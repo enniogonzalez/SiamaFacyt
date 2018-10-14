@@ -299,6 +299,53 @@
             return $retorno;
         }
 
+        public function ObtenerInfoPDF($id){
+            
+            //Abrir conexion
+            $conexion = $this->bd_model->ObtenerConexion();
+
+            //Query para buscar usuario
+            $query ="   SELECT  MAN.MAN_ID,		
+                                MAN.Documento,
+                                B.nombre Bie_Nom,
+                                B.Inv_UC,			
+                                CRE.Nombre Solicitante,
+                                COALESCE(APR.Nombre,'') Aprobador,
+                                to_char(MAN.Fec_Cre,'DD/MM/YYYY') Fec_Cre,
+                                COALESCE(to_char(MAN.Fec_Apr,'DD/MM/YYYY'),'') Fec_Apr,			
+                                MAN.Estatus,		
+                                MAN.Fec_Ini,
+                                MAN.Fec_Fin,
+                                COALESCE(MAN.Observaciones,'') Observaciones
+                        FROM Mantenimiento MAN
+                            JOIN Bienes B ON B.bie_id = MAN.bie_id
+                            JOIN Usuarios CRE ON CRE.usu_id = MAN.usu_cre
+                            LEFT JOIN Usuarios APR ON APR.usu_id = MAN.usu_apr
+                        WHERE MAN_ID = '" . $id . "'";
+
+            //Ejecutar Query
+            $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
+            
+            //Si existe registro, se guarda. Sino se guarda false
+            if ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) 
+                $retorno = $line;
+            else
+                $retorno = false;
+
+            //Liberar memoria
+            pg_free_result($result);
+
+            //liberar conexion
+            $this->bd_model->CerrarConexion($conexion);
+
+            if($retorno){
+                $retorno['Tareas'] = $this->ObtenerTareasPDF($retorno['man_id'],$retorno['estatus']);
+            }
+
+
+            return $retorno;
+        }
+
         private function ObtenerUltimoIdInsertado(){
 
             //Query para buscar usuario
@@ -855,7 +902,8 @@
                             JOIN Piezas PIE ON PIE.PIE_ID = MTA.PIE_ID
                             LEFT JOIN Usuarios USU ON USU.USU_ID = MTA.USU_ID
                             LEFT JOIN Proveedores PRO ON PRO.PRO_ID = MTA.PRO_ID
-                        WHERE MTA.MAN_ID = " . $mantenimiento;
+                        WHERE MTA.MAN_ID = " . $mantenimiento . "
+                        ORDER BY MTA.MTA_ID ASC";
 
 
             //Ejecutar Query
@@ -916,6 +964,49 @@
 
 
             return $html;
+        }
+
+        private function ObtenerTareasPDF($mantenimiento){
+
+            //Abrir conexion
+            $conexion = $this->bd_model->ObtenerConexion();
+            		
+            //Query para buscar usuario
+            $query ="   SELECT  PIE.Nombre PIE_NOM,		
+                                MTA.Titulo,	
+                                MTA.Min_Eje,
+                                MTA.Min_Asi,
+                                to_char(MTA.Fec_Ini,'DD/MM/YYYY') Fec_Ini,
+                                to_char(MTA.Fec_Fin,'DD/MM/YYYY') Fec_Fin,
+                                MTA.estatus,	
+                                MTA.Descripcion,		
+                                COALESCE(USU.Nombre,'') USU_NOM,	
+                                COALESCE(PRO.Raz_Soc,'') PRO_NOM,	
+                                MTA.Herramientas,	
+                                COALESCE(MTA.Observaciones,'') Observaciones
+                        FROM MantenimientoTarea MTA
+                            JOIN Piezas PIE ON PIE.PIE_ID = MTA.PIE_ID
+                            LEFT JOIN Usuarios USU ON USU.USU_ID = MTA.USU_ID
+                            LEFT JOIN Proveedores PRO ON PRO.PRO_ID = MTA.PRO_ID
+                        WHERE MTA.MAN_ID = " . $mantenimiento ."
+                        ORDER BY MTA.MTA_ID ASC";
+
+
+            //Ejecutar Query
+            $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
+
+            $retorno = array();
+            while($line = pg_fetch_array($result, null, PGSQL_ASSOC))
+                array_push($retorno,$line);
+
+            //Liberar memoria
+            pg_free_result($result);
+
+            //liberar conexion
+            $this->bd_model->CerrarConexion($conexion);
+
+
+            return $retorno;
         }
 
     }

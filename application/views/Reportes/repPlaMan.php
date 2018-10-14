@@ -93,6 +93,12 @@ $tbl = "
             <td>" . $datos['estatus'] . "</td>
         </tr>
         <tr >
+            <td> <strong>Bien:</strong></td>
+            <td>" . $datos['bie_nom'] . "</td>
+            <td><strong>Inv. Uc:</strong></td>
+            <td>" . $datos['inv_uc'] . "</td>
+        </tr>
+        <tr >
             <td> <strong>Usuario Solicitante:</strong></td>
             <td>" . $datos['solicitante'] . "</td>
             <td><strong>Fecha Solicitado:</strong></td>
@@ -110,12 +116,6 @@ if($datos['aprobador'] != ""){
 }
 
 $tbl = $tbl . "
-    <tr >
-        <td> <strong>Bien:</strong></td>
-        <td>" . $datos['bie_nom'] . "</td>
-        <td><strong>Inv. Uc:</strong></td>
-        <td>" . $datos['inv_uc'] . "</td>
-    </tr>
     <tr >
         <td> <strong>Observaci&oacute;n:</strong></td>
         <td colspan=\"3\">" . $datos['observaciones'] . "</td>
@@ -154,7 +154,7 @@ foreach ($datos['Tareas'] as $elemento) {
                     </tr></table><hr>";
 }
 
-$tbl .= "<table><tr><td><strong>" . count($datos['Tareas']) . " Cambios Correctivos</strong></td></tr></table>";
+$tbl .= "<table><tr><td><strong>" . count($datos['Tareas']) . " Tareas</strong></td></tr></table>";
 
 
 $pdf->writeHTML($tbl, true, false, false, false, '');

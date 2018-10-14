@@ -242,6 +242,36 @@
 
         }
 
+        public function imprimir($id){
+
+            $data['datos'] = $this->FormatearImpresion($this->preventivo_model->ObtenerInfoPDF($id));
+
+            $this->load->library('tcpdf/Pdf');
+            $this->load->view('Reportes/repManPre',$data);
+        }
+
+        private function FormatearImpresion($respuesta){
+
+            $data = array(
+                "documento"     =>"",
+                "bie_nom"       =>"",
+                "inv_uc"        =>"",
+                "estatus"       =>"",
+                "solicitante"   =>"",
+                "aprobador"     =>"",
+                "fec_cre"       =>"",
+                "fec_apr"       =>"",
+                "fec_ini"       =>"",
+                "fec_fin"       =>"",
+                "Tareas"        =>[],
+                "observaciones" => ""
+            );
+
+            if($respuesta)
+                $data = $respuesta;
+
+            return $data;
+        }
         private function FormatearBusqueda($datos){
             
             $data = array(

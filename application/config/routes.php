@@ -99,6 +99,7 @@ $route['preventivo/obtener'] = 'Mantenimiento/preventivo/obtener';
 $route['preventivo/busqueda'] = 'Mantenimiento/preventivo/busqueda';
 $route['preventivo/eliminar'] = 'Mantenimiento/preventivo/eliminar';
 $route['preventivo/guardar'] = 'Mantenimiento/preventivo/guardar';
+$route['preventivo/imprimir/(:any)'] = 'Mantenimiento/preventivo/imprimir/$1';
 $route['preventivo'] = 'Mantenimiento/preventivo/view/';
 
 $route['plantilla/aprobar'] = 'Mantenimiento/plantilla/aprobar';
