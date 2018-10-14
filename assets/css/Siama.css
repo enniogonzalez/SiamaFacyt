@@ -1,0 +1,245 @@
+
+/****************************************************/
+/*                  Principales                     */
+/****************************************************/
+.header-siama{
+    background-color:#2C3E50 !important;
+    color:#fff;
+    font-family: 'Open Sans Condensed', sans-serif;
+    padding:10px;
+    min-height: 15vh;
+}
+
+.body-siama{
+    background-color: #e9ecef !important;
+}
+
+.vertical-nav, .nav-item > li{
+    border-bottom: 1px dashed #eee;
+}
+
+.botoneraDeshabilitada{
+    pointer-events: none;
+}
+/****************************************************/
+/*              Pagina de Informacion               */
+/****************************************************/
+
+.informationPage{
+    font-family: 'Open Sans Condensed', sans-serif;
+    padding: 20px;
+}
+
+.informationPage  h2{
+    text-align:left;
+}
+
+
+/****************************************************/
+/*                      Loggin                      */
+/****************************************************/
+
+.login-siama{
+    width: 60%;
+    margin: auto;
+    background-color:#fff;
+    border-radius: 10px;
+    padding:20px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.container-login-siama{
+    margin-top: 5%;
+    margin-bottom: 5%;
+}
+/****************************************************/
+/*                  Botones                         */
+/****************************************************/
+.btn-primary-siama{
+    color: #fff;
+    background-color: #2C3E50;
+    border-color: #2C3E50;
+}
+
+.btn-secundary-siama{
+    color: #000;
+    background-color: #95a5a6;
+    border-color: #95a5a6;
+}
+/****************************************************/
+/*                  Tablas                          */
+/****************************************************/
+
+.head-table-siama{
+    color: #fff;
+    background-color: #2C3E50;
+    border-color:  #2C3E50;
+}
+
+.tr-activa-siama, .tr-activa-siama:hover{
+    background-color: #95a5a6 !important;
+}
+
+.tabla-siama{
+    border: solid #2C3E50;
+}
+.tabla-siama td{
+    border-top: 1px solid #2C3E50 ;
+}
+.tabla-siama thead th{
+    border-bottom: 1px solid #2C3E50 ;
+}
+
+.tabla-siama tbody tr td{
+    /* border-right: 2px solid #dee2e6; */
+    border-right: 2px solid #2C3E50;
+}
+
+.tabla-siama-desactivada{
+    pointer-events: none;
+}
+
+.tabla-siama-desactivada tbody tr{
+    background-color: #e9ecef;
+}
+
+
+/****************************************************/
+/*                  Formularios                     */
+/****************************************************/
+.buscador{
+    cursor:pointer;
+}
+
+.form-group div{
+    padding-top:5px;
+}
+
+.col-form-label{
+    padding-right: 0;
+}
+
+.botoneraFormulario button{
+    margin:5px;
+}
+.botoneraFormulario{
+    margin:0;
+}
+.formulario-siama{
+    background: #fff;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.formulario-siama form{
+    padding: 20px;
+}
+
+.formulario-desactivado{
+    pointer-events: none;
+}
+
+/****************************************************/
+/*                  Modales                         */
+/****************************************************/
+@media (min-width: 576px){
+    .modal-busqueda {
+        max-width: 85% !important;
+        margin: 1.75rem auto;
+    }
+    .container{
+        max-width: 100% !important;
+    }
+}
+.containerModalMensajes{
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+#RegistrosEncontrados{
+    font-size: 12px;
+    margin-bottom: 10px;
+    margin-top: -0.5rem;
+    font-weight: bold;
+}
+.estatusTransaccion{
+    z-index: 99999 !important;
+    max-width: 400px;
+    display: none;
+    padding: 0 10px;
+    position: fixed;
+    bottom: 0;
+    margin-bottom: 10px;
+    margin-right: 20px;
+    right: 0;
+    z-index: 2;
+    font-family: 'Open Sans Condensed', sans-serif;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.ModalDesactivado{
+    pointer-events: none;
+}
+
+#SiamaModalAdvertencias{
+    z-index: 9999;
+}
+#SiamaModalBusqueda{
+    overflow: auto;
+}
+.ColorEspera{
+    background-color: rgba(137,182,244,0.65);
+}
+
+.ColorExitoso{
+    background-color: rgba(63,191,63,0.85);
+}
+
+#InformacionEstatus{
+    width:100%;
+    font-size:20px;
+    text-align:center;
+    margin-bottom:10px;
+    margin-top:-7px;
+}
+
+#CerrarEstatusInformacion{
+    cursor:pointer;
+}
+
+
+/****************************************************/
+/*                  Paginacion                      */
+/****************************************************/
+
+
+
+.page-item-siama:hover{
+    background-color: #95a5a6;
+    color: #000;
+}
+
+.page-item-selected, .page-item-selected:hover{
+    background-color: #2C3E50;
+    color: #fff;
+}
+
+.page-item-siama{
+    border-radius: 5px;
+    margin-left:1px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+.PaginationDisabled{
+    pointer-events: none;
+}
+
+.RR{
+    color:red;
+}
+.modal-busqueda{
+    width: 85%;
+    margin: 1.75rem auto;
+}
+#TablaBusquedaFormulario td{
+    padding: 0.3rem;
+}

@@ -1,0 +1,96 @@
+@import url(http://fonts.googleapis.com/css?family=Lato:300,400,700);
+/* Starter CSS for Flyout Menu */
+#menu-siama,
+#menu-siama ul,
+#menu-siama ul li{
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+#menu-siama ul {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  border-radius: 10px;
+  padding: 10px 0px;
+  position: relative;
+  z-index: 597;
+  float: left;
+}
+#menu-siama ul li {
+  float: left;
+  min-height: 1px;
+  line-height: 1em;
+  vertical-align: middle;
+}
+
+#menu-siama ul li,#menu-siama ul li span,#menu-siama ul li label {
+  cursor: pointer;
+}
+#menu-siama ul li.hover,
+#menu-siama ul li:hover {
+  position: relative;
+  z-index: 599;
+  cursor: default;
+}
+
+#menu-siama ul li {
+  float: none;
+}
+#menu-siama ul ul li {
+  font-weight: normal;
+}
+
+#menu-siama {
+  font-family: 'Lato', sans-serif;
+  font-size: 18px;
+  margin-top: 10px;
+  border-radius: 10px;
+}
+
+#menu-siama ul a,
+#menu-siama ul a:link,
+#menu-siama ul a:visited {
+  display: block;
+  color: #1e1e1f;
+  text-decoration: none;
+  font-weight: 300;
+}
+ #menu-siama > ul {
+  float: none;
+}
+#menu-siama ul {
+  background: #fff;
+}
+#menu-siama > ul > li {
+  border-left: 3px solid #d7d8da;
+}
+#menu-siama > ul > li > a {
+  padding: 10px 10px;
+} 
+#menu-siama > ul > li:hover {
+  border-left: 3px solid #2C3E50;
+}
+#menu-siama ul li:hover > a {
+  color: #2C3E50;
+}
+.oMenu:hover {
+  background: #f6f6f6;
+} 
+
+.submenu{
+  display: none;
+}
+
+.menu-activo{
+    border-left: 3px solid #3dbd99 !important;
+    background: #f6f6f6;
+}
+.menu-activo > a{
+    color: #3dbd99 !important;
+
+}
+
+.submenu{
+  background: #bdb9b9;
+  border-left: 3px solid #a9aaac;
+}
