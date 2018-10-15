@@ -132,6 +132,42 @@
             return $retorno;
         }
 
+        public function ObtenerInfoPDF($id){
+            
+            //Abrir conexion
+            $conexion = $this->bd_model->ObtenerConexion();
+    
+            //Query para buscar usuario
+            $query ="   SELECT  Hijo.Loc_ID,
+                                Hijo.Nombre,
+                                Hijo.Ubicacion,
+                                Hijo.Tipo,
+                                Hijo.Cap_Amp,
+                                COALESCE(Hijo.Observaciones,'') Observaciones,
+                                COALESCE(Padre.Nombre,'') AS NombrePadre
+                        FROM Localizaciones AS Hijo
+                            LEFT JOIN Pertenece AS P ON P.loh_id = Hijo.loc_id
+                            LEFT JOIN Localizaciones AS Padre ON Padre.loc_id = P.lop_id
+                        WHERE Hijo.LOC_ID = '" . $id . "'";
+
+            //Ejecutar Query
+            $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
+            
+            //Si existe registro, se guarda. Sino se guarda false
+            if ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) 
+                $retorno = $line;
+            else
+                $retorno = false;
+
+            //Liberar memoria
+            pg_free_result($result);
+
+            //liberar conexion
+            $this->bd_model->CerrarConexion($conexion);
+
+            return $retorno;
+        }
+
         public function Busqueda($busqueda,$orden,$inicio,$fin,$id){
             
             //Abrir conexion

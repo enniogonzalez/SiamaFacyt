@@ -181,4 +181,4 @@ $pdf->writeHTML($tbl, true, false, false, false, '');
 // -----------------------------------------------------------------------------
 
 //Close and output PDF document
-$pdf->Output('MantenimientoCorrectivo' . $datos['documento']  . '.pdf', 'I');
+$pdf->Output('MantenimientoPreventivo' . $datos['documento']  . '.pdf', 'I');

@@ -126,6 +126,30 @@
             echo json_encode(array("isValid"=>true,"Datos"=>$respuesta));
         }
 
+        public function imprimir($id){
+            $data['datos'] = $this->FormatearImpresion($this->marcas_model->ObtenerInfoPDF($id));
+            $this->load->library('tcpdf/Pdf');
+            $this->load->view('Reportes/repMarcas',$data);
+        }
+
+        private function FormatearImpresion($respuesta){
+
+            $data = array(
+                "mar_id"        =>"",
+                "nombre"        =>"",
+                "ubicacion"     =>"",
+                "tipo"          =>"",
+                "cap_amp"       =>"",
+                "nombrepadre"   =>"",
+                "observaciones" => ""
+            );
+
+            if($respuesta)
+                $data = $respuesta;
+
+            return $data;
+        }
+        
         private function FormatearBusqueda($datos){
             
             $data = array(

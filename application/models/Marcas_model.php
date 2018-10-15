@@ -98,6 +98,38 @@
             return $retorno;
         }
 
+        public function ObtenerInfoPDF($id){
+            
+
+            //Abrir conexion
+            $conexion = $this->bd_model->ObtenerConexion();
+            //Query para buscar usuario
+            $query ="   SELECT  MAR_ID,
+                                Nombre,
+                                COALESCE(Observaciones,'') Observaciones
+                        FROM Marcas
+                        WHERE MAR_ID = '" . $id . "'";
+            
+
+
+            //Ejecutar Query
+            $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
+            
+            //Si existe registro, se guarda. Sino se guarda false
+            if ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) 
+                $retorno = $line;
+            else
+                $retorno = false;
+
+            //Liberar memoria
+            pg_free_result($result);
+
+            //liberar conexion
+            $this->bd_model->CerrarConexion($conexion);
+
+            return $retorno;
+        }
+
         public function Busqueda($busqueda,$orden,$inicio,$fin){
             
             //Abrir conexion

@@ -1,6 +1,17 @@
 <div class="container">
-    <h2><span class="fa fa-map-marker"></span> Localizaci&oacute;n</h2>   
+    <div class="row">
+        <div class="col-lg-9" style="padding: 0px;">
+            <h2><span class="fa fa-map-marker"></span> Localizaci&oacute;n</h2>
+        </div>
+        <div class="col-lg-3" style="text-align:center;" id="SeccionImprimir">
+            <button type="button"  class="btn btn-primary-siama" id="Imprimir">
+                <span class="fa fa-print fa-lg"></span>
+                Imprimir
+            </button>
+        </div>
+    </div>
 </div>
+
 
 <div class="container">
     <div class="formulario-siama">

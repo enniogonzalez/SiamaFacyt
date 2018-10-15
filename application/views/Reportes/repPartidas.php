@@ -16,7 +16,7 @@ class MYPDF extends TCPDF {
         
         $this->SetFont('helvetica', 'B', 15);
 		$this->SetY(23);
-        $this->Cell(200, 10, "Plantilla de Mantenimiento", 0, false, 'C', 0, '', 0, false, 'M', 'M');
+        $this->Cell(200, 10, "Partidas", 0, false, 'C', 0, '', 0, false, 'M', 'M');
 		$this->SetY(28);
         $this->SetFont('helvetica', 'B', 8);
         $this->Cell(320, 10, "Fecha Impresión: " . date("d/m/Y"), 0, false, 'C', 0, '', 0, false, 'M', 'M');
@@ -41,8 +41,8 @@ $pdf = new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8',
 // set document information
 $pdf->SetCreator(PDF_CREATOR);
 $pdf->SetAuthor('Ennio Gonzalez');
-$pdf->SetTitle('Plantilla de Mantenimiento');
-$pdf->SetSubject('Plantilla de Mantenimiento');
+$pdf->SetTitle('Partidas');
+$pdf->SetSubject('TCPDF Tutorial');
 $pdf->SetKeywords('TCPDF, PDF, example, test, guide');
 
 // set default header data
@@ -86,82 +86,27 @@ $pdf->SetFont('helvetica', '', 10);
 
 $tbl = "
     <table cellspacing=\"0\" cellpadding=\"1\" style=\"border: 1px solid black;\">
-        <tr >
-            <td> <strong>Documento:</strong></td>
-            <td>" . $datos['documento'] . "</td>
-            <td><strong>Estatus:</strong></td>
-            <td>" . $datos['estatus'] . "</td>
+        <tr>
+            <td style=\"width:15%;\"> <strong>Código:</strong></td>
+            <td style=\"width:35%;\">" . $datos['codigo'] . "</td>
+            <td style=\"width:15%;\"><strong>Nombre:</strong></td>
+            <td style=\"width:35%;\">" . $datos['nombre'] . "</td>
         </tr>
-        <tr >
-            <td> <strong>Bien:</strong></td>
-            <td>" . $datos['bie_nom'] . "</td>
-            <td><strong>Inv. Uc:</strong></td>
-            <td>" . $datos['inv_uc'] . "</td>
+        <tr>
+            <td style=\"width:15%;\"> <strong>Partida Padre:</strong></td>
+            <td style=\"width:75%;\">" . $datos['nombrepadre'] . "</td>
         </tr>
-        <tr >
-            <td> <strong>Usuario Solicitante:</strong></td>
-            <td>" . $datos['solicitante'] . "</td>
-            <td><strong>Fecha Solicitado:</strong></td>
-            <td>" . $datos['fec_cre'] . "</td>
-        </tr>";
-
-if($datos['aprobador'] != ""){
-    $tbl = $tbl . "
-    <tr >
-        <td> <strong>Usuario Aprobador:</strong></td>
-        <td>" . $datos['aprobador'] . "</td>
-        <td><strong>Fecha Aprobado:</strong></td>
-        <td>" . $datos['fec_apr'] . "</td>
-    </tr>";
-}
-
-$tbl = $tbl . "
-    <tr >
-        <td> <strong>Observaci&oacute;n:</strong></td>
-        <td colspan=\"3\">" . $datos['observaciones'] . "</td>
-    </tr>
+        <tr>
+            <td style=\"width:15%;\"> <strong>Observaci&oacute;n:</strong></td>
+            <td style=\"width:75%;\">" . $datos['observaciones'] . "</td>
+        </tr>
 </table>
 ";
 
 $pdf->writeHTML($tbl, true, false, false, false, '');
 
-// -----------------------------------------------------------------------------
-//                          Cambios Correctivos
-// -----------------------------------------------------------------------------
-$pdf->SetFont('helvetica', '', 8);
-$tbl =" <br>
-        <h2>Tareas</h2>
-        <table>
-            <thead>
-                <tr style=\"font-weight: bold; \">
-                    <th style=\"width:23%\">Pieza </th>
-                    <th style=\"width:20%\">Titulo</th>
-                    <th style=\"width:20%\">Herramientas</th>
-                    <th style=\"width:20%\">Descripción</th>
-                    <th style=\"width:7%\">Minutos</th>
-                </tr>
-            </thead>
-        </table><hr>";
-
-
-foreach ($datos['Tareas'] as $elemento) {
-        $tbl .= "<table><tr>
-                        <td style=\"width:23%\">" . $elemento['pie_nom'] . "</td>
-                        <td style=\"width:20%\">" . $elemento['titulo'] . "</td>
-                        <td style=\"width:20%\">" . $elemento['herramientas'] . "</td>
-                        <td style=\"width:20%\">" . $elemento['descripcion'] . "</td>
-                        <td style=\"width:7%;\">" . $elemento['minutos'] . "</td>
-                    </tr></table><hr>";
-}
-
-$tbl .= "<table><tr><td><strong>" . count($datos['Tareas']) . " Tareas</strong></td></tr></table>";
-
-
-$pdf->writeHTML($tbl, true, false, false, false, '');
-
-
 
 // -----------------------------------------------------------------------------
 
 //Close and output PDF document
-$pdf->Output('PlantillaMantenimiento' . $datos['documento']  . '.pdf', 'I');
+$pdf->Output('Localizacion' . substr("0000000000" . trim($datos['par_id'] ),-10)  . '.pdf', 'I');

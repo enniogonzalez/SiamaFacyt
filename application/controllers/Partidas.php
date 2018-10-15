@@ -136,6 +136,27 @@
             echo json_encode(array("isValid"=>true,"Datos"=>$respuesta));
         }
 
+        public function imprimir($id){
+            $data['datos'] = $this->FormatearImpresion($this->partidas_model->ObtenerInfoPDF($id));
+            $this->load->library('tcpdf/Pdf');
+            $this->load->view('Reportes/repPartidas',$data);
+        }
+
+        private function FormatearImpresion($respuesta){
+
+            $data = array(
+                "par_id"        =>"",
+                "codigo"        =>"",
+                "nombre"        =>"",
+                "nombrepadre"   =>"",
+                "observaciones" => ""
+            );
+
+            if($respuesta)
+                $data = $respuesta;
+
+            return $data;
+        }
         private function FormatearBusqueda($datos){
             
             $data = array(

@@ -68,6 +68,7 @@ $route['usuarios'] = 'Sistema/usuarios/view/';
 $route['marcas/busqueda'] = 'marcas/busqueda';
 $route['marcas/eliminar'] = 'marcas/eliminar';
 $route['marcas/guardar'] = 'marcas/guardar';
+$route['marcas/imprimir/(:any)'] = 'marcas/imprimir/$1';
 $route['marcas'] = 'marcas/view';
 
 $route['piezas/obtener'] = 'Patrimonio/piezas/obtener';
@@ -121,11 +122,13 @@ $route['bienes'] = 'Patrimonio/bienes/view/';
 $route['localizaciones/busqueda'] = 'localizaciones/busqueda';
 $route['localizaciones/eliminar'] = 'localizaciones/eliminar';
 $route['localizaciones/guardar'] = 'localizaciones/guardar';
+$route['localizaciones/imprimir/(:any)'] = 'localizaciones/imprimir/$1';
 $route['localizaciones'] = 'localizaciones/view';
 
 $route['partidas/busqueda'] = 'partidas/busqueda';
 $route['partidas/eliminar'] = 'partidas/eliminar';
 $route['partidas/guardar'] = 'partidas/guardar';
+$route['partidas/imprimir/(:any)'] = 'partidas/imprimir/$1';
 $route['partidas'] = 'partidas/view';
 
 $route['proveedores/busqueda'] = 'proveedores/busqueda';
