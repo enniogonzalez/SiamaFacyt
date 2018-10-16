@@ -16,7 +16,7 @@ class MYPDF extends TCPDF {
         
         $this->SetFont('helvetica', 'B', 15);
 		$this->SetY(23);
-        $this->Cell(200, 10, "Partidas", 0, false, 'C', 0, '', 0, false, 'M', 'M');
+        $this->Cell(200, 10, "Proveedores", 0, false, 'C', 0, '', 0, false, 'M', 'M');
 		$this->SetY(28);
         $this->SetFont('helvetica', 'B', 8);
         $this->Cell(320, 10, "Fecha Impresión: " . date("d/m/Y"), 0, false, 'C', 0, '', 0, false, 'M', 'M');
@@ -41,7 +41,7 @@ $pdf = new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8',
 // set document information
 $pdf->SetCreator(PDF_CREATOR);
 $pdf->SetAuthor('Ennio Gonzalez');
-$pdf->SetTitle('Partidas');
+$pdf->SetTitle('Proveedores');
 $pdf->SetSubject('TCPDF Tutorial');
 $pdf->SetKeywords('TCPDF, PDF, example, test, guide');
 
@@ -84,17 +84,33 @@ $pdf->SetFont('helvetica', '', 10);
 //                          Informacion Encabezado
 // -----------------------------------------------------------------------------
 
+$data = array(
+	"pro_id"        =>"",
+	"rif"           =>"",
+	"raz_soc"       =>"",
+	"reg_nac_con"   =>"",
+	"direccion"     =>"",
+	"telefonos"     =>"",
+	"correo"        =>"",
+	"observaciones" =>"",
+);
 $tbl = "
     <table cellspacing=\"0\" cellpadding=\"1\" style=\"border: 1px solid black;\">
         <tr>
-            <td style=\"width:15%;\"> <strong>Código:</strong></td>
-            <td style=\"width:35%;\">" . $datos['codigo'] . "</td>
-            <td style=\"width:15%;\"><strong>Nombre:</strong></td>
-            <td style=\"width:35%;\">" . $datos['nombre'] . "</td>
+            <td style=\"width:15%;\"> <strong>RIF:</strong></td>
+            <td style=\"width:35%;\">" . $datos['rif'] . "</td>
+            <td style=\"width:15%;\"><strong>RNC:</strong></td>
+            <td style=\"width:35%;\">" . $datos['reg_nac_con'] . "</td>
         </tr>
         <tr>
-            <td style=\"width:15%;\"> <strong>Partida Padre:</strong></td>
-            <td style=\"width:75%;\">" . $datos['nombrepadre'] . "</td>
+            <td style=\"width:15%;\"> <strong>Correo:</strong></td>
+            <td style=\"width:35%;\">" . $datos['correo'] . "</td>
+            <td style=\"width:15%;\"><strong>Teléfonos:</strong></td>
+            <td style=\"width:35%;\">" . $datos['telefonos'] . "</td>
+        </tr>
+        <tr>
+            <td style=\"width:15%;\"> <strong>Dirección:</strong></td>
+            <td style=\"width:75%;\">" . $datos['direccion'] . "</td>
         </tr>
         <tr>
             <td style=\"width:15%;\"> <strong>Observaci&oacute;n:</strong></td>
@@ -109,4 +125,4 @@ $pdf->writeHTML($tbl, true, false, false, false, '');
 // -----------------------------------------------------------------------------
 
 //Close and output PDF document
-$pdf->Output('Partida' . substr("0000000000" . trim($datos['par_id'] ),-10)  . '.pdf', 'I');
+$pdf->Output('Proveedor' . substr("0000000000" . trim($datos['pro_id'] ),-10)  . '.pdf', 'I');

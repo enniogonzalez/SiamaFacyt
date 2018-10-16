@@ -157,6 +157,7 @@
 
             return $data;
         }
+        
         private function FormatearBusqueda($datos){
             
             $data = array(

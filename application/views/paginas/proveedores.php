@@ -1,5 +1,15 @@
 <div class="container">
-    <h2><span class="fa fa-user"></span> Proveedores</h2>   
+    <div class="row">
+        <div class="col-lg-9" style="padding: 0px;">
+            <h2><span class="fa fa-bookmark"></span> Proveedores</h2>   
+        </div>
+        <div class="col-lg-3" style="text-align:center;" id="SeccionImprimir">
+            <button type="button"  class="btn btn-primary-siama" id="Imprimir">
+                <span class="fa fa-print fa-lg"></span>
+                Imprimir
+            </button>
+        </div>
+    </div>
 </div>
 
 <div class="container">
@@ -22,7 +32,7 @@
             </div>
 
             <div class="form-group row">
-                <label for="nombrePro" class="col-md-3 col-form-label">Razon Social:</label>
+                <label for="nombrePro" class="col-md-3 col-form-label">Raz&oacute;n Social:</label>
                 <div class="col-md-9">
                     <input maxlength="100" readonly disabled type="text" 
                     class="form-control obligatorio texto" id="nombrePro" value="<?=$raz_soc?> ">
@@ -44,7 +54,6 @@
                 <div class="col-md-9">
                     <input maxlength="100" readonly disabled type="text" 
                     class="form-control  texto" id="tlf" value="<?=$telefonos?>">
-                    <div class="invalid-feedback">Campo Obligatorio</div>
                 </div>
             </div>
 
@@ -53,7 +62,7 @@
                 <div class="col-md-9">
                     <input maxlength="100" readonly disabled type="email" 
                     class="form-control  texto" id="correo" value="<?=$correo?>">
-                    <div class="invalid-feedback">Campo Obligatorio</div>
+                    <div class="invalid-feedback">Correo Inv&aacute;lido</div>
                 </div>
             </div>
 

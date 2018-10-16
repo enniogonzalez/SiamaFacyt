@@ -92,6 +92,11 @@ $(function(){
             }
         })
 
+        if(Valido && $('#correo').val().trim() != '' && !validateEmail($('#correo').val())){
+            Valido = false;
+            $('#correo').addClass('is-invalid');
+        }
+
         if(Valido){
             var parametros = {
                 "id":           $('#IdForm').text().trim(),

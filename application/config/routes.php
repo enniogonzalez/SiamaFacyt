@@ -134,6 +134,7 @@ $route['partidas'] = 'partidas/view';
 $route['proveedores/busqueda'] = 'proveedores/busqueda';
 $route['proveedores/eliminar'] = 'proveedores/eliminar';
 $route['proveedores/guardar'] = 'proveedores/guardar';
+$route['proveedores/imprimir/(:any)'] = 'proveedores/imprimir/$1';
 $route['proveedores'] = 'proveedores/view';
 
 
