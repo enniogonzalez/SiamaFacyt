@@ -58,6 +58,7 @@ $route['listasdesplegables/ObtenerLista'] = 'Sistema/listasdesplegables/ObtenerL
 $route['listasdesplegables/busqueda'] = 'Sistema/listasdesplegables/busqueda';
 $route['listasdesplegables/eliminar'] = 'Sistema/listasdesplegables/eliminar';
 $route['listasdesplegables/guardar'] = 'Sistema/listasdesplegables/guardar';
+$route['listasdesplegables/imprimir/(:any)'] = 'Sistema/listasdesplegables/imprimir/$1';
 $route['listasdesplegables'] = 'Sistema/listasdesplegables/view/';
 
 $route['usuarios/busqueda'] = 'Sistema/usuarios/busqueda';

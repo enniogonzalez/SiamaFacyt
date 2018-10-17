@@ -42,7 +42,7 @@ $pdf = new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8',
 $pdf->SetCreator(PDF_CREATOR);
 $pdf->SetAuthor('Ennio Gonzalez');
 $pdf->SetTitle('Mantenimiento Correctivo');
-$pdf->SetSubject('TCPDF Tutorial');
+$pdf->SetSubject('Mantenimiento Correctivo');
 $pdf->SetKeywords('TCPDF, PDF, example, test, guide');
 
 // set default header data

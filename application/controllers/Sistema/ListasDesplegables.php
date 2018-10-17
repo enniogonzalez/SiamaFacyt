@@ -188,6 +188,31 @@
             ));
         }
 
+        public function imprimir($id){
+            $data['datos'] = $this->FormatearImpresion($this->listasdesplegables_model->Obtener($id));
+            $this->load->library('tcpdf/Pdf');
+            $this->load->view('Reportes/repListasDesplegables',$data);
+        }
+
+        private function FormatearImpresion($respuesta){
+
+            $data = array(
+                "ld_id"         =>"",
+                "codigo"        =>"",
+                "nombre"        =>"",
+                "descripcion"   => "",
+                "opciones"      => [""]
+            );
+
+            if($respuesta){
+                $data = $respuesta;
+                $data['opciones'] = json_decode($data['opciones'],true);
+            }
+
+            return $data;
+        }
+
+
         private function FormatearBusqueda($datos){
             
             $data = array(
