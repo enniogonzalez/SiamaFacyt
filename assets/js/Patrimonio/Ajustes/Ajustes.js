@@ -158,8 +158,6 @@ $(function(){
 
         //Evitar doble click
         if(!Guardando){
-            console.log("Aprobar")
-            console.log(parametros)
             Guardando = true;
             AprobarAjuste(parametros)
         }
@@ -288,7 +286,6 @@ $(function(){
     }
     
     function BuscarBien(){
-        console.log("Hola")
         SetSearchThead(thBienes);
 
         parametros = {

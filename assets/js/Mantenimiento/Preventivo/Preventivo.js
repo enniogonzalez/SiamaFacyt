@@ -240,7 +240,6 @@ $(function(){
                 "Url"           : $('#FormularioActual').attr("action")
             }
             
-            console.log(parametros)
             if(!Guardando){
                 Guardando = true;
                 GuardarFormulario(parametros);

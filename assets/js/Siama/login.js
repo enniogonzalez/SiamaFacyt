@@ -34,7 +34,6 @@ $(function(){
                     $('#inputPassword').val("");
                 }
             }).fail(function(data){
-                console.log(data)
             });
         }
     });

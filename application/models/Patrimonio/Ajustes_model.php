@@ -209,6 +209,53 @@
             return $retorno;
         }
 
+        public function ObtenerInfoPDF($id){
+            
+            //Abrir conexion
+            $conexion = $this->bd_model->ObtenerConexion();
+
+            //Query para buscar usuario
+            $query ="   SELECT  AJU.AJU_ID,	
+                                AJU.Documento,
+                                B.nombre Bie_Nom,			
+                                B.Inv_UC,	
+                                to_char(AJU.Fec_Cre,'DD/MM/YYYY') Fec_Cre,
+                                COALESCE(to_char(AJU.Fec_Apr,'DD/MM/YYYY'),'') Fec_Apr,	
+                                CRE.Nombre Solicitante,
+                                COALESCE(APR.Nombre,'') Aprobador,	
+                                AJU.Estatus,
+                                COALESCE(AJU.Observaciones,'') Observaciones
+                        FROM Ajustes AJU
+                            JOIN Bienes B ON B.bie_id = AJU.bie_id
+                            JOIN Usuarios CRE ON CRE.usu_id = AJU.usu_cre
+                            LEFT JOIN Usuarios APR ON APR.usu_id = AJU.usu_apr
+                        WHERE AJU_ID = '" . $id . "'";
+
+
+            //Ejecutar Query
+            $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
+            
+            //Si existe registro, se guarda. Sino se guarda false
+            if ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) 
+                $retorno = $line;
+            else
+                $retorno = false;
+
+            //Liberar memoria
+            pg_free_result($result);
+
+            //liberar conexion
+            $this->bd_model->CerrarConexion($conexion);
+
+            if($retorno){
+                $retorno['Agregados'] = $this->ObtenerAgregadosPDF($retorno['aju_id']);
+                $retorno['Quitados'] = $this->ObtenerQuitadosPDF($retorno['aju_id']);
+            }
+
+
+            return $retorno;
+        }
+
         private function ObtenerUltimoIdInsertado(){
 
             //Query para buscar usuario
@@ -590,7 +637,8 @@
                         FROM AjustesAccion AAC
                             JOIN Piezas PIE ON PIE.PIE_ID = AAC.PIE_ID
                         WHERE AAC.AJU_ID = " . $ajuste . "
-                            AND AAC.Tipo = 'Agregar';";
+                            AND AAC.Tipo = 'Agregar'
+                        ORDER BY AAC.AAC_ID ASC;";
 
 
             //Ejecutar Query
@@ -621,6 +669,38 @@
 
 
             return $html;
+        }
+
+        private function ObtenerAgregadosPDF($ajuste){
+
+            //Abrir conexion
+            $conexion = $this->bd_model->ObtenerConexion();
+            
+            $query ="   SELECT  PIE.Nombre PIE_NOM,
+                                COALESCE(PIE.Inv_UC,'') inv_uc,	
+                                COALESCE(AAC.Observaciones,'') Observaciones
+                        FROM AjustesAccion AAC
+                            JOIN Piezas PIE ON PIE.PIE_ID = AAC.PIE_ID
+                        WHERE AAC.AJU_ID = " . $ajuste . "
+                            AND AAC.Tipo = 'Agregar'
+                        ORDER BY AAC.AAC_ID ASC;";
+
+
+            //Ejecutar Query
+            $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
+
+            $retorno = array();
+            while($line = pg_fetch_array($result, null, PGSQL_ASSOC))
+                array_push($retorno,$line);
+
+            //Liberar memoria
+            pg_free_result($result);
+
+            //liberar conexion
+            $this->bd_model->CerrarConexion($conexion);
+
+
+            return $retorno;
         }
 
         /************************************/
@@ -700,7 +780,8 @@
                         FROM AjustesAccion AAC
                             JOIN Piezas PIE ON PIE.PIE_ID = AAC.PIE_ID
                         WHERE AAC.AJU_ID = " . $ajuste . "
-                            AND AAC.Tipo = 'Quitar';";
+                            AND AAC.Tipo = 'Quitar'
+                        ORDER BY AAC.AAC_ID ASC;";
 
 
             //Ejecutar Query
@@ -731,6 +812,36 @@
 
 
             return $html;
+        }
+
+        private function ObtenerQuitadosPDF($ajuste){
+
+            //Abrir conexion
+            $conexion = $this->bd_model->ObtenerConexion();
+
+            $query ="   SELECT  PIE.Nombre PIE_NOM,
+                            COALESCE(PIE.Inv_UC,'') inv_uc,	
+                            COALESCE(AAC.Observaciones,'') Observaciones
+                    FROM AjustesAccion AAC
+                        JOIN Piezas PIE ON PIE.PIE_ID = AAC.PIE_ID
+                    WHERE AAC.AJU_ID = " . $ajuste . "
+                        AND AAC.Tipo = 'Quitar'
+                    ORDER BY AAC.AAC_ID ASC;";
+
+            //Ejecutar Query
+            $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
+
+            $retorno = array();
+            while($line = pg_fetch_array($result, null, PGSQL_ASSOC))
+                array_push($retorno,$line);
+
+            //Liberar memoria
+            pg_free_result($result);
+
+            //liberar conexion
+            $this->bd_model->CerrarConexion($conexion);
+            
+            return $retorno;
         }
     }
 

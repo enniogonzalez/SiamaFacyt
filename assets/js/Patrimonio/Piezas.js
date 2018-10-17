@@ -228,7 +228,6 @@ $(function(){
                 "Url":              $('#FormularioActual').attr("action")
             }
             
-            console.log(parametros)
             if(!Guardando){
                 EstablecerBuscador();
                 Guardando = true;

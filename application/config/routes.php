@@ -64,6 +64,7 @@ $route['listasdesplegables'] = 'Sistema/listasdesplegables/view/';
 $route['usuarios/busqueda'] = 'Sistema/usuarios/busqueda';
 $route['usuarios/eliminar'] = 'Sistema/usuarios/eliminar';
 $route['usuarios/guardar'] = 'Sistema/usuarios/guardar';
+$route['usuarios/imprimir/(:any)'] = 'Sistema/usuarios/imprimir/$1';
 $route['usuarios'] = 'Sistema/usuarios/view/';
 
 $route['marcas/busqueda'] = 'marcas/busqueda';
@@ -84,6 +85,7 @@ $route['ajustes/obtener'] = 'Patrimonio/ajustes/obtener';
 $route['ajustes/busqueda'] = 'Patrimonio/ajustes/busqueda';
 $route['ajustes/eliminar'] = 'Patrimonio/ajustes/eliminar';
 $route['ajustes/guardar'] = 'Patrimonio/ajustes/guardar';
+$route['ajustes/imprimir/(:any)'] = 'Patrimonio/ajustes/imprimir/$1';
 $route['ajustes'] = 'Patrimonio/ajustes/view/';
 
 $route['correctivo/aprobar'] = 'Mantenimiento/correctivo/aprobar';

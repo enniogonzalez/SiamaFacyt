@@ -223,6 +223,35 @@
 
         }
 
+        public function imprimir($id){
+
+            $data['datos'] = $this->FormatearImpresion($this->ajustes_model->ObtenerInfoPDF($id));
+            $this->load->library('tcpdf/Pdf');
+            $this->load->view('Reportes/repAjustes',$data);
+        }
+
+        private function FormatearImpresion($respuesta){
+
+            $data = array(
+                "documento"     =>"",
+                "aju_id"        =>"",
+                "bie_nom"       =>"",
+                "inv_uc"        =>"",
+                "estatus"       =>"",
+                "solicitante"   =>"",
+                "fec_cre"       =>"",
+                "fec_apr"   =>"",
+                "aprobador"     =>"",
+                "Agregados"     =>[],
+                "Quitados"      =>[],
+                "observaciones" => ""
+            );
+
+            if($respuesta)
+                $data = $respuesta;
+
+            return $data;
+        }
         private function FormatearBusqueda($datos){
             
             $data = array(

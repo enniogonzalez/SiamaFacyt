@@ -41,7 +41,6 @@ $(function(){
             data: parametros,
             dataType: 'json'
         }).done(function(data){
-            console.log(data)
             Guardando = false;
 
             HabilitarBotonera();
@@ -185,7 +184,6 @@ $(function(){
             data: parametros,
             dataType: 'json'
         }).done(function(data){
-            console.log(data)
             if(data['isValid']){
 
                 MostrarEstatus(4,true); 
@@ -211,7 +209,6 @@ $(function(){
                 ModalAdvertencia(parametros,true);
             }
         }).fail(function(data){
-            console.log(data);
             failAjaxRequest(data);
         });
     }
