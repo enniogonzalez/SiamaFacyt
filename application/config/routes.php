@@ -77,6 +77,7 @@ $route['piezas/obtener'] = 'Patrimonio/piezas/obtener';
 $route['piezas/busqueda'] = 'Patrimonio/piezas/busqueda';
 $route['piezas/eliminar'] = 'Patrimonio/piezas/eliminar';
 $route['piezas/guardar'] = 'Patrimonio/piezas/guardar';
+$route['piezas/imprimir/(:any)'] = 'Patrimonio/piezas/imprimir/$1';
 $route['piezas'] = 'Patrimonio/piezas/view/';
 
 $route['ajustes/aprobar'] = 'Patrimonio/ajustes/aprobar';

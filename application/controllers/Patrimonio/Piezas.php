@@ -190,6 +190,12 @@
             echo json_encode(array("isValid"=>true,"Datos"=>$respuesta));
         }
 
+        public function imprimir($id){
+            $data['datos'] = $this->FormatearRequest($this->piezas_model->ObtenerInfoPDF($id));
+            $this->load->library('tcpdf/Pdf');
+            $this->load->view('Reportes/repPiezas',$data);
+        }
+
         private function FormatearBusqueda($datos){
             
             $data = array(

@@ -1,5 +1,15 @@
 <div class="container">
-    <h2><span class="fa fa-cubes"></span> Piezas</h2>   
+    <div class="row">
+        <div class="col-lg-9" style="padding: 0px;">
+            <h2><span class="fa fa-cubes"></span> Piezas</h2> 
+        </div>
+        <div class="col-lg-3" style="text-align:center;" id="SeccionImprimir">
+            <button type="button"  class="btn btn-primary-siama" id="Imprimir">
+                <span class="fa fa-print fa-lg"></span>
+                Imprimir
+            </button>
+        </div>
+    </div>
 </div>
 
 <div class="container">
@@ -117,7 +127,7 @@
             </div>
 
             <div class="form-group row">
-                <label for="fabPieza" class="col-lg-3 col-form-label">Fecha Fabricacion:</label>
+                <label for="fabPieza" class="col-lg-3 col-form-label">Fecha Fabricaci&oacute;n:</label>
                 <div class="col-lg-9">
                     <input maxlength="100" readonly disabled type="date" 
                     class="form-control obligatorio fecha" id="fabPieza" value="<?=$fec_fab?>">
@@ -126,7 +136,7 @@
             </div>
 
             <div class="form-group row">
-                <label for="fAdqPieza" class="col-lg-3 col-form-label">Fecha Adquisicion:</label>
+                <label for="fAdqPieza" class="col-lg-3 col-form-label">Fecha Adquisici&oacute;n:</label>
                 <div class="col-lg-9">
                     <input maxlength="100" readonly disabled type="date" 
                     class="form-control obligatorio fecha" id="fAdqPieza" value="<?=$fec_adq?>">
@@ -135,7 +145,7 @@
             </div>
 
             <div class="form-group row">
-                <label for="Instalacion" class="col-lg-3 col-form-label">Fecha Instalacion:</label>
+                <label for="Instalacion" class="col-lg-3 col-form-label">Fecha Instalaci&oacute;n:</label>
                 <div class="col-lg-9">
                     <input maxlength="100" readonly disabled type="date" 
                     class="form-control obligatorio fecha" id="Instalacion" value="<?=$fec_ins?>">
@@ -144,7 +154,7 @@
             </div>
 
             <div class="form-group row">
-                <label for="tAdqPieza" class="col-lg-3 col-form-label">Tipo Adquisicion:</label>
+                <label for="tAdqPieza" class="col-lg-3 col-form-label">Tipo Adquisici&oacute;n:</label>
                 <div class="col-lg-9">
                     <select readonly disabled class="form-control obligatorio lista" id="tAdqPieza">
                         <?=$ldAdquisicion?>

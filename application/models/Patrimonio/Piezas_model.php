@@ -141,6 +141,50 @@
             return $retorno;
         }
 
+        public function ObtenerInfoPDF($id){
+            
+            //Abrir conexion
+            $conexion = $this->bd_model->ObtenerConexion();
+
+            //Query para buscar usuario
+            $query ="   SELECT  P.Pie_Id,   COALESCE(P.Bie_Id,-1) Bie_Id,   
+                                P.Nombre,   P.Estatus,    P.Modelo, 
+                                P.Pie_ser,  P.PRO_ID,   P.PAR_ID,   P.MAR_ID, 
+                                to_char(P.Fec_Fab,'DD/MM/YYYY') Fec_Fab,
+                                to_char(P.Fec_adq,'DD/MM/YYYY') Fec_adq,
+                                to_char(P.Fec_ins,'DD/MM/YYYY') Fec_ins,
+                                P.Tip_Adq, 
+                                COALESCE(P.Inv_UC,'') Inv_UC,
+                                COALESCE(P.Observaciones,'') Observaciones,
+                                Par.nombre  nomPar,
+                                Pro.Raz_Soc nomPro,
+                                COALESCE(B.Nombre,'') nomBie,
+                                M.nombre    nomMar
+                        FROM Piezas P
+                            JOIN Proveedores Pro ON Pro.pro_id = P.pro_id
+                            JOIN Marcas M ON M.mar_id = P.mar_id
+                            JOIN Partidas Par ON Par.par_id =P.par_id
+                            LEFT JOIN Bienes B ON b.bie_id =P.bie_id
+                        WHERE P.Pie_Id = '" . $id . "'";
+
+            //Ejecutar Query
+            $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
+            
+            //Si existe registro, se guarda. Sino se guarda false
+            if ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) 
+                $retorno = $line;
+            else
+                $retorno = false;
+
+            //Liberar memoria
+            pg_free_result($result);
+
+            //liberar conexion
+            $this->bd_model->CerrarConexion($conexion);
+
+            return $retorno;
+        }
+
         public function Busqueda($busqueda,$orden,$inicio,$fin,$id = "",$igual = true){
             
             //Abrir conexion
