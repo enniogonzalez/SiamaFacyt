@@ -4,11 +4,11 @@
         
     
         public function Insertar($data){
+
             //Abrir conexion
             $conexion = $this->bd_model->ObtenerConexion();
 
 
-            //Insertar Bien
             $query = " INSERT INTO Bienes ( Nombre,     Modelo,     BIE_SER,    Inv_UC,     PRO_ID,     Fec_Fab, 
                                             Fec_adq,    Fec_ins,    Tip_Adq,    LOC_ID,     PAR_ID,		MAR_ID,
                                             Custodio,   Fue_Ali,    Cla_Uso,    Tipo,       med_vol,    uni_vol, 
@@ -148,7 +148,6 @@
             //liberar conexion
             $this->bd_model->CerrarConexion($conexion);
 
-            //Si existe registro, se guarda. Sino se guarda false
             if ($result)
                 $retorno = true;
             else
@@ -163,7 +162,6 @@
             //Abrir conexion
             $conexion = $this->bd_model->ObtenerConexion();
 
-            //Query para buscar usuario
             $query ="   SELECT  B.Bie_Id,     B.Nombre,     B.Modelo,     B.BIE_SER,    B.PRO_ID,   COALESCE(B.Inv_UC,'') Inv_UC,    
                                 B.Fec_adq,    B.Fec_ins,    B.Tip_Adq,    B.LOC_ID,     B.PAR_ID,   B.MAR_ID,
                                 B.Custodio,   B.Fue_Ali,    B.Cla_Uso,    B.Tipo,       B.med_vol,  B.uni_vol,
@@ -195,6 +193,56 @@
             //Ejecutar Query
             $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
             
+            if ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) 
+                $retorno = $line;
+            else
+                $retorno = false;
+
+            //Liberar memoria
+            pg_free_result($result);
+
+            //liberar conexion
+            $this->bd_model->CerrarConexion($conexion);
+
+            if($retorno){
+                $retorno['Piezas'] = $this->ObtenerPiezas($retorno['bie_id']);
+            }
+            return $retorno;
+        }
+
+        public function ObtenerInfoPDF($id){
+            
+            //Abrir conexion
+            $conexion = $this->bd_model->ObtenerConexion();
+
+            $query ="   SELECT  B.Bie_Id,     B.Nombre,     B.Modelo,     B.BIE_SER,    B.PRO_ID,   COALESCE(B.Inv_UC,'') Inv_UC,    
+                                B.Tip_Adq,    B.LOC_ID,     B.PAR_ID,   B.MAR_ID,
+                                B.Custodio,   B.Fue_Ali,    B.Cla_Uso,    B.Tipo,       B.med_vol,  B.uni_vol,
+                                B.med_amp,    B.uni_amp,    B.med_pot,    B.uni_pot,    B.med_fre,  
+                                B.uni_fre,    B.med_cap,    B.uni_cap,    B.med_pre,    B.uni_pre,  B.med_flu,
+                                B.uni_flu,    B.med_tem,    B.uni_tem,    B.med_pes,    B.uni_pes,
+                                B.med_vel,    B.uni_vel,    B.Tec_Pre,    B.Riesgo,     B.Estatus,
+                                COALESCE(B.Rec_Fab,'') Rec_Fab,
+                                COALESCE(B.Observaciones,'') Observaciones, 
+                                to_char(B.Fec_Fab,'DD/MM/YYYY') Fec_Fab,
+                                to_char(B.Fec_adq,'DD/MM/YYYY') Fec_adq,
+                                to_char(B.Fec_ins,'DD/MM/YYYY') Fec_ins,
+                                Par.nombre  nomPar,
+                                P.Raz_Soc   nomPro,
+                                L.nombre    nomLoc,
+                                M.nombre    nomMar,
+                                U.nombre    nomCus
+                        FROM Bienes B
+                            JOIN Localizaciones L ON L.loc_id = B.loc_Id
+                            JOIN Proveedores P ON P.pro_id = B.pro_id
+                            JOIN Marcas M ON M.mar_id = B.mar_id
+                            JOIN Partidas Par ON Par.par_id =B.par_id
+                            JOIN Usuarios U ON U.usu_id = B.custodio
+                        WHERE B.Bie_Id = '" . $id . "'";
+
+            //Ejecutar Query
+            $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
+            
             //Si existe registro, se guarda. Sino se guarda false
             if ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) 
                 $retorno = $line;
@@ -207,6 +255,9 @@
             //liberar conexion
             $this->bd_model->CerrarConexion($conexion);
 
+            if($retorno){
+                $retorno['Piezas'] = $this->ObtenerPiezasPDF($retorno['bie_id']);
+            }
             return $retorno;
         }
 
@@ -358,6 +409,68 @@
             //liberar conexion
             $this->bd_model->CerrarConexion($conexion);
 
+            return $retorno;
+        }
+
+        private function ObtenerPiezas($bien){
+            
+            
+            //Abrir conexion
+            $conexion = $this->bd_model->ObtenerConexion();
+
+            $query ="   SELECT  Nombre,
+                                Inv_UC
+                        FROM Piezas
+                        WHERE bie_id = '" . $bien . "'";
+
+            //Ejecutar Query
+            $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
+            
+            $html = "";
+
+            //Si existe registro, se guarda. Sino se guarda false
+            while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)){
+                $html = $html
+                    . "<tr>"
+                    . "    <td style=\"width:60%;\">" . $line['nombre'] . "</td>"
+                    . "    <td style=\"width:40%;\">" . $line['inv_uc'] . "</td>"
+                    . "</tr>";
+
+            }
+            
+            //Liberar memoria
+            pg_free_result($result);
+
+            //liberar conexion
+            $this->bd_model->CerrarConexion($conexion);
+
+
+            return $html;
+        }
+
+        private function ObtenerPiezasPDF($bien){
+
+            //Abrir conexion
+            $conexion = $this->bd_model->ObtenerConexion();
+
+            $query ="   SELECT  Nombre,
+                                Inv_UC
+                        FROM Piezas
+                        WHERE bie_id = '" . $bien . "'";
+
+            //Ejecutar Query
+            $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
+            
+            $retorno = array();
+            while($line = pg_fetch_array($result, null, PGSQL_ASSOC))
+                array_push($retorno,$line);
+
+            //Liberar memoria
+            pg_free_result($result);
+
+            //liberar conexion
+            $this->bd_model->CerrarConexion($conexion);
+            
             return $retorno;
         }
     }

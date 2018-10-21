@@ -245,7 +245,6 @@
         }
 
         public function imprimir($id){
-            
             $data['datos'] = $this->FormatearImpresion($this->correctivo_model->ObtenerInfoPDF($id));
             $this->load->library('tcpdf/Pdf');
             $this->load->view('Reportes/repManCor',$data);

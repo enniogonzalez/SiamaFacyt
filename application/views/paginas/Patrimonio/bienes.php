@@ -1,5 +1,15 @@
 <div class="container">
-    <h2><span class="fa fa-cube"></span> Bienes</h2>   
+    <div class="row">
+        <div class="col-lg-9" style="padding: 0px;">
+            <h2><span class="fa fa-cube"></span> Bienes</h2> 
+        </div>
+        <div class="col-lg-3" style="text-align:center;" id="SeccionImprimir">
+            <button type="button"  class="btn btn-primary-siama" id="Imprimir">
+                <span class="fa fa-print fa-lg"></span>
+                Imprimir
+            </button>
+        </div>
+    </div>
 </div>
 
 <div class="container">
@@ -301,7 +311,7 @@
             </div>
 
             <div class="form-group row">
-                <label for="mPre" class="col-lg-3 col-form-label">Presion:</label>
+                <label for="mPre" class="col-lg-3 col-form-label">Presi&oacute;n:</label>
                 <div class="col-lg-5">
                     <input readonly disabled required type="number" step=".01" 
                         class="form-control obligatorio decimal" id="mPre" value="<?=$med_pre?>">
@@ -377,7 +387,7 @@
 
 
             <div class="form-group row">
-                <label for="Recomendacion" class="col-lg-3 col-form-label">Recomendaciones Fabricante:</label>
+                <label for="Recomendacion" class="col-lg-3 col-form-label">Recomendaciones del Fabricante:</label>
                 <div class="col-lg-9">
                     <textarea  readonly disabled class="form-control texto" rows="3"
                     style = "resize:vertical;" id="Recomendacion"><?=$rec_fab?></textarea>
@@ -392,6 +402,22 @@
                 </div>
             </div>
 
+            <h3>
+                Piezas
+            </h3>
+            <div class="table-responsive">
+                <table id="TablaPiezas" class="table table-hover tabla-siama tabla-siama-desactivada">
+                    <thead class="head-table-siama" style="font-size:13px;">
+                        <tr>
+                            <th style="width:60%;">Pieza</th>
+                            <th style="width:40%;">Inventario UC</th>
+                        </tr>
+                    </thead>
+                    <tbody style="font-size:13px;">
+                        <?=$Piezas?>
+                    </tbody>
+                </table>
+            </div>
         </form>
         <div style="display:none;">
             <select readonly disabled  id="listaBusquedaFormulario">

@@ -121,6 +121,7 @@ $route['bienes/obtener'] = 'Patrimonio/bienes/obtener';
 $route['bienes/busqueda'] = 'Patrimonio/bienes/busqueda';
 $route['bienes/eliminar'] = 'Patrimonio/bienes/eliminar';
 $route['bienes/guardar'] = 'Patrimonio/bienes/guardar';
+$route['bienes/imprimir/(:any)'] = 'Patrimonio/bienes/imprimir/$1';
 $route['bienes'] = 'Patrimonio/bienes/view/';
 
 $route['localizaciones/busqueda'] = 'localizaciones/busqueda';

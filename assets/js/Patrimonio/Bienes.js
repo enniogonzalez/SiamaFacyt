@@ -20,6 +20,7 @@ $(function(){
     var idBuscadorActual = "";
     var nombreBuscadorActual = "";
     var idMarca = "";
+    var TablaPieza = "";
     var idProveedor = "";
     var idLocalizacion = "";
     var idPartidas = "";
@@ -428,6 +429,7 @@ $(function(){
         $('#IdForm').text(''); 
         $('#alertaFormularioActual').hide();
 
+        $('#TablaPiezas > tbody').children().remove();
         $('.formulario-siama form .form-control').each(function(){
             $(this).removeClass('is-invalid');
             if($(this).hasClass('texto'))
@@ -442,8 +444,10 @@ $(function(){
     }
     
     function GuardarEstadoActualFormulario(){
+
         dataInputs = [];
         idActual =$('#IdForm').text().trim();
+        TablaPieza = $('#TablaPiezas > tbody').html();
 
         idMarca         = $('#idMar').text().trim();
         idProveedor     = $('#idPro').text().trim();
@@ -504,13 +508,17 @@ $(function(){
             "mVelocidad":       dataInputs[37].trim(),
             "uVelocidad":       dataInputs[38].trim(),
             "Recomendacion":    dataInputs[39].trim(),
-            "Observacion":      dataInputs[40].trim()
+            "Observacion":      dataInputs[40].trim(),
+            "Piezas":           TablaPieza
         }
         LlenarFormulario(parametros);
     }
     
     function LlenarFormulario(data){
 
+        $('#TablaPiezas > tbody').children().remove();
+        
+        $('#TablaPiezas > tbody:last-child').append(data['Piezas']);
         $('#IdForm').text(data['id']);
         $('#idMar').text(data['idMarca']);
         $('#idPro').text(data['idProveedor']);
@@ -629,7 +637,8 @@ $(function(){
             "mVelocidad":       data['Datos']['med_vel'].trim(),
             "uVelocidad":       data['Datos']['uni_vel'].trim(),
             "Recomendacion":    data['Datos']['rec_fab'].trim(),
-            "Observacion":      data['Datos']['observaciones'].trim()
+            "Observacion":      data['Datos']['observaciones'].trim(),
+            "Piezas":           data['Datos']['Piezas'].trim(),
         }
 
         LlenarFormulario(parametros);

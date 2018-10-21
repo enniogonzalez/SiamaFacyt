@@ -8,7 +8,13 @@
             $this->load->library('liblistasdesplegables','liblistasdesplegables');
         }
 
-        private function FormatearRequest($respuesta){
+        private function FormatearRequest($respuesta,$PiezaArray = false){
+            if($PiezaArray){
+                $Pieza = array();
+            }else{
+                $Pieza = "";
+            }
+
 
             $data = array(
                 "bie_id"        =>"",
@@ -57,7 +63,8 @@
                 "nompro"        =>"",
                 "nomloc"        =>"",
                 "nommar"        =>"",
-                "nomcus"        =>""
+                "Piezas"        =>$Pieza,
+                "nomcus"        =>"",
             );
 
             if($respuesta)
@@ -274,6 +281,13 @@
             $respuesta = $this->FormatearBusqueda($this->bienes_model->Busqueda($busqueda,$ordenamiento,$inicio,$fin,$BienesDisponibles));
 
             echo json_encode(array("isValid"=>true,"Datos"=>$respuesta));
+        }
+
+        public function imprimir($id){
+            
+            $data['datos'] = $this->FormatearRequest($this->bienes_model->ObtenerInfoPDF($id),true);
+            $this->load->library('tcpdf/Pdf');
+            $this->load->view('Reportes/repBienes',$data);
         }
 
         private function FormatearBusqueda($datos){
