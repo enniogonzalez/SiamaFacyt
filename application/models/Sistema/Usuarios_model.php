@@ -8,10 +8,13 @@
             $conexion = $this->bd_model->ObtenerConexion();
 
             //Insertar Proveedor
-            $query = " INSERT INTO Usuarios(Username,Nombre,Clave,Cargo,Observaciones) VALUES('"
+            $query = " INSERT INTO Usuarios(Username,Nombre,Clave,Cargo,Correo,Usu_Cre,Usu_Mod,Observaciones) VALUES('"
             . str_replace("'", "''",$data['Username']) . "','"
             . str_replace("'", "''",$data['Nombre']) . "','123456','"
             . str_replace("'", "''",$data['Cargo']) . "',"
+            . (($data['Correo'] == "") ? "null" : ("'" .str_replace("'", "''", $data['Correo']) . "'")). ","
+            . $this->session->userdata("usu_id")    . ","
+            . $this->session->userdata("usu_id")    . ","
             . (($data['Observaciones'] == "") ? "null" : ("'" .str_replace("'", "''", $data['Observaciones']) . "'"))
             . ");";
 
@@ -43,10 +46,12 @@
                 . " SET Username ='". str_replace("'", "''",$data['Username']) 
                 . "', Nombre = '".str_replace("'", "''",$data['Nombre'])
                 . "', Cargo = '".str_replace("'", "''",$data['Cargo'])
-                . "', Observaciones = " 
+                . "', Correo = ". (($data['Correo'] == "") ? "null" : ("'" .str_replace("'", "''", $data['Correo']) . "'"))
+                . ", Usu_Mod = " . $this->session->userdata("usu_id") 
+                . ", Fec_Mod = NOW()" 
+                . ", Observaciones = " 
                 .(($data['Observaciones'] == "") ? "null" : ("'" .str_replace("'", "''", $data['Observaciones']) . "'"))
                 . " WHERE USU_ID = '" . str_replace("'", "''",$data['idActual']) . "';";
-
 
             //Ejecutar Query
             $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
@@ -77,6 +82,7 @@
                                 Username,
                                 Nombre,
                                 Cargo,
+                                COALESCE(Correo,'') Correo,
                                 COALESCE(Observaciones,'') Observaciones
                         FROM Usuarios
                     ";

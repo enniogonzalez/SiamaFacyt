@@ -50,6 +50,15 @@
                     <div class="invalid-feedback">Campo Obligatorio</div>
                 </div>
             </div>
+
+            <div class="form-group row">
+                <label for="correo" class="col-md-3 col-form-label">Correo:</label>
+                <div class="col-md-9">
+                    <input maxlength="100" readonly disabled type="email" 
+                    class="form-control  texto" id="correo" value="<?=$correo?>">
+                    <div class="invalid-feedback">Correo Inv&aacute;lido</div>
+                </div>
+            </div>
             
             <div class="form-group row">
                 <label for="Observacion" class="col-md-3 col-form-label">Observaci&oacute;n:</label>

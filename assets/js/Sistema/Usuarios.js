@@ -92,6 +92,11 @@ $(function(){
             }
         })
 
+        if(Valido && $('#correo').val().trim() != '' && !validateEmail($('#correo').val())){
+            Valido = false;
+            $('#correo').addClass('is-invalid');
+        }
+
         if(Valido){
 
             var parametros = {
@@ -99,6 +104,7 @@ $(function(){
                 "Username":     $('#Usuario').val().trim(),
                 "Nombre":       $('#nombreUsu').val().trim(),
                 "Cargo":        $('#Cargo').val().trim(),
+                "Correo":       $('#correo').val().trim(),
                 "Observacion":  $('#Observacion').val().trim(),
                 "Url":          $('#FormularioActual').attr("action")
             }
@@ -152,7 +158,8 @@ $(function(){
             "Username":     dataInputs[0].trim(),
             "Nombre":       dataInputs[1].trim(),
             "Cargo":        dataInputs[2].trim(),
-            "Observacion":  dataInputs[3].trim()
+            "Correo":       dataInputs[3].trim(),
+            "Observacion":  dataInputs[4].trim()
         }
         LlenarFormulario(parametros);
     }
@@ -162,18 +169,53 @@ $(function(){
         $('#Usuario').val(data['Username']);
         $('#nombreUsu').val(data['Nombre']);
         $('#Cargo').val(data['Cargo']);
+        $('#correo').val(data['Correo']);
         $('#Observacion').val(data['Observacion']);
     }
 
-    window.InterfazElegirBuscador = function(fila){
+    function LlenarFormularioRequest(data){
+
         var parametros = {
-            "id":           fila.find('td:eq(0)').text().trim(),
-            "Username":     fila.find('td:eq(2)').text().trim(),
-            "Nombre":       fila.find('td:eq(3)').text().trim(),
-            "Cargo":        fila.find('td:eq(4)').text().trim(),
-            "Observacion":  fila.find('td:eq(1)').text().trim(),
+            "id":           data['usu_id'],
+            "Username":     data['username'],
+            "Nombre":       data['nombre'],
+            "Cargo":        data['cargo'],
+            "Correo":       data['correo'],
+            "Observacion":  data['observaciones'],
         }
+
         LlenarFormulario(parametros);
+        
+    }
+
+    function Obtener(parametros){
+
+        MostrarEstatus(5); 
+
+        $.ajax({
+            url: parametros['Url'],
+            type: "POST",
+            data: parametros,
+            dataType: 'json'
+        }).done(function(data){
+            $(window).scrollTop(0);
+            if(data['isValid']){
+                CerrarEstatus();
+                LlenarFormularioRequest(data['Datos']);
+                $('#SiamaModalBusqueda').modal('hide');
+            }
+        }).fail(function(data){
+            failAjaxRequest(data);
+        });
+    }
+
+    window.InterfazElegirBuscador = function(fila){
+        
+        var parametros = {
+            "id": fila.find("td:eq(0)").text().trim(),
+            "Url": $('#ControladorActual').text().trim()+"/obtener"
+        }
+        Obtener(parametros);
     }
 
     window.AccionEliminarFormulario = function(data){

@@ -15,6 +15,7 @@
                 "username"      =>"",
                 "nombre"        =>"",
                 "cargo"         =>"",
+                "correo"         =>"",
                 "observaciones" =>"",
             );
 
@@ -57,6 +58,16 @@
 
         }
 
+        public function obtener(){
+
+            if(!$this->session->userdata("nombre") || $this->input->post("id") == ""){
+                redirect(site_url(''));
+            }
+            $data = $this->FormatearRequest($this->usuarios_model->Obtener($this->input->post("id")));
+            echo json_encode(array("isValid"=>true,"Datos"=>$data));
+
+        }
+
         public function guardar(){
 
             if(!$this->session->userdata("nombre") || $this->input->post("Username") == ""){
@@ -69,6 +80,7 @@
                 "Username"      => $this->input->post("Username"),
                 "Nombre"        => $this->input->post("Nombre"),
                 "Cargo"         => $this->input->post("Cargo"),
+                "Correo"        => $this->input->post("Correo"),
                 "Observaciones" => trim($this->input->post("Observacion"))
             );
             

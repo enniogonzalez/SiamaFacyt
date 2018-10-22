@@ -17,7 +17,7 @@ $(function(){
         return false;
     })
     
-    $('#Imprimir').on('click',function(){
+    $('#SeccionImprimir').on('click',"#Imprimir",function(){
         window.open($('#ControladorActual').text().trim() + "/imprimir/" + $('#IdForm').text().trim(), '_blank');
     })
 
@@ -110,7 +110,16 @@ $(function(){
 
     window.AgregarBotoneraPrimaria = function(){
         
+        $('#SeccionImprimir').children().remove();
         $('.botoneraFormulario').children().remove();
+
+        $('#SeccionImprimir').append(`
+            <button type="button"  class="btn btn-primary-siama" id="Imprimir">
+                <span class="fa fa-print fa-lg"></span>
+                Imprimir
+            </button>
+        `);
+
         $('.botoneraFormulario').append(`
             <button  title="Buscar" type="button"  class="btn btn-primary-siama" id="BuscarRegistro">
                 <span class="fa fa-search"></span>
@@ -136,6 +145,7 @@ $(function(){
 
     window.AgregarBotoneraPrimariaNULL = function(){
         
+        $('#SeccionImprimir').children().remove();
         $('.botoneraFormulario').children().remove();
         $('.botoneraFormulario').append(`
             <button title="Agregar" type="button"  class="btn btn-primary-siama" id="AgregarRegistro">
@@ -146,7 +156,12 @@ $(function(){
     }
 
     window.AgregarBotoneraSecundaria = function(){
+
+
+        $('#SeccionImprimir').children().remove();
         $('.botoneraFormulario').children().remove();
+
+
         $('.botoneraFormulario').append(`
             <button title="Guardar" type="button" class="btn  btn-success" id="GuardarRegistro">
                 <span class="fa fa-floppy-o"></span>

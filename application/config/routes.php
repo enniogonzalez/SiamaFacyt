@@ -64,6 +64,7 @@ $route['listasdesplegables'] = 'Sistema/listasdesplegables/view/';
 $route['usuarios/busqueda'] = 'Sistema/usuarios/busqueda';
 $route['usuarios/eliminar'] = 'Sistema/usuarios/eliminar';
 $route['usuarios/guardar'] = 'Sistema/usuarios/guardar';
+$route['usuarios/obtener'] = 'Sistema/usuarios/obtener';
 $route['usuarios/imprimir/(:any)'] = 'Sistema/usuarios/imprimir/$1';
 $route['usuarios'] = 'Sistema/usuarios/view/';
 
