@@ -26,11 +26,19 @@
             return $data;
         }
 
+        private function ValidarPermiso(){
+            if(!$this->session->userdata("Permisos")['Patrimonio']){
+                show_404();
+            }
+        } 
+
         public function view(){
             
             if(!$this->session->userdata("nombre")){
                 redirect(site_url(''));
             }
+
+            $this->ValidarPermiso();
             
             $data = $this->FormatearRequest($this->ajustes_model->Obtener());
 
@@ -67,6 +75,8 @@
 
         public function obtener(){
 
+            $this->ValidarPermiso();
+
             if(!$this->session->userdata("nombre") || $this->input->post("id") == ""){
                 redirect(site_url(''));
             }
@@ -76,6 +86,8 @@
         }
 
         public function guardar(){
+
+            $this->ValidarPermiso();
 
             if(!$this->session->userdata("nombre") || $this->input->post("Bien") == ""){
                 redirect(site_url(''));
@@ -132,6 +144,8 @@
 
         public function eliminar(){
             
+            $this->ValidarPermiso();
+
             if(!$this->session->userdata("nombre") || $this->input->post("id") == ""){
                 redirect(site_url(''));
             }
@@ -153,6 +167,8 @@
 
         public function busqueda(){
 
+            $this->ValidarPermiso();
+
             if(!$this->session->userdata("nombre") || $this->input->post("Pagina") == ""){
                 redirect(site_url(''));
             }
@@ -172,6 +188,8 @@
 
         public function aprobar(){
             
+            $this->ValidarPermiso();
+
             if(!$this->session->userdata("nombre") || $this->input->post("id") == ""){
                 redirect(site_url(''));
             }
@@ -199,6 +217,8 @@
 
         public function reversar(){
             
+            $this->ValidarPermiso();
+
             if(!$this->session->userdata("nombre") || $this->input->post("id") == ""){
                 redirect(site_url(''));
             }
@@ -224,7 +244,7 @@
         }
 
         public function imprimir($id){
-
+            $this->ValidarPermiso();
             $data['datos'] = $this->FormatearImpresion($this->ajustes_model->ObtenerInfoPDF($id));
             $this->load->library('tcpdf/Pdf');
             $this->load->view('Reportes/repAjustes',$data);

@@ -11,12 +11,13 @@
         private function FormatearRequest($respuesta){
 
             $data = array(
-                "usu_id"        =>"",
-                "username"      =>"",
-                "nombre"        =>"",
-                "cargo"         =>"",
-                "correo"         =>"",
-                "observaciones" =>"",
+                "usu_id"        => "",
+                "username"      => "",
+                "nombre"        => "",
+                "cargo"         => "",
+                "correo"        => "",
+                "observaciones" => "",
+                "Permisos"      => [],
             );
 
             if($respuesta)
@@ -24,11 +25,18 @@
             return $data;
         }
 
+        private function ValidarPermiso(){
+            if(!$this->session->userdata("Permisos")['Sistema']){
+                show_404();
+            }
+        }
+
         public function view(){
             
             if(!$this->session->userdata("nombre")){
                 redirect(site_url(''));
             }
+            $this->ValidarPermiso();
             
             $data = $this->FormatearRequest($this->usuarios_model->Obtener());
 
@@ -60,6 +68,8 @@
 
         public function obtener(){
 
+            $this->ValidarPermiso();
+
             if(!$this->session->userdata("nombre") || $this->input->post("id") == ""){
                 redirect(site_url(''));
             }
@@ -70,10 +80,11 @@
 
         public function guardar(){
 
+            $this->ValidarPermiso();
+
             if(!$this->session->userdata("nombre") || $this->input->post("Username") == ""){
                 redirect(site_url(''));
             }
-
 
             $parametros = array(
                 "idActual"      => $this->input->post("id"),
@@ -81,6 +92,13 @@
                 "Nombre"        => $this->input->post("Nombre"),
                 "Cargo"         => $this->input->post("Cargo"),
                 "Correo"        => $this->input->post("Correo"),
+                "Localizacion"  => ($this->input->post("Localizacion") == "true" ? true:false),
+                "Mantenimiento" => ($this->input->post("Mantenimiento") == "true" ? true:false),
+                "Marcas"        => ($this->input->post("Marcas") == "true" ? true:false),
+                "Partidas"      => ($this->input->post("Partidas") == "true" ? true:false),
+                "Patrimonio"    => ($this->input->post("Patrimonio") == "true" ? true:false),
+                "Proveedores"   => ($this->input->post("Proveedores") == "true" ? true:false),
+                "Sistema"       => ($this->input->post("Sistema") == "true" ? true:false),
                 "Observaciones" => trim($this->input->post("Observacion"))
             );
             
@@ -116,6 +134,7 @@
         }
 
         public function eliminar(){
+            $this->ValidarPermiso();
             
             if(!$this->session->userdata("nombre") || $this->input->post("id") == ""){
                 redirect(site_url(''));
@@ -148,6 +167,8 @@
         }
 
         public function imprimir($id){
+
+            $this->ValidarPermiso();
             
             $data['datos'] = $this->FormatearRequest($this->usuarios_model->Obtener($id));
             $this->load->library('tcpdf/Pdf');

@@ -21,11 +21,19 @@
             return $data;
         }
 
+        private function ValidarPermiso(){
+            if(!$this->session->userdata("Permisos")['Marcas']){
+                show_404();
+            }
+        }
+        
         public function view(){
             
             if(!$this->session->userdata("nombre")){
                 redirect(site_url(''));
             }
+
+            $this->ValidarPermiso();
             
             $data = $this->FormatearRequest($this->marcas_model->Obtener());
 
@@ -54,6 +62,8 @@
         }
 
         public function guardar(){
+
+            $this->ValidarPermiso();
 
             if(!$this->session->userdata("nombre") || $this->input->post("Nombre") == ""){
                 redirect(site_url(''));
@@ -98,6 +108,7 @@
 
         public function eliminar(){
             
+            $this->ValidarPermiso();
             if(!$this->session->userdata("nombre") || $this->input->post("id") == ""){
                 redirect(site_url(''));
             }

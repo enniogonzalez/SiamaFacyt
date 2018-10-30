@@ -23,9 +23,9 @@
                         </a>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" style="color: #fff;cursor:pointer;" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Usuario</a>
+                        <a class="nav-link dropdown-toggle" style="color: #fff;cursor:pointer;" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><?=$this->session->userdata("username")?></a>
                         <div style="right:0;" class="dropdown-menu" aria-labelledby="dropdown01">
-                        <a class="dropdown-item" href="#"><span class="fa-wrench fa fa-lg"></span> Ajustes</a>
+                        <a class="dropdown-item" href="<?=site_url('configurar')?>"><span class="fa-cog fa fa-lg"></span> Configurar</a>
                         <a class="dropdown-item" href="<?=site_url('login/cerrarConexion')?>"><span class="fa-sign-out fa fa-lg"></span> Salir</a>
                         </div>
                     </li>

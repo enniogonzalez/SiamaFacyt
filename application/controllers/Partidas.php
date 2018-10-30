@@ -24,11 +24,18 @@
             return $data;
         }
 
+        private function ValidarPermiso(){
+            if(!$this->session->userdata("Permisos")['Partidas']){
+                show_404();
+            }
+        }
+        
         public function view(){
             
             if(!$this->session->userdata("nombre")){
                 redirect(site_url(''));
             }
+            $this->ValidarPermiso();
             
             $data = $this->FormatearRequest($this->partidas_model->Obtener());
 
@@ -61,6 +68,7 @@
             if(!$this->session->userdata("nombre") || $this->input->post("Nombre") == ""){
                 redirect(site_url(''));
             }
+            $this->ValidarPermiso();
 
             $parametros = array(
                 "idActual" => $this->input->post("id"),
@@ -106,6 +114,7 @@
             if(!$this->session->userdata("nombre") || $this->input->post("id") == ""){
                 redirect(site_url(''));
             }
+            $this->ValidarPermiso();
 
             $eliminar = $this->partidas_model->Eliminar($this->input->post("id"));
             $data = $this->FormatearRequest($this->partidas_model->Obtener());
@@ -137,6 +146,7 @@
         }
 
         public function imprimir($id){
+            $this->ValidarPermiso();
             $data['datos'] = $this->FormatearImpresion($this->partidas_model->ObtenerInfoPDF($id));
             $this->load->library('tcpdf/Pdf');
             $this->load->view('Reportes/repPartidas',$data);

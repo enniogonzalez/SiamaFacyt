@@ -39,11 +39,18 @@
             return $data;
         }
 
+        private function ValidarPermiso(){
+            if(!$this->session->userdata("Permisos")['Patrimonio']){
+                show_404();
+            }
+        } 
+
         public function view(){
             
             if(!$this->session->userdata("nombre")){
                 redirect(site_url(''));
             }
+            $this->ValidarPermiso();
             
             $data = $this->FormatearRequest($this->piezas_model->Obtener());
 
@@ -88,6 +95,7 @@
         }
 
         public function obtener(){
+            $this->ValidarPermiso();
 
             if(!$this->session->userdata("nombre") || $this->input->post("id") == ""){
                 redirect(site_url(''));
@@ -98,6 +106,7 @@
         }
 
         public function guardar(){
+            $this->ValidarPermiso();
 
             if(!$this->session->userdata("nombre") || $this->input->post("Nombre") == ""){
                 redirect(site_url(''));
@@ -153,6 +162,7 @@
         }
 
         public function eliminar(){
+            $this->ValidarPermiso();
             
             if(!$this->session->userdata("nombre") || $this->input->post("id") == ""){
                 redirect(site_url(''));
@@ -191,6 +201,7 @@
         }
 
         public function imprimir($id){
+            $this->ValidarPermiso();
             $data['datos'] = $this->FormatearRequest($this->piezas_model->ObtenerInfoPDF($id));
             $this->load->library('tcpdf/Pdf');
             $this->load->view('Reportes/repPiezas',$data);

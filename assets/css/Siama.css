@@ -104,6 +104,9 @@
     background-color: #e9ecef;
 }
 
+.seleccionarPermiso{
+    cursor: pointer;
+}
 
 /****************************************************/
 /*                  Formularios                     */

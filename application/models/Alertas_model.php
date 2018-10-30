@@ -10,6 +10,8 @@
 
             $query ="   SELECT  Titulo,Descripcion
                         FROM Alertas
+                            JOIN PermisosUsuarios PU ON PU.menu = Alertas.menu
+                        WHERE PU.usu_id = '" . $this->session->userdata("usu_id") . "'
                         ORDER BY fec_cre DESC
                     ";
 
@@ -36,7 +38,8 @@
 
             $query ="   SELECT  COUNT(*) cantidad
                         FROM Alertas
-                    ";
+                            JOIN PermisosUsuarios PU ON PU.menu = Alertas.menu
+                        WHERE PU.usu_id = '" . $this->session->userdata("usu_id") . "'";
 
             //Ejecutar Query
             $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());

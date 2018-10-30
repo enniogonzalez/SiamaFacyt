@@ -10,6 +10,7 @@ $(function(){
 
     var idActual ="";
     var dataInputs= [];
+    var permisos = [];
 
     EstablecerBuscador()
 
@@ -99,14 +100,22 @@ $(function(){
 
         if(Valido){
 
+            var per = ObtenerPermisos();
             var parametros = {
-                "id":           $('#IdForm').text().trim(),
-                "Username":     $('#Usuario').val().trim(),
-                "Nombre":       $('#nombreUsu').val().trim(),
-                "Cargo":        $('#Cargo').val().trim(),
-                "Correo":       $('#correo').val().trim(),
-                "Observacion":  $('#Observacion').val().trim(),
-                "Url":          $('#FormularioActual').attr("action")
+                "id"                : $('#IdForm').text().trim(),
+                "Username"          : $('#Usuario').val().trim(),
+                "Nombre"            : $('#nombreUsu').val().trim(),
+                "Cargo"             : $('#Cargo').val().trim(),
+                "Correo"            : $('#correo').val().trim(),
+                "Observacion"       : $('#Observacion').val().trim(),
+                "Url"               : $('#FormularioActual').attr("action"),
+                "Localizacion"      : per[0],
+                "Mantenimiento"     : per[1],
+                "Marcas"            : per[2],
+                "Partidas"          : per[3],
+                "Patrimonio"        : per[4],
+                "Proveedores"       : per[5],
+                "Sistema"           : per[6],
             }
             
             if(!Guardando){
@@ -116,6 +125,31 @@ $(function(){
         }
         
     });
+
+    $('#TablaPermisos').on('click','.seleccionarPermiso',function(){
+        $('.tr-activa-siama').removeClass('tr-activa-siama');
+        var fila = $(this).parent('tr');
+        fila.addClass('tr-activa-siama');
+
+        if($(this).find('span').hasClass('fa-square-o')){
+            $(this).find('span').removeClass('fa-square-o');
+            $(this).find('span').addClass('fa-check-square-o');
+            $(this).parent('tr').find('td:eq(13)').text('Realizado');
+        }else{
+            $(this).find('span').removeClass('fa-check-square-o');
+            $(this).find('span').addClass('fa-square-o');
+            $(this).parent('tr').find('td:eq(13)').text('');
+        }
+    });
+
+    function ObtenerPermisos(){
+        var p = [];
+        $('.seleccionarPermiso').each(function(){
+            p.push($(this).find('span').hasClass('fa-check-square-o'));
+        });
+
+        return p;
+    }
 
     function EstablecerBuscador(){
         html = `
@@ -132,6 +166,9 @@ $(function(){
         
         $('#IdForm').text(''); 
         $('#alertaFormularioActual').hide();
+        $('.seleccionarPermiso').find('span').removeClass('fa-check-square-o');
+        $('.seleccionarPermiso').find('span').removeClass('fa-square-o');
+        $('.seleccionarPermiso').find('span').addClass('fa-square-o');
 
         $('.formulario-siama form .form-control').each(function(){
             $(this).removeClass('is-invalid');
@@ -146,20 +183,30 @@ $(function(){
     
     function GuardarEstadoActualFormulario(){
         dataInputs = [];
+        permisos = [];
         idActual =$('#IdForm').text().trim();
         $('.formulario-siama form .form-control').each(function(){
             dataInputs.push($(this).val().trim());
-        })
+        });
+
+        permisos = ObtenerPermisos();
     }
 
     function ReestablecerEstadoAnteriorFormulario(){
         var parametros = {
-            "id":           idActual.trim(),
-            "Username":     dataInputs[0].trim(),
-            "Nombre":       dataInputs[1].trim(),
-            "Cargo":        dataInputs[2].trim(),
-            "Correo":       dataInputs[3].trim(),
-            "Observacion":  dataInputs[4].trim()
+            "id"            : idActual.trim(),
+            "Username"      : dataInputs[0].trim(),
+            "Nombre"        : dataInputs[1].trim(),
+            "Cargo"         : dataInputs[2].trim(),
+            "Correo"        : dataInputs[3].trim(),
+            "Observacion"   : dataInputs[4].trim(),
+            "Localizacion"  : permisos[0],
+            "Mantenimiento" : permisos[1],
+            "Marcas"        : permisos[2],
+            "Partidas"      : permisos[3],
+            "Patrimonio"    : permisos[4],
+            "Proveedores"   : permisos[5],
+            "Sistema"       : permisos[6],
         }
         LlenarFormulario(parametros);
     }
@@ -171,17 +218,36 @@ $(function(){
         $('#Cargo').val(data['Cargo']);
         $('#correo').val(data['Correo']);
         $('#Observacion').val(data['Observacion']);
+
+
+        $('.seleccionarPermiso').find('span').removeClass('fa-check-square-o');
+        $('.seleccionarPermiso').find('span').removeClass('fa-square-o');
+
+        $('#perLoc').find('span').addClass(data['Localizacion'] ? 'fa-check-square-o':'fa-square-o');
+        $('#perMan').find('span').addClass(data['Mantenimiento'] ? 'fa-check-square-o':'fa-square-o');
+        $('#perMar').find('span').addClass(data['Marcas'] ? 'fa-check-square-o':'fa-square-o');
+        $('#perPar').find('span').addClass(data['Partidas'] ? 'fa-check-square-o':'fa-square-o');
+        $('#perPat').find('span').addClass(data['Patrimonio'] ? 'fa-check-square-o':'fa-square-o');
+        $('#perPro').find('span').addClass(data['Proveedores'] ? 'fa-check-square-o':'fa-square-o');
+        $('#perSis').find('span').addClass(data['Sistema'] ? 'fa-check-square-o':'fa-square-o');
     }
 
     function LlenarFormularioRequest(data){
 
         var parametros = {
-            "id":           data['usu_id'],
-            "Username":     data['username'],
-            "Nombre":       data['nombre'],
-            "Cargo":        data['cargo'],
-            "Correo":       data['correo'],
-            "Observacion":  data['observaciones'],
+            "id"            : data['usu_id'],
+            "Username"      : data['username'],
+            "Nombre"        : data['nombre'],
+            "Cargo"         : data['cargo'],
+            "Correo"        : data['correo'],
+            "Observacion"   : data['observaciones'],
+            "Localizacion"  : data['Permisos']["Localizacion"],
+            "Mantenimiento" : data['Permisos']["Mantenimiento"],
+            "Marcas"        : data['Permisos']["Marcas"],
+            "Partidas"      : data['Permisos']["Partidas"],
+            "Patrimonio"    : data['Permisos']["Patrimonio"],
+            "Proveedores"   : data['Permisos']["Proveedores"],
+            "Sistema"       : data['Permisos']["Sistema"],
         }
 
         LlenarFormulario(parametros);

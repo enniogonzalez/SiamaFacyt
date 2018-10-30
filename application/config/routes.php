@@ -50,6 +50,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |		my-controller/my-method	-> my_controller/my_method
 */
 
+$route['configurar'] = 'Sistema/configurarusuario/view';
+$route['configurar/guardar'] = 'Sistema/configurarusuario/guardar';
 
 $route['alertas/CantidadAlertas'] = 'alertas/CantidadAlertas';
 $route['alertas'] = 'alertas/view';

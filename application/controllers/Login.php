@@ -39,8 +39,10 @@ class Login extends CI_Controller{
                 "usu_id"        => $resp['usu_id'],
                 "username"      => $resp['username'],
                 "nombre"        => $resp['nombre'],
+                "correo"        => $resp['correo'],
                 "cargo"         => $resp['cargo'],
                 "observaciones" => $resp['observaciones'],
+                "Permisos"      => $resp['Permisos'],
             ];
             $this->session->set_userdata($data);
             echo json_encode(array("isValid"=>true,"Mensaje"=>"Ingreso Satisfactorio","url" => site_url('home')));

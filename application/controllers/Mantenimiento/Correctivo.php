@@ -28,11 +28,19 @@
             return $data;
         }
 
+        private function ValidarPermiso(){
+            if(!$this->session->userdata("Permisos")['Mantenimiento']){
+                show_404();
+            }
+        } 
+
         public function view(){
             
             if(!$this->session->userdata("nombre")){
                 redirect(site_url(''));
             }
+
+            $this->ValidarPermiso();
             
             $data = $this->FormatearRequest($this->correctivo_model->Obtener());
 
@@ -73,10 +81,13 @@
         }
 
         public function obtener(){
-
+            
             if(!$this->session->userdata("nombre") || $this->input->post("id") == ""){
                 redirect(site_url(''));
             }
+            
+            $this->ValidarPermiso();
+
             $data = $this->FormatearRequest($this->correctivo_model->Obtener($this->input->post("id")));
             echo json_encode(array("isValid"=>true,"Datos"=>$data));
 
@@ -87,6 +98,8 @@
             if(!$this->session->userdata("nombre") || $this->input->post("Bien") == ""){
                 redirect(site_url(''));
             }
+
+            $this->ValidarPermiso();
 
 
             $parametros = array(
@@ -158,6 +171,8 @@
                 redirect(site_url(''));
             }
 
+            $this->ValidarPermiso();
+
             if($this->correctivo_model->PuedeEliminar($this->input->post("id"))){
                 $eliminar = $this->correctivo_model->Eliminar($this->input->post("id"));
                 $data = $this->FormatearRequest($this->correctivo_model->Obtener());
@@ -178,6 +193,8 @@
                 redirect(site_url(''));
             }
 
+            $this->ValidarPermiso();
+
             $busqueda = $this->input->post("Busqueda") ;
             $pagina = (int) $this->input->post("Pagina") ;
             $regXpag = (int) $this->input->post("RegistrosPorPagina") ;
@@ -196,6 +213,8 @@
             if(!$this->session->userdata("nombre") || $this->input->post("id") == ""){
                 redirect(site_url(''));
             }
+
+            $this->ValidarPermiso();
 
             if($this->correctivo_model->PuedeAprobar($this->input->post("id"))){
                 $aprobar = $this->correctivo_model->AprobarMantenimiento($this->input->post("id"));
@@ -224,6 +243,8 @@
                 redirect(site_url(''));
             }
 
+            $this->ValidarPermiso();
+
             if($this->correctivo_model->PuedeAprobar($this->input->post("id"))){
                 $reversar = $this->correctivo_model->ReversarMantenimiento($this->input->post("id"));
                 
@@ -245,6 +266,7 @@
         }
 
         public function imprimir($id){
+            $this->ValidarPermiso();
             $data['datos'] = $this->FormatearImpresion($this->correctivo_model->ObtenerInfoPDF($id));
             $this->load->library('tcpdf/Pdf');
             $this->load->view('Reportes/repManCor',$data);

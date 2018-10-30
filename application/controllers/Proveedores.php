@@ -26,12 +26,18 @@
             return $data;
         }
 
+        private function ValidarPermiso(){
+            if(!$this->session->userdata("Permisos")['Proveedores']){
+                show_404();
+            }
+        }
+
         public function view(){
             
             if(!$this->session->userdata("nombre")){
                 redirect(site_url(''));
             }
-            
+            $this->ValidarPermiso();
             $data = $this->FormatearRequest($this->proveedores_model->Obtener());
 
             $JsFile = "<script src=\"". base_url() . "assets/js/Proveedores.js\"></script>";
@@ -63,7 +69,7 @@
             if(!$this->session->userdata("nombre") || $this->input->post("Rif") == ""){
                 redirect(site_url(''));
             }
-
+            $this->ValidarPermiso();
             $parametros = array(
                 "idActual"      => $this->input->post("id"),
                 "Rif"           => $this->input->post("Rif"),
@@ -111,6 +117,7 @@
             if(!$this->session->userdata("nombre") || $this->input->post("id") == ""){
                 redirect(site_url(''));
             }
+            $this->ValidarPermiso();
 
             $eliminar = $this->proveedores_model->Eliminar($this->input->post("id"));
             $data = $this->FormatearRequest($this->proveedores_model->Obtener());
@@ -137,6 +144,7 @@
         }
 
         public function imprimir($id){
+            $this->ValidarPermiso();
             $data['datos'] = $this->FormatearRequest($this->proveedores_model->Obtener($id));
             $this->load->library('tcpdf/Pdf');
             $this->load->view('Reportes/repProveedores',$data);

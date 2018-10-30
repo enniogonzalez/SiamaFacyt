@@ -43,11 +43,18 @@
             return $data;
         }
 
+        private function ValidarPermiso(){
+            if(!$this->session->userdata("Permisos")['Sistema']){
+                show_404();
+            }
+        }
+
         public function view(){
             
             if(!$this->session->userdata("nombre")){
                 redirect(site_url(''));
             }
+            $this->ValidarPermiso();
 
             $respuesta = $this->listasdesplegables_model->Obtener();
 
@@ -78,6 +85,8 @@
             if(!$this->session->userdata("nombre")){
                 redirect(site_url(''));
             }
+
+            $this->ValidarPermiso();
 
             //Si no se llama a la funcion desde un post
             //Se redirreciona
@@ -130,6 +139,8 @@
             if(!$this->session->userdata("nombre")){
                 redirect(site_url(''));
             }
+
+            $this->ValidarPermiso();
 
             //Si no se llama a la funcion desde un post
             //Se redirreciona
@@ -189,6 +200,7 @@
         }
 
         public function imprimir($id){
+            $this->ValidarPermiso();
             $data['datos'] = $this->FormatearImpresion($this->listasdesplegables_model->Obtener($id));
             $this->load->library('tcpdf/Pdf');
             $this->load->view('Reportes/repListasDesplegables',$data);
