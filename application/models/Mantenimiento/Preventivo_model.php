@@ -162,7 +162,9 @@
             }
 
             $query = "  UPDATE Mantenimiento
-                        SET Estatus = 'Afectado'
+                        SET Estatus = 'Afectado',
+                            Observaciones = "
+                            . (($data['Observaciones'] == "") ? "null" : ("'" .str_replace("'", "''", $data['Observaciones']) . "'")) . "
                         WHERE MAN_ID = " . $data['idActual'] . "
                             AND EXISTS(
                                 SELECT 1 
@@ -852,6 +854,9 @@
 
                     $query = "  UPDATE MantenimientoTarea  
                                 SET estatus = 'Realizado',
+                                    Observaciones = "
+                                    . (($data['Observacion'] == "") ? "null" : ("'" .str_replace("'", "''", $data['Observacion']) . "'")) . ",
+                                    min_eje  = '" . str_replace("'", "''", $data['Min_Eje']) . "',
                                     Usu_Mod = " . $this->session->userdata("usu_id") . ",
                                     Fec_Mod = NOW() 
                                 WHERE man_id = " . str_replace("'", "''",$correctivo) . "

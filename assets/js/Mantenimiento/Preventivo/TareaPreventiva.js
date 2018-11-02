@@ -356,7 +356,7 @@ $(function(){
             </div>
 
             <div class="form-group row" ${displayMinutos} >
-                <label for="MinutosRea" class="col-lg-3 col-form-label">Minutos Realizados:</label>
+                <label for="MinutosRea" class="col-lg-3 col-form-label">Minutos Estimados:</label>
                 <div class="col-lg-9">
                     <input type="number" step = "1" min = "1"
                     class="form-control obligatorio Tarea"  id="MinutosRea" value="${data['MinutosRea']}">
