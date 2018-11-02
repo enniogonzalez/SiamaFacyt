@@ -183,7 +183,8 @@
             }
 
             $query = "  UPDATE MantenimientoCorrectivo
-                        SET Estatus = 'Afectado'
+                        SET Estatus = 'Afectado',
+                            Observaciones = " . (($data['Observaciones'] == "") ? "null" : ("'" .str_replace("'", "''", $data['Observaciones']) . "'")) . "
                         WHERE mco_id = " . $data['idActual'] . "
                             AND EXISTS(
                                 SELECT 1 
@@ -877,6 +878,7 @@
 
                     $query = "  UPDATE CambioCorrectivo  
                                 SET estatus = 'Realizado',
+                                    Observaciones = " . (($data['Observacion'] == "") ? "null" : ("'" .str_replace("'", "''", $data['Observacion']) . "'")) . ",
                                     Usu_Mod = " . $this->session->userdata("usu_id") . ",
                                     Fec_Mod = NOW() 
                                 WHERE mco_id = " . str_replace("'", "''",$correctivo) . "
@@ -1079,6 +1081,7 @@
 
                     $query = "  UPDATE ReparacionCorrectiva  
                                 SET estatus = 'Realizado',
+                                    Observaciones = " . (($data['Observacion'] == "") ? "null" : ("'" .str_replace("'", "''", $data['Observacion']) . "'")) . ",
                                     Usu_Mod = " . $this->session->userdata("usu_id") . ",
                                     Fec_Mod = NOW() 
                                 WHERE mco_id = " . str_replace("'", "''",$correctivo) . " 

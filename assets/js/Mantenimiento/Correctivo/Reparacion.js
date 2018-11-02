@@ -194,7 +194,7 @@ $(function(){
             
             ValorActual =$('#idPiezaDR').text().trim();
             fila = $('#mhOptionR').text().trim();
-            $("#TablaCambiosCorrectivos").find('> tbody > tr').each(function () {
+            $("#TablaReparacionesCorrectivas").find('> tbody > tr').each(function () {
 
                 if(fila != $(this).index() && ValorActual == $(this).find('td:eq(1)').text().trim()){
                     Valido = false;
@@ -345,7 +345,7 @@ $(function(){
                 <div class="col-md-9">
                     <div style="width:80%;float:left;">
                         <div style="display:none;" id="idPiezaDR">${data['idPiezaDR']}</div>
-                        <input type="text" title="Pieza Dañada" ${atributos}
+                        <input type="text" title="Pieza Dañada" ${atributos} readonly
                             class="form-control texto obligatorio buscador Reparacion" id="nomPiezaDR" value="${data['nomPiezaDR']}">
                         <div class="invalid-feedback">Campo Obligatorio</div>
                     </div>
@@ -363,7 +363,7 @@ $(function(){
                 <div class="col-md-9">
                     <div style="width:80%;float:left;">
                         <div style="display:none;" id="idUsuReparacion">${data['idUsuReparacion']}</div>
-                        <input type="text" title="Usuario que realiza reparacion" ${atributos}
+                        <input type="text" title="Usuario que realiza reparacion" ${atributos} readonly
                             class="form-control texto  buscador Reparacion" id="nomUsuReparacion" 
                             value="${data['nomUsuReparacion']}">
                         <div class="invalid-feedback">Campo Obligatorio</div>
