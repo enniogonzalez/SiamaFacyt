@@ -26,12 +26,12 @@
             //Ejecutar Query
             $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
 
-            $link = site_url('/reestablecer/') .$token;
-            $Mensaje = "<p>Estimado/a " . $data['nombre'] . ",</p> <br><br><p>Por favor haga click <a href='". $link ."'>aqu&iacute;</a> por poder reestablecer su contraseña</p>";
+            $link = site_url('/restablecer/') .$token;
+            $Mensaje = "<p>Estimado/a " . $data['nombre'] . ",</p> <br><br><p>Por favor haga click <a href='". $link ."'>aqu&iacute;</a> por poder restablecer su contraseña</p>";
             
             $correo = array(
                 "Correo" => $data['correo'],
-                "Asunto" => "Reestablecer Contraseña",
+                "Asunto" => "Restablecer Contraseña",
                 "Mensaje" => $Mensaje
             );
             $estatusCorreo = $this->libcorreosiama->EnviarCorreo($correo);

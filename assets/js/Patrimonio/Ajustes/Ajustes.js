@@ -165,7 +165,7 @@ $(function(){
 
     $('.botoneraFormulario').on('click','#CancelarRegistro',function(){
         ClearForm();
-        ReestablecerEstadoAnteriorFormulario();
+        RestablecerEstadoAnteriorFormulario();
         EstablecerBuscador();
         DeshabilitarFormulario();
 
@@ -405,7 +405,7 @@ $(function(){
         })
     }
 
-    function ReestablecerEstadoAnteriorFormulario(){
+    function RestablecerEstadoAnteriorFormulario(){
         
         var parametros = {
             "id"            : idActual.trim(),

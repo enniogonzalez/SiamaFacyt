@@ -12,7 +12,7 @@ class ResetPassword extends CI_Controller{
 
     public function view($page = ''){
 
-        $JsFile = "<script src=\"". base_url() . "assets/js/Siama/Reestablecer.js\"></script>";
+        $JsFile = "<script src=\"". base_url() . "assets/js/Siama/Restablecer.js\"></script>";
                 
         $datafile['JsFile'] = $JsFile ;
         $dataLD['OrdenarBusqueda'] = "";
@@ -21,7 +21,7 @@ class ResetPassword extends CI_Controller{
 
             $this->load->view('plantillas/1-header-login', $datafile);
             $this->load->view('plantillas/2-modales',$dataLD);
-            $this->load->view('paginas/Reestablecer/reestablecer');
+            $this->load->view('paginas/Restablecer/restablecer');
             $this->load->view('plantillas/7-footer-login');
         }else{
             $usuario = $this->resetpassword_model->Obtener($page);
@@ -30,7 +30,7 @@ class ResetPassword extends CI_Controller{
                 
                 $this->load->view('plantillas/1-header-login', $datafile);
                 $this->load->view('plantillas/2-modales',$dataLD);
-                $this->load->view('paginas/Reestablecer/restClave',$usuario);
+                $this->load->view('paginas/Restablecer/restClave',$usuario);
                 $this->load->view('plantillas/7-footer-login');
             }else{
                 show_404();

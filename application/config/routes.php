@@ -139,9 +139,9 @@ $route['proveedores/guardar'] = 'proveedores/guardar';
 $route['proveedores/imprimir/(:any)'] = 'proveedores/imprimir/$1';
 $route['proveedores'] = 'proveedores/view';
 
-$route['reestablecer/reset'] = 'resetpassword/reset/';
-$route['reestablecer/guardar'] = 'resetpassword/guardar/';
-$route['reestablecer/(:any)'] = 'resetpassword/view/$1';
+$route['restablecer/reset'] = 'resetpassword/reset/';
+$route['restablecer/guardar'] = 'resetpassword/guardar/';
+$route['restablecer/(:any)'] = 'resetpassword/view/$1';
 
 $route['usuarios/busqueda'] = 'Sistema/usuarios/busqueda';
 $route['usuarios/eliminar'] = 'Sistema/usuarios/eliminar';

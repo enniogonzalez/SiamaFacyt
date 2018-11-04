@@ -32,7 +32,7 @@
                 </div>
                 
                 <div class="form-group" style="text-align: center">
-                    <a href='<?=site_url('reestablecer/usuario')?>'><span>¿Ha olvidado su contraseña?</span></a>
+                    <a href='<?=site_url('restablecer/usuario')?>'><span>¿Ha olvidado su contraseña?</span></a>
                 </div>
                 <button class="btn btn-lg btn-primary-siama btn-block" id="loginbutton" type="submit"><span class="fa fa-sign-in " style="margin-right:5px;"></span>Ingresar</button>
             </form>

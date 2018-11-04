@@ -77,7 +77,7 @@ $(function(){
 
     $('.botoneraFormulario').on('click','#CancelarRegistro',function(){
         ClearForm();
-        ReestablecerEstadoAnteriorFormulario();
+        RestablecerEstadoAnteriorFormulario();
         DeshabilitarFormulario();
     })
 
@@ -195,7 +195,7 @@ $(function(){
         permisos = ObtenerPermisos();
     }
 
-    function ReestablecerEstadoAnteriorFormulario(){
+    function RestablecerEstadoAnteriorFormulario(){
         var parametros = {
             "id"            : idActual.trim(),
             "Username"      : dataInputs[0].trim(),

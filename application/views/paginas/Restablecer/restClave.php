@@ -11,7 +11,7 @@
         <link rel="stylesheet" type="text/css" href="<?=base_url()?>assets/css/font-awesome-4.7.0/css/font-awesome.css">
         <script src="<?=base_url()?>assets/js/Siama/jquery-3.3.1.min.js"></script>
         <script src="<?=base_url()?>assets/js/Siama/bootstrap.js"></script>
-        <script src="<?=base_url()?>assets/js/Siama/Reestablecer.js"></script>
+        <script src="<?=base_url()?>assets/js/Siama/Restablecer.js"></script>
         <script src="<?=base_url()?>assets/js/Siama/md5.js"></script>
     </head>
     <body class="body-siama">
@@ -23,10 +23,11 @@
         </header>
         <div class="container container-login-siama">
 
-            <form id="resetpassform" class="form-signin login-siama" method="POST" action = "<?=site_url('/reestablecer/reset/')?>">
+            <form id="resetpassform" class="form-signin login-siama" method="POST" action = "<?=site_url('/restablecer/reset/')?>">
                 
                 <input type="hidden" name="token" id="token" value="<?=$token?>">
-                <h2 class="font-weight-normal text-center">Reestablecer Contraseña</h2>
+                <input type="hidden" name="usu" id="usu" value="<?=$username?>">
+                <h2 class="font-weight-normal text-center">Restablecer Contraseña</h2>
                 <label style="margin-bottom:0px;font-size: small;text-align:center;width: 100%;">Usuario: <?=$username?></label>
                 <hr style="margin-top:0px;">
                 <div style="display:none;" id="alertaReset" class="alert alert-danger text-center">
@@ -49,7 +50,7 @@
                     </div>
                 </div>
 
-                <button class="btn btn-lg btn-primary-siama btn-block" id="loginbutton" type="submit"><span class="fa fa-arrow-circle-right  " style="margin-right:5px;"></span>Reestablecer</button>
+                <button class="btn btn-lg btn-primary-siama btn-block" id="loginbutton" type="submit"><span class="fa fa-arrow-circle-right  " style="margin-right:5px;"></span>Restablecer</button>
             </form>
         </div>
     </body>

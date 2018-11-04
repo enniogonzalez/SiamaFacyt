@@ -310,7 +310,7 @@ $(function(){
 
     $('.botoneraFormulario').on('click','#CancelarRegistro',function(){
         clearLDform();
-        ReestablecerEstadoAnteriorFormulario();
+        RestablecerEstadoAnteriorFormulario();
         DeshabilitarFormulario()
     });
 
@@ -355,7 +355,7 @@ $(function(){
         $('#TablaListasDesplegables tbody').append(data['Cuerpo']);
     }
 
-    function ReestablecerEstadoAnteriorFormulario(){
+    function RestablecerEstadoAnteriorFormulario(){
         var parametros = {
             "id": idActual.trim(),
             "Codigo": codigoActual.trim(),
