@@ -19,11 +19,18 @@ $(function(){
         }else
             $('#inputPassword').removeClass('is-invalid');
 
+            
         if($('#inputUsuario')[0].checkValidity() && $('#inputPassword')[0].checkValidity()){
+
+            parametros = {
+                "inputPassword" : CryptoJS.MD5($('#inputPassword').val()).toString(),
+                "inputUsuario"  : $('#inputUsuario').val()
+            }
+
             $.ajax({
                 url: $('#loginform').attr("action"),
                 type: $('#loginform').attr("method"),
-                data: $('#loginform').serialize(),
+                data: parametros,
                 dataType: 'json'
             }).done(function(data){
                 if(data['isValid']){

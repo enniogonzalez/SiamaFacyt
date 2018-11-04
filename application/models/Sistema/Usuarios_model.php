@@ -397,6 +397,66 @@
 
             return $retorno;
         }
+        
+        public function ObtenerIdUsuario($username){
+
+            //Abrir conexion
+            $conexion = $this->bd_model->ObtenerConexion();
+            
+            $query ="   SELECT USU_ID,correo,nombre FROM Usuarios 
+                        WHERE LOWER(username) = '" . strtolower(str_replace("'", "''",$username)) . "';";
+
+            //Ejecutar Query
+            $result = pg_query($query);
+            
+            //Si existe registro, se guarda. Sino se guarda false
+            if ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) 
+                $retorno = $line;
+            else
+                $retorno = false;
+
+            //Liberar memoria
+            pg_free_result($result);
+
+            //liberar conexion
+            $this->bd_model->CerrarConexion($conexion);
+
+            return $retorno;
+        }
+
+        public function ExisteCorreo($correo,$id=""){
+
+            //Abrir conexion
+            $conexion = $this->bd_model->ObtenerConexion();
+    
+            //Query para buscar usuario
+            $query =" SELECT * FROM Usuarios WHERE LOWER(correo) ='" . strtolower(str_replace("'", "''",$correo)) . "' " ;
+
+            if($id != "")
+                $query = $query . " AND usu_id <>'" . str_replace("'", "''",$id) . "' " ;
+
+                
+            $query = $query . ";" ;
+
+            
+
+            //Ejecutar Query
+            $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
+            
+            //Si existe registro, se guarda. Sino se guarda false
+            if (pg_num_rows($result) > 0) 
+                $retorno = true;
+            else
+                $retorno = false;
+
+            //Liberar memoria
+            pg_free_result($result);
+
+            //liberar conexion
+            $this->bd_model->CerrarConexion($conexion);
+
+            return $retorno;
+        }
     }
 
 ?>

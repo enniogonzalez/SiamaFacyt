@@ -14,7 +14,10 @@ $(function(){
 
     EstablecerBuscador()
 
-    $('#Usuario').on('keypress',function(){
+    $('#Usuario').on('keypress',function(e){
+        if (e.which == 32)
+            return false;
+
         $('#Usuario').val($('#Usuario').val().replace(/[^a-z\.\-0-9]/gi,""))
     })
 

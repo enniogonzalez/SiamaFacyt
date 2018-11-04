@@ -108,6 +108,11 @@
                         "isValid"=>false,
                         "Mensaje"=>"Ya existe un usuario registrado con el mismo campo usuario.",
                         "id"=>""));
+                }elseif($this->usuarios_model->ExisteCorreo($parametros['Correo'])){
+                    echo json_encode(array(
+                        "isValid"=>false,
+                        "Mensaje"=>"Ya existe un usuario registrado con el mismo correo.",
+                        "id"=>""));
                 }else{
                     $respuesta = $this->usuarios_model->Insertar($parametros);
                     $insertado = $this->usuarios_model->Obtener();
@@ -121,6 +126,11 @@
                     echo json_encode(array(
                         "isValid"=>false,
                         "Mensaje"=>"Ya existe un usuario registrado con el mismo campo usuario.",
+                        "id"=>""));
+                }elseif($this->usuarios_model->ExisteCorreo($parametros['Correo'],$parametros['idActual'])){
+                    echo json_encode(array(
+                        "isValid"=>false,
+                        "Mensaje"=>"Ya existe un usuario registrado con el mismo correo.",
                         "id"=>""));
                 }else{
                     $respuesta = $this->usuarios_model->Actualizar($parametros);

@@ -64,26 +64,32 @@
                 "Nombre"    => $this->input->post("Nombre"),
                 "Correo"    => $this->input->post("Correo"),
             );
-            
-            $respuesta = $this->usuarios_model->Configurar($parametros);
 
-            $data = [
-                "usu_id"        => $this->session->userdata("usu_id"),
-                "username"      => $this->session->userdata("username"),
-                "nombre"        => $this->input->post("Nombre"),
-                "cargo"         => $this->session->userdata("cargo"),
-                "correo"        => $this->input->post("Correo"),
-                "observaciones" => $this->session->userdata("observaciones"),
-                "Permisos"      => $this->session->userdata("Permisos"),
-            ];
+            if($this->usuarios_model->ExisteCorreo($parametros['Correo'],$parametros['idActual'])){
+                echo json_encode(array(
+                    "isValid"=>false,
+                    "Mensaje"=>"Ya existe un usuario registrado con el mismo correo.",
+                    "id"=>""));
+            }else{
+                $respuesta = $this->usuarios_model->Configurar($parametros);
 
-            $this->session->set_userdata($data);
+                $data = [
+                    "usu_id"        => $this->session->userdata("usu_id"),
+                    "username"      => $this->session->userdata("username"),
+                    "nombre"        => $this->input->post("Nombre"),
+                    "cargo"         => $this->session->userdata("cargo"),
+                    "correo"        => $this->input->post("Correo"),
+                    "observaciones" => $this->session->userdata("observaciones"),
+                    "Permisos"      => $this->session->userdata("Permisos"),
+                ];
 
-            echo json_encode(array(
-                "isValid"=>true,
-                "Mensaje"=>"Se ha modificado el usuario exitosamente",
-                "id"=>$this->session->userdata("usu_id")));
+                $this->session->set_userdata($data);
 
+                echo json_encode(array(
+                    "isValid"=>true,
+                    "Mensaje"=>"Se ha modificado el usuario exitosamente",
+                    "id"=>$this->session->userdata("usu_id")));
+            }
         }
 
     }

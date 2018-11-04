@@ -15,7 +15,16 @@ class Login extends CI_Controller{
             redirect(site_url(''));
         }
         
+        $JsFile = "<script src=\"". base_url() . "assets/js/Siama/login.js\"></script>";
+            
+        $datafile['JsFile'] = $JsFile ;
+        $dataLD['OrdenarBusqueda'] = "";
+
+        $this->load->view('plantillas/1-header-login', $datafile);
+        $this->load->view('plantillas/2-modales',$dataLD);
         $this->load->view('paginas/login');
+        $this->load->view('plantillas/7-footer-login');
+
 
         if($this->session->userdata("nombre")){
             redirect(site_url('home'));
