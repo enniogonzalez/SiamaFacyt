@@ -20,6 +20,8 @@
                 <label for="reporte" class="col-lg-2 col-form-label">Reporte:</label>
                 <div class="col-lg-10">
                     <select class="form-control obligatorio lista" id="reporte">
+                        <option value="RepManBie">Mantenimientos por Bien</option>
+                        <option value="RepManLoc">Mantenimientos por Localizaci&oacute;n</option>
                         <option value="RepManPro">Mantenimientos por Proveedor</option>
                         <option value="RepManUsu">Mantenimientos por Usuario</option>
                     </select>
