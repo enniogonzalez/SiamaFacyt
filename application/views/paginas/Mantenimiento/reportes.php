@@ -21,6 +21,7 @@
                 <div class="col-lg-10">
                     <select class="form-control obligatorio lista" id="reporte">
                         <option value="RepManPro">Mantenimientos por Proveedor</option>
+                        <option value="RepManUsu">Mantenimientos por Usuario</option>
                     </select>
                 </div>
             </div>

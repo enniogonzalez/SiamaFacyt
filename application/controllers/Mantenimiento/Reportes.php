@@ -51,7 +51,20 @@
         }
 
         public function RepManUsu(){
-            echo "hola";
+            $this->ValidarPermiso();
+
+            $parametros = array(
+                "Inicio"        => $this->input->post("Inicio"),
+                "Fin"           => $this->input->post("Fin"),
+                "Usuario"       => $this->input->post("Usuario"),
+                "Proveedor"     => $this->input->post("Proveedor"),
+                "Bien"          => $this->input->post("Bien"),
+                "Localizacion"  => $this->input->post("Localizacion"),
+            );
+
+            $data['datos'] = $this->Reportes_model->RepManUsu($parametros);
+            $this->load->library('tcpdf/Pdf');
+            $this->load->view('Reportes/repManUsu',$data);
         }
 
         public function RepManPro(){
