@@ -103,6 +103,25 @@
             $this->load->view('Reportes/repManBie',$data);
 
         }
+
+        public function RepManLoc(){
+            
+            $this->ValidarPermiso();
+
+            $parametros = array(
+                "Inicio"        => $this->input->post("Inicio"),
+                "Fin"           => $this->input->post("Fin"),
+                "Usuario"       => $this->input->post("Usuario"),
+                "Proveedor"     => $this->input->post("Proveedor"),
+                "Bien"          => $this->input->post("Bien"),
+                "Localizacion"  => $this->input->post("Localizacion"),
+            );
+
+            $data['datos'] = $this->Reportes_model->RepManLoc($parametros);
+            $this->load->library('tcpdf/Pdf');
+            $this->load->view('Reportes/repManLoc',$data);
+
+        }
     }
 
 
