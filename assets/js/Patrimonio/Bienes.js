@@ -149,8 +149,6 @@ $(function(){
     /*          Fin Buscadores          */
     /************************************/
 
-
-
     $('.botoneraFormulario').on('click','#EliminarRegistro',function(){
         Botones = `
         <button data-dismiss="modal" type="submit" id ="ConfirmarEliminacion" title="Confirmar Eliminar Registro" 

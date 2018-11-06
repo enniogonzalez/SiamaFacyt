@@ -44,6 +44,12 @@
                     <label>Preventivo</label>
                 </a>
             </li>
+            <li class="submenu submenu<?=$posMenu?>">
+                <a href='<?=base_url()?>mantenimiento/reportes'>
+                    <span class="fa fa-file-text" style="width:20px;" ></span>
+                    <label>Reportes</label>
+                </a>
+            </li>
             <?php
             }
 

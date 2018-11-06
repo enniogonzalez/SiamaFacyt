@@ -101,6 +101,10 @@ $route['marcas/guardar'] = 'marcas/guardar';
 $route['marcas/imprimir/(:any)'] = 'marcas/imprimir/$1';
 $route['marcas'] = 'marcas/view';
 
+$route['mantenimiento/reportes/RepManPro'] = 'Mantenimiento/reportes/RepManPro';
+$route['mantenimiento/reportes/RepManUsu'] = 'Mantenimiento/reportes/RepManUsu';
+$route['mantenimiento/reportes'] = 'Mantenimiento/reportes/view';
+
 $route['partidas/busqueda'] = 'partidas/busqueda';
 $route['partidas/eliminar'] = 'partidas/eliminar';
 $route['partidas/guardar'] = 'partidas/guardar';
