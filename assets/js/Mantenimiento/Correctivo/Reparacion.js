@@ -129,7 +129,8 @@ $(function(){
             "nomProR"           :   fila.find('td:eq(6)').text().trim(),
             "InicioReparacion"  :   fila.find('td:eq(7)').text().trim(),
             "FinReparacion"     :   fila.find('td:eq(8)').text().trim(),
-            "ObservacionR"      :   fila.find('td:eq(9)').text().trim()
+            "ObservacionR"      :   fila.find('td:eq(9)').text().trim(),
+            "FallaReparacion"   :   fila.find('td:eq(11)').text().trim(),
         }
         SetModalFuncionesReparaciones(data);
 
@@ -226,6 +227,7 @@ $(function(){
             fila.find('td:eq(7)').text($('#InicioReparacion').val().trim());
             fila.find('td:eq(8)').text($('#FinReparacion').val().trim());
             fila.find('td:eq(9)').text($('#ObservacionR').val().trim());
+            fila.find('td:eq(11)').text($('#FallaReparacion').val().trim());
     
             CerrarFunciones();
         }
@@ -262,14 +264,15 @@ $(function(){
                 )
             ){
                 Reparaciones.push({ 
-                    "Id"            : $(this).find('td:eq(0)').text(),
-                    "IdPiezaD"      : $(this).find('td:eq(1)').text(),
-                    "IdUsu"         : $(this).find('td:eq(3)').text(),
-                    "IdPro"         : $(this).find('td:eq(5)').text(),
-                    "Inicio"        : $(this).find('td:eq(7)').text(),
-                    "Fin"           : $(this).find('td:eq(8)').text(),
-                    "Observacion"   : $(this).find('td:eq(9)').text(), 
-                    "Estatus"       : $(this).find('td:eq(10)').text(), 
+                    "Id"                : $(this).find('td:eq(0)').text(),
+                    "IdPiezaD"          : $(this).find('td:eq(1)').text(),
+                    "IdUsu"             : $(this).find('td:eq(3)').text(),
+                    "IdPro"             : $(this).find('td:eq(5)').text(),
+                    "Inicio"            : $(this).find('td:eq(7)').text(),
+                    "Fin"               : $(this).find('td:eq(8)').text(),
+                    "Observacion"       : $(this).find('td:eq(9)').text(), 
+                    "Estatus"           : $(this).find('td:eq(10)').text(), 
+                    "FallaReparacion"   : $(this).find('td:eq(11)').text(), 
                 });
             }
         });
@@ -318,6 +321,8 @@ $(function(){
                 <td></td>
                 <td></td>
                 <td></td>
+                <td style="display:none;"></td>
+                <td style="display:none;"></td>
                 <td style="display:none;"></td>
                 <td colspan="2" class ="editarReparacion" style="text-align: center;cursor: pointer;">
                     <span class="fa fa-pencil fa-lg"></span>
@@ -409,6 +414,15 @@ $(function(){
                 <div class="col-lg-9">
                     <input type="date" 
                     class="form-control obligatorio fecha Reparacion" ${atributos} id="FinReparacion" value="${data['FinReparacion']}">
+                    <div class="invalid-feedback">Campo Obligatorio</div>
+                </div>
+            </div>
+            
+            <div class="form-group row">
+                <label for="FallaReparacion" class="col-lg-3 col-form-label">Falla:</label>
+                <div class="col-lg-9">
+                    <textarea  class="form-control obligatorio texto Reparacion" rows="3"
+                    style = "resize:vertical;" id="FallaReparacion">${data['FallaReparacion']}</textarea>
                     <div class="invalid-feedback">Campo Obligatorio</div>
                 </div>
             </div>

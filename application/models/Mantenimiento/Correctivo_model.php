@@ -847,7 +847,7 @@
 
                     $query = "INSERT INTO CambioCorrectivo( MCO_ID,PDA_ID,BIE_ID,PCA_ID,
                                                             USU_ID,PRO_ID,ESTATUS,
-                                                            Fec_Ini,Fec_Fin,
+                                                            Fec_Ini,Fec_Fin,Falla,
                                                             Usu_Cre,Usu_Mod,Observaciones)"
                             . "VALUES('"
                             . str_replace("'", "''",$correctivo)    . "','"
@@ -858,7 +858,8 @@
                             . (($data['IdPro'] == "") ? "null" : ("'" .str_replace("'", "''", $data['IdPro']) . "'")). ","
                             . "'Solicitado','"
                             . str_replace("'", "''",$data['Inicio'])    . "','"
-                            . str_replace("'", "''",$data['Fin'])    . "',"
+                            . str_replace("'", "''",$data['Fin'])    . "','"
+                            . str_replace("'", "''",$data['Falla'])    . "',"
                             . $this->session->userdata("usu_id")    . ","
                             . $this->session->userdata("usu_id")    . ",'"
                             . str_replace("'", "''",$data['Observacion'])    . "');";
@@ -948,7 +949,8 @@
                                 PCA.Nombre PCA_NOM,			
                                 CCO.ESTATUS,			
                                 CCO.Fec_Ini,			
-                                CCO.Fec_Fin,			
+                                CCO.Fec_Fin,
+                                CCO.Falla,			
                                 CCO.Usu_Cre,			
                                 CCO.Fec_Cre,			
                                 CCO.Usu_Mod,			
@@ -983,7 +985,8 @@
                     . "    <td>" . $line['fec_ini'] . "</td>"
                     . "    <td>" . $line['fec_fin'] . "</td>"
                     . "    <td style=\"display:none;\">" . $line['observaciones'] . "</td>"
-                    . "    <td style=\"display:none;\">" . $line['estatus'] . "</td>";
+                    . "    <td style=\"display:none;\">" . $line['estatus'] . "</td>"
+                    . "    <td style=\"display:none;\">" . $line['falla'] . "</td>";
 
                 if($line['estatus'] == "Solicitado"){
                     $html = $html
@@ -1030,6 +1033,7 @@
                                 COALESCE(PRO.Raz_Soc,'') PRO_NOM,
                                 PCA.Nombre PCA_NOM,			
                                 CCO.ESTATUS,
+                                CCO.Falla,
                                 COALESCE(to_char(CCO.Fec_Ini,'DD/MM/YYYY'),'') Fec_Ini,			
                                 COALESCE(to_char(CCO.Fec_Fin,'DD/MM/YYYY'),'') Fec_Fin,				
                                 COALESCE(CCO.Observaciones,'') Observaciones
@@ -1116,7 +1120,7 @@
                     
                     $query = "INSERT INTO ReparacionCorrectiva( MCO_ID,PIE_ID,
                                                                 USU_ID,PRO_ID,ESTATUS,
-                                                                Fec_Ini,Fec_Fin,
+                                                                Fec_Ini,Fec_Fin,Falla,
                                                                 Usu_Cre,Usu_Mod,Observaciones)"
                             . "VALUES('"
                             . str_replace("'", "''",$correctivo)    . "','"
@@ -1125,7 +1129,8 @@
                             . (($data['IdPro'] == "") ? "null" : ("'" .str_replace("'", "''", $data['IdPro']) . "'")). ","
                             . "'Solicitado','"
                             . str_replace("'", "''",$data['Inicio'])    . "','"
-                            . str_replace("'", "''",$data['Fin'])    . "',"
+                            . str_replace("'", "''",$data['Fin'])    . "','"
+                            . str_replace("'", "''",$data['FallaReparacion'])    . "',"
                             . $this->session->userdata("usu_id")    . ","
                             . $this->session->userdata("usu_id")    . ",'"
                             . str_replace("'", "''",$data['Observacion'])    . "');";
@@ -1152,6 +1157,7 @@
                                 RCO.ESTATUS,			
                                 RCO.Fec_Ini,			
                                 RCO.Fec_Fin,			
+                                RCO.Falla,			
                                 RCO.Usu_Cre,			
                                 RCO.Fec_Cre,			
                                 RCO.Usu_Mod,			
@@ -1182,7 +1188,8 @@
                     . "    <td>" . $line['fec_ini'] . "</td>"
                     . "    <td>" . $line['fec_fin'] . "</td>"
                     . "    <td style=\"display:none;\">" . $line['observaciones'] . "</td>"
-                    . "    <td style=\"display:none;\">" . $line['estatus'] . "</td>";
+                    . "    <td style=\"display:none;\">" . $line['estatus'] . "</td>"
+                    . "    <td style=\"display:none;\">" . $line['falla'] . "</td>";
 
                     if($line['estatus'] == "Solicitado"){
                         $html = $html

@@ -148,7 +148,8 @@ $(function(){
             "nomProC"       :   fila.find('td:eq(9)').text().trim(),
             "InicioCambio"  :   fila.find('td:eq(10)').text().trim(),
             "FinCambio"     :   fila.find('td:eq(11)').text().trim(),
-            "ObservacionC"  :   fila.find('td:eq(12)').text().trim()
+            "ObservacionC"  :   fila.find('td:eq(12)').text().trim(),
+            "FallaCambio"   :   fila.find('td:eq(14)').text().trim(),
         }
 
         SetModalFuncionesCambios(data);
@@ -272,6 +273,7 @@ $(function(){
             fila.find('td:eq(10)').text($('#InicioCambio').val().trim());
             fila.find('td:eq(11)').text($('#FinCambio').val().trim());
             fila.find('td:eq(12)').text($('#ObservacionC').val().trim());
+            fila.find('td:eq(14)').text($('#FallaCambio').val().trim());
     
             CerrarFunciones();
         }
@@ -316,7 +318,8 @@ $(function(){
                     "Inicio"        : $(this).find('td:eq(10)').text(),
                     "Fin"           : $(this).find('td:eq(11)').text(),
                     "Observacion"   : $(this).find('td:eq(12)').text(),
-                    "Estatus"       : $(this).find('td:eq(13)').text()
+                    "Estatus"       : $(this).find('td:eq(13)').text(),
+                    "Falla"         : $(this).find('td:eq(14)').text()
                 });
             }
         });
@@ -355,6 +358,7 @@ $(function(){
                 <td></td>
                 <td></td>
                 <td></td>
+                <td style="display:none;"></td>
                 <td style="display:none;"></td>
                 <td style="display:none;"></td>
                 <td colspan="2" class ="editarCambio" style="text-align: center;cursor: pointer;">
@@ -478,6 +482,13 @@ $(function(){
                     <input type="date" 
                     class="form-control obligatorio fecha Cambio" id="FinCambio" ${atributos} value="${data['FinCambio']}">
                     <div class="invalid-feedback">Campo Obligatorio</div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="FallaCambio" class="col-lg-3 col-form-label">Falla:</label>
+                <div class="col-lg-9">
+                    <textarea  class="form-control obligatorio texto" rows="3"
+                    style = "resize:vertical;" id="FallaCambio">${data['FallaCambio']}</textarea>
                 </div>
             </div>
 
