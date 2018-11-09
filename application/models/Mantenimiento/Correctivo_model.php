@@ -176,6 +176,9 @@
 
             for($i = 0; $result && $i < count($TransCambio); $i++){
                 $result = pg_query($TransCambio[$i]);
+                if(!$result){
+                    echo $TransCambio[$i];
+                }
             }
 
             for($i = 0; $result && $i < count($TransReparacion); $i++){
@@ -890,13 +893,14 @@
                     $query = "  UPDATE Piezas 
                                 SET Bie_Id = " . str_replace("'", "''",$Bien) . ",
                                     Usu_Mod = " . $this->session->userdata("usu_id") . ",
+                                    Estatus = 'Inactivo',
                                     Fec_Mod = NOW() 
                                 WHERE Pie_Id = " . str_replace("'", "''",$data['IdPiezaC']); 
 
                     array_push($transacciones,$query);
-
+                    
                     $query = "  UPDATE Piezas
-                                SET Bie_Id = null,
+                                SET Bie_Id = " . (($data['idBienPiezaC'] == "") ? "null" : ("'" .str_replace("'", "''", $data['idBienPiezaC']) . "'")). ",
                                     Usu_Mod = " . $this->session->userdata("usu_id") . ",
                                     Fec_Mod = NOW() 
                                 WHERE Pie_Id = " . str_replace("'", "''",$data['IdPiezaD']); 

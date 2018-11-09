@@ -159,7 +159,8 @@ $(function(){
         BusquedaActiva = $('#TextoBusqueda').val().trim().toLowerCase();
         OrdenamientoActivo = $("#CampoOrden")[0].selectedIndex;
         TipoOrdenamientoActivo = $("#TipoOrden")[0].selectedIndex;
-        Busqueda(1,FechaActiva);
+        parametros = JSON.parse($('#ParametrosBuscador').text());
+        Busqueda(1,FechaActiva,parametros);
     })
 
     $('.paginacion-siama').on('click','.Next',function(){
@@ -407,6 +408,7 @@ $(function(){
     }
 
     window.Busqueda = function(paginaActual, verFecha = false,paramsRequest = {}){
+        $('#ParametrosBuscador').text(JSON.stringify(paramsRequest));
         FechaActiva =verFecha;
         
         DeshabilitarBotonera();

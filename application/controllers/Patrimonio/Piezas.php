@@ -187,15 +187,35 @@
             $inicio = 1+$regXpag*($pagina-1);
             $fin = $regXpag*$pagina;
             $idBien = "";
-            $PiezasBien = true;
 
             $Condiciones = $this->input->post("Condiciones");
+            
             if(isset($Condiciones)){
                 $idBien = $Condiciones['Bien'];
-                $PiezasBien = $Condiciones['PiezasBien'] == "true" ? true:false;
             }
             
-            $respuesta = $this->FormatearBusqueda($this->piezas_model->Busqueda($busqueda,$ordenamiento,$inicio,$fin,$idBien,$PiezasBien));
+            $respuesta = $this->FormatearBusqueda($this->piezas_model->Busqueda($busqueda,$ordenamiento,$inicio,$fin,$idBien));
+
+            echo json_encode(array("isValid"=>true,"Datos"=>$respuesta));
+        }
+
+        public function busquedaDisponibles(){
+
+            if(!$this->session->userdata("nombre") || $this->input->post("Pagina") == ""){
+                redirect(site_url(''));
+            }
+
+            $busqueda = $this->input->post("Busqueda") ;
+            $pagina = (int) $this->input->post("Pagina") ;
+            $regXpag = (int) $this->input->post("RegistrosPorPagina") ;
+            $ordenamiento = $this->input->post("Orden") ;
+            
+            $inicio = 1+$regXpag*($pagina-1);
+            $fin = $regXpag*$pagina;
+            $Condiciones = $this->input->post("Condiciones");
+            $idBien = $Condiciones['Bien'];
+            
+            $respuesta = $this->FormatearBusqueda($this->piezas_model->busquedaDisponibles($busqueda,$ordenamiento,$inicio,$fin,$idBien));
 
             echo json_encode(array("isValid"=>true,"Datos"=>$respuesta));
         }

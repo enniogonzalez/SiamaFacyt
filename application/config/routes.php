@@ -115,6 +115,7 @@ $route['partidas'] = 'partidas/view';
 
 $route['piezas/obtener'] = 'Patrimonio/piezas/obtener';
 $route['piezas/busqueda'] = 'Patrimonio/piezas/busqueda';
+$route['piezas/busquedaDisponibles'] = 'Patrimonio/piezas/busquedaDisponibles';
 $route['piezas/eliminar'] = 'Patrimonio/piezas/eliminar';
 $route['piezas/guardar'] = 'Patrimonio/piezas/guardar';
 $route['piezas/imprimir/(:any)'] = 'Patrimonio/piezas/imprimir/$1';

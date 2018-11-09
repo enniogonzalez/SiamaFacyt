@@ -419,26 +419,28 @@ $(function(){
         switch(opcion){
             case ProveedorC:
             case ProveedorR:
-                controlador = "proveedores";
+                controlador = "proveedores/busqueda";
             break;
             case UsuarioC:
             case UsuarioR:
-                controlador = "usuarios";
+                controlador = "usuarios/busqueda";
             break;
-            case PiezaDC:
-            case PiezaDR:
             case PiezaCC:
-                controlador = "piezas";
+                controlador = "piezas/busquedaDisponibles";
+            break;
+            case PiezaDR:
+            case PiezaDC:
+                controlador = "piezas/busqueda";
             break;
             case Correctivo:
-                controlador = "correctivo";
+                controlador = "correctivo/busqueda";
             break;
             case Bienes:
-                controlador = "bienes";
+                controlador = "bienes/busqueda";
             break;
         }
 
-        return $('#UrlBase').text() + "/" + controlador + "/busqueda"
+        return $('#UrlBase').text() + "/" + controlador
     }
 
     function SetSearchModal(data,buscar =true,condiciones = {}){

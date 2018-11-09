@@ -329,17 +329,17 @@ $(function(){
         switch(opcion){
             case PiezaAgregar:
             case PiezaQuitar:
-                controlador = "piezas";
+                controlador = "piezas/busquedaDisponibles";
             break;
             case Ajustes:
-                controlador = "Ajustes";
+                controlador = "Ajustes/busqueda";
             break;
             case Bienes:
-                controlador = "bienes";
+                controlador = "bienes/busqueda";
             break;
         }
 
-        return $('#UrlBase').text() + "/" + controlador + "/busqueda"
+        return $('#UrlBase').text() + "/" + controlador + ""
     }
 
     function SetSearchModal(data,buscar =true,condiciones = {}){

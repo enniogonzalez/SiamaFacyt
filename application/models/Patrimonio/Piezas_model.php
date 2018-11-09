@@ -185,57 +185,14 @@
             return $retorno;
         }
 
-        public function Busqueda($busqueda,$orden,$inicio,$fin,$id = "",$igual = true){
+        public function Busqueda($busqueda,$orden,$inicio,$fin,$id = ""){
             
             //Abrir conexion
             $conexion = $this->bd_model->ObtenerConexion();
             $condicion ="";
 
-            if($id != "" && $igual )
+            if($id != "")
                 $condicion = "P.Bie_Id = " . $id ;
-            elseif($id != ""){
-                $condicion = "
-                    P.PIE_ID NOT IN(    SELECT AAC.PIE_ID
-                                        FROM Ajustes AJU
-                                            JOIN AjustesAccion AAC ON AAC.AJU_ID = AJU.AJU_ID
-                                        WHERE AJU.Estatus = 'Solicitado'
-                                        
-                                        UNION
-                                        
-                                        SELECT PMT.PIE_ID
-                                        FROM PlantillaMantenimiento PLM 
-                                            JOIN PlantillaMantenimientoTarea PMT ON PMT.PLM_ID = PLM.PLM_ID
-                                        WHERE PLM.Estatus = 'Solicitado'
-                                        
-                                        UNION
-                                        
-                                        SELECT CCO.PDA_ID
-                                        FROM MantenimientoCorrectivo MCO
-                                            JOIN CambioCorrectivo CCO ON CCO.MCO_ID = MCO.MCO_ID
-                                        WHERE MCO.Estatus <> 'Realizado'
-                                        
-                                        UNION
-                                        
-                                        SELECT CCO.PCA_ID
-                                        FROM MantenimientoCorrectivo MCO
-                                            JOIN CambioCorrectivo CCO ON CCO.MCO_ID = MCO.MCO_ID
-                                        WHERE MCO.Estatus <> 'Realizado'
-                                        
-                                        UNION
-                                        
-                                        SELECT RCO.PIE_ID
-                                        FROM MantenimientoCorrectivo MCO
-                                            JOIN ReparacionCorrectiva RCO ON RCO.MCO_ID = MCO.MCO_ID
-                                        WHERE MCO.Estatus <> 'Realizado'
-                                        
-                                        UNION
-                                        
-                                        SELECT MTA.PIE_ID
-                                        FROM Mantenimiento MAN
-                                            JOIN MantenimientoTarea MTA ON MTA.MAN_ID = MAN.MAN_ID
-                                        WHERE MAN.Estatus <> 'Realizado')
-                AND (P.Bie_Id <> " . $id . " OR P.Bie_Id is null) AND P.estatus = 'Activo'";
-            }
 
             if($busqueda != ""){
                 $condicion = ($condicion == "" ? "": $condicion . " AND ") 
@@ -274,6 +231,106 @@
                             FROM Piezas P
                                 LEFT JOIN Bienes B ON B.bie_id = P.bie_id
                                 JOIN Marcas M ON M.mar_id = P.mar_id
+                            " . $condicion . "
+
+                        ) LD
+                        WHERE Fila BETWEEN ". $inicio . " AND " . $fin . "
+                        ORDER BY Fila ASC;";
+
+            //Ejecutar Query
+            $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
+            
+            //Si existe registro, se guarda. Sino se guarda false
+            if ($result){
+                $retorno = [];
+                while($line = pg_fetch_array($result, null, PGSQL_ASSOC))
+                    array_push($retorno,$line);
+
+            } else
+                $retorno = false;
+
+            //Liberar memoria
+            pg_free_result($result);
+
+            //liberar conexion
+            $this->bd_model->CerrarConexion($conexion);
+
+            return $retorno;
+        }
+        
+        public function busquedaDisponibles($busqueda,$orden,$inicio,$fin,$id){
+            
+            //Abrir conexion
+            $conexion = $this->bd_model->ObtenerConexion();
+            $condicion ="";
+
+            if($busqueda != ""){
+                $condicion = ($condicion == "" ? "": $condicion . " AND ") 
+                            . "(LOWER(P.Inv_UC) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
+                            . "%' OR LOWER(P.nombre) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
+                            . "%' OR LOWER(P.estatus) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
+                            . "%' OR LOWER(B.nombre) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
+                            . "%' OR LOWER(M.nombre) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
+                            . "%')";
+            }
+            
+            if($condicion != ""){
+                $condicion = "AND " . $condicion;
+            }
+
+            //Query para buscar usuario
+            $query ="   SELECT  Pie_Id,Bie_Id,estatus,
+                                nombre,Inv_UC,nomBie,
+                                nomMar,Registros
+                        FROM (
+                            SELECT  P.Pie_Id,
+                                    P.nombre,
+                                    P.estatus,
+                                    COALESCE(P.Bie_Id,-1) Bie_Id,
+                                    P.Inv_UC,
+                                    COALESCE(B.nombre,'') nomBie,
+                                    M.nombre nomMar,
+                                    COUNT(*) OVER() AS Registros,
+                                    ROW_NUMBER() OVER(ORDER BY " . $orden .") Fila
+                            FROM Piezas P
+                                LEFT JOIN Bienes B ON B.bie_id = P.bie_id
+                                JOIN Marcas M ON M.mar_id = P.mar_id
+                            WHERE P.PIE_ID NOT IN(   
+
+                                    SELECT AAC.PIE_ID
+                                    FROM Ajustes AJU
+                                        JOIN AjustesAccion AAC ON AAC.AJU_ID = AJU.AJU_ID
+                                    WHERE AJU.Estatus = 'Solicitado'
+                                                                        
+                                    UNION
+                                    
+                                    SELECT CCO.PDA_ID
+                                    FROM MantenimientoCorrectivo MCO
+                                        JOIN CambioCorrectivo CCO ON CCO.MCO_ID = MCO.MCO_ID
+                                    WHERE MCO.Estatus <> 'Realizado'
+                                    
+                                    UNION
+                                    
+                                    SELECT CCO.PCA_ID
+                                    FROM MantenimientoCorrectivo MCO
+                                        JOIN CambioCorrectivo CCO ON CCO.MCO_ID = MCO.MCO_ID
+                                    WHERE MCO.Estatus <> 'Realizado'
+                                    
+                                    UNION
+                                    
+                                    SELECT RCO.PIE_ID
+                                    FROM MantenimientoCorrectivo MCO
+                                        JOIN ReparacionCorrectiva RCO ON RCO.MCO_ID = MCO.MCO_ID
+                                    WHERE MCO.Estatus <> 'Realizado'
+                                    
+                                    UNION
+                                    
+                                    SELECT MTA.PIE_ID
+                                    FROM Mantenimiento MAN
+                                        JOIN MantenimientoTarea MTA ON MTA.MAN_ID = MAN.MAN_ID
+                                    WHERE MAN.Estatus <> 'Realizado')
+                            AND (P.Bie_Id <> " . $id . " OR P.Bie_Id is null) 
+                            AND P.estatus = 'Activo'
                             " . $condicion . "
 
                         ) LD
