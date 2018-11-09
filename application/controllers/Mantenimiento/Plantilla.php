@@ -36,6 +36,7 @@
                 "bie_nom"       =>"",
                 "estatus"       =>"",
                 "frecuencia"    =>"",
+                "fec_ult"       =>"",
                 "observaciones" =>"",
                 "Tareas"        =>""
             );
@@ -125,6 +126,7 @@
                 "Bie_Id"        => $this->input->post("Bien"),
                 "Documento"     => $this->input->post("Documento"),
                 "Frecuencia"    => $this->input->post("Frecuencia"),
+                "Fec_Ult"       => $this->input->post("UltMan"),
                 "Tareas"        => $this->input->post("Tareas"),
                 "Estatus"       => $this->input->post("Estatus"),
                 "Observaciones" => trim($this->input->post("Observacion"))

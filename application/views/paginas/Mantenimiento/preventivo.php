@@ -34,7 +34,7 @@
                 <label for="EstatusPreventivo" class="col-lg-3 col-form-label">Estatus:</label>
                 <div class="col-lg-9">
                     <input readonly disabled type="text" maxlength="100" title = "Estatus de "
-                        class="form-control texto" id="EstatusPreventivo" value="<?=$estatus?>">
+                        class="form-control texto estatus" id="EstatusPreventivo" value="<?=$estatus?>">
                 </div>
             </div>
 

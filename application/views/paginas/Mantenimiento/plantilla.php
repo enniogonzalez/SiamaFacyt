@@ -34,7 +34,7 @@
                 <label for="EstatusPlantilla" class="col-lg-3 col-form-label">Estatus:</label>
                 <div class="col-lg-9">
                     <input readonly disabled type="text" maxlength="100" title = "Estatus de "
-                        class="form-control texto" id="EstatusPlantilla" value="<?=$estatus?>">
+                        class="form-control texto estatus" id="EstatusPlantilla" value="<?=$estatus?>">
                 </div>
             </div>
 
@@ -59,6 +59,15 @@
                 <div class="col-lg-9">
                     <input readonly disabled type="number" title = "Frecuencia del mantenimiento (meses)" 
                         class="form-control texto obligatorio" step="1" min="1" id="FrecuenciaMan" value="<?=$frecuencia?>">
+                    <div class="invalid-feedback">Campo Obligatorio</div>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="UltimoMantenimiento" class="col-lg-3 col-form-label">Ultimo Mantenimiento:</label>
+                <div class="col-lg-9">
+                    <input maxlength="100" readonly disabled type="date" 
+                    class="form-control obligatorio fecha" id="UltimoMantenimiento" value="<?=$fec_ult?>">
                     <div class="invalid-feedback">Campo Obligatorio</div>
                 </div>
             </div>

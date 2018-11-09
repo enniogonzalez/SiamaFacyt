@@ -251,6 +251,7 @@ $(function(){
                 "Documento"     : $('#DocumentoPlantilla').val().trim(),
                 "Bien"          : $('#idBiePlantilla').text().trim(),
                 "Frecuencia"    : $('#FrecuenciaMan').val(),
+                "UltMan"        : $('#UltimoMantenimiento').val(),
                 "Tareas"        : Tareas,
                 "Observacion"   : $('#ObservacionPlantilla').val().trim(),
                 "Url"           : $('#FormularioActual').attr("action")
@@ -452,7 +453,8 @@ $(function(){
             "Estatus"       : dataInputs[1].trim(),
             "nomBien"       : dataInputs[2].trim(),
             "Frecuencia"    : dataInputs[3].trim(),
-            "Observaciones" : dataInputs[4].trim(),
+            "UltMan"        : dataInputs[4].trim(),
+            "Observaciones" : dataInputs[5].trim(),
             "Tareas"        : Tareas
         }
 
@@ -474,6 +476,7 @@ $(function(){
         $('#DocumentoPlantilla').val(data['Documento']);
         $('#EstatusPlantilla').val(data['Estatus']);
         $('#idBiePlantilla').text(data['idBien']);
+        $('#UltimoMantenimiento').val(data['UltMan']);
         $('#nomBiePlantilla').val(data['nomBien']);
         $('#FrecuenciaMan').val(data['Frecuencia']);
         $('#ObservacionPlantilla').val(data['Observaciones']);
@@ -509,6 +512,7 @@ $(function(){
             "idBien"        : data['bie_id'],     
             "Documento"     : data['documento'],  
             "Estatus"       : data['estatus'],
+            "UltMan"        : data['fec_ult'],
             "nomBien"       : data['bie_nom'],
             "Frecuencia"    : data['frecuencia'],
             "Observaciones" : data['observaciones'],

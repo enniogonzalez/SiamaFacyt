@@ -73,9 +73,12 @@ $(function(){
     window.HabilitarFormulario = function(cambiarBotonera = true){
 
         $('#FormularioActual').removeClass('formulario-desactivado');
+
         $('.formulario-siama form .form-control').each(function(){
-            $(this).removeAttr("disabled"); 
-            $(this).removeAttr("readonly");
+            if(!$(this).hasClass('estatus')){
+                $(this).removeAttr("disabled"); 
+                $(this).removeAttr("readonly");
+            }
         })
 
         $('.formulario-siama table').each(function(){

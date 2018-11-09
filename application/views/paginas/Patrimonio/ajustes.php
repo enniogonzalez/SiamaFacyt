@@ -34,7 +34,7 @@
                 <label for="EstatusAjustes" class="col-lg-3 col-form-label">Estatus:</label>
                 <div class="col-lg-9">
                     <input readonly disabled type="text" maxlength="100"
-                        class="form-control texto" id="EstatusAjustes" value="<?=$estatus?>">
+                        class="form-control texto estatus" id="EstatusAjustes" value="<?=$estatus?>">
                 </div>
             </div>
 

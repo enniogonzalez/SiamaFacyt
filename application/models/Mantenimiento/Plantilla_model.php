@@ -14,12 +14,13 @@
             //Abrir Transaccion
             pg_query("BEGIN") or die("Could not start transaction");
 
-            $query = " INSERT INTO PlantillaMantenimiento ( Documento,Bie_Id, Estatus, Frecuencia, 
+            $query = " INSERT INTO PlantillaMantenimiento ( Documento,Bie_Id, Estatus, Frecuencia,Fec_Ult, 
                                                             Usu_Cre,Usu_Mod, Observaciones) 
                         VALUES('"
             . str_replace("'", "''",$data['Documento'])    . "','"
             . str_replace("'", "''",$data['Bie_Id'])    . "','Solicitado',"
-            . str_replace("'", "''",$data['Frecuencia'])    . ","
+            . str_replace("'", "''",$data['Frecuencia'])    . ",'"
+            . str_replace("'", "''",$data['Fec_Ult'])    . "',"
             . $this->session->userdata("usu_id")    . ","
             . $this->session->userdata("usu_id")    . ","
             . (($data['Observaciones'] == "") ? "null" : ("'" .str_replace("'", "''", $data['Observaciones']) . "'"))
@@ -98,16 +99,15 @@
             //Abrir conexion
             $conexion = $this->bd_model->ObtenerConexion();
 
-            
             //Abrir Transaccion
             pg_query("BEGIN") or die("Could not start transaction");
 
             $query = " UPDATE PlantillaMantenimiento "
                 . " SET Bie_Id ='". str_replace("'", "''",$data['Bie_Id']) 
-                . "', Fec_Ini = '" . str_replace("'", "''",$data['Fec_Ini']) 
                 . "', Documento = " 
                 . (($data['Documento'] == "") ? "Documento" : ("'" .str_replace("'", "''", $data['Documento']) . "'")) 
-                . ", Fec_Fin = '" . str_replace("'", "''",$data['Fec_Fin']) 
+                . ", Frecuencia = '" . str_replace("'", "''",$data['Frecuencia']) 
+                . "', Fec_Ult = '" . str_replace("'", "''",$data['Fec_Ult']) 
                 . "', Usu_Mod = " . $this->session->userdata("usu_id") 
                 . ", Fec_Mod = NOW()" 
                 . ", Observaciones = "
@@ -225,6 +225,7 @@
             $query ="   SELECT  PLM.PLM_ID,		
                                 PLM.BIE_ID,
                                 PLM.Documento,
+                                PLM.Fec_Ult,
                                 B.nombre Bie_Nom,		
                                 PLM.Estatus,		
                                 PLM.Frecuencia,
