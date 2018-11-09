@@ -14,11 +14,12 @@
             //Abrir Transaccion
             pg_query("BEGIN") or die("Could not start transaction");
 
-            $query = " INSERT INTO Mantenimiento ( Documento,Bie_Id, Estatus,fec_ini,
+            $query = " INSERT INTO Mantenimiento ( Documento,Bie_Id, Estatus,plm_id,fec_ini,
                                                     fec_fin, Usu_Cre,Usu_Mod, Observaciones) 
                         VALUES('"
             . str_replace("'", "''",$data['Documento'])    . "','"
             . str_replace("'", "''",$data['Bie_Id'])    . "','Solicitado','"
+            . str_replace("'", "''",$data['plm_id'])    . "','"
             . str_replace("'", "''",$data['Fec_Ini'])    . "','"
             . str_replace("'", "''",$data['Fec_Fin'])    . "',"
             . $this->session->userdata("usu_id")    . ","
@@ -263,6 +264,7 @@
             //Query para buscar usuario
             $query ="   SELECT  MAN.MAN_ID,		
                                 MAN.BIE_ID,
+                                MAN.plm_id,
                                 MAN.Documento,
                                 B.nombre Bie_Nom,		
                                 MAN.Estatus,		

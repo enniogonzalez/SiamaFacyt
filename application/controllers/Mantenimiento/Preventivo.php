@@ -12,6 +12,7 @@
 
             $data = array(
                 "man_id"        =>"",
+                "plm_id"        =>"",
                 "documento"     =>"",
                 "bie_id"        =>"",
                 "bie_nom"       =>"",
@@ -97,6 +98,7 @@
 
             $parametros = array(
                 "idActual"      => $this->input->post("id"),
+                "plm_id"        => $this->input->post("plm_id"),
                 "Bie_Id"        => $this->input->post("Bien"),
                 "Documento"     => $this->input->post("Documento"),
                 "Fec_Ini"       => $this->input->post("Inicio"),

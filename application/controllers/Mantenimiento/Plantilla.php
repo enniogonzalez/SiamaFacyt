@@ -11,6 +11,7 @@
         private function FormatearRequestMantenimiento($respuesta){
 
             $data = array(
+                "plm_id"        =>"",
                 "man_id"        =>"",
                 "documento"     =>"",
                 "bie_id"        =>"",

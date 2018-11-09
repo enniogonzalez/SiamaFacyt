@@ -13,6 +13,7 @@ $(function(){
     const Plantilla = "Platillas de Mantenimiento"
 
     var idActual ="";
+    var plmActual ="";
     var dataInputs= [];
     var idBuscadorActual = "";
     var nombreBuscadorActual = "";
@@ -230,6 +231,7 @@ $(function(){
 
             var parametros = {
                 "id"            : $('#IdForm').text().trim(),
+                "plm_id"        : $('#PlantillaMantenimiento').text().trim(),
                 "Estatus"       : $('#EstatusPreventivo').val().trim(),
                 "Documento"     : $('#DocumentoPreventivo').val().trim(),
                 "Bien"          : $('#idBiePreventivo').text().trim(),
@@ -427,6 +429,7 @@ $(function(){
     function GuardarEstadoActualFormulario(){
         dataInputs = [];
         idActual =$('#IdForm').text().trim();
+        plmActual =$('#PlantillaMantenimiento').text().trim();
         idBiePreventivo = $('#idBiePreventivo').text().trim();
 
         Tareas = $('#TablaTareas > tbody').html();
@@ -439,6 +442,7 @@ $(function(){
         
         var parametros = {
             "id"            : idActual.trim(),
+            "plm_id"        : plmActual.trim(),
             "idBien"        : idBiePreventivo.trim(),     
             "Documento"     : dataInputs[0].trim(),  
             "Estatus"       : dataInputs[1].trim(),
@@ -464,6 +468,7 @@ $(function(){
 
 
         $('#IdForm').text(data['id']);
+        $('#PlantillaMantenimiento').text(data['plm_id']);
         $('#DocumentoPreventivo').val(data['Documento']);
         $('#EstatusPreventivo').val(data['Estatus']);
         $('#idBiePreventivo').text(data['idBien']);
@@ -529,6 +534,7 @@ $(function(){
         
         var parametros = {
             "id"            : data['man_id'],
+            "plm_id"        : data['plm_id'],
             "idBien"        : data['bie_id'],     
             "Documento"     : data['documento'],  
             "Estatus"       : data['estatus'],

@@ -21,6 +21,9 @@
             <div style="display:none;" id = "IdForm">
                 <?=$man_id?>
             </div>
+            <div style="display:none;" id = "PlantillaMantenimiento">
+                <?=$man_id?>
+            </div>
          
             <div class="form-group row">
                 <label for="DocumentoPreventivo" class="col-lg-3 col-form-label">Documento:</label>
