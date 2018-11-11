@@ -122,27 +122,13 @@ $(function(){
     });
 
     $('.botoneraFormulario').on('click','#EditarRegistro',function(){
-        GuardarEstadoActualFormulario();
-        HabilitarFormulario()
-
-        if($('#EstatusPlantilla').val() == "Solicitado"){
-            $('#EstatusPlantilla').attr("disabled", "disabled");
-            $('#EstatusPlantilla').attr("readonly", "readonly");
-            ActivarTareas();
-        }else{
-            $('.formulario-siama form .form-control').each(function(){
-                $(this).attr("disabled", "disabled");
-                $(this).attr("readonly", "readonly");
-            })
-
-            DesactivarTareas();
-            $('#ObservacionPlantilla').removeAttr("disabled"); 
-            $('#ObservacionPlantilla').removeAttr("readonly");
-            setTimeout(function(){$('#ObservacionPlantilla').focus();}, 400);
-        }
-
         
-        $(window).scrollTop(0);
+        var parametros = {
+            "id": $('#IdForm').text().trim(),
+            "Caso":"Editar",
+            "Url": $('#ControladorActual').text().trim()+"/obtener"
+        }
+        Obtener(parametros);
     });
 
     $('.botoneraFormulario').on('click','#AgregarRegistro',function(){
@@ -266,6 +252,50 @@ $(function(){
         
     });
 
+    function Editar(){
+
+        if($('#EstatusPlantilla').val().trim() == "Aprobado"){
+            
+            Botones = `
+            <button data-dismiss="modal" title="Cerrar" type="button" style="margin:5px;" class="btn  btn-danger">
+            <span class="fa fa-times "></span>
+            Cerrar
+            </button>`;
+
+            Cuerpo = `No se puede editar <strong>Plantilla de Mantenimiento</strong> debido a que el estatus ha cambiado a 
+            <strong>aprobado</strong>.`;
+
+            var parametros = {
+                "Titulo":"Advetencia",
+                "Cuerpo": Cuerpo,
+                "Botones":Botones
+            }
+
+            ModalAdvertencia(parametros);
+        }else{
+            GuardarEstadoActualFormulario();
+            HabilitarFormulario()
+
+            if($('#EstatusPlantilla').val() == "Solicitado"){
+                $('#EstatusPlantilla').attr("disabled", "disabled");
+                $('#EstatusPlantilla').attr("readonly", "readonly");
+                ActivarTareas();
+            }else{
+                $('.formulario-siama form .form-control').each(function(){
+                    $(this).attr("disabled", "disabled");
+                    $(this).attr("readonly", "readonly");
+                })
+
+                DesactivarTareas();
+                $('#ObservacionPlantilla').removeAttr("disabled"); 
+                $('#ObservacionPlantilla').removeAttr("readonly");
+                setTimeout(function(){$('#ObservacionPlantilla').focus();}, 400);
+            }
+
+            
+            $(window).scrollTop(0);
+        }
+    }
 
     function CambioEstatusMantenimiento(parametros){
 
@@ -499,6 +529,10 @@ $(function(){
                 CerrarEstatus();
                 LlenarFormularioRequest(data['Datos']);
                 $('#SiamaModalBusqueda').modal('hide');
+                
+                if(data['Caso'] == "Editar"){
+                    Editar();
+                }
             }
         }).fail(function(data){
             failAjaxRequest(data);
@@ -633,6 +667,7 @@ $(function(){
             case "Formulario":
                 var parametros = {
                     "id": fila.find("td:eq(0)").text().trim(),
+                    "Caso":"Buscar",
                     "Url": $('#ControladorActual').text().trim()+"/obtener"
                 }
                 Obtener(parametros);

@@ -102,7 +102,7 @@
             $this->ValidarPermiso();
 
             $data = $this->FormatearRequest($this->plantilla_model->Obtener($this->input->post("id")));
-            echo json_encode(array("isValid"=>true,"Datos"=>$data));
+            echo json_encode(array("isValid"=>true,"Datos"=>$data,"Caso" =>  $this->input->post("Caso") ));
         }
 
         public function obtenerMantenimiento(){
