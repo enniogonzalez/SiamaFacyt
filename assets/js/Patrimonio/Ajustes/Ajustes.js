@@ -248,7 +248,7 @@ $(function(){
             Cerrar
             </button>`;
 
-            Cuerpo = `No se puede Editar <strong>Ajuste</strong> debido a que el estatus ha cambiado a 
+            Cuerpo = `No se puede editar <strong>Ajuste</strong> debido a que el estatus ha cambiado a 
             <strong>aprobado</strong>.`;
 
             var parametros = {

@@ -49,7 +49,6 @@ $(function(){
         }
     })
 
-
     $('#InicioPreventivo').on('change',function(){
         if($(this).val() != "" && 
         $('#FinPreventivo').val() != "" 
@@ -110,27 +109,14 @@ $(function(){
     });
 
     $('.botoneraFormulario').on('click','#EditarRegistro',function(){
-        GuardarEstadoActualFormulario();
-        HabilitarFormulario()
-
-        if($('#EstatusPreventivo').val() == "Solicitado"){
-            $('#EstatusPreventivo').attr("disabled", "disabled");
-            $('#EstatusPreventivo').attr("readonly", "readonly");
-            ActivarTareas();
-        }else{
-            $('.formulario-siama form .form-control').each(function(){
-                $(this).attr("disabled", "disabled");
-                $(this).attr("readonly", "readonly");
-            })
-
-            DesactivarTareas();
-            $('#ObservacionPreventivo').removeAttr("disabled"); 
-            $('#ObservacionPreventivo').removeAttr("readonly");
-            setTimeout(function(){$('#ObservacionPreventivo').focus();}, 400);
-        }
-
         
-        $(window).scrollTop(0);
+        var parametros = {
+            "id": $('#IdForm').text().trim(),
+            "Caso":"Editar",
+            "Url": $('#ControladorActual').text().trim()+"/obtener"
+        }
+        Obtener(parametros);
+
     });
 
     $('.botoneraFormulario').on('click','#AgregarRegistro',function(){
@@ -252,6 +238,54 @@ $(function(){
         
     });
 
+    function Editar(){
+        
+        if($('#EstatusPreventivo').val().trim() == "Realizado"){
+            
+            Botones = `
+            <button data-dismiss="modal" title="Cerrar" type="button" style="margin:5px;" class="btn  btn-danger">
+            <span class="fa fa-times "></span>
+            Cerrar
+            </button>`;
+
+            Cuerpo = `No se puede editar <strong>Mantenimiento Preventivo</strong> debido a que el estatus ha cambiado a 
+            <strong>realizado</strong>.`;
+
+            var parametros = {
+                "Titulo":"Advetencia",
+                "Cuerpo": Cuerpo,
+                "Botones":Botones
+            }
+
+            ModalAdvertencia(parametros);
+        }else{
+
+            GuardarEstadoActualFormulario();
+            HabilitarFormulario()
+
+            $('#nomBiePreventivo').attr("disabled", "disabled");
+            $('#nomBiePreventivo').attr("readonly", "readonly");
+            if($('#EstatusPreventivo').val() == "Solicitado"){
+                $('#EstatusPreventivo').attr("disabled", "disabled");
+                $('#EstatusPreventivo').attr("readonly", "readonly");
+                ActivarTareas();
+            }else{
+                $('.formulario-siama form .form-control').each(function(){
+                    $(this).attr("disabled", "disabled");
+                    $(this).attr("readonly", "readonly");
+                })
+
+                DesactivarTareas();
+                $('#ObservacionPreventivo').removeAttr("disabled"); 
+                $('#ObservacionPreventivo').removeAttr("readonly");
+                setTimeout(function(){$('#ObservacionPreventivo').focus();}, 400);
+            }
+
+            
+            $(window).scrollTop(0);
+        }
+    }
+
     function CambioEstatusMantenimiento(parametros){
 
         if(parametros['Tipo'] ==  "Aprobar")
@@ -312,21 +346,6 @@ $(function(){
     function ActivarTareas(){
         $('#eliminarTarea').show();
     }
-
-    function BuscarBien(){
-
-        SetSearchThead(thBienes);
-
-        parametros = {
-            "Lista": $('#listaBusquedaBien').html().trim(),
-            "Tipo": Bienes
-        }
-
-        idBuscadorActual = $('#idBiePreventivo').text().trim();
-        nombreBuscadorActual = $('#nomBiePreventivo').val().trim();
-        SetSearchModal(parametros)
-
-    }
     
     function BuscarPlantilla(){
 
@@ -340,27 +359,6 @@ $(function(){
 
         SetSearchModal(parametros)
 
-    }
-
-    function AdvertenciaCambiarBien(opcion){
-
-        Botones = `
-        <button data-dismiss="modal" title="Cerrar" type="button" style="margin:5px;" class="btn  btn-danger">
-          <span class="fa fa-times "></span>
-          Cerrar
-        </button>`;
-
-        Cuerpo = `No se puede ${opcion} <strong>Bien</strong> debido a que tiene asociado 
-        al menos una <strong>Tarea</strong>.`;
-
-
-        var parametros = {
-            "Titulo":"Advetencia",
-            "Cuerpo": Cuerpo,
-            "Botones":Botones
-        }
-
-        ModalAdvertencia(parametros);
     }
 
     function GetUrlBusquedaOpcion(opcion){
@@ -495,6 +493,10 @@ $(function(){
                 CerrarEstatus();
                 LlenarFormularioRequest(data['Datos']);
                 $('#SiamaModalBusqueda').modal('hide');
+
+                if(data['Caso'] == "Editar"){
+                    Editar();
+                }
             }
         }).fail(function(data){
             failAjaxRequest(data);
@@ -698,6 +700,7 @@ $(function(){
             case "Formulario":
                 var parametros = {
                     "id": fila.find("td:eq(0)").text().trim(),
+                    "Caso":"Buscar",
                     "Url": $('#ControladorActual').text().trim()+"/obtener"
                 }
                 Obtener(parametros);
