@@ -81,7 +81,7 @@
                 redirect(site_url(''));
             }
             $data = $this->FormatearRequest($this->ajustes_model->Obtener($this->input->post("id")));
-            echo json_encode(array("isValid"=>true,"Datos"=>$data));
+            echo json_encode(array("isValid"=>true,"Datos"=>$data,"Caso" =>  $this->input->post("Caso") ));
 
         }
 
