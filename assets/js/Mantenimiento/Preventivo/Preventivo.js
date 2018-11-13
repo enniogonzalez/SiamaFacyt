@@ -357,7 +357,11 @@ $(function(){
             "Tipo": Plantilla
         }
 
-        SetSearchModal(parametros)
+        condiciones ={
+            "Disponibles": true
+        }
+
+        SetSearchModal(parametros,true,condiciones)
 
     }
 

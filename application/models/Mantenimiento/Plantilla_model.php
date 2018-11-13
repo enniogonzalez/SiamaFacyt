@@ -373,7 +373,7 @@
             return $retorno;
         }
 
-        public function Busqueda($busqueda,$orden,$inicio,$fin){
+        public function Busqueda($busqueda,$orden,$inicio,$fin,$disponibles = false){
             
             //Abrir conexion
             $conexion = $this->bd_model->ObtenerConexion();
@@ -381,12 +381,19 @@
 
 
             if($busqueda != ""){
-                $condicion = " WHERE  (LOWER(B.nombre) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
+                $condicion = "(LOWER(B.nombre) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
                             . "%' OR LOWER(PLM.documento) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
                             . "%' OR LOWER(PLM.estatus) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
                             . "%')";
             }
             
+            if($disponibles){
+                $condicion .= ($condicion == "" ? "": " AND ") . " PLM.estatus = 'Aprobado'";
+            }
+
+            if($condicion != ""){
+                $condicion = ($condicion == "" ? "": "WHERE ") . $condicion;
+            }
             //Query para buscar usuario
             $query ="   SELECT  PLM_Id,
                                 nombre,

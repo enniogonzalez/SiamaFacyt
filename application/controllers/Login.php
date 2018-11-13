@@ -15,6 +15,7 @@ class Login extends CI_Controller{
             redirect(site_url(''));
         }
         
+        $this->alertas_model->ValidarAlertaPlantilla();
         $JsFile = "<script src=\"". base_url() . "assets/js/Siama/login.js\"></script>";
             
         $datafile['JsFile'] = $JsFile ;

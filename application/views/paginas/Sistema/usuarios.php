@@ -54,7 +54,7 @@
                 <label for="correo" class="col-md-3 col-form-label">Correo:</label>
                 <div class="col-md-9">
                     <input maxlength="100" readonly disabled type="email" 
-                    class="form-control  texto" id="correo" value="<?=$correo?>">
+                    class="form-control  obligatorio texto" id="correo" value="<?=$correo?>">
                     <div class="invalid-feedback">Correo Inv&aacute;lido</div>
                 </div>
             </div>

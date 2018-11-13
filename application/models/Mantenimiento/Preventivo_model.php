@@ -45,6 +45,19 @@
                     $result = pg_query($TransTarea[$i]);
                 }   
             }
+            
+
+            $query = "
+                DELETE FROM Alertas 
+                WHERE tabla = 'PlantillaMantenimiento' 
+                    AND tab_id = '" . str_replace("'", "''",$data['plm_id']) . "'
+                    AND titulo like '%Vencida%'
+                ";
+            
+            if ($result){
+                $result = pg_query($query);
+            }
+
 
             $query = "  SELECT  MAN.Documento,
                                 to_char(MAN.Fec_Cre,'DD/MM/YYYY') Fecha,
@@ -173,11 +186,8 @@
                                 WHERE MAN_ID = " . $data['idActual'] . "
                                     AND Estatus <> 'Realizado'
                             );
-            ";
-
-            $result = pg_query($query);
-
-            $query = "  UPDATE Mantenimiento
+                        
+                        UPDATE Mantenimiento
                         SET Estatus = 'Realizado'
                         WHERE MAN_ID = " . $data['idActual'] . "
                             AND NOT EXISTS(
@@ -186,11 +196,8 @@
                                 WHERE MAN_ID = " . $data['idActual'] . "
                                     AND Estatus <> 'Realizado'
                             );
-            ";
-
-            $result = pg_query($query);
-
-            $query = " DELETE FROM Alertas WHERE Tabla = 'Mantenimiento' AND TAB_ID = " . $data['idActual'];
+            
+                        DELETE FROM Alertas WHERE Tabla = 'Mantenimiento' AND TAB_ID = " . $data['idActual'] . ";";
             
             if($result){
                 $result = pg_query($query);
@@ -227,18 +234,29 @@
                 }
             }
              
-            $query = "  DELETE FROM ALERTAS 
-                        WHERE Tabla = 'Mantenimiento' AND TAB_ID = " . $data['idActual'] ."
-                            AND EXISTS (
-                                SELECT 1
-                                FROM Mantenimiento
-                                where man_id = " . $data['idActual'] ."
-                                    AND Estatus = 'Realizado'
-                            );";
+            $query = "  SELECT fec_fin,plm_id
+                        FROM Mantenimiento
+                        where man_id = " . $data['idActual'] ."
+                            AND Estatus = 'Realizado'";
 
+                            
             if($result){
                 $result = pg_query($query);
+
+                if($line = pg_fetch_array($result, null, PGSQL_ASSOC)){
+                    
+                    $query = "  UPDATE PlantillaMantenimiento
+                                SET Fec_Ult = '" . $line['fec_fin'] ."'
+                                WHERE plm_id = '" . $line['plm_id'] ."';
+                    
+                                DELETE FROM ALERTAS 
+                                WHERE Tabla = 'Mantenimiento' AND TAB_ID = " . $data['idActual'] .";";
+                    
+                    $result = pg_query($query);
+                }
             }
+
+
                 
             if(!$result){
                 pg_query("ROLLBACK") or die("Transaction rollback failed");

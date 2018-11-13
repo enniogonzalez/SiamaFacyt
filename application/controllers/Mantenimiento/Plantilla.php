@@ -220,7 +220,13 @@
             $inicio = 1+$regXpag*($pagina-1);
             $fin = $regXpag*$pagina;
 
-            $respuesta = $this->FormatearBusqueda($this->plantilla_model->Busqueda($busqueda,$ordenamiento,$inicio,$fin));
+            $Condiciones = $this->input->post("Condiciones");
+            $disponibles = false;
+            if(isset($Condiciones)){
+                $disponibles = $Condiciones['Disponibles'] == "true" ? true:false;
+            }
+
+            $respuesta = $this->FormatearBusqueda($this->plantilla_model->Busqueda($busqueda,$ordenamiento,$inicio,$fin,$disponibles));
 
             echo json_encode(array("isValid"=>true,"Datos"=>$respuesta));
         }
