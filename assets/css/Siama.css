@@ -15,8 +15,12 @@
     background-color: #d3d9df !important;
 }
 
+.form-control:disabled{
+    background-color: #d3d9df !important;
+}
+
 .form-control{
-    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.2), 0 4px 4px 0 rgba(0, 0, 0, 0.2);
 }
 
 .vertical-nav, .nav-item > li{

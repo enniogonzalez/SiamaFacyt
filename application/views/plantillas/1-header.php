@@ -5,6 +5,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta name="author" content="Ennio Gonzalez">
         <meta name="description" content="Sistema automatizado de mantenimiento">
+        
+		<link rel="icon" type="image/x-icon" href="<?=base_url()?>assets/images/logoPagina.png" />
         <title>SiamaFACYT</title>
         
         <link rel="stylesheet" type="text/css" href="<?=base_url()?>assets/css/bootstrap.css">

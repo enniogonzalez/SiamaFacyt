@@ -6,6 +6,7 @@
         <meta name="description" content="Sistema automatizado de mantenimiento">
         <title>SiamaFACYT</title>
 
+		<link rel="icon" type="image/x-icon" href="<?=base_url()?>assets/images/logoPagina.png" />
         <link rel="stylesheet" type="text/css" href="<?=base_url()?>assets/css/bootstrap.css">
         <link rel="stylesheet" type="text/css" href="<?=base_url()?>assets/css/Siama.css">
         <link rel="stylesheet" type="text/css" href="<?=base_url()?>assets/css/font-awesome-4.7.0/css/font-awesome.css">

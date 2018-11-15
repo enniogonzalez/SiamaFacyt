@@ -82,12 +82,13 @@
 }
 
 .menu-activo{
-    border-left: 3px solid #3dbd99 !important;
+    border-left: 3px solid #2C3E50 !important;
     background: #f6f6f6;
+    font-weight: bold;
 }
 .menu-activo > a{
-    color: #3dbd99 !important;
-
+    color: #2C3E50 !important;
+    font-weight: bold;
 }
 
 .submenu{
