@@ -1,19 +1,21 @@
 <div class="container">
     <div class="row">
-        <div class="col-lg-9" style="padding: 0px;">
+        <div class="col-lg-12" style="padding: 0px;">
             <h2><span class="fa fa-cube"></span> Bienes</h2> 
-        </div>
-        <div class="col-lg-3" style="text-align:center;" id="SeccionImprimir">
-            <button type="button"  class="btn btn-primary-siama" id="Imprimir">
-                <span class="fa fa-print fa-lg"></span>
-                Imprimir
-            </button>
         </div>
     </div>
 </div>
 
 <div class="container">
     <div class="formulario-siama">
+        
+        <div style="text-align:center;" id="SeccionImprimir">
+            <button type="button"  class="btn btn-primary-siama" id="Imprimir">
+                <span class="fa fa-print fa-lg"></span>
+                Imprimir
+            </button>
+        </div>
+        
         <form class ="formulario-desactivado" id="FormularioActual" method="POST" action = "<?=site_url('/bienes/guardar')?>">
 
             <div style="margin: 10px 15px;display:none;" id="alertaFormularioActual" class="alert alert-danger text-center">
@@ -25,9 +27,8 @@
             <div class="form-group row">
                 <label for="estatusBien" class="col-lg-3 col-form-label">Estatus:</label>
                 <div class="col-lg-9">
-                    <select readonly disabled class="form-control obligatorio lista" id="estatusBien">
-                        <?=$ldEstatus?>
-                    </select> 
+                    <input maxlength="100" readonly disabled type="text" 
+                    class="form-control estatus obligatorio texto" id="estatusBien" value="<?=$estatus?>">
                     <div class="invalid-feedback">Campo Obligatorio</div>
                 </div>
             </div>
@@ -238,8 +239,8 @@
             <div class="form-group row">
                 <label for="mVol" class="col-lg-3 col-form-label">Voltaje:</label>
                 <div class="col-lg-5">
-                    <input readonly disabled required type="number" step=".01" 
-                        class="form-control obligatorio decimal" id="mVol" value="<?=$med_vol?>">
+                    <input readonly disabled required type="text"  
+                        class="form-control obligatorio medida" id="mVol" value="<?=$med_vol?>">
                     <div class="invalid-feedback">Campo Obligatorio</div>
                 </div>
                 <div class="col-lg-4">
@@ -253,8 +254,8 @@
             <div class="form-group row">
                 <label for="mAmp" class="col-lg-3 col-form-label">Amperaje:</label>
                 <div class="col-lg-5">
-                    <input readonly disabled required type="number" step=".01" 
-                        class="form-control obligatorio decimal" id="mAmp" value="<?=$med_amp?>">
+                    <input readonly disabled required type="text"  
+                        class="form-control obligatorio medida" id="mAmp" value="<?=$med_amp?>">
                     <div class="invalid-feedback">Campo Obligatorio</div>
                 </div>
                 <div class="col-lg-4">
@@ -268,8 +269,8 @@
             <div class="form-group row">
                 <label for="mPot" class="col-lg-3 col-form-label">Potencia:</label>
                 <div class="col-lg-5">
-                    <input readonly disabled required type="number" step=".01" 
-                        class="form-control obligatorio decimal" id="mPot" value="<?=$med_pot?>">
+                    <input readonly disabled required type="text"  
+                        class="form-control obligatorio medida" id="mPot" value="<?=$med_pot?>">
                     <div class="invalid-feedback">Campo Obligatorio</div>
                 </div>
                 <div class="col-lg-4">
@@ -283,8 +284,8 @@
             <div class="form-group row">
                 <label for="mFre" class="col-lg-3 col-form-label">Frecuencia:</label>
                 <div class="col-lg-5">
-                    <input readonly disabled required type="number" step=".01" 
-                        class="form-control obligatorio decimal" id="mFre" value="<?=$med_fre?>">
+                    <input readonly disabled required type="text"  
+                        class="form-control obligatorio medida" id="mFre" value="<?=$med_fre?>">
                     <div class="invalid-feedback">Campo Obligatorio</div>
                 </div>
                 <div class="col-lg-4">
@@ -298,8 +299,8 @@
             <div class="form-group row">
                 <label for="mCap" class="col-lg-3 col-form-label">Capacidad:</label>
                 <div class="col-lg-5">
-                    <input readonly disabled required type="number" step=".01" 
-                        class="form-control obligatorio decimal" id="mCap" value="<?=$med_cap?>">
+                    <input readonly disabled required type="text"  
+                        class="form-control obligatorio medida" id="mCap" value="<?=$med_cap?>">
                     <div class="invalid-feedback">Campo Obligatorio</div>
                 </div>
                 <div class="col-lg-4">
@@ -313,8 +314,8 @@
             <div class="form-group row">
                 <label for="mPre" class="col-lg-3 col-form-label">Presi&oacute;n:</label>
                 <div class="col-lg-5">
-                    <input readonly disabled required type="number" step=".01" 
-                        class="form-control obligatorio decimal" id="mPre" value="<?=$med_pre?>">
+                    <input readonly disabled required type="text"  
+                        class="form-control obligatorio medida" id="mPre" value="<?=$med_pre?>">
                     <div class="invalid-feedback">Campo Obligatorio</div>
                 </div>
                 <div class="col-lg-4">
@@ -328,8 +329,8 @@
             <div class="form-group row">
                 <label for="mFlu" class="col-lg-3 col-form-label">Flujo:</label>
                 <div class="col-lg-5">
-                    <input readonly disabled required type="number" step=".01" 
-                        class="form-control obligatorio decimal" id="mFlu" value="<?=$med_flu?>">
+                    <input readonly disabled required type="text"  
+                        class="form-control obligatorio medida" id="mFlu" value="<?=$med_flu?>">
                     <div class="invalid-feedback">Campo Obligatorio</div>
                 </div>
                 <div class="col-lg-4">
@@ -343,8 +344,8 @@
             <div class="form-group row">
                 <label for="mTem" class="col-lg-3 col-form-label">Temperatura:</label>
                 <div class="col-lg-5">
-                    <input readonly disabled required type="number" step=".01" 
-                        class="form-control obligatorio decimal" id="mTem" value="<?=$med_tem?>">
+                    <input readonly disabled required type="text"  
+                        class="form-control obligatorio medida" id="mTem" value="<?=$med_tem?>">
                     <div class="invalid-feedback">Campo Obligatorio</div>
                 </div>
                 <div class="col-lg-4">
@@ -358,8 +359,8 @@
             <div class="form-group row">
                 <label for="mPes" class="col-lg-3 col-form-label">Peso:</label>
                 <div class="col-lg-5">
-                    <input readonly disabled required type="number" step=".01" 
-                        class="form-control obligatorio decimal" id="mPes" value="<?=$med_pes?>">
+                    <input readonly disabled required type="text"  
+                        class="form-control obligatorio medida" id="mPes" value="<?=$med_pes?>">
                     <div class="invalid-feedback">Campo Obligatorio</div>
                 </div>
                 <div class="col-lg-4">
@@ -373,8 +374,8 @@
             <div class="form-group row">
                 <label for="mVel" class="col-lg-3 col-form-label">Velocidad:</label>
                 <div class="col-lg-5">
-                    <input readonly disabled required type="number" step=".01" 
-                        class="form-control obligatorio decimal" id="mVel" value="<?=$med_vel?>">
+                    <input readonly disabled required type="text"  
+                        class="form-control obligatorio medida" id="mVel" value="<?=$med_vel?>">
                     <div class="invalid-feedback">Campo Obligatorio</div>
                 </div>
                 <div class="col-lg-4">
@@ -409,8 +410,9 @@
                 <table id="TablaPiezas" class="table table-hover tabla-siama tabla-siama-desactivada">
                     <thead class="head-table-siama" style="font-size:13px;">
                         <tr>
-                            <th style="width:60%;">Pieza</th>
-                            <th style="width:40%;">Inventario UC</th>
+                            <th style="width:55%;">Pieza</th>
+                            <th style="width:35%;">Inventario UC</th>
+                            <th style="width:10%;">Estatus</th>
                         </tr>
                     </thead>
                     <tbody style="font-size:13px;">

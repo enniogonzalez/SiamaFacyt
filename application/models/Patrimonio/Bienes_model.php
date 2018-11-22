@@ -8,6 +8,9 @@
             //Abrir conexion
             $conexion = $this->bd_model->ObtenerConexion();
 
+            //Abrir Transaccion
+            pg_query("BEGIN") or die("Could not start transaction");
+
 
             $query = " INSERT INTO Bienes ( Nombre,     Modelo,     BIE_SER,    Inv_UC,     PRO_ID,     Fec_Fab, 
                                             Fec_adq,    Fec_ins,    Tip_Adq,    LOC_ID,     PAR_ID,		MAR_ID,
@@ -58,36 +61,52 @@
             . str_replace("'", "''",$data['Tec_Pre'])   . "','"
             . str_replace("'", "''",$data['Riesgo'])    . "',"
             . (($data['Rec_Fab'] == "") ? "null" : ("'" .str_replace("'", "''", $data['Rec_Fab']) . "'"))
-            .",'"
-            . str_replace("'", "''",$data['Estatus']) . "',"
+            .",'Activo',"
             . $this->session->userdata("usu_id")    . ","
             . $this->session->userdata("usu_id")    . ","
             . (($data['Observaciones'] == "") ? "null" : ("'" .str_replace("'", "''", $data['Observaciones']) . "'"))
             . ");";
 
             //Ejecutar Query
-            $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
+            $result = pg_query($query);
             
+            if($result){
+                $UltimoId = $this->ObtenerUltimoIdInsertado();
+                $query = "INSERT INTO HistoricoCustodios( usu_cus, bie_id, usu_cre) VALUES('"   
+                        . str_replace("'", "''",$data['Custodio'])  . "','"
+                        . str_replace("'", "''",$UltimoId['bie_id'])  . "',"
+                        . $this->session->userdata("usu_id") . ")  ON CONFLICT DO NOTHING;";
+                        
+                $result = pg_query($query);
+            }
+
+            if(!$result){
+                pg_query("ROLLBACK") or die("Transaction rollback failed");
+                die(pg_last_error());
+            }else
+                pg_query("COMMIT") or die("Transaction commit failed");
+
             //Liberar memoria
             pg_free_result($result);
 
             //liberar conexion
             $this->bd_model->CerrarConexion($conexion);
             
-            //Si existe registro, se guarda. Sino se guarda false
-            if ($result)
-                $retorno = true;
-            else
-                $retorno = false;
 
 
-            return $retorno;
+
+            return true;
         }
 
         public function Actualizar($data){
             
             //Abrir conexion
             $conexion = $this->bd_model->ObtenerConexion();
+
+            $CustodioActual =$this->ObtenerCustodioctual(str_replace("'", "''",$data['idActual']));
+
+            //Abrir Transaccion
+            pg_query("BEGIN") or die("Could not start transaction");
 
             $query = " UPDATE Bienes "
                 . " SET Nombre ='". str_replace("'", "''",$data['Nombre']) 
@@ -129,7 +148,6 @@
                 . "', uni_vel = '" . str_replace("'", "''",$data['uni_vel']) 
                 . "', Tec_Pre = '" . str_replace("'", "''",$data['Tec_Pre']) 
                 . "', Riesgo = '" . str_replace("'", "''",$data['Riesgo']) 
-                . "', Estatus = '" . str_replace("'", "''",$data['Estatus']) 
                 . "', Rec_Fab = "
                 . (($data['Rec_Fab'] == "") ? "null" : ("'" .str_replace("'", "''", $data['Rec_Fab']) . "'"))
                 . ", Usu_Mod = " . $this->session->userdata("usu_id") 
@@ -140,21 +158,36 @@
 
 
             //Ejecutar Query
-            $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
+            $result = pg_query($query);
             
+            if($result){
+                
+                if($CustodioActual['custodio'] != $data['Custodio']){
+
+                    $query = "INSERT INTO HistoricoCustodios( usu_cus, bie_id, usu_cre) VALUES('"   
+                    . str_replace("'", "''",$data['Custodio'])  . "','"
+                    . str_replace("'", "''",$data['idActual'])  . "',"
+                    . $this->session->userdata("usu_id") . ") ON CONFLICT DO NOTHING;";
+                    
+                    $result = pg_query($query);
+                }
+            }
+
+            
+            if(!$result){
+                pg_query("ROLLBACK") or die("Transaction rollback failed");
+                die(pg_last_error());
+            }else
+                pg_query("COMMIT") or die("Transaction commit failed");
+
             //Liberar memoria
             pg_free_result($result);
 
             //liberar conexion
             $this->bd_model->CerrarConexion($conexion);
 
-            if ($result)
-                $retorno = true;
-            else
-                $retorno = false;
 
-
-            return $retorno;
+            return true;
         }
 
         public function Obtener($id = ''){
@@ -268,7 +301,7 @@
             $condicion ="";
 
             if($disponible){
-                $condicion = " B.BIE_ID NOT IN( SELECT BIE_ID
+                $condicion = " (B.BIE_ID NOT IN( SELECT BIE_ID
                                                 FROM Ajustes
                                                 WHERE Estatus = 'Solicitado'
 
@@ -289,6 +322,7 @@
                                                 SELECT BIE_ID
                                                 FROM Mantenimiento
                                                 WHERE Estatus <> 'Realizado') 
+                                AND B.estatus = 'Activo')
                 ";
             }
 
@@ -296,6 +330,7 @@
                 $condicion = ($condicion == "" ? "": $condicion . " AND ") 
                             . "(LOWER(B.Inv_UC) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
                             . "%' OR LOWER(B.nombre) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
+                            . "%' OR LOWER(B.estatus) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
                             . "%' OR LOWER(L.nombre) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
                             . "%' OR LOWER(M.nombre) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
                             . "%')";
@@ -307,6 +342,7 @@
             //Query para buscar usuario
             $query ="   SELECT  Bie_Id,
                                 nombre,
+                                estatus,
                                 Inv_UC,
                                 nomLoc,
                                 nomMar,
@@ -314,6 +350,7 @@
                         FROM (
                             SELECT  B.Bie_Id,
                                     B.nombre,
+                                    B.estatus,
                                     COALESCE(B.Inv_UC,'') Inv_UC,
                                     L.nombre nomLoc,
                                     M.nombre nomMar,
@@ -419,7 +456,8 @@
             $conexion = $this->bd_model->ObtenerConexion();
 
             $query ="   SELECT  Nombre,
-                                Inv_UC
+                                Inv_UC,
+                                Estatus
                         FROM Piezas
                         WHERE bie_id = '" . $bien . "'";
 
@@ -432,8 +470,9 @@
             while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)){
                 $html = $html
                     . "<tr>"
-                    . "    <td style=\"width:60%;\">" . $line['nombre'] . "</td>"
-                    . "    <td style=\"width:40%;\">" . $line['inv_uc'] . "</td>"
+                    . "    <td style=\"width:55%;\">" . $line['nombre'] . "</td>"
+                    . "    <td style=\"width:35%;\">" . $line['inv_uc'] . "</td>"
+                    . "    <td style=\"width:10%;\">" . $line['estatus'] . "</td>"
                     . "</tr>";
 
             }
@@ -454,7 +493,8 @@
             $conexion = $this->bd_model->ObtenerConexion();
 
             $query ="   SELECT  Nombre,
-                                Inv_UC
+                                Inv_UC,
+                                Estatus
                         FROM Piezas
                         WHERE bie_id = '" . $bien . "'";
 
@@ -471,6 +511,49 @@
             //liberar conexion
             $this->bd_model->CerrarConexion($conexion);
             
+            return $retorno;
+        }
+
+        private function ObtenerUltimoIdInsertado(){
+
+            //Query para buscar usuario
+            $query ="   SELECT bie_id FROM bienes 
+                        WHERE Usu_cre = " . $this->session->userdata("usu_id") . "
+                        ORDER BY bie_id DESC LIMIT 1;";
+
+            //Ejecutar Query
+            $result = pg_query($query);
+            
+            //Si existe registro, se guarda. Sino se guarda false
+            if ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) 
+                $retorno = $line;
+            else
+                $retorno = false;
+
+            //Liberar memoria
+            pg_free_result($result);
+
+            return $retorno;
+        }
+
+        private function ObtenerCustodioctual($bie_id){
+
+            //Query para buscar usuario
+            $query ="   SELECT custodio FROM bienes 
+                        WHERE bie_id = '" . $bie_id . "';";
+
+            //Ejecutar Query
+            $result = pg_query($query) or die(pg_last_error());
+            
+            //Si existe registro, se guarda. Sino se guarda false
+            if ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) 
+                $retorno = $line;
+            else
+                $retorno = false;
+
+            //Liberar memoria
+            pg_free_result($result);
+
             return $retorno;
         }
     }

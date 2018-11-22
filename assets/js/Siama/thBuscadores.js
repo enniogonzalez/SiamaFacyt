@@ -9,9 +9,10 @@ const thAjustes = `
 const thBienes = `
 <tr>
     <th style="width:40%;">Nombre</th>
-    <th style="width:20%;">Inventario UC</th>
-    <th style="width:20%;">Localizaci&oacute;n</th>
-    <th style="width:20%;">Marca</th>
+    <th style="width:15%;">Inventario UC</th>
+    <th style="width:15%;">Localizaci&oacute;n</th>
+    <th style="width:15%;">Marca</th>
+    <th style="width:15%;">Estatus</th>
 </tr>
 `;
 

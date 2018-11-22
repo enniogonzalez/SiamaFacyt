@@ -14,6 +14,14 @@
 
 <div class="container">
     <div class="formulario-siama">
+        
+        <div style="text-align:center;" id="SeccionImprimir">
+            <button type="button"  class="btn btn-primary-siama" id="Imprimir">
+                <span class="fa fa-print fa-lg"></span>
+                Imprimir
+            </button>
+        </div>
+
         <form class ="formulario-desactivado" id="FormularioActual" method="POST" action = "<?=site_url('/preventivo/guardar')?>">
 
             <div style="margin: 10px 15px;display:none;" id="alertaFormularioActual" class="alert alert-danger text-center">

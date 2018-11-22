@@ -19,7 +19,7 @@
             //Insertar Proveedor
             $query = " INSERT INTO Usuarios(Username,Nombre,Clave,Cargo,Correo,Usu_Cre,Usu_Mod,Observaciones) VALUES('"
             . str_replace("'", "''",$data['Username']) . "','"
-            . str_replace("'", "''",$data['Nombre']) . "','123456','"
+            . str_replace("'", "''",$data['Nombre']) . "','e11170b8cbd2d74102651cb967fa28e5','"
             . str_replace("'", "''",$data['Cargo']) . "',"
             . (($data['Correo'] == "") ? "null" : ("'" .str_replace("'", "''", $data['Correo']) . "'")). ","
             . $this->session->userdata("usu_id")    . ","

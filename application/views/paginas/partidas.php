@@ -3,17 +3,19 @@
         <div class="col-lg-9" style="padding: 0px;">
             <h2><span class="fa fa-bookmark"></span> Partidas</h2>   
         </div>
-        <div class="col-lg-3" style="text-align:center;" id="SeccionImprimir">
-            <button type="button"  class="btn btn-primary-siama" id="Imprimir">
-                <span class="fa fa-print fa-lg"></span>
-                Imprimir
-            </button>
-        </div>
     </div>
 </div>
 
 <div class="container">
     <div class="formulario-siama">
+        
+        <div style="text-align:center;" id="SeccionImprimir">
+            <button type="button"  class="btn btn-primary-siama" id="Imprimir">
+                <span class="fa fa-print fa-lg"></span>
+                Imprimir
+            </button>
+        </div>
+
         <form class ="formulario-desactivado" id="FormularioActual" method="POST" action = "<?=site_url('/partidas/guardar')?>">
 
             <div style="margin: 10px 15px;display:none;" id="alertaFormularioActual" class="alert alert-danger text-center">

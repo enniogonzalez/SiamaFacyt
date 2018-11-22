@@ -197,8 +197,9 @@ $tbl =" <br>
         <table>
             <thead>
                 <tr style=\"font-weight: bold; \">
-                    <th style=\"width:60%\">Pieza </th>
-                    <th style=\"width:40%\">Inventario UC</th>
+                    <th style=\"width:55%\">Pieza </th>
+                    <th style=\"width:35%\">Inventario UC</th>
+                    <th style=\"width:10%\">Estatus</th>
                 </tr>
             </thead>
         </table><hr>";
@@ -206,8 +207,9 @@ $tbl =" <br>
 
 foreach ($datos['Piezas'] as $elemento) {
         $tbl .= "<table><tr>
-                        <td style=\"width:60%\">" . $elemento['nombre'] . "</td>
-                        <td style=\"width:40%\">" . $elemento['inv_uc'] . "</td>
+                        <td style=\"width:55%\">" . $elemento['nombre'] . "</td>
+                        <td style=\"width:35%\">" . $elemento['inv_uc'] . "</td>
+                        <td style=\"width:10%\">" . $elemento['estatus'] . "</td>
                     </tr></table><hr>";
 }
 

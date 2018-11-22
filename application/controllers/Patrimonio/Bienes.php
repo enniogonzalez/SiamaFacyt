@@ -77,6 +77,7 @@
                 show_404();
             }
         } 
+
         public function view(){
             
             if(!$this->session->userdata("nombre")){
@@ -118,7 +119,6 @@
             $ldTipo         = $this->listasdesplegables_model->Obtener('','BIE-TIPO');
             $ldTecnologia   = $this->listasdesplegables_model->Obtener('','BIE-TECNOL');
             $ldRiesgo       = $this->listasdesplegables_model->Obtener('','BIE-RIESGO');
-            $ldEstatus      = $this->listasdesplegables_model->Obtener('','BIE-ESTATU');
             
             $dataLD['OrdenarBusqueda'] = $this->liblistasdesplegables->FormatearListaDesplegable($ld);
             $data['listaBusquedaFormulario'] = $dataLD['OrdenarBusqueda'];
@@ -145,7 +145,6 @@
             $data['ldTipo'] = $this->liblistasdesplegables->FormatearListaDesplegable($ldTipo,true,$data['tipo']);
             $data['ldTecnologia'] = $this->liblistasdesplegables->FormatearListaDesplegable($ldTecnologia,true,$data['tec_pre']);
             $data['ldRiesgo'] = $this->liblistasdesplegables->FormatearListaDesplegable($ldRiesgo,true,$data['riesgo']);
-            $data['ldEstatus'] = $this->liblistasdesplegables->FormatearListaDesplegable($ldEstatus,false,$data['estatus']);
 
             $dataAlerta['cantAlertas'] = $this->alertas_model->CantidadAlertas();
 
@@ -323,6 +322,7 @@
                         .   "<td>" . $elemento['inv_uc'] . "</td>"
                         .   "<td>" . $elemento['nomloc'] . "</td>"
                         .   "<td>" . $elemento['nommar'] . "</td>"
+                        .   "<td>" . $elemento['estatus'] . "</td>"
                         ."</tr>";
                 }
                 
@@ -332,8 +332,6 @@
 
             return $data;
         }
-
-
     }
 
 

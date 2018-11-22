@@ -79,6 +79,10 @@ $(function(){
                 $(this).removeAttr("disabled"); 
                 $(this).removeAttr("readonly");
             }
+            
+            if($(this).hasClass('buscador')){
+                $(this).attr("readonly", "readonly");
+            }
         })
 
         $('.formulario-siama table').each(function(){

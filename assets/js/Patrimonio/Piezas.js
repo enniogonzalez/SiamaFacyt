@@ -155,6 +155,9 @@ $(function(){
         GuardarEstadoActualFormulario();
         HabilitarFormulario()
         $('#NombrePieza').focus();
+        
+        $('#nomBie').attr("disabled", "disabled");
+        $('#nomBie').attr("readonly", "readonly");
         $('#nomBie').attr("disabled", "disabled");
         $('#nomBie').attr("readonly", "readonly");
         $(window).scrollTop(0);

@@ -29,6 +29,11 @@ $(function(){
     EstablecerBuscador();
 
 
+    $('.medida').on('keypress',function(e){
+        if (!((e.which >= 48 && e.which <= 57) || e.which == 45))
+            return false;
+    })
+
     $('#CancelarModalBuscar').on('click',function(){
         switch(GetSearchType()){
             case Proveedores:
@@ -436,8 +441,8 @@ $(function(){
                 $(this)[0].selectedIndex = 0;
             else if($(this).hasClass('fecha'))
                 $(this).val('')
-            else if ($(this).hasClass('decimal'))
-                $(this).val('0.00')
+            else if ($(this).hasClass('medida'))
+                $(this).val('0')
         })
     }
     

@@ -3,17 +3,19 @@
         <div class="col-lg-9" style="padding: 0px;">
             <h2><span class="fa fa-cubes"></span> Piezas</h2> 
         </div>
-        <div class="col-lg-3" style="text-align:center;" id="SeccionImprimir">
-            <button type="button"  class="btn btn-primary-siama" id="Imprimir">
-                <span class="fa fa-print fa-lg"></span>
-                Imprimir
-            </button>
-        </div>
     </div>
 </div>
 
 <div class="container">
     <div class="formulario-siama">
+        
+        <div style="text-align:center;" id="SeccionImprimir">
+            <button type="button"  class="btn btn-primary-siama" id="Imprimir">
+                <span class="fa fa-print fa-lg"></span>
+                Imprimir
+            </button>
+        </div>
+        
         <form class ="formulario-desactivado" id="FormularioActual" method="POST" action = "<?=site_url('/piezas/guardar')?>">
 
             <div style="margin: 10px 15px;display:none;" id="alertaFormularioActual" class="alert alert-danger text-center">
@@ -25,7 +27,7 @@
             <div class="form-group row">
                 <label for="estatusPieza" class="col-lg-3 col-form-label">Estatus:</label>
                 <div class="col-lg-9">
-                    <select readonly disabled class="form-control obligatorio lista" id="estatusPieza">
+                    <select readonly disabled class="form-control estatus obligatorio lista" id="estatusPieza">
                         <?=$ldEstatus?>
                     </select> 
                     <div class="invalid-feedback">Campo Obligatorio</div>
