@@ -1,10 +1,10 @@
 
 <?php
-    class Ajustes_model extends CI_Model{
+    class CambiosEstatus_model extends CI_Model{
         
 
         /************************************/
-        /*          Ajustes                 */
+        /*          Cambios                 */
         /************************************/
 
         public function Insertar($data){
@@ -14,15 +14,15 @@
             //Abrir Transaccion
             pg_query("BEGIN") or die("Could not start transaction");
 
-            $query = " INSERT INTO Ajustes ( Documento,Bie_Id, Estatus, 
+            $query = " INSERT INTO CambiosEstatus ( Documento,doc_estatus, bie_id, bie_estatus,
                                             Usu_Cre,Usu_Mod, Observaciones) 
                         VALUES('"
-            . str_replace("'", "''",$data['Documento'])    . "','"
-            . str_replace("'", "''",$data['Bie_Id'])    . "','Solicitado',"
+            . str_replace("'", "''",$data['Documento'])    . "','Solicitado','"
+            . str_replace("'", "''",$data['Bie_Id'])    . "','"
+            . str_replace("'", "''",$data['Bie_estatus'])    . "',"
             . $this->session->userdata("usu_id")    . ","
-            . $this->session->userdata("usu_id")    . ","
-            . (($data['Observaciones'] == "") ? "null" : ("'" .str_replace("'", "''", $data['Observaciones']) . "'"))
-            . ");";
+            . $this->session->userdata("usu_id")    . ",'"
+            . str_replace("'", "''", $data['Observaciones']) . "');";
 
 
             //Ejecutar Query
@@ -33,44 +33,39 @@
 
                 $UltimoId = $this->ObtenerUltimoIdInsertado();
 
-                $result = pg_query("DELETE FROM AjustesAccion WHERE AJU_ID = " . $UltimoId['aju_id']);
+                $result = pg_query("DELETE FROM CambioEstatusPieza WHERE CAM_ID = " . $UltimoId['cam_id']);
 
-                $TransAgregado = $this->ObtenerTransaccionesAgregados($data['Agregados'],$UltimoId['aju_id']);
-                $TransQuitado = $this->ObtenerTransaccionesQuitados($data['Quitados'],$UltimoId['aju_id']);
+                $TransAgregado = $this->ObtenerTransCEP($data['PiezaCEs'],$UltimoId['cam_id']);
 
                 if($data['Documento'] == "")
-                    $result = pg_query($this->ObtenerTransaccionDocumento($UltimoId['aju_id']));
+                    $result = pg_query($this->ObtenerTransaccionDocumento($UltimoId['cam_id']));
 
                 for($i = 0; $result && $i < count($TransAgregado); $i++){
                     $result = pg_query($TransAgregado[$i]);
                 }
                     
-                for($i = 0; $result && $i < count($TransQuitado); $i++){
-                    $result = pg_query($TransQuitado[$i]);
-                }
-
-                $query = "  SELECT  AJU.Documento,
-                                    to_char(AJU.Fec_Cre,'DD/MM/YYYY') Fecha,
+                $query = "  SELECT  CAM.Documento,
+                                    to_char(CAM.Fec_Cre,'DD/MM/YYYY') Fecha,
                                     BIE.nombre BIE_NOM,
                                     USU.Nombre USU_NOM,
                                     LOC.nombre LOC_NOM
-                            FROM Ajustes AJU
-                                JOIN Bienes BIE ON BIE.BIE_ID = AJU.BIE_ID
-                                JOIN Usuarios USU ON USU.USU_ID = AJU.USU_CRE
+                            FROM CambiosEstatus CAM
+                                JOIN Bienes BIE ON BIE.BIE_ID = CAM.BIE_ID
+                                JOIN Usuarios USU ON USU.USU_ID = CAM.USU_CRE
                                 JOIN Localizaciones LOC ON LOC.LOC_ID = BIE.LOC_ID
-                            WHERE AJU.AJU_ID = " . $UltimoId['aju_id'];
+                            WHERE CAM.CAM_ID = " . $UltimoId['cam_id'];
 
                 if($result){
                     $result = pg_query($query);
 
                     if($line = pg_fetch_array($result, null, PGSQL_ASSOC)){
-                        $titulo = "Ajuste Solicitado " . $line['documento'];
-                        $descripcion = "El d&iacute;a " . $line['fecha'] . " el usuario " . $line['usu_nom'] . " solicit&oacute; el ajuste "
+                        $titulo = "Cambio de Estatus Solicitado " . $line['documento'];
+                        $descripcion = "El d&iacute;a " . $line['fecha'] . " el usuario " . $line['usu_nom'] . " solicit&oacute; el cambio de estatus "
                                 . $line['documento'] . " para el bien " . $line['bie_nom'] . " ubicado en " .  $line['loc_nom'] . "."; 
 
                         $query = "INSERT INTO Alertas(Titulo, Menu, Tabla, TAB_ID,Usu_Cre,Descripcion)
-                            VALUES('" . $titulo . "','Patrimonio','Ajustes',"
-                            . $UltimoId['aju_id'] . ","
+                            VALUES('" . $titulo . "','Patrimonio','CambiosEstatus',"
+                            . $UltimoId['cam_id'] . ","
                             .$this->session->userdata("usu_id") . ",'"
                             . $descripcion . "')";
                             
@@ -101,7 +96,7 @@
             if(!$Valido)
                 die();
 
-            return $UltimoId['aju_id'];
+            return $UltimoId['cam_id'];
         }
 
         public function Actualizar($data){
@@ -113,15 +108,16 @@
             //Abrir Transaccion
             pg_query("BEGIN") or die("Could not start transaction");
 
-            $query = " UPDATE Ajustes "
+            $query = " UPDATE CambiosEstatus "
                 . " SET Bie_Id ='". str_replace("'", "''",$data['Bie_Id']) 
+                . "', Bie_estatus = '" .str_replace("'", "''",$data['Bie_estatus'])    . "',"
                 . "', Documento = " 
                 . (($data['Documento'] == "") ? "Documento" : ("'" .str_replace("'", "''", $data['Documento']) . "'")) 
                 . ", Usu_Mod = " . $this->session->userdata("usu_id") 
                 . ", Fec_Mod = NOW()" 
                 . ", Observaciones = "
                 . (($data['Observaciones'] == "") ? "null" : ("'" .str_replace("'", "''", $data['Observaciones']) . "'"))
-                . " WHERE AJU_ID = '" . str_replace("'", "''",$data['idActual']) . "';";
+                . " WHERE CAM_ID = '" . str_replace("'", "''",$data['idActual']) . "';";
 
 
             
@@ -131,16 +127,12 @@
 
             if ($result){
                 
-                $TransAgregado = $this->ObtenerTransaccionesAgregados($data['Agregados'],$data['idActual']);
-                $TransQuitado = $this->ObtenerTransaccionesQuitados($data['Quitados'],$data['idActual']);
+                $TransAgregado = $this->ObtenerTransCEP($data['PiezaCEs'],$data['idActual']);
 
                 for($i = 0; $result && $i < count($TransAgregado); $i++){
                     $result = pg_query($TransAgregado[$i]);
                 }
                     
-                for($i = 0; $result && $i < count($TransQuitado); $i++){
-                    $result = pg_query($TransQuitado[$i]);
-                }
 
                 if(!$result)
                     pg_query("ROLLBACK") or die("Transaction rollback failed");
@@ -170,20 +162,21 @@
             $conexion = $this->bd_model->ObtenerConexion();
 
             //Query para buscar usuario
-            $query ="   SELECT  AJU.AJU_ID,		
-                                AJU.BIE_ID,
-                                AJU.Documento,
+            $query ="   SELECT  CAM.CAM_ID,		
+                                CAM.BIE_ID,
+                                CAM.Documento,
                                 B.nombre Bie_Nom,		
-                                AJU.Estatus,
-                                COALESCE(AJU.Observaciones,'') Observaciones
-                        FROM Ajustes AJU
-                            JOIN Bienes B ON B.bie_id = AJU.bie_id";
+                                CAM.doc_estatus,
+                                CAM.bie_estatus,
+                                COALESCE(CAM.Observaciones,'') Observaciones
+                        FROM CambiosEstatus CAM
+                            JOIN Bienes B ON B.bie_id = CAM.bie_id";
 
             if($id != ''){
-                $query = $query . " WHERE AJU_ID = '" . $id . "'";
+                $query = $query . " WHERE CAM_ID = '" . $id . "'";
             }
 
-            $query = $query . " ORDER BY AJU_ID DESC LIMIT 1;";
+            $query = $query . " ORDER BY CAM_ID DESC LIMIT 1;";
 
             //Ejecutar Query
             $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
@@ -201,8 +194,7 @@
             $this->bd_model->CerrarConexion($conexion);
 
             if($retorno){
-                $retorno['Agregados'] = $this->ObtenerAgregados($retorno['aju_id']);
-                $retorno['Quitados'] = $this->ObtenerQuitados($retorno['aju_id']);
+                $retorno['PiezaCEs'] = $this->ObtenerCEP($retorno['cam_id']);
             }
 
 
@@ -215,21 +207,22 @@
             $conexion = $this->bd_model->ObtenerConexion();
 
             //Query para buscar usuario
-            $query ="   SELECT  AJU.AJU_ID,	
-                                AJU.Documento,
+            $query ="   SELECT  CAM.CAM_ID,	
+                                CAM.Documento,
                                 B.nombre Bie_Nom,			
                                 B.Inv_UC,	
-                                to_char(AJU.Fec_Cre,'DD/MM/YYYY') Fec_Cre,
-                                COALESCE(to_char(AJU.Fec_Apr,'DD/MM/YYYY'),'') Fec_Apr,	
+                                to_char(CAM.Fec_Cre,'DD/MM/YYYY') Fec_Cre,
+                                COALESCE(to_char(CAM.Fec_Apr,'DD/MM/YYYY'),'') Fec_Apr,	
                                 CRE.Nombre Solicitante,
                                 COALESCE(APR.Nombre,'') Aprobador,	
-                                AJU.Estatus,
-                                COALESCE(AJU.Observaciones,'') Observaciones
-                        FROM Ajustes AJU
-                            JOIN Bienes B ON B.bie_id = AJU.bie_id
-                            JOIN Usuarios CRE ON CRE.usu_id = AJU.usu_cre
-                            LEFT JOIN Usuarios APR ON APR.usu_id = AJU.usu_apr
-                        WHERE AJU_ID = '" . $id . "'";
+                                CAM.doc_estatus,
+                                CAM.bie_estatus,
+                                COALESCE(CAM.Observaciones,'') Observaciones
+                        FROM CambiosEstatus CAM
+                            JOIN Bienes B ON B.bie_id = CAM.bie_id
+                            JOIN Usuarios CRE ON CRE.usu_id = CAM.usu_cre
+                            LEFT JOIN Usuarios APR ON APR.usu_id = CAM.usu_apr
+                        WHERE CAM_ID = '" . $id . "'";
 
 
             //Ejecutar Query
@@ -248,8 +241,7 @@
             $this->bd_model->CerrarConexion($conexion);
 
             if($retorno){
-                $retorno['Agregados'] = $this->ObtenerAgregadosPDF($retorno['aju_id']);
-                $retorno['Quitados'] = $this->ObtenerQuitadosPDF($retorno['aju_id']);
+                $retorno['PiezaCEs'] = $this->ObtenerCepPDF($retorno['cam_id']);
             }
 
 
@@ -259,9 +251,9 @@
         private function ObtenerUltimoIdInsertado(){
 
             //Query para buscar usuario
-            $query ="   SELECT AJU_ID FROM Ajustes 
+            $query ="   SELECT CAM_ID FROM CambiosEstatus 
                         WHERE Usu_cre = " . $this->session->userdata("usu_id") . "
-                        ORDER BY AJU_ID DESC LIMIT 1;";
+                        ORDER BY CAM_ID DESC LIMIT 1;";
 
             //Ejecutar Query
             $result = pg_query($query);
@@ -287,8 +279,8 @@
 
             if($busqueda != ""){
                 $condicion = " WHERE  (LOWER(B.nombre) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
-                            . "%' OR LOWER(AJU.documento) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
-                            . "%' OR LOWER(AJU.estatus) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
+                            . "%' OR LOWER(CAM.documento) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
+                            . "%' OR LOWER(CAM.doc_estatus) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
                             . "%')";
             }
             
@@ -296,17 +288,17 @@
             $query ="   SELECT  Aju_Id,
                                 nombre,
                                 Documento,
-                                Estatus,
+                                doc_estatus,
                                 Registros
                         FROM (
-                            SELECT  AJU.Aju_Id,
-                                    AJU.Documento,
-                                    AJU.Estatus,
+                            SELECT  CAM.Aju_Id,
+                                    CAM.Documento,
+                                    CAM.doc_estatus,
                                     B.nombre,
                                     COUNT(*) OVER() AS Registros,
                                     ROW_NUMBER() OVER(ORDER BY " . $orden .") Fila
-                            FROM Ajustes AJU
-                                JOIN Bienes B ON B.Bie_Id = AJU.Bie_Id
+                            FROM CambiosEstatus CAM
+                                JOIN Bienes B ON B.Bie_Id = CAM.Bie_Id
                             " . $condicion . "
 
                         ) LD
@@ -339,15 +331,15 @@
             $conexion = $this->bd_model->ObtenerConexion();
 
             //Query para buscar usuario
-            $query ="   SELECT  AJU.usu_cre,
+            $query ="   SELECT  CAM.usu_cre,
                                 CRE.nombre cre_nom,
-                                COALESCE(AJU.usu_apr,-1) usu_apr,
+                                COALESCE(CAM.usu_apr,-1) usu_apr,
                                 COALESCE(APR.nombre,'') apr_nom
-                        FROM Ajustes AJU
-                            JOIN Usuarios CRE ON CRE.usu_id = AJU.usu_cre
-                            LEFT JOIN Usuarios APR ON APR.usu_id = AJU.usu_apr
-                        WHERE AJU_ID = '" . $id . "'
-                        ORDER BY AJU_ID DESC LIMIT 1;";
+                        FROM CambiosEstatus CAM
+                            JOIN Usuarios CRE ON CRE.usu_id = CAM.usu_cre
+                            LEFT JOIN Usuarios APR ON APR.usu_id = CAM.usu_apr
+                        WHERE CAM_ID = '" . $id . "'
+                        ORDER BY CAM_ID DESC LIMIT 1;";
 
             //Ejecutar Query
             $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
@@ -377,8 +369,8 @@
             //Abrir Transaccion
             pg_query("BEGIN") or die("Could not start transaction");
 
-            $query = " DELETE FROM Ajustes "
-                . " WHERE aju_id = '" .str_replace("'", "''",$id) . "';";
+            $query = " DELETE FROM CambiosEstatus "
+                . " WHERE cam_id = '" .str_replace("'", "''",$id) . "';";
                 
             //Ejecutar Query
             $result = pg_query($query);
@@ -388,7 +380,7 @@
             //Si existe registro, se guarda. Sino se guarda false
             if ($result){
                 
-                $query = " DELETE FROM Alertas WHERE Tabla = 'Ajustes' AND TAB_ID = " . $id;
+                $query = " DELETE FROM Alertas WHERE Tabla = 'CambiosEstatus' AND TAB_ID = " . $id;
                 $result = pg_query($query);
 
 
@@ -422,10 +414,10 @@
             $conexion = $this->bd_model->ObtenerConexion();
     
             //Query para buscar usuario
-            $query =" SELECT * FROM Ajustes WHERE LOWER(documento) ='" . strtolower(str_replace("'", "''",$documento)) . "' " ;
+            $query =" SELECT * FROM CambiosEstatus WHERE LOWER(documento) ='" . strtolower(str_replace("'", "''",$documento)) . "' " ;
 
             if($id != "")
-                $query = $query . " AND AJU_ID <>'" . str_replace("'", "''",$id) . "' " ;
+                $query = $query . " AND CAM_ID <>'" . str_replace("'", "''",$id) . "' " ;
 
             $query = $query . ";" ;
 
@@ -450,13 +442,13 @@
         private function ObtenerTransaccionDocumento($id){
 
             $documento = substr("0000000000" . trim( $id),-10);
-            $query = "UPDATE Ajustes "
+            $query = "UPDATE CambiosEstatus "
                     . "SET  Documento = '" . $documento
-                    ."' WHERE AJU_ID = " . $id;
+                    ."' WHERE CAM_ID = " . $id;
             return $query;
         }
 
-        public function AprobarAjuste($id){
+        public function AprobarCambioEstatus($id){
             
             //Abrir conexion
             $conexion = $this->bd_model->ObtenerConexion();
@@ -464,51 +456,53 @@
             //Abrir Transaccion
             pg_query("BEGIN") or die("Could not start transaction");
 
-            $query = "  UPDATE Ajustes  
-                        SET estatus = 'Aprobado'
+            $query = "  UPDATE CambiosEstatus  
+                        SET doc_estatus = 'Aprobado'
                             , Usu_Apr = " . $this->session->userdata("usu_id") . "
                             , Usu_Mod = " . $this->session->userdata("usu_id") . "
                             , Fec_Apr = Now()
                             , Fec_Mod = Now()
-                        WHERE aju_id = '" .str_replace("'", "''",$id) . "';";
+                        WHERE cam_id = '" .str_replace("'", "''",$id) . "';";
                 
             //Ejecutar Query
             $result = pg_query($query);
 
+
+            if($result){
+                $query = "  UPDATE Bienes 
+                                SET Estatus = CambiosEstatus.bie_estatus
+                            FROM CambiosEstatus
+                            WHERE Bienes.bie_id = CambiosEstatus.bie_id
+                                AND CambiosEstatus.cam_id = " . $id;
+                $result = pg_query($query);
+            }
+
             if ($result){
 
-                $TransAgregado = $this->ObtenerTAprobadoAgregados($id);
-                $TransQuitado = $this->ObtenerTAprobadoQuitados($id);
+                $TransAgregado = $this->ObtenerTansAproCEP($id);
 
                 for($i = 0; $result && $i < count($TransAgregado); $i++){
                     $result = pg_query($TransAgregado[$i]);
                 }
                     
-                for($i = 0; $result && $i < count($TransQuitado); $i++){
-                    $result = pg_query($TransQuitado[$i]);
-                }
 
-                $query = " DELETE FROM Alertas WHERE Tabla = 'Ajustes' AND TAB_ID = " . $id;
+                $query = " DELETE FROM Alertas WHERE Tabla = 'CambiosEstatus' AND TAB_ID = " . $id;
                 $result = pg_query($query);
-
-                if(!$result)
-                    pg_query("ROLLBACK") or die("Transaction rollback failed");
-                else
-                    pg_query("COMMIT") or die("Transaction commit failed");
                 
-                $Valido = $result;
+            }
+
+
+            if(!$result){
+                pg_query("ROLLBACK") or die("Transaction rollback failed");
+                die();
             }else
-                $Valido = false;
-
-
+                pg_query("COMMIT") or die("Transaction commit failed");
             //Liberar memoria
             pg_free_result($result);
 
             //liberar conexion
             $this->bd_model->CerrarConexion($conexion);
 
-            if(!$Valido)
-                die();
 
             return true;
         }
@@ -520,8 +514,8 @@
     
             //Query para buscar usuario
             $query ="   SELECT 1 
-                        FROM Ajustes 
-                        WHERE AJU_ID = " . str_replace("'", "''",$id) . "
+                        FROM CambiosEstatus 
+                        WHERE CAM_ID = " . str_replace("'", "''",$id) . "
                             AND Usu_Cre = ". $this->session->userdata("usu_id");
 
 
@@ -550,8 +544,8 @@
     
             //Query para buscar usuario
             $query ="   SELECT 1 
-                        FROM Ajustes 
-                        WHERE AJU_ID = " . str_replace("'", "''",$id) . "
+                        FROM CambiosEstatus 
+                        WHERE CAM_ID = " . str_replace("'", "''",$id) . "
                             AND Usu_Cre <> ". $this->session->userdata("usu_id");
 
 
@@ -574,21 +568,22 @@
         }
 
         /************************************/
-        /*              Agregados           */
+        /*      Cambios Estatus Pieza       */
         /************************************/
 
-        private function ObtenerTransaccionesAgregados($agregados,$ajuste){
+        private function ObtenerTransCEP($ceps,$cambio){
             $transacciones = [];
 
 
-            if(isset($agregados)){
-                foreach ($agregados as $data) {
+            if(isset($ceps)){
+                foreach ($ceps as $data) {
 
-                    $query = "INSERT INTO AjustesAccion( AJU_ID,PIE_ID,Tipo,
+                    $query = "INSERT INTO CambioEstatusPieza( CAM_ID,PIE_ID,Estatus,
                                                         Usu_Cre,Usu_Mod,Observaciones)"
                             . "VALUES('"
-                            . str_replace("'", "''",$ajuste)    . "','"
-                            . str_replace("'", "''",$data['IdPieza']) . "','Agregar',"
+                            . str_replace("'", "''",$cambio)    . "','"
+                            . str_replace("'", "''",$data['IdPieza']) . "','"
+                            . str_replace("'", "''",$data['Estatus']) . "',"
                             . $this->session->userdata("usu_id")    . ","
                             . $this->session->userdata("usu_id")    . ",'"
                             . str_replace("'", "''",$data['Observacion'])    . "');";
@@ -600,18 +595,15 @@
             return $transacciones;
         }
 
-        private function ObtenerTAprobadoAgregados($ajuste){
+        private function ObtenerTansAproCEP($cambio){
             
             $transacciones = [];
 
             $query = "  UPDATE Piezas 
-                            SET BIE_ID = (SELECT BIE_ID FROM Ajustes WHERE AJU_ID = " . $ajuste . " LIMIT 1)
-                        WHERE PIE_ID IN (
-                                SELECT PIE_ID
-                                FROM AjustesAccion
-                                WHERE AJU_ID = " . $ajuste . "
-                                    AND Tipo = 'Agregar'
-                        );";
+                            SET Estatus = CambioEstatusPieza.estatus
+                        FROM CambioEstatusPieza
+                        WHERE Piezas.pie_id = CambioEstatusPieza.pie_id
+                            AND CambioEstatusPieza.cam_id = " . $cambio;
             
             array_push($transacciones,$query);
 
@@ -619,26 +611,26 @@
             return $transacciones;
         }
 
-        private function ObtenerAgregados($ajuste){
+        private function ObtenerCEP($cambio){
 
             //Abrir conexion
             $conexion = $this->bd_model->ObtenerConexion();
             
-            $query ="   SELECT  AAC.AAC_ID,			
-                                AAC.AJU_ID,			
-                                AAC.PIE_ID,	
+            $query ="   SELECT  CEP.CEP_ID,			
+                                CEP.CAM_ID,			
+                                CEP.PIE_ID,	
+                                CEP.estatus,	
                                 PIE.Nombre PIE_NOM,
                                 COALESCE(PIE.Inv_UC,'') inv_uc,
-                                AAC.Usu_Cre,			
-                                AAC.Fec_Cre,			
-                                AAC.Usu_Mod,			
-                                AAC.Fec_Mod,	
-                                COALESCE(AAC.Observaciones,'') Observaciones
-                        FROM AjustesAccion AAC
-                            JOIN Piezas PIE ON PIE.PIE_ID = AAC.PIE_ID
-                        WHERE AAC.AJU_ID = " . $ajuste . "
-                            AND AAC.Tipo = 'Agregar'
-                        ORDER BY AAC.AAC_ID ASC;";
+                                CEP.Usu_Cre,			
+                                CEP.Fec_Cre,			
+                                CEP.Usu_Mod,			
+                                CEP.Fec_Mod,	
+                                COALESCE(CEP.Observaciones,'') Observaciones
+                        FROM CambioEstatusPieza CEP
+                            JOIN Piezas PIE ON PIE.PIE_ID = CEP.PIE_ID
+                        WHERE CEP.CAM_ID = " . $cambio . "
+                        ORDER BY CEP.CEP_ID ASC;";
 
 
             //Ejecutar Query
@@ -649,12 +641,13 @@
             while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)){
                 $html = $html
                     . "<tr>"
-                    . "    <td style=\"display:none;\">" . $line['aac_id'] . "</td>"
+                    . "    <td style=\"display:none;\">" . $line['cep_id'] . "</td>"
                     . "    <td style=\"display:none;\">" . $line['pie_id'] . "</td>"
                     . "    <td>" . $line['pie_nom'] . "</td>"
                     . "    <td>" . $line['inv_uc'] . "</td>"
                     . "    <td style=\"display:none;\">" . $line['observaciones']
-                    . "    <td colspan=\"2\" class =\"editarAgregado\"  style=\"text-align: center;cursor: pointer;\">"
+                    . "    <td>" . $line['estatus'] . "</td>"
+                    . "    <td colspan=\"2\" class =\"editarPiezaCE\"  style=\"text-align: center;cursor: pointer;\">"
                     . "        <span class=\"fa fa-pencil fa-lg\"></span>"
                     . "    </td>"
                     . "</tr>";
@@ -671,19 +664,19 @@
             return $html;
         }
 
-        private function ObtenerAgregadosPDF($ajuste){
+        private function ObtenerCepPDF($cambio){
 
             //Abrir conexion
             $conexion = $this->bd_model->ObtenerConexion();
             
             $query ="   SELECT  PIE.Nombre PIE_NOM,
                                 COALESCE(PIE.Inv_UC,'') inv_uc,	
-                                COALESCE(AAC.Observaciones,'') Observaciones
-                        FROM AjustesAccion AAC
-                            JOIN Piezas PIE ON PIE.PIE_ID = AAC.PIE_ID
-                        WHERE AAC.AJU_ID = " . $ajuste . "
-                            AND AAC.Tipo = 'Agregar'
-                        ORDER BY AAC.AAC_ID ASC;";
+                                CEP.estatus,	
+                                COALESCE(CEP.Observaciones,'') Observaciones
+                        FROM CambioEstatusPieza CEP
+                            JOIN Piezas PIE ON PIE.PIE_ID = CEP.PIE_ID
+                        WHERE CEP.CAM_ID = " . $cambio . "
+                        ORDER BY CEP.CEP_ID ASC;";
 
 
             //Ejecutar Query
@@ -703,146 +696,6 @@
             return $retorno;
         }
 
-        /************************************/
-        /*          Quitados                */
-        /************************************/
-
-
-        private function ObtenerTransaccionesQuitados($quitados,$ajuste){
-            $transacciones = [];
-
-            if(isset($quitados)){
-                foreach ($quitados as $data) {
-                    
-                    $query = "INSERT INTO AjustesAccion( AJU_ID,PIE_ID,Tipo,
-                                                        Usu_Cre,Usu_Mod,Observaciones)"
-                            . "VALUES('"
-                            . str_replace("'", "''",$ajuste)    . "','"
-                            . str_replace("'", "''",$data['IdPieza']) . "','Quitar',"
-                            . $this->session->userdata("usu_id")    . ","
-                            . $this->session->userdata("usu_id")    . ",'"
-                            . str_replace("'", "''",$data['Observacion'])    . "');";
-
-                    array_push($transacciones,$query);
-                }
-            }
-
-            return $transacciones;
-        }
-        
-        private function ObtenerTAprobadoQuitados($ajuste){
-            
-            $transacciones = [];
-
-            $query = "  UPDATE Piezas 
-                            SET BIE_ID = null
-                        WHERE PIE_ID IN (
-                                SELECT PIE_ID
-                                FROM AjustesAccion
-                                WHERE AJU_ID = " . $ajuste . "
-                                    AND Tipo = 'Quitar'
-                        );";
-            
-            array_push($transacciones,$query);
-
-            $query = "  DELETE FROM PlantillaMantenimientoTarea AS PMT
-                        WHERE EXISTS(
-                            SELECT 1
-                            FROM PlantillaMantenimiento PLM 
-                                JOIN Ajustes AJU ON AJU.BIE_ID = PLM.BIE_ID
-                                JOIN AjustesAccion AAC ON AAC.AJU_ID = AJU.AJU_Id
-                                    AND AAC.PIE_ID = PMT.PIE_ID
-                            WHERE PLM.PLM_ID = PMT.PLM_ID
-                                AND AJU.AJU_ID = " . $ajuste . "
-                                AND AAC.Tipo = 'Quitar'
-                        );";
-            
-            array_push($transacciones,$query);
-            
-            return $transacciones;
-        }
-
-        private function ObtenerQuitados($ajuste){
-
-            //Abrir conexion
-            $conexion = $this->bd_model->ObtenerConexion();
-            //Query para buscar usuario
-            $query ="   SELECT  AAC.AAC_ID,			
-                                AAC.AJU_ID,			
-                                AAC.PIE_ID,	
-                                PIE.Nombre PIE_NOM,
-                                COALESCE(PIE.Inv_UC,'') inv_uc,	
-                                AAC.Usu_Cre,			
-                                AAC.Fec_Cre,			
-                                AAC.Usu_Mod,			
-                                AAC.Fec_Mod,	
-                                COALESCE(AAC.Observaciones,'') Observaciones
-                        FROM AjustesAccion AAC
-                            JOIN Piezas PIE ON PIE.PIE_ID = AAC.PIE_ID
-                        WHERE AAC.AJU_ID = " . $ajuste . "
-                            AND AAC.Tipo = 'Quitar'
-                        ORDER BY AAC.AAC_ID ASC;";
-
-
-            //Ejecutar Query
-            $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
-
-            $html = "";
-            //Si existe registro, se guarda. Sino se guarda false
-            while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)){
-                $html = $html
-                    . "<tr>"
-                    . "    <td style=\"display:none;\">" . $line['aac_id'] . "</td>"
-                    . "    <td style=\"display:none;\">" . $line['pie_id'] . "</td>"
-                    . "    <td>" . $line['pie_nom'] . "</td>"
-                    . "    <td>" . $line['inv_uc'] . "</td>"
-                    . "    <td style=\"display:none;\">" . $line['observaciones']
-                    . "    <td colspan=\"2\" class =\"editarQuitado\"  style=\"text-align: center;cursor: pointer;\">"
-                    . "        <span class=\"fa fa-pencil fa-lg\"></span>"
-                    . "    </td>"
-                    . "</tr>";
-
-            }
-
-            //Liberar memoria
-            pg_free_result($result);
-
-            //liberar conexion
-            $this->bd_model->CerrarConexion($conexion);
-
-
-            return $html;
-        }
-
-        private function ObtenerQuitadosPDF($ajuste){
-
-            //Abrir conexion
-            $conexion = $this->bd_model->ObtenerConexion();
-
-            $query ="   SELECT  PIE.Nombre PIE_NOM,
-                            COALESCE(PIE.Inv_UC,'') inv_uc,	
-                            COALESCE(AAC.Observaciones,'') Observaciones
-                    FROM AjustesAccion AAC
-                        JOIN Piezas PIE ON PIE.PIE_ID = AAC.PIE_ID
-                    WHERE AAC.AJU_ID = " . $ajuste . "
-                        AND AAC.Tipo = 'Quitar'
-                    ORDER BY AAC.AAC_ID ASC;";
-
-            //Ejecutar Query
-            $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
-
-            $retorno = array();
-            while($line = pg_fetch_array($result, null, PGSQL_ASSOC))
-                array_push($retorno,$line);
-
-            //Liberar memoria
-            pg_free_result($result);
-
-            //liberar conexion
-            $this->bd_model->CerrarConexion($conexion);
-            
-            return $retorno;
-        }
     }
 
 ?>

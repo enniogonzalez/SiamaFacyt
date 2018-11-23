@@ -124,7 +124,7 @@ $(function(){
             
             ValorActual =$('#idPiezaQuitar').text().trim();
             fila = $('#mhOptionR').text().trim();
-            $("#TablaAgregarPiezas").find('> tbody > tr').each(function () {
+            $("#TablaQuitarPiezas").find('> tbody > tr').each(function () {
 
                 if(fila != $(this).index() && ValorActual == $(this).find('td:eq(1)').text().trim()){
                     Valido = false;

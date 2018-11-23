@@ -1,24 +1,24 @@
 <?php
 
-    class Ajustes extends CI_Controller{
+    class CambiosEstatus extends CI_Controller{
 
         public function __construct(){
             parent::__construct();
-            $this->load->model('Patrimonio/ajustes_model' , 'ajustes_model');
+            $this->load->model('Patrimonio/cambiosestatus_model' , 'cambiosestatus_model');
             $this->load->library('liblistasdesplegables','liblistasdesplegables');
         }
 
         private function FormatearRequest($respuesta){
 
             $data = array(
-                "aju_id"        =>"",
+                "cam_id"        =>"",
                 "documento"     =>"",
                 "bie_id"        =>"",
                 "bie_nom"       =>"",
-                "estatus"       =>"",
+                "doc_estatus"   =>"",
+                "bie_estatus"   =>"",
                 "observaciones" =>"",
-                "Quitados"      =>"",
-                "Agregados"     =>"",
+                "PiezaCEs"     =>"",
             );
 
             if($respuesta)
@@ -40,11 +40,10 @@
 
             $this->ValidarPermiso();
             
-            $data = $this->FormatearRequest($this->ajustes_model->Obtener());
+            $data = $this->FormatearRequest($this->cambiosestatus_model->Obtener());
 
-            $JsFile =   "<script src=\"". base_url() . "assets/js/Patrimonio/Ajustes/Ajustes.js\"></script>"
-                    .   "<script src=\"". base_url() . "assets/js/Patrimonio/Ajustes/Agregar.js\"></script>"
-                    .   "<script src=\"". base_url() . "assets/js/Patrimonio/Ajustes/Quitar.js\"></script>";
+            $JsFile =   "<script src=\"". base_url() . "assets/js/Patrimonio/CambiosEstatus/CambiosEstatus.js\"></script>"
+                    .   "<script src=\"". base_url() . "assets/js/Patrimonio/CambiosEstatus/PiezasEstatus.js\"></script>";
 
             $datafile['JsFile'] = $JsFile ;
 
@@ -68,7 +67,7 @@
             $this->load->view('plantillas/3-iniciomain');
             $this->load->view('plantillas/4-barramenu');
             $this->load->view('plantillas/5-iniciopagina');
-            $this->load->view('paginas/Patrimonio/ajustes',$data);
+            $this->load->view('paginas/Patrimonio/cambiosestatus',$data);
             $this->load->view('plantillas/7-footer');
 
         }
@@ -80,7 +79,7 @@
             if(!$this->session->userdata("nombre") || $this->input->post("id") == ""){
                 redirect(site_url(''));
             }
-            $data = $this->FormatearRequest($this->ajustes_model->Obtener($this->input->post("id")));
+            $data = $this->FormatearRequest($this->cambiosestatus_model->Obtener($this->input->post("id")));
             echo json_encode(array("isValid"=>true,"Datos"=>$data,"Caso" =>  $this->input->post("Caso") ));
 
         }
@@ -97,42 +96,41 @@
                 "idActual"      => $this->input->post("id"),
                 "Bie_Id"        => $this->input->post("Bien"),
                 "Documento"     => $this->input->post("Documento"),
-                "Agregados"     => $this->input->post("Agregados"),
-                "Quitados"      => $this->input->post("Quitados"),
-                "Estatus"       => $this->input->post("Estatus"),
+                "PiezaCEs"      => $this->input->post("PiezaCEs"),
+                "Bie_estatus"   => $this->input->post("Bie_estatus"),
                 "Observaciones" => trim($this->input->post("Observacion"))
             );
             
             if($this->input->post("id") == ""){
-                if($this->ajustes_model->ExisteDocumento($parametros['Documento'])){
+                if($this->cambiosestatus_model->ExisteDocumento($parametros['Documento'])){
                     echo json_encode(array(
                         "isValid"=>false,
-                        "Mensaje"=>"Ya existe un Ajuste registrado con el mismo codigo Documento.",
+                        "Mensaje"=>"Ya existe un Cambio de Estatus registrado con el mismo Documento.",
                         "id"=>""));
                 }else{
-                    $id = $this->ajustes_model->Insertar($parametros);
-                    $Datos = $this->ajustes_model->Obtener($id);
+                    $id = $this->cambiosestatus_model->Insertar($parametros);
+                    $Datos = $this->cambiosestatus_model->Obtener($id);
 
                     echo json_encode(array(
                         "isValid"=>true,
-                        "Mensaje"=>"Se ha guardado el Ajuste exitosamente",
+                        "Mensaje"=>"Se ha guardado el Cambio de Estatus exitosamente",
                         "id"=>$id,
                         "Datos"=>$Datos
                     ));
                 }
             }else{
-                if($this->ajustes_model->ExisteDocumento($parametros['Documento'],$parametros['idActual'])){
+                if($this->cambiosestatus_model->ExisteDocumento($parametros['Documento'],$parametros['idActual'])){
                     echo json_encode(array(
                         "isValid"=>false,
-                        "Mensaje"=>"Ya existe un Ajuste registrado con el mismo codigo Documento.",
+                        "Mensaje"=>"Ya existe un Cambio de Estatus registrado con el mismo Documento.",
                         "id"=>$this->input->post("id")));
                 }else{
-                    $respuesta = $this->ajustes_model->Actualizar($parametros);
-                    $Datos = $this->ajustes_model->Obtener($this->input->post("id"));
+                    $respuesta = $this->cambiosestatus_model->Actualizar($parametros);
+                    $Datos = $this->cambiosestatus_model->Obtener($this->input->post("id"));
 
                     echo json_encode(array(
                         "isValid"=>true,
-                        "Mensaje"=>"Se ha actualizado el Ajuste exitosamente",
+                        "Mensaje"=>"Se ha actualizado el Cambio de Estatus exitosamente",
                         "id"=>$this->input->post("id"),
                         "Datos"=>$Datos
                     ));
@@ -150,13 +148,13 @@
                 redirect(site_url(''));
             }
 
-            if($this->ajustes_model->PuedeEliminar($this->input->post("id"))){
-                $eliminar = $this->ajustes_model->Eliminar($this->input->post("id"));
+            if($this->cambiosestatus_model->PuedeEliminar($this->input->post("id"))){
+                $eliminar = $this->cambiosestatus_model->Eliminar($this->input->post("id"));
 
-                $data = $this->FormatearRequest($this->ajustes_model->Obtener());
+                $data = $this->FormatearRequest($this->cambiosestatus_model->Obtener());
                 echo json_encode(array("isValid"=>true,"Datos"=>$data));
             }else{
-                $usuarios = $this->ajustes_model->ObtenerUsuarios($this->input->post("id"));
+                $usuarios = $this->cambiosestatus_model->ObtenerUsuarios($this->input->post("id"));
                 $html = "<strong>Usuario Solicitante:</strong> " . $usuarios['cre_nom'];
                 echo json_encode(array("isValid"=>false,
                     "Mensaje"=>"El Documento actual solo puede ser eliminado por la persona que lo ha solicitado.<br/><br/>" .$html
@@ -181,7 +179,7 @@
             $inicio = 1+$regXpag*($pagina-1);
             $fin = $regXpag*$pagina;
 
-            $respuesta = $this->FormatearBusqueda($this->ajustes_model->Busqueda($busqueda,$ordenamiento,$inicio,$fin));
+            $respuesta = $this->FormatearBusqueda($this->cambiosestatus_model->Busqueda($busqueda,$ordenamiento,$inicio,$fin));
 
             echo json_encode(array("isValid"=>true,"Datos"=>$respuesta));
         }
@@ -194,18 +192,18 @@
                 redirect(site_url(''));
             }
 
-            if($this->ajustes_model->PuedeAprobar($this->input->post("id"))){
-                $aprobar = $this->ajustes_model->AprobarAjuste($this->input->post("id"));
+            if($this->cambiosestatus_model->PuedeAprobar($this->input->post("id"))){
+                $aprobar = $this->cambiosestatus_model->AprobarCambioEstatus($this->input->post("id"));
             
-                $Datos = $this->ajustes_model->Obtener($this->input->post("id"));
+                $Datos = $this->cambiosestatus_model->Obtener($this->input->post("id"));
                 echo json_encode(array("isValid"=>true,
-                    "Mensaje"=>"Se ha aprobado correctamente el ajuste",
+                    "Mensaje"=>"Se ha aprobado correctamente el cambio de ajuste",
                     "Tipo" => $this->input->post("Tipo"),
                     "Datos"=>$Datos
                 ));
             }else{
                 
-                $usuarios = $this->ajustes_model->ObtenerUsuarios($this->input->post("id"));
+                $usuarios = $this->cambiosestatus_model->ObtenerUsuarios($this->input->post("id"));
                 $html = "<strong>Usuario Solicitante:</strong> " . $usuarios['cre_nom'];
                 echo json_encode(array("isValid"=>false,
                     "Mensaje"=>"El Documento actual no puede ser aprobado por la misma persona que lo ha solicitado.<br><br>" . $html
@@ -217,25 +215,25 @@
 
         public function imprimir($id){
             $this->ValidarPermiso();
-            $data['datos'] = $this->FormatearImpresion($this->ajustes_model->ObtenerInfoPDF($id));
+            $data['datos'] = $this->FormatearImpresion($this->cambiosestatus_model->ObtenerInfoPDF($id));
             $this->load->library('tcpdf/Pdf');
-            $this->load->view('Reportes/repAjustes',$data);
+            $this->load->view('Reportes/repCambiosEstatus',$data);
         }
 
         private function FormatearImpresion($respuesta){
 
             $data = array(
                 "documento"     =>"",
-                "aju_id"        =>"",
+                "cam_id"        =>"",
                 "bie_nom"       =>"",
                 "inv_uc"        =>"",
-                "estatus"       =>"",
+                "doc_estatus"   =>"",
+                "bie_estatus"   =>"",
                 "solicitante"   =>"",
                 "fec_cre"       =>"",
-                "fec_apr"   =>"",
+                "fec_apr"       =>"",
                 "aprobador"     =>"",
-                "Agregados"     =>[],
-                "Quitados"      =>[],
+                "PiezaCEs"      =>[],
                 "observaciones" => ""
             );
 
@@ -244,6 +242,7 @@
 
             return $data;
         }
+
         private function FormatearBusqueda($datos){
             
             $data = array(
@@ -260,10 +259,10 @@
                     $registros = $elemento['registros'];
                     $htmlListas = $htmlListas
                         ."<tr>"
-                        .   "<td style='display:none;'>" . $elemento['aju_id'] . "</td>"
+                        .   "<td style='display:none;'>" . $elemento['cam_id'] . "</td>"
                         .   "<td>" . $elemento['documento'] . "</td>"
                         .   "<td>" . $elemento['nombre'] . "</td>"
-                        .   "<td>" . $elemento['estatus'] . "</td>"
+                        .   "<td>" . $elemento['doc_estatus'] . "</td>"
                         ."</tr>";
                 }
                 

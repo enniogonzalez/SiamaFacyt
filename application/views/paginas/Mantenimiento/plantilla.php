@@ -3,12 +3,6 @@
         <div class="col-lg-9" style="padding: 0px;">
             <h2><span class="fa fa-sticky-note"></span> Plantillas de Mantenimiento</h2>   
         </div>
-        <div class="col-lg-3" style="text-align:center;" id="SeccionImprimir">
-            <button type="button"  class="btn btn-primary-siama" id="Imprimir">
-                <span class="fa fa-print fa-lg"></span>
-                Imprimir
-            </button>
-        </div>
     </div>  
 </div>
 

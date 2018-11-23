@@ -52,7 +52,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 
 $route['ajustes/aprobar'] = 'Patrimonio/ajustes/aprobar';
-$route['ajustes/reversar'] = 'Patrimonio/ajustes/reversar';
 $route['ajustes/obtener'] = 'Patrimonio/ajustes/obtener';
 $route['ajustes/busqueda'] = 'Patrimonio/ajustes/busqueda';
 $route['ajustes/eliminar'] = 'Patrimonio/ajustes/eliminar';
@@ -69,6 +68,14 @@ $route['bienes/eliminar'] = 'Patrimonio/bienes/eliminar';
 $route['bienes/guardar'] = 'Patrimonio/bienes/guardar';
 $route['bienes/imprimir/(:any)'] = 'Patrimonio/bienes/imprimir/$1';
 $route['bienes'] = 'Patrimonio/bienes/view/';
+
+$route['cambiosestatus/aprobar'] = 'Patrimonio/cambiosestatus/aprobar';
+$route['cambiosestatus/obtener'] = 'Patrimonio/cambiosestatus/obtener';
+$route['cambiosestatus/busqueda'] = 'Patrimonio/cambiosestatus/busqueda';
+$route['cambiosestatus/eliminar'] = 'Patrimonio/cambiosestatus/eliminar';
+$route['cambiosestatus/guardar'] = 'Patrimonio/cambiosestatus/guardar';
+$route['cambiosestatus/imprimir/(:any)'] = 'Patrimonio/cambiosestatus/imprimir/$1';
+$route['cambiosestatus'] = 'Patrimonio/cambiosestatus/view/';
 
 $route['configurar/guardar'] = 'Sistema/configurarusuario/guardar';
 $route['configurar'] = 'Sistema/configurarusuario/view';

@@ -283,13 +283,26 @@
             $inicio = 1+$regXpag*($pagina-1);
             $fin = $regXpag*$pagina;
             $BienesDisponibles = false;
-
             $Condiciones = $this->input->post("Condiciones");
+            $Inactivos = false;
+
             if(isset($Condiciones)){
                 $BienesDisponibles = $Condiciones['BienesDisponibles'] == "true" ? true:false;
+
+                if(isset($Condiciones['Inactivos'])){
+                    $Inactivos = $Condiciones['Inactivos'] == "true" ? true:false;
+                }
             }
 
-            $respuesta = $this->FormatearBusqueda($this->bienes_model->Busqueda($busqueda,$ordenamiento,$inicio,$fin,$BienesDisponibles));
+            $data = array(
+                "busqueda"      => $busqueda,
+                "orden"  => $ordenamiento,
+                "inicio"        => $inicio,
+                "fin"           => $fin,
+                "Inactivos"     => $Inactivos,
+                "Disponible"    => $BienesDisponibles
+            );
+            $respuesta = $this->FormatearBusqueda($this->bienes_model->Busqueda($data));
 
             echo json_encode(array("isValid"=>true,"Datos"=>$respuesta));
         }

@@ -158,8 +158,6 @@ $(function(){
         
         $('#nomBie').attr("disabled", "disabled");
         $('#nomBie').attr("readonly", "readonly");
-        $('#nomBie').attr("disabled", "disabled");
-        $('#nomBie').attr("readonly", "readonly");
         $(window).scrollTop(0);
     });
 
@@ -168,6 +166,9 @@ $(function(){
         ClearForm();
         HabilitarFormulario()
         $('#NombrePieza').focus();
+        
+        $('#nomBie').attr("disabled", "disabled");
+        $('#nomBie').attr("readonly", "readonly");
         $(window).scrollTop(0);
     })
 
@@ -343,6 +344,7 @@ $(function(){
         
         $('#IdForm').text(''); 
         $('#alertaFormularioActual').hide();
+
 
         $('.formulario-siama form .form-control').each(function(){
             $(this).removeClass('is-invalid');

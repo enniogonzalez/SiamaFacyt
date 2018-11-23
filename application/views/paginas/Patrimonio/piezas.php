@@ -27,9 +27,8 @@
             <div class="form-group row">
                 <label for="estatusPieza" class="col-lg-3 col-form-label">Estatus:</label>
                 <div class="col-lg-9">
-                    <select readonly disabled class="form-control estatus obligatorio lista" id="estatusPieza">
-                        <?=$ldEstatus?>
-                    </select> 
+                    <input maxlength="100" readonly disabled type="text" 
+                    class="form-control estatus obligatorio texto" id="estatusPieza" value="<?=$estatus?>">
                     <div class="invalid-feedback">Campo Obligatorio</div>
                 </div>
             </div>

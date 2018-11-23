@@ -294,13 +294,13 @@
             return $retorno;
         }
 
-        public function Busqueda($busqueda,$orden,$inicio,$fin,$disponible){
+        public function Busqueda($data){
             
             //Abrir conexion
             $conexion = $this->bd_model->ObtenerConexion();
             $condicion ="";
 
-            if($disponible){
+            if($data['Disponible']){
                 $condicion = " (B.BIE_ID NOT IN( SELECT BIE_ID
                                                 FROM Ajustes
                                                 WHERE Estatus = 'Solicitado'
@@ -321,18 +321,21 @@
 
                                                 SELECT BIE_ID
                                                 FROM Mantenimiento
-                                                WHERE Estatus <> 'Realizado') 
-                                AND B.estatus = 'Activo')
-                ";
+                                                WHERE Estatus <> 'Realizado')";
+                if(!$data['Inactivos']){
+                    $condicion .= " AND B.estatus = 'Activo'";
+                }
+                
+                $condicion .= ")";
             }
 
-            if($busqueda != ""){
+            if($data['busqueda'] != ""){
                 $condicion = ($condicion == "" ? "": $condicion . " AND ") 
-                            . "(LOWER(B.Inv_UC) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
-                            . "%' OR LOWER(B.nombre) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
-                            . "%' OR LOWER(B.estatus) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
-                            . "%' OR LOWER(L.nombre) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
-                            . "%' OR LOWER(M.nombre) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
+                            . "(LOWER(B.Inv_UC) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
+                            . "%' OR LOWER(B.nombre) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
+                            . "%' OR LOWER(B.estatus) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
+                            . "%' OR LOWER(L.nombre) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
+                            . "%' OR LOWER(M.nombre) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
                             . "%')";
             }
             
@@ -355,14 +358,14 @@
                                     L.nombre nomLoc,
                                     M.nombre nomMar,
                                     COUNT(*) OVER() AS Registros,
-                                    ROW_NUMBER() OVER(ORDER BY " . $orden .") Fila
+                                    ROW_NUMBER() OVER(ORDER BY " . $data['orden'] .") Fila
                             FROM Bienes B
                                 JOIN Localizaciones L ON L.loc_id = B.loc_Id
                                 JOIN Marcas M ON M.mar_id = B.mar_id
                             " . $condicion . "
 
                         ) LD
-                        WHERE Fila BETWEEN ". $inicio . " AND " . $fin . "
+                        WHERE Fila BETWEEN ". $data['inicio'] . " AND " . $data['fin'] . "
                         ORDER BY Fila ASC;";
 
             //Ejecutar Query

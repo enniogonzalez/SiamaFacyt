@@ -8,16 +8,15 @@ var Guardando = false;
 
 $(function(){
     
-    const Ajustes = "Ajustes";
+    const Cambios = "Cambios";
     const Bienes = "Bienes";
 
     var idActual ="";
     var dataInputs= [];
     var idBuscadorActual = "";
     var nombreBuscadorActual = "";
-    var idBieAjustes = "";
-    var Agregados = "";
-    var Quitados = "";
+    var idBieCambios = "";
+    var PiezasCambiosE = "";
 
     EstablecerBuscador();
 
@@ -25,17 +24,13 @@ $(function(){
 
     $('#CancelarModalBuscar').on('click',function(){
         switch(GetSearchType()){
-            case PiezaAgregar:
-                $('#idPiezaAgregar').text(idBuscadorActual.trim());
-                $('#nomPiezaAgregar').val(nombreBuscadorActual.trim());
-            break;
-            case PiezaQuitar:
-                $('#idPiezaQuitar').text(idBuscadorActual.trim());
-                $('#nomPiezaQuitar').val(nombreBuscadorActual.trim());
+            case PiezaCE:
+                $('#idPieza').text(idBuscadorActual.trim());
+                $('#nomPiezaCE').val(nombreBuscadorActual.trim());
             break;
             case Bienes:
-                $('#idBieAjustes').text(idBuscadorActual.trim());
-                $('#nomBieAjustes').val(nombreBuscadorActual.trim());
+                $('#idBieCambios').text(idBuscadorActual.trim());
+                $('#nomBieCambios').val(nombreBuscadorActual.trim());
             break;
         }
 
@@ -56,28 +51,28 @@ $(function(){
     /*          Manejo Bienes           */
     /************************************/
     
-    $('#nomBieAjustes').on('click',function(){
+    $('#nomBieCambios').on('click',function(){
 
-        if(ExisteQuitado() || ExisteAgregado() )
+        if(ExistePiezaCE())
             AdvertenciaCambiarBien("cambiar");
         else
             BuscarBien();
     });
 
-    $('.BuscarBienAjustes').on('click',function(){
-        if(ExisteQuitado() || ExisteAgregado() )
+    $('.BuscarBienCambios').on('click',function(){
+        if(ExistePiezaCE())
             AdvertenciaCambiarBien("cambiar");
         else
             BuscarBien();
     });
 
-    $('.BorrarBienAjustes').on('click',function(){
+    $('.BorrarBienCambios').on('click',function(){
         
-        if(ExisteQuitado() || ExisteAgregado() )
+        if(ExistePiezaCE())
             AdvertenciaCambiarBien("borrar");
         else{
-            $('#idBieAjustes').text("");
-            $('#nomBieAjustes').val("");
+            $('#idBieCambios').text("");
+            $('#nomBieCambios').val("");
         }
     });
 
@@ -99,7 +94,7 @@ $(function(){
 
         var parametros = {
             "Titulo":"Advertencia",
-            "Cuerpo": "<h4>¿Est&aacute; usted seguro de querer borrar el Ajuste?</h4>",
+            "Cuerpo": "<h4>¿Est&aacute; usted seguro de querer borrar el Cambio de Estatus?</h4>",
             "Botones":Botones
         }
 
@@ -108,7 +103,7 @@ $(function(){
 
     $('.botoneraFormulario').on('click','#BuscarRegistro',function(){
         SetSearchType('Formulario');
-        SetSearchTitle('Busqueda Ajustes');
+        SetSearchTitle('Busqueda Cambios');
         PrimeraVezBusqueda = true;
         DeshabilitarBotonera();
         SetUrlBusqueda($('#ControladorActual').text().trim()+"/busqueda");
@@ -142,9 +137,9 @@ $(function(){
         ClearForm();
         HabilitarFormulario();
         
-        $('#EstatusAjustes').val("Solicitado");
-        $('#EstatusAjustes').attr("disabled", "disabled");
-        $('#EstatusAjustes').attr("readonly", "readonly");
+        $('#EstatusCambios').val("Solicitado");
+        $('#EstatusCambios').attr("disabled", "disabled");
+        $('#EstatusCambios').attr("readonly", "readonly");
         $(window).scrollTop(0);
     })
 
@@ -169,11 +164,11 @@ $(function(){
         EstablecerBuscador();
         DeshabilitarFormulario();
 
-        AgregarBotoneraCorrectiva($('#EstatusAjustes').val().trim());
+        AgregarBotoneraCambios($('#EstatusCambios').val().trim());
 
         parametros = {
             "Lista": $('#listaBusquedaFormulario').html().trim(),
-            "Tipo": Ajustes
+            "Tipo": Cambios
         }
 
         SetSearchModal(parametros,false)
@@ -184,7 +179,7 @@ $(function(){
     $('.botoneraFormulario').on('click','#GuardarRegistro',function(){
         var Valido = true;
         var Agregados = [];
-        var Quitados = [];
+        var PiezaCEs = [];
 
         $('.formulario-siama form .form-control').each(function(){
             $(this).removeClass('is-invalid');
@@ -198,37 +193,27 @@ $(function(){
             }
         })
 
-        if(Valido){
-            Agregados = ObtenerJsonPAgregadas();
-            Quitados = ObtenerJsonPQuitadas();
-
-            Valido = (Agregados.length + Quitados.length) > 0;
-
-            if(!Valido){
-                SetAlertaFormulario("No se puede guardar Ajuste si no posee piezas a agregar y/o quitar.");
-            }
-        }
 
         if(Valido){
             var data = {
                 "Lista": $('#listaBusquedaFormulario').html().trim(),
-                "Tipo": Ajustes
+                "Tipo": Cambios
             }
     
             SetSearchModal(data,false)
             SetModalEtqContador("")
             SetSearchType("Formulario");
-
+            PiezaCEs = ObtenerJsonPiezasCE();
             var parametros = {
                 "id"            : $('#IdForm').text().trim(),
-                "Estatus"       : $('#EstatusAjustes').val().trim(),
-                "Documento"     : $('#DocumentoAjustes').val().trim(),
-                "Bien"          : $('#idBieAjustes').text().trim(),
-                "Agregados"     : Agregados,
-                "Quitados"      : Quitados,
-                "Observacion"   : $('#ObservacionAjustes').val().trim(),
+                "Bie_estatus"   : $('#estatusBien').val().trim(),
+                "Documento"     : $('#DocumentoCambios').val().trim(),
+                "Bien"          : $('#idBieCambios').text().trim(),
+                "PiezaCEs"      : PiezaCEs,
+                "Observacion"   : $('#ObservacionCambios').val().trim(),
                 "Url"           : $('#FormularioActual').attr("action")
             }
+
             if(!Guardando){
                 EstablecerBuscador();
                 Guardando = true;
@@ -240,7 +225,7 @@ $(function(){
 
     function Editar(){
 
-        if($('#EstatusAjustes').val().trim() == "Aprobado"){
+        if($('#EstatusCambios').val().trim() == "Aprobado"){
             
             Botones = `
             <button data-dismiss="modal" title="Cerrar" type="button" style="margin:5px;" class="btn  btn-danger">
@@ -248,7 +233,7 @@ $(function(){
             Cerrar
             </button>`;
 
-            Cuerpo = `No se puede editar <strong>Ajuste</strong> debido a que el estatus ha cambiado a 
+            Cuerpo = `No se puede editar <strong>Cambio de Estatus</strong> debido a que el estatus ha cambiado a 
             <strong>aprobado</strong>.`;
 
             var parametros = {
@@ -262,8 +247,8 @@ $(function(){
             GuardarEstadoActualFormulario();
             HabilitarFormulario()
     
-            $('#EstatusAjustes').attr("disabled", "disabled");
-            $('#EstatusAjustes').attr("readonly", "readonly");
+            $('#EstatusCambios').attr("disabled", "disabled");
+            $('#EstatusCambios').attr("readonly", "readonly");
             
             $(window).scrollTop(0);
         }
@@ -325,11 +310,12 @@ $(function(){
         }
 
 
-        idBuscadorActual = $('#idBieAjustes').text().trim();
-        nombreBuscadorActual = $('#nomBieAjustes').val().trim();
+        idBuscadorActual = $('#idBieCambios').text().trim();
+        nombreBuscadorActual = $('#nomBieCambios').val().trim();
         
         condiciones = {
-            "BienesDisponibles":true
+            "BienesDisponibles":true,
+            "Inactivos":true
         }
         SetSearchModal(parametros,true,condiciones)
 
@@ -343,8 +329,7 @@ $(function(){
           Cerrar
         </button>`;
 
-        Cuerpo = `No se puede ${opcion} <strong>Bien</strong> debido a que tiene asociado 
-        el <strong>Agregado</strong> o <strong>Quitado</strong> de al menos una pieza.`;
+        Cuerpo = `No se puede ${opcion} <strong>Bien</strong> debido a que tiene asociado al menos una pieza.`;
 
 
         var parametros = {
@@ -358,14 +343,11 @@ $(function(){
 
     function GetUrlBusquedaOpcion(opcion){
         switch(opcion){
-            case PiezaAgregar:
-                controlador = "piezas/busquedaDisponibles";
-            break;
-            case PiezaQuitar:
+            case PiezaCE:
                 controlador = "piezas/busqueda";
             break;
-            case Ajustes:
-                controlador = "Ajustes/busqueda";
+            case Cambios:
+                controlador = "Cambios/busqueda";
             break;
             case Bienes:
                 controlador = "bienes/busqueda";
@@ -379,14 +361,11 @@ $(function(){
         SetSearchType(data['Tipo']);
         
         switch(data['Tipo']){
-            case PiezaAgregar:
-                controlador = "Piezas Disponibles";
-            break;
-            case PiezaQuitar:
+            case PiezaCE:
                 controlador = "Piezas del Bien";
             break;
-            case Ajustes:
-                controlador = "Ajustes";
+            case Cambios:
+                controlador = "Cambios";
             break;
             case Bienes:
                 controlador = "Bienes Disponibles";
@@ -406,16 +385,17 @@ $(function(){
     }
 
     function EstablecerBuscador(){
-        SetSearchThead(thAjustes);
+        // SetSearchThead(thCambios);
+        SetSearchThead("");
     }
 
     function ClearForm(){
         
         $('#IdForm').text(''); 
-        $('#idBieAjustes').text('');
+        $('#idBieCambios').text('');
         $('#alertaFormularioActual').hide();
         $('#TablaAgregarPiezas > tbody').children().remove();
-        $('#TablaQuitarPiezas > tbody').children().remove();
+        $('#TablaPiezasEstatus > tbody').children().remove();
 
         $('.formulario-siama form .form-control').each(function(){
             $(this).removeClass('is-invalid');
@@ -431,46 +411,45 @@ $(function(){
     function GuardarEstadoActualFormulario(){
         dataInputs = [];
         idActual =$('#IdForm').text().trim();
-        idBieAjustes = $('#idBieAjustes').text().trim();
+        idBieCambios = $('#idBieCambios').text().trim();
 
-        Agregados = $('#TablaAgregarPiezas > tbody').html();
-        Quitados = $('#TablaQuitarPiezas > tbody').html();
+        PiezasCambiosE = $('#TablaPiezasEstatus > tbody').html();
+        
         $('.formulario-siama form .form-control').each(function(){
             dataInputs.push($(this).val().trim());
         })
     }
 
     function RestablecerEstadoAnteriorFormulario(){
-        
+    
         var parametros = {
-            "id"            : idActual.trim(),
-            "idBien"        : idBieAjustes.trim(),     
-            "Documento"     : dataInputs[0].trim(),  
-            "Estatus"       : dataInputs[1].trim(),
-            "nomBien"       : dataInputs[2].trim(),
-            "Observaciones" : dataInputs[3].trim(),
-            "Agregados"       : Agregados,
-            "Quitados"  : Quitados
+            "id"                : idActual.trim(),
+            "idBien"            : idBieCambios.trim(),     
+            "Documento"         : dataInputs[0].trim(),  
+            "Doc_Estatus"       : dataInputs[1].trim(),
+            "nomBien"           : dataInputs[2].trim(),
+            "Bie_Estatus"       : dataInputs[3].trim(),
+            "Observaciones"     : dataInputs[4].trim(),
+            "PiezasCambiosE"    : PiezasCambiosE
         }
 
+        console.log(parametros);
         LlenarFormulario(parametros);
     }
     
     function LlenarFormulario(data){
-        $('#TablaAgregarPiezas > tbody').children().remove();
-        $('#TablaQuitarPiezas > tbody').children().remove();
 
-
-        AgregarBotoneraCorrectiva(data['Estatus']);
+        $('#TablaPiezasEstatus > tbody').children().remove();
+        AgregarBotoneraCambios(data['Doc_Estatus']);
 
         $('#IdForm').text(data['id']);
-        $('#DocumentoAjustes').val(data['Documento']);
-        $('#EstatusAjustes').val(data['Estatus']);
-        $('#idBieAjustes').text(data['idBien']);
-        $('#nomBieAjustes').val(data['nomBien']);
-        $('#ObservacionAjustes').val(data['Observaciones']);
-        $('#TablaAgregarPiezas > tbody:last-child').append(data['Agregados']);
-        $('#TablaQuitarPiezas > tbody:last-child').append(data['Quitados']);
+        $('#DocumentoCambios').val(data['Documento']);
+        $('#EstatusCambios').val(data['Doc_Estatus']);
+        $('#estatusBien').val(data['Bie_Estatus']);
+        $('#idBieCambios').text(data['idBien']);
+        $('#nomBieCambios').val(data['nomBien']);
+        $('#ObservacionCambios').val(data['Observaciones']);
+        $('#TablaPiezasEstatus > tbody:last-child').append(data['PiezasCambiosE']);
 
     }
 
@@ -500,23 +479,23 @@ $(function(){
     }
 
     function LlenarFormularioRequest(data){
-        
+      
         var parametros = {
-            "id"            : data['aju_id'],
-            "Documento"     : data['documento'],
-            "idBien"        : data['bie_id'],
-            "nomBien"       : data['bie_nom'],
-            "Observaciones" : data['observaciones'],
-            "Agregados"     : data['Agregados'],
-            "Estatus"       : data['estatus'],   
-            "Quitados"      : data['Quitados']
+            "id"                : data['aju_id'],
+            "Documento"         : data['documento'],
+            "idBien"            : data['bie_id'],
+            "nomBien"           : data['bie_nom'],
+            "Observaciones"     : data['observaciones'],
+            "Doc_Estatus"       : data['doc_estatus'],   
+            "Bie_Estatus"       : data['bie_estatus'],   
+            "PiezasCambiosE"    : data['PiezaCEs']
         }
 
         LlenarFormulario(parametros);
         
     }
 
-    function AgregarBotoneraCorrectiva(Tipo){
+    function AgregarBotoneraCambios(Tipo){
         
         btnAgregar = `
             <button type="button"  class="btn btn-primary-siama" id="AgregarRegistro">
@@ -561,7 +540,7 @@ $(function(){
                 html = btnBuscar  + btnAgregar;
             break;
             default:
-                html = ""
+                html = btnAgregar;
 
         }
         if(html != ""){
@@ -596,24 +575,21 @@ $(function(){
 
 
         SetSearchThead(thPiezas);
+
         parametros = {
             "Lista": $('#listaBusquedaPieza').html().trim(),
             "Tipo": tipo,
         }
 
         condiciones = {
-            "Bien"          : $('#idBieAjustes').text().trim(),
+            "Bien"          : $('#idBieCambios').text().trim(),
             "PiezasBien"    : false
         }
 
         switch(tipo){
-            case PiezaAgregar:
-                idBuscadorActual = $('#idPiezaAgregar').text().trim();
-                nombreBuscadorActual = $('#nomPiezaAgregar').val().trim();
-            break;
-            case PiezaQuitar:
-                idBuscadorActual = $('#idPiezaQuitar').text().trim();
-                nombreBuscadorActual = $('#nomPiezaQuitar').val().trim();
+            case PiezaCE:
+                idBuscadorActual = $('#idPieza').text().trim();
+                nombreBuscadorActual = $('#nomPiezaCE').val().trim();
                 condiciones['PiezasBien'] = true;
             break;
         }
@@ -632,19 +608,14 @@ $(function(){
                 }
                 Obtener(parametros);
             break;
-            case PiezaAgregar:
-                $('#idPiezaAgregar').text(fila.find("td:eq(0)").text().trim());
-                $('#InvAP').text(fila.find("td:eq(1)").text().trim());
-                $('#nomPiezaAgregar').val(fila.find("td:eq(2)").text().trim());
-            break;
-            case PiezaQuitar:
-                $('#idPiezaQuitar').text(fila.find("td:eq(0)").text().trim());
-                $('#InvQP').text(fila.find("td:eq(1)").text().trim());
-                $('#nomPiezaQuitar').val(fila.find("td:eq(2)").text().trim());
+            case PiezaCE:
+                $('#idPieza').text(fila.find("td:eq(0)").text().trim());
+                $('#InvPieza').text(fila.find("td:eq(1)").text().trim());
+                $('#nomPiezaCE').val(fila.find("td:eq(2)").text().trim());
             break;
             case Bienes:
-                $('#idBieAjustes').text(fila.find("td:eq(0)").text().trim());
-                $('#nomBieAjustes').val(fila.find("td:eq(1)").text().trim());
+                $('#idBieCambios').text(fila.find("td:eq(0)").text().trim());
+                $('#nomBieCambios').val(fila.find("td:eq(1)").text().trim());
             break;
         }
 

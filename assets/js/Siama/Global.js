@@ -18,7 +18,8 @@ $(function(){
     })
     
     $('#SeccionImprimir').on('click',"#Imprimir",function(){
-        window.open($('#ControladorActual').text().trim() + "/imprimir/" + $('#IdForm').text().trim(), '_blank');
+        if($('#IdForm').text().trim() != "")
+            window.open($('#ControladorActual').text().trim() + "/imprimir/" + $('#IdForm').text().trim(), '_blank');
     })
 
     window.SetAlertaFormulario = function (Mensaje){
@@ -151,7 +152,6 @@ $(function(){
     }
 
     window.AgregarBotoneraPrimariaNULL = function(){
-        
         $('#SeccionImprimir').children().remove();
         $('.botoneraFormulario').children().remove();
         $('.botoneraFormulario').append(`
