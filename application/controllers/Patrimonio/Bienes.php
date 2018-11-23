@@ -64,6 +64,8 @@
                 "nomloc"        =>"",
                 "nommar"        =>"",
                 "Piezas"        =>$Pieza,
+                "CustodiosH"    =>[],
+                "CambiosH"    =>[],
                 "nomcus"        =>"",
             );
 

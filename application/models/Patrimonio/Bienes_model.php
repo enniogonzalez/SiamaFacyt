@@ -290,6 +290,8 @@
 
             if($retorno){
                 $retorno['Piezas'] = $this->ObtenerPiezasPDF($retorno['bie_id']);
+                $retorno['CustodiosH'] = $this->ObtenerCustodiosPDF($retorno['bie_id']);
+                $retorno['CambiosH'] = $this->ObtenerCambiosEstatusPDF($retorno['bie_id']);
             }
             return $retorno;
         }
@@ -500,6 +502,65 @@
                                 Estatus
                         FROM Piezas
                         WHERE bie_id = '" . $bien . "'";
+
+            //Ejecutar Query
+            $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
+            
+            $retorno = array();
+            while($line = pg_fetch_array($result, null, PGSQL_ASSOC))
+                array_push($retorno,$line);
+
+            //Liberar memoria
+            pg_free_result($result);
+
+            //liberar conexion
+            $this->bd_model->CerrarConexion($conexion);
+            
+            return $retorno;
+        }
+
+        private function ObtenerCustodiosPDF($bien){
+
+            //Abrir conexion
+            $conexion = $this->bd_model->ObtenerConexion();
+
+            $query ="   SELECT 	u.nombre, 
+                                u.username, 
+                                to_char(h.fec_cre,'DD/MM/YYYY') fec_cre 
+                        FROM historicocustodios h
+                            JOIN usuarios u ON u.usu_id = h.usu_cus
+                        WHERE h.bie_id = '" . $bien . "'
+                        ORDER BY h.fec_cre DESC;";
+
+            //Ejecutar Query
+            $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
+            
+            $retorno = array();
+            while($line = pg_fetch_array($result, null, PGSQL_ASSOC))
+                array_push($retorno,$line);
+
+            //Liberar memoria
+            pg_free_result($result);
+
+            //liberar conexion
+            $this->bd_model->CerrarConexion($conexion);
+            
+            return $retorno;
+        }
+
+        private function ObtenerCambiosEstatusPDF($bien){
+            
+            //Abrir conexion
+            $conexion = $this->bd_model->ObtenerConexion();
+
+            $query ="   SELECT 	c.documento,
+                                c.doc_estatus,
+                                to_char(c.fec_cre,'DD/MM/YYYY') fec_cre,
+                                c.bie_estatus,
+                                c.observaciones
+                        FROM cambiosestatus c
+                        WHERE c.bie_id = '" . $bien . "'
+                        ORDER BY c.fec_cre DESC;";
 
             //Ejecutar Query
             $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());

@@ -218,7 +218,74 @@ $tbl .= "<table><tr><td><strong>" . count($datos['Piezas']) . " Piezas</strong><
 
 $pdf->writeHTML($tbl, true, false, false, false, '');
 
+// -----------------------------------------------------------------------------
+//                          Custodios del Bien
+// -----------------------------------------------------------------------------
 
+$pdf->SetFont('helvetica', '', 10);
+$tbl =" <br>
+        <h2>Histórico de Custodios</h2>
+        <table>
+            <thead>
+                <tr style=\"font-weight: bold; \">
+                    <th style=\"width:55%\">Nombre</th>
+                    <th style=\"width:30%\">Usuario</th>
+                    <th style=\"width:15%\">Fecha</th>
+                </tr>
+            </thead>
+        </table><hr>";
+
+
+foreach ($datos['CustodiosH'] as $elemento) {
+        $tbl .= "<table><tr>
+                        <td style=\"width:55%\">" . $elemento['nombre'] . "</td>
+                        <td style=\"width:30%\">" . $elemento['username'] . "</td>
+                        <td style=\"width:15%\">" . $elemento['fec_cre'] . "</td>
+                    </tr></table><hr>";
+}
+
+$tbl .= "<table><tr><td><strong>" . count($datos['CustodiosH']) . " Custodios</strong></td></tr></table>";
+
+
+$pdf->writeHTML($tbl, true, false, false, false, '');
+
+
+
+
+// -----------------------------------------------------------------------------
+//                          Cambios del Estatus
+// -----------------------------------------------------------------------------
+
+$pdf->SetFont('helvetica', '', 10);
+$tbl =" <br>
+        <h2>Histórico de Cambios de Estatus</h2>
+        <table>
+            <thead>
+                <tr style=\"font-weight: bold; \">
+                    <th style=\"width:15%\">Documento</th>
+                    <th style=\"width:15%\">Estatus Doc.</th>
+                    <th style=\"width:15%\">Fecha</th>
+                    <th style=\"width:15%\">Estatus Bien</th>
+                    <th style=\"width:40%\">Observaciones</th>
+                </tr>
+            </thead>
+        </table><hr>";
+
+
+foreach ($datos['CambiosH'] as $elemento) {
+        $tbl .= "<table><tr>
+                        <td style=\"width:15%\">" . $elemento['documento'] . "</td>
+                        <td style=\"width:15%\">" . $elemento['doc_estatus'] . "</td>
+                        <td style=\"width:15%\">" . $elemento['fec_cre'] . "</td>
+                        <td style=\"width:15%\">" . $elemento['bie_estatus'] . "</td>
+                        <td style=\"width:40%\">" . $elemento['observaciones'] . "</td>
+                    </tr></table><hr>";
+}
+
+$tbl .= "<table><tr><td><strong>" . count($datos['CambiosH']) . " Cambios de Estatus</strong></td></tr></table>";
+
+
+$pdf->writeHTML($tbl, true, false, false, false, '');
 
 // -----------------------------------------------------------------------------
 
