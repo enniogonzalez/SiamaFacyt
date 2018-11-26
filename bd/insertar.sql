@@ -37,9 +37,12 @@ INSERT INTO "public"."marcas" VALUES ('5', 'NVIDIA', null);
 INSERT INTO "public"."marcas" VALUES ('6', 'Samsung', null);
 INSERT INTO "public"."marcas" VALUES ('7', 'haier', null);
 
+SELECT setval('marcas_mar_id_seq', 7, true);
+
 INSERT INTO "public"."bienes" VALUES ('1', 'Aveo 2013 LT', 'LT', '12354A5L', '1', '2', '3', '1', '2', '1', '2018-09-14', '2018-09-13', '2018-09-06', 'Compra', 'Otros', 'Basico', 'Movil', '0.0000', 'Voltio', '0.0000', 'Amperio', '0.0000', 'Vatios', '0.0000', 'Hertz', '0.0000', 'Litro', '0.0000', 'Pascal', '0.0000', 'Caudal', '0.0000', 'Celsius', '0.0000', 'Gramo', '0.0000', 'm/s', 'Mecanico', 'Bajo', null, 'Activo', '1', '2018-09-06 21:19:07.31358', '1', '2018-11-25 17:31:31.105032', null);
 INSERT INTO "public"."bienes" VALUES ('2', 'Aire Acondicionado Split', '1321-EE-K', '1599674', null, '7', '3', '1', '4', '1', '2018-11-15', '2018-11-19', '2018-11-13', 'Compra', 'Electricidad', 'Apoyo', 'Fijo', '2-3', 'Voltio', '02-3', 'Amperio', '2-3', 'Vatios', '2-3', 'Hertz', '2-3', 'Litro', '2-3', 'Pascal', '2-3', 'Caudal', '2-3', 'Celsius', '2-3', 'Gramo', '2-3', 'm/s', 'Electrico', 'Moderado', null, 'Inactivo', '1', '2018-11-25 17:36:31.87271', '1', '2018-11-25 17:36:31.87271', null);
 
+SELECT setval('bienes_bie_id_seq', 2, true);
 
 INSERT INTO "public"."piezas" VALUES ('1', '1', 'Amortiguador Izquierdo', '2342SFS5554', 'Platino', 'SD54233421A', '3', '2', '2', '2018-09-06', '2018-09-13', '2018-09-21', 'Compra', 'Activo', '1', '2018-09-06 21:24:27.310642', '1', '2018-09-06 21:24:27.310642', null);
 INSERT INTO "public"."piezas" VALUES ('2', null, 'Amortiguador Derecho', '2342SFS34323', 'Platino', 'SD54LSDF21A', '3', '2', '2', '2018-09-06', '2018-09-13', '2018-09-21', 'Compra', 'Activo', '1', '2018-09-07 01:43:00.882001', '1', '2018-11-25 18:02:17.024545', null);
@@ -51,3 +54,4 @@ INSERT INTO "public"."piezas" VALUES ('7', '1', 'Motor de Aire Acondicionador ha
 INSERT INTO "public"."piezas" VALUES ('8', null, 'Condensador aire acondicionado', null, '2342342', 'KERIA3465432', '3', '4', '7', '2018-11-28', '2018-11-08', '2018-11-15', 'Donacion', 'Activo', '1', '2018-11-25 17:39:45.808732', '1', '2018-11-25 17:39:45.808732', null);
 
 
+SELECT setval('bienes_bie_id_seq', 8, true);
