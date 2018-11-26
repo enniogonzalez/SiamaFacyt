@@ -6,7 +6,7 @@
         private $port='5432';
         private $dbname='siamafacyt'; 
         private $user='userapp';
-        private $password='\*.app.*/';
+        private $password='userapp12293';
 
 
         public function ObtenerConexion(){
