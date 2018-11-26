@@ -52,7 +52,7 @@
             </div>
 
             <div class="form-group row">
-                <label for="tlf" class="col-md-3 col-form-label">Telefonos:</label>
+                <label for="tlf" class="col-md-3 col-form-label">Tel&eacute;fonos:</label>
                 <div class="col-md-9">
                     <input maxlength="100" readonly disabled type="text" 
                     class="form-control  texto" id="tlf" value="<?=$telefonos?>">

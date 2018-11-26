@@ -166,9 +166,12 @@ $(function(){
         ClearForm();
         HabilitarFormulario()
         $('#NombrePieza').focus();
-        
+
+        $('.fecha').val('');
         $('#nomBie').attr("disabled", "disabled");
         $('#nomBie').attr("readonly", "readonly");
+        
+        $('#estatusPieza').val("Activo");
         $(window).scrollTop(0);
     })
 

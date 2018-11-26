@@ -63,7 +63,7 @@
             </div>
 
             <div class="form-group row">
-                <label for="LocPad" class="col-md-3 col-form-label">Localizacion Padre:</label>
+                <label for="LocPad" class="col-md-3 col-form-label">Localizaci&oacute;n Padre:</label>
                 <div class="col-md-9">
                     <div style="width:86%;float:left;">
                         <div style="display:none;" id="idPad"><?=$idpad?></div>

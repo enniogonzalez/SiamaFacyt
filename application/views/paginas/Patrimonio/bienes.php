@@ -102,7 +102,7 @@
             </div>
             
             <div class="form-group row">
-                <label for="nomLoc" class="col-lg-3 col-form-label">Localizacion:</label>
+                <label for="nomLoc" class="col-lg-3 col-form-label">Localizaci&oacute;n:</label>
                 <div class="col-lg-9">
                     <div style="width:86%;float:left;">
                         <div style="display:none;" id="idLoc"><?=$loc_id?></div>
@@ -150,7 +150,7 @@
             </div>
 
             <div class="form-group row">
-                <label for="fabBien" class="col-lg-3 col-form-label">Fecha Fabricacion:</label>
+                <label for="fabBien" class="col-lg-3 col-form-label">Fecha Fabricaci&oacute;n:</label>
                 <div class="col-lg-9">
                     <input maxlength="100" readonly disabled type="date" 
                     class="form-control obligatorio fecha" id="fabBien" value="<?=$fec_fab?>">
@@ -159,7 +159,7 @@
             </div>
 
             <div class="form-group row">
-                <label for="fAdqBien" class="col-lg-3 col-form-label">Fecha Adquisicion:</label>
+                <label for="fAdqBien" class="col-lg-3 col-form-label">Fecha Adquisici&oacute;n:</label>
                 <div class="col-lg-9">
                     <input maxlength="100" readonly disabled type="date" 
                     class="form-control obligatorio fecha" id="fAdqBien" value="<?=$fec_adq?>">
@@ -168,7 +168,7 @@
             </div>
 
             <div class="form-group row">
-                <label for="Instalacion" class="col-lg-3 col-form-label">Fecha Instalacion:</label>
+                <label for="Instalacion" class="col-lg-3 col-form-label">Fecha Instalaci&oacute;n:</label>
                 <div class="col-lg-9">
                     <input maxlength="100" readonly disabled type="date" 
                     class="form-control obligatorio fecha" id="Instalacion" value="<?=$fec_ins?>">
@@ -177,7 +177,7 @@
             </div>
 
             <div class="form-group row">
-                <label for="tAdqBien" class="col-lg-3 col-form-label">Tipo Adquisicion:</label>
+                <label for="tAdqBien" class="col-lg-3 col-form-label">Tipo Adquisici&oacute;n:</label>
                 <div class="col-lg-9">
                     <select readonly disabled class="form-control obligatorio lista" id="tAdqBien">
                         <?=$ldAdquisicion?>
@@ -187,7 +187,7 @@
             </div>
 
             <div class="form-group row">
-                <label for="Alimentacion" class="col-lg-3 col-form-label">Fuente Alimentacion:</label>
+                <label for="Alimentacion" class="col-lg-3 col-form-label">Fuente Alimentaci&oacute;n:</label>
                 <div class="col-lg-9">
                     <select readonly disabled class="form-control obligatorio lista" id="Alimentacion">
                         <?=$ldAlimentacion?>
@@ -217,7 +217,7 @@
             </div>
             
             <div class="form-group row">
-                <label for="tecBien" class="col-lg-3 col-form-label">Tecnologia Predominante:</label>
+                <label for="tecBien" class="col-lg-3 col-form-label">Tecnolog&iacute;a Predominante:</label>
                 <div class="col-lg-9">
                     <select readonly disabled class="form-control obligatorio lista" id="tecBien">
                         <?=$ldTecnologia?>

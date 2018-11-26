@@ -56,6 +56,8 @@ $(function(){
                 setTimeout(function(){
                     CerrarEstatus();
                 }, 6000);
+                
+                BuscarCantidadAlerta();
             }else{
                 CerrarEstatus();
                 SetAlertaFormulario(data['Mensaje']);

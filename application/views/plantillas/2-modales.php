@@ -102,18 +102,20 @@
                 </div>
 
                 <div class="modal-footer" style="background-color: #95a5a6; padding: 10px;">
-                    <button  type="button" style="margin:5px;" class="btn btn-primary-siama" id="FiltrarModalBuscar">
-                        <span class="fa fa-search"></span>
-                        Filtrar
-                    </button>
-                    <button type="submit" type="button" style="margin:5px;" class="btn  btn-success" id="ElegirModalBuscar">
-                        <span class="fa fa-check"></span>
-                        Elegir
-                    </button>
-                    <button data-dismiss="modal"  type="button" style="margin:5px;" class="btn  btn-danger" id="CancelarModalBuscar">
-                        <span class="fa fa-ban "></span>
-                        Cancelar
-                    </button>
+                    <div class="table-responsive">
+                        <button  type="button" style="margin:5px;" class="btn btn-primary-siama" id="FiltrarModalBuscar">
+                            <span class="fa fa-search"></span>
+                            Filtrar
+                        </button>
+                        <button type="submit" type="button" style="margin:5px;" class="btn  btn-success" id="ElegirModalBuscar">
+                            <span class="fa fa-check"></span>
+                            Elegir
+                        </button>
+                        <button data-dismiss="modal"  type="button" style="margin:5px;" class="btn  btn-danger" id="CancelarModalBuscar">
+                            <span class="fa fa-ban "></span>
+                            Cancelar
+                        </button>
+                    </div>
                 </div>
                 </div>
             </div>

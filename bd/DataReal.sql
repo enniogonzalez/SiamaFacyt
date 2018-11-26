@@ -1,6 +1,15 @@
 
 INSERT INTO Usuarios(Username,Nombre,Clave,Cargo)
-VALUES ('enniogonca','ennio','e11170b8cbd2d74102651cb967fa28e5','');
+VALUES ('admin','Administrador','e11170b8cbd2d74102651cb967fa28e5','');
+
+INSERT INTO permisosusuarios ("usu_id", "menu") VALUES ('1', 'Sistema');
+INSERT INTO permisosusuarios ("usu_id", "menu") VALUES ('1', 'Localizacion');
+INSERT INTO permisosusuarios ("usu_id", "menu") VALUES ('1', 'Mantenimiento');
+INSERT INTO permisosusuarios ("usu_id", "menu") VALUES ('1', 'Marcas');
+INSERT INTO permisosusuarios ("usu_id", "menu") VALUES ('1', 'Partidas');
+INSERT INTO permisosusuarios ("usu_id", "menu") VALUES ('1', 'Patrimonio');
+INSERT INTO permisosusuarios ("usu_id", "menu") VALUES ('1', 'Proveedores');
+
 
 INSERT INTO Listas_Desplegables( Codigo,Nombre,Descripcion,Opciones) 
 VALUES(
@@ -248,6 +257,14 @@ Values(
     'Campos para Ordenar Busqueda Ajustes',
     null,
     '[{"Valor":"AJU.Documento","Opcion":"Documento","Descripcion":""},{"Valor":"B.nombre","Opcion":"Bien","Descripcion":""},{"Valor":"AJU.Estatus","Opcion":"Estatus","Descripcion":""}]'
+);
+
+INSERT INTO Listas_Desplegables( Codigo,Nombre,Descripcion,Opciones) 
+Values(
+    'COB-CAMBIO',
+    'Campos para Ordenar Busqueda Cambio de Estatus',
+    null,
+    '[{"Valor":"CAM.Documento","Opcion":"Documento","Descripcion":""},{"Valor":"Cam.doc_estatus","Opcion":"Estatus Documento","Descripcion":""},{"Valor":"B.nombre","Opcion":"Bien","Descripcion":""},{"Valor":"Cam.bie_estatus","Opcion":"Estatus Bien","Descripcion":""}]'
 );
 
 /*

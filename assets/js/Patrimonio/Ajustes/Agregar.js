@@ -224,7 +224,7 @@ $(function(){
                     <div style="width:80%;float:left;">
                         <div style="display:none;" id="idPiezaAgregar">${data['idPiezaAgregar']}</div>
                         <div style="display:none;" id="InvAP">${data['InvAP']}</div>
-                        <input type="text" title="Pieza" 
+                        <input type="text" title="Pieza" readonly
                             class="form-control texto obligatorio buscador Agregado" id="nomPiezaAgregar" value="${data['nomPiezaAgregar']}">
                         <div class="invalid-feedback">Campo Obligatorio</div>
                     </div>

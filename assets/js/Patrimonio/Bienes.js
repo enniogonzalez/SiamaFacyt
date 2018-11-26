@@ -30,7 +30,7 @@ $(function(){
 
 
     $('.medida').on('keypress',function(e){
-        if (!((e.which >= 48 && e.which <= 57) || e.which == 45))
+        if (!((e.which >= 48 && e.which <= 57) || e.which == 45 || e.which == 8))
             return false;
     })
 
@@ -206,8 +206,11 @@ $(function(){
     $('.botoneraFormulario').on('click','#AgregarRegistro',function(){
         GuardarEstadoActualFormulario();
         ClearForm();
-        HabilitarFormulario()
+        HabilitarFormulario();
+        
+        $('.fecha').val('');
         $('#NombreBien').focus();
+        $('#estatusBien').val("Activo");
         $(window).scrollTop(0);
     })
 

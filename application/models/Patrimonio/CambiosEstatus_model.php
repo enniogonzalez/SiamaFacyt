@@ -110,7 +110,7 @@
 
             $query = " UPDATE CambiosEstatus "
                 . " SET Bie_Id ='". str_replace("'", "''",$data['Bie_Id']) 
-                . "', Bie_estatus = '" .str_replace("'", "''",$data['Bie_estatus'])    . "',"
+                . "', Bie_estatus = '" .str_replace("'", "''",$data['Bie_estatus'])
                 . "', Documento = " 
                 . (($data['Documento'] == "") ? "Documento" : ("'" .str_replace("'", "''", $data['Documento']) . "'")) 
                 . ", Usu_Mod = " . $this->session->userdata("usu_id") 
@@ -281,19 +281,22 @@
                 $condicion = " WHERE  (LOWER(B.nombre) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
                             . "%' OR LOWER(CAM.documento) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
                             . "%' OR LOWER(CAM.doc_estatus) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
+                            . "%' OR LOWER(CAM.bie_estatus) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
                             . "%')";
             }
             
             //Query para buscar usuario
-            $query ="   SELECT  Aju_Id,
+            $query ="   SELECT  cam_id,
                                 nombre,
                                 Documento,
                                 doc_estatus,
+                                bie_estatus,
                                 Registros
                         FROM (
-                            SELECT  CAM.Aju_Id,
+                            SELECT  CAM.cam_id,
                                     CAM.Documento,
                                     CAM.doc_estatus,
+                                    CAM.bie_estatus,
                                     B.nombre,
                                     COUNT(*) OVER() AS Registros,
                                     ROW_NUMBER() OVER(ORDER BY " . $orden .") Fila
@@ -574,6 +577,9 @@
         private function ObtenerTransCEP($ceps,$cambio){
             $transacciones = [];
 
+            $query = "DELETE FROM CambioEstatusPieza WHERE CAM_ID = " . $cambio;
+
+            array_push($transacciones,$query);
 
             if(isset($ceps)){
                 foreach ($ceps as $data) {

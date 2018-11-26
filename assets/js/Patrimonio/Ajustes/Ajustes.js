@@ -21,8 +21,6 @@ $(function(){
 
     EstablecerBuscador();
 
-
-
     $('#CancelarModalBuscar').on('click',function(){
         switch(GetSearchType()){
             case PiezaAgregar:
@@ -603,6 +601,7 @@ $(function(){
 
         condiciones = {
             "Bien"          : $('#idBieAjustes').text().trim(),
+            "PiewBie"       : false,
             "PiezasBien"    : false
         }
 

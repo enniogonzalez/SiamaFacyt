@@ -1,7 +1,7 @@
-CREATE DATABASE SIAMAUC WITH 
-ENCODING 'UTF8';
+CREATE DATABASE siamafacyt WITH 
+ENCODING 'UTF8' owner "adminsiama";
 
-\c siamauc
+\c siamafacyt
 
 /*Tablas de Primer Nivel*/
 CREATE TABLE Partidas(
@@ -466,7 +466,18 @@ CREATE TABLE CambioEstatusPieza(
 	FOREIGN KEY (Usu_Cre) References Usuarios,
 	FOREIGN KEY (Usu_Mod) References Usuarios
 );
-);
+
+
+GRANT CONNECT ON DATABASE siamafacyt TO userapp;
+
+-- Grant usage the schema
+
+GRANT USAGE ON SCHEMA public TO userapp ;
+
+-- Grant all table for SELECT, INSERT, UPDATE, DELETE
+
+GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO userapp;
+GRANT USAGE, SELECT,  UPDATE ON ALL SEQUENCES IN SCHEMA public TO userapp;
 
 \i DataReal.sql
 \i insertar.sql

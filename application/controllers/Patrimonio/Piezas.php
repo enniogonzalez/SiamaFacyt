@@ -214,8 +214,22 @@
             $fin = $regXpag*$pagina;
             $Condiciones = $this->input->post("Condiciones");
             $idBien = $Condiciones['Bien'];
-            
-            $respuesta = $this->FormatearBusqueda($this->piezas_model->busquedaDisponibles($busqueda,$ordenamiento,$inicio,$fin,$idBien));
+            $PiewBie = true;
+
+            if(isset($Condiciones) && isset($Condiciones['PiewBie'])){
+                $PiewBie = $Condiciones['PiewBie'] == "true" ? true:false;
+            }
+
+            $data = array(
+                "busqueda"  =>$busqueda,
+                "orden"     =>$ordenamiento,
+                "inicio"    =>$inicio,
+                "fin"       =>$fin,
+                "id"        =>$idBien,
+                "PiewBie"   =>$PiewBie,
+            );
+
+            $respuesta = $this->FormatearBusqueda($this->piezas_model->busquedaDisponibles($data));
 
             echo json_encode(array("isValid"=>true,"Datos"=>$respuesta));
         }

@@ -258,19 +258,24 @@
             return $retorno;
         }
         
-        public function busquedaDisponibles($busqueda,$orden,$inicio,$fin,$id){
+        public function busquedaDisponibles($data){
             
             //Abrir conexion
             $conexion = $this->bd_model->ObtenerConexion();
+
             $condicion ="";
 
-            if($busqueda != ""){
+            if(!$data['PiewBie']){
+                $condicion = " P.bie_id is null ";
+            }
+
+            if($data['busqueda'] != ""){
                 $condicion = ($condicion == "" ? "": $condicion . " AND ") 
-                            . "(LOWER(P.Inv_UC) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
-                            . "%' OR LOWER(P.nombre) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
-                            . "%' OR LOWER(P.estatus) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
-                            . "%' OR LOWER(B.nombre) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
-                            . "%' OR LOWER(M.nombre) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
+                            . "(LOWER(P.Inv_UC) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
+                            . "%' OR LOWER(P.nombre) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
+                            . "%' OR LOWER(P.estatus) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
+                            . "%' OR LOWER(B.nombre) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
+                            . "%' OR LOWER(M.nombre) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
                             . "%')";
             }
             
@@ -291,7 +296,7 @@
                                     COALESCE(B.nombre,'') nomBie,
                                     M.nombre nomMar,
                                     COUNT(*) OVER() AS Registros,
-                                    ROW_NUMBER() OVER(ORDER BY " . $orden .") Fila
+                                    ROW_NUMBER() OVER(ORDER BY " . $data['orden'] .") Fila
                             FROM Piezas P
                                 LEFT JOIN Bienes B ON B.bie_id = P.bie_id
                                 JOIN Marcas M ON M.mar_id = P.mar_id
@@ -329,12 +334,12 @@
                                     FROM Mantenimiento MAN
                                         JOIN MantenimientoTarea MTA ON MTA.MAN_ID = MAN.MAN_ID
                                     WHERE MAN.Estatus <> 'Realizado')
-                            AND (P.Bie_Id <> " . $id . " OR P.Bie_Id is null) 
+                            AND (P.Bie_Id <> " . $data['id'] . " OR P.Bie_Id is null) 
                             AND P.estatus = 'Activo'
                             " . $condicion . "
 
                         ) LD
-                        WHERE Fila BETWEEN ". $inicio . " AND " . $fin . "
+                        WHERE Fila BETWEEN ". $data['inicio'] . " AND " . $data['fin'] . "
                         ORDER BY Fila ASC;";
 
             //Ejecutar Query

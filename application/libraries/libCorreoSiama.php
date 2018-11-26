@@ -14,8 +14,8 @@ class libCorreoSiama {
         'protocol' => 'smtp',
         'smtp_host' => 'ssl://smtp.gmail.com',
         'smtp_port' => 465,
-        'smtp_user' => 'mr.ennio@gmail.com',
-        'smtp_pass' => 'ennio21031997',
+        'smtp_user' => 'siamafacyt@gmail.com',
+        'smtp_pass' => 'siamafacytcorreo1234',
         'mailtype' => 'html',
         'charset' => 'utf-8',
         'newline' => "\r\n"
@@ -25,7 +25,7 @@ class libCorreoSiama {
         //cargamos la configuración para enviar con gmail
         $CI->email->initialize($configGmail);
         
-        $CI->email->from('mr.ennio@gmail.com', "Ennio González");
+        $CI->email->from('siamafacyt@gmail.com', "Departamento de Sistema SiamaFacyt");
         $CI->email->to($data['Correo']);
         $CI->email->subject($data['Asunto']);
         $CI->email->message($data['Mensaje']);

@@ -893,7 +893,6 @@
                     $query = "  UPDATE Piezas 
                                 SET Bie_Id = " . str_replace("'", "''",$Bien) . ",
                                     Usu_Mod = " . $this->session->userdata("usu_id") . ",
-                                    Estatus = 'Inactivo',
                                     Fec_Mod = NOW() 
                                 WHERE Pie_Id = " . str_replace("'", "''",$data['IdPiezaC']); 
 
@@ -902,6 +901,7 @@
                     $query = "  UPDATE Piezas
                                 SET Bie_Id = " . (($data['idBienPiezaC'] == "") ? "null" : ("'" .str_replace("'", "''", $data['idBienPiezaC']) . "'")). ",
                                     Usu_Mod = " . $this->session->userdata("usu_id") . ",
+                                    Estatus = 'Inactivo',
                                     Fec_Mod = NOW() 
                                 WHERE Pie_Id = " . str_replace("'", "''",$data['IdPiezaD']); 
 
@@ -1094,6 +1094,14 @@
                                     Fec_Mod = NOW() 
                                 WHERE mco_id = " . str_replace("'", "''",$correctivo) . " 
                                     AND rco_id = " . str_replace("'", "''",$data['Id']); 
+
+                    array_push($transacciones,$query);
+                    
+                    $query = "  UPDATE Piezas
+                                SET estatus = 'Activo',
+                                    Usu_Mod = " . $this->session->userdata("usu_id") . ",
+                                    Fec_Mod = NOW() 
+                                WHERE Pie_Id = " . str_replace("'", "''",$data['IdPiezaD']); 
 
                     array_push($transacciones,$query);
                 }

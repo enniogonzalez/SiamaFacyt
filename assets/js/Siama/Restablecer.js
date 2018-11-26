@@ -29,6 +29,9 @@ $(function(){
                 data: parametros,
                 dataType: 'json'
             }).done(function(data){
+                
+                $('#inputUsuario').removeAttr("disabled");
+                $('#inputUsuario').removeAttr("readonly");
                 if(data['isValid']){ 
                     CorreoEnviado(data['Correo']);
                 }else{

@@ -4,9 +4,9 @@
         
         private $host='localhost';
         private $port='5432';
-        private $dbname='siamauc'; 
-        private $user='postgres';
-        private $password='fuji0918';
+        private $dbname='siamafacyt'; 
+        private $user='userapp';
+        private $password='\*.app.*/';
 
 
         public function ObtenerConexion(){

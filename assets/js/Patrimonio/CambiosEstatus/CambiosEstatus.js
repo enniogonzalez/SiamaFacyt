@@ -385,8 +385,7 @@ $(function(){
     }
 
     function EstablecerBuscador(){
-        // SetSearchThead(thCambios);
-        SetSearchThead("");
+        SetSearchThead(thCambioEstatus);
     }
 
     function ClearForm(){

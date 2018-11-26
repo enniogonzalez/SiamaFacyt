@@ -160,6 +160,7 @@ $(function(){
         ClearForm();
         HabilitarFormulario();
         
+        $('.fecha').val('');
         ActivarCambiosReparaciones();
         $('#EstatusCorrectivo').val("Solicitado");
         $('#EstatusCorrectivo').attr("disabled", "disabled");
@@ -526,12 +527,12 @@ $(function(){
         $('.formulario-siama form .form-control').each(function(){
             $(this).removeClass('is-invalid');
             if($(this).hasClass('texto') || $(this).hasClass('fecha'))
-                $(this).val('')
+                $(this).val('');
             else if($(this).hasClass('lista'))
                 $(this)[0].selectedIndex = 0;
             else if ($(this).hasClass('decimal'))
                 $(this).val('0.00')
-        })
+        });
     }
     
     function GuardarEstadoActualFormulario(){

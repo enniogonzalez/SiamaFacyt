@@ -580,6 +580,9 @@
         private function ObtenerTransaccionesAgregados($agregados,$ajuste){
             $transacciones = [];
 
+            $query = "DELETE FROM AjustesAccion WHERE tipo = 'Agregar' AND aju_id = " . $ajuste;
+
+            array_push($transacciones,$query);
 
             if(isset($agregados)){
                 foreach ($agregados as $data) {
@@ -710,6 +713,10 @@
 
         private function ObtenerTransaccionesQuitados($quitados,$ajuste){
             $transacciones = [];
+
+            $query = "DELETE FROM AjustesAccion WHERE tipo = 'Quitar' AND aju_id = " . $ajuste;
+
+            array_push($transacciones,$query);
 
             if(isset($quitados)){
                 foreach ($quitados as $data) {

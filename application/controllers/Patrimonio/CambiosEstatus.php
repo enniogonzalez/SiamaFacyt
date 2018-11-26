@@ -48,7 +48,7 @@
             $datafile['JsFile'] = $JsFile ;
 
             $this->load->model('Sistema/listasdesplegables_model' , 'listasdesplegables_model');
-            $ld = $this->listasdesplegables_model->Obtener('','COB-AJUSTE');
+            $ld = $this->listasdesplegables_model->Obtener('','COB-CAMBIO');
 
             $listaBusquedaBien   = $this->listasdesplegables_model->Obtener('','COB-BIENES');
             $listaBusquedaPieza= $this->listasdesplegables_model->Obtener('','COB-PIEZAS');
@@ -261,8 +261,9 @@
                         ."<tr>"
                         .   "<td style='display:none;'>" . $elemento['cam_id'] . "</td>"
                         .   "<td>" . $elemento['documento'] . "</td>"
-                        .   "<td>" . $elemento['nombre'] . "</td>"
                         .   "<td>" . $elemento['doc_estatus'] . "</td>"
+                        .   "<td>" . $elemento['nombre'] . "</td>"
+                        .   "<td>" . $elemento['bie_estatus'] . "</td>"
                         ."</tr>";
                 }
                 

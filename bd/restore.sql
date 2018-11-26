@@ -1,5 +1,5 @@
 \c postgres
 
-drop database siamauc;
+drop database siamafacyt;
 
 \i SiamaUc.sql

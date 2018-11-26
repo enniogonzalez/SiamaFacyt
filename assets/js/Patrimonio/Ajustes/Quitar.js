@@ -221,7 +221,7 @@ $(function(){
                     <div style="width:80%;float:left;">
                         <div style="display:none;" id="idPiezaQuitar">${data['idPiezaQuitar']}</div>
                         <div style="display:none;" id="InvQP">${data['InvQP']}</div>
-                        <input type="text" title="Pieza" 
+                        <input type="text" title="Pieza"  readonly
                             class="form-control texto obligatorio buscador Quitado" id="nomPiezaQuitar" value="${data['nomPiezaQuitar']}">
                         <div class="invalid-feedback">Campo Obligatorio</div>
                     </div>

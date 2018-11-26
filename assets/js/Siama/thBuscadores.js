@@ -15,7 +15,14 @@ const thBienes = `
     <th style="width:15%;">Estatus</th>
 </tr>
 `;
-
+const thCambioEstatus = `
+    <tr>
+        <th style="width:20%;">Documento</th>
+        <th style="width:20%;">Estatus Doc.</th>
+        <th style="width:40%;">Bien</th>
+        <th style="width:20%;">Estatus Bien</th>
+    </tr>
+`;
 const thCorrectivos = `
 <tr>
     <th style="width:15%;">Documento</th>
