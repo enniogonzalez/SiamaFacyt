@@ -44,7 +44,7 @@
 
             
             $this->load->model('Sistema/listasdesplegables_model' , 'listasdesplegables_model');
-            $ld = $this->listasdesplegables_model->Obtener('','COB-MARCAS');
+            $ld = $this->listasdesplegables_model->Obtener('','COB-FALLAS');
 
             $dataLD['OrdenarBusqueda'] = $this->liblistasdesplegables->FormatearListaDesplegable($ld);
 
@@ -140,7 +140,7 @@
         public function imprimir($id){
             $data['datos'] = $this->FormatearImpresion($this->fallas_model->ObtenerInfoPDF($id));
             $this->load->library('tcpdf/Pdf');
-            $this->load->view('Reportes/repMarcas',$data);
+            $this->load->view('Reportes/repFallas',$data);
         }
 
         private function FormatearImpresion($respuesta){

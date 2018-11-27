@@ -113,7 +113,7 @@
             //Query para buscar usuario
             $query ="   SELECT  fal_id,
                                 Nombre,
-                                Tipo
+                                Tipo,
                                 COALESCE(Observaciones,'') Observaciones
                         FROM Fallas
                         WHERE fal_id = '" . $id . "'";

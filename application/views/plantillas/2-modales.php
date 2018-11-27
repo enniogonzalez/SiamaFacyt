@@ -101,7 +101,7 @@
                     </nav>
                 </div>
 
-                <div class="modal-footer" style="background-color: #95a5a6; padding: 10px;">
+                <div class="modal-footer" style="background-color: #95a5a6; padding: 10px;text-align:right;">
                     <div class="table-responsive">
                         <button  type="button" style="margin:5px;" class="btn btn-primary-siama" id="FiltrarModalBuscar">
                             <span class="fa fa-search"></span>

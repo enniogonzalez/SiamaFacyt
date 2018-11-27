@@ -267,6 +267,14 @@ Values(
     '[{"Valor":"CAM.Documento","Opcion":"Documento","Descripcion":""},{"Valor":"Cam.doc_estatus","Opcion":"Estatus Documento","Descripcion":""},{"Valor":"B.nombre","Opcion":"Bien","Descripcion":""},{"Valor":"Cam.bie_estatus","Opcion":"Estatus Bien","Descripcion":""}]'
 );
 
+INSERT INTO Listas_Desplegables( Codigo,Nombre,Descripcion,Opciones) 
+Values(
+    'COB-FALLAS',
+    'Campos para Ordenar Busqueda Fallas',
+    null,
+    '[{"Valor":"Nombre","Opcion":"Nombre","Descripcion":""},{"Valor":"Tipo","Opcion":"Tipo","Descripcion":""},{"Valor":"Observacion","Opcion":"Observacion","Descripcion":""}]'
+);
+
 /*
 INSERT INTO Listas_Desplegables( Codigo,Nombre,Descripcion,Opciones) 
 Values(
