@@ -1,16 +1,11 @@
-INSERT INTO localizaciones(nombre,ubicacion,tipo,cap_amp)
-VALUES  ('Facyt','Facyt','Facultad',0.00),
-        ('Computacion','Computacion','Departamento',0.00),
-        ('Biologia','Biologia','Departamento',0.00),
-        ('Fisica','Fisica','Departamento',0.00),
-        ('Matematica','Matematica','Departamento',0.00),
-        ('Quimica','Quimica','Departamento',0.00);
+INSERT INTO localizaciones(nombre,ubicacion,tipo,cap_amp,Secuencia,usu_cre)
+VALUES  ('Facyt','Facyt','Facultad',0.00,'-1-',1),
+        ('Computacion','Computacion','Departamento',0.00,'-2-',1),
+        ('Biologia','Biologia','Departamento',0.00,'-3-',1),
+        ('Fisica','Fisica','Departamento',0.00,'-4-',1),
+        ('Matematica','Matematica','Departamento',0.00,'-5-',1),
+        ('Quimica','Quimica','Departamento',0.00,'-6-',1);
 
-INSERT INTO Pertenece(loh_id,lop_id)
-VALUES  (2,1),
-        (4,1),
-        (5,1),
-        (6,1);
 
 
 INSERT INTO Partidas(codigo,nombre)
