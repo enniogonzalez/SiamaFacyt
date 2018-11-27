@@ -15,6 +15,7 @@ const thBienes = `
     <th style="width:15%;">Estatus</th>
 </tr>
 `;
+
 const thCambioEstatus = `
     <tr>
         <th style="width:20%;">Documento</th>
@@ -31,6 +32,14 @@ const thCorrectivos = `
     <th style="width:15%;">Inicio</th>
     <th style="width:15%;">Fin</th>
 </tr>
+`;
+
+const thFallas = `
+    <tr>
+        <th style="width:40%;">Nombre</th>
+        <th style="width:30%;">Tipo</th>
+        <th style="width:30%;">Observaci&oacute;n</th>
+    </tr>
 `;
 
 const thLocalizaciones = `

@@ -68,9 +68,9 @@ CREATE TABLE Localizaciones(
 	Tipo			VARCHAR(100)		NOT NULL,
 	Secuencia		TEXT				NOT NULL DEFAULT '',
 	Cap_Amp			DECIMAL(10,4)		NOT NULL,
-	Usu_Cre			INT					NOT NULL,			--Usuario Creador
+	Usu_Cre			INT					NOT NULL,--Usuario Creador
 	Fec_Cre			TIMESTAMP			NOT NULL DEFAULT(NOW()), --fecha Creacion
-	Usu_Mod			INT					NULL, 			--Usuario Creador
+	Usu_Mod			INT					NULL,--Usuario Creador
 	Fec_Mod			TIMESTAMP			NOT NULL DEFAULT(NOW()),
 	Observaciones	TEXT,
 	FOREIGN KEY (Usu_Cre) References Usuarios,
@@ -474,6 +474,18 @@ CREATE TABLE CambioEstatusPieza(
 	FOREIGN KEY (Usu_Mod) References Usuarios
 );
 
+CREATE TABLE Fallas(
+	FAL_ID			SERIAL			PRIMARY KEY,
+	Nombre			VARCHAR(255)	NOT NULL,
+	Tipo			VARCHAR(100)	NOT NULL,
+	Usu_Cre			INT				NOT NULL,--Usuario Creador
+	Fec_Cre			TIMESTAMP		NOT NULL DEFAULT(NOW()), --fecha Creacion
+	Usu_Mod			INT				NULL,--Usuario Creador
+	Fec_Mod			TIMESTAMP		NOT NULL DEFAULT(NOW()),
+	Observaciones	TEXT			NULL,
+	FOREIGN KEY (Usu_Cre) References Usuarios,
+	FOREIGN KEY (Usu_Mod) References Usuarios
+);
 
 GRANT CONNECT ON DATABASE siamafacyt TO userapp;
 

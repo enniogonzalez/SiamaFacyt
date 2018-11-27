@@ -89,6 +89,12 @@ $route['correctivo/guardar'] = 'Mantenimiento/correctivo/guardar';
 $route['correctivo/imprimir/(:any)'] = 'Mantenimiento/correctivo/imprimir/$1';
 $route['correctivo'] = 'Mantenimiento/correctivo/view/';
 
+$route['fallas/busqueda'] = 'Mantenimiento/fallas/busqueda';
+$route['fallas/eliminar'] = 'Mantenimiento/fallas/eliminar';
+$route['fallas/guardar'] = 'Mantenimiento/fallas/guardar';
+$route['fallas/imprimir/(:any)'] = 'Mantenimiento/fallas/imprimir/$1';
+$route['fallas'] = 'Mantenimiento/fallas/view';
+
 $route['listasdesplegables/ObtenerLista'] = 'Sistema/listasdesplegables/ObtenerLista';
 $route['listasdesplegables/busqueda'] = 'Sistema/listasdesplegables/busqueda';
 $route['listasdesplegables/eliminar'] = 'Sistema/listasdesplegables/eliminar';

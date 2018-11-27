@@ -28,7 +28,7 @@ $(function(){
 
         var parametros = {
             "Titulo":"Advertencia",
-            "Cuerpo": "<h4>¿Est&aacute; usted seguro de querer eliminar la marca?</h4>",
+            "Cuerpo": "<h4>¿Est&aacute; usted seguro de querer eliminar la falla?</h4>",
             "Botones":Botones
         }
 
@@ -37,7 +37,7 @@ $(function(){
 
     $('.botoneraFormulario').on('click','#BuscarRegistro',function(){
         SetSearchType('Formulario');
-        SetSearchTitle('Busqueda Marcas');
+        SetSearchTitle('Busqueda Fallas');
         PrimeraVezBusqueda = true;
         DeshabilitarBotonera();
         SetUrlBusqueda($('#ControladorActual').text().trim()+"/busqueda");
@@ -59,14 +59,14 @@ $(function(){
     $('.botoneraFormulario').on('click','#EditarRegistro',function(){
         GuardarEstadoActualFormulario();
         HabilitarFormulario()
-        $('#nombreMarca').focus();
+        $('#nombreFalla').focus();
     });
 
     $('.botoneraFormulario').on('click','#AgregarRegistro',function(){
         GuardarEstadoActualFormulario();
         ClearForm();
         HabilitarFormulario()
-        $('#nombreMarca').focus();
+        $('#nombreFalla').focus();
     })
 
     $('.botoneraFormulario').on('click','#CancelarRegistro',function(){
@@ -92,10 +92,11 @@ $(function(){
 
         if(Valido){
             var parametros = {
-                "id":           $('#IdForm').text().trim(),
-                "Nombre":       $('#nombreMarca').val().trim(),
-                "Observacion":  $('#Observacion').val().trim(),
-                "Url":          $('#FormularioActual').attr("action")
+                "id"            : $('#IdForm').text().trim(),
+                "Nombre"        : $('#nombreFalla').val().trim(),
+                "Tipo"          : $('#tipoFalla').val().trim(),
+                "Observacion"   : $('#Observacion').val().trim(),
+                "Url"           : $('#FormularioActual').attr("action")
             }
             
             if(!Guardando){
@@ -107,7 +108,7 @@ $(function(){
     });
 
     function EstablecerBuscador(){
-        SetSearchThead(thMarcas);
+        SetSearchThead(thFallas);
     }
 
     function ClearForm(){
@@ -136,24 +137,27 @@ $(function(){
 
     function RestablecerEstadoAnteriorFormulario(){
         var parametros = {
-            "id":           idActual.trim(),
-            "Nombre":       dataInputs[0].trim(),
-            "Observacion":  dataInputs[1].trim()
+            "id"            : idActual.trim(),
+            "Nombre"        : dataInputs[0].trim(),
+            "Tipo"          : dataInputs[1].trim(),
+            "Observacion"   : dataInputs[2].trim()
         }
         LlenarFormulario(parametros);
     }
     
     function LlenarFormulario(data){
         $('#IdForm').text(data['id']);
-        $('#nombreMarca').val(data['Nombre']);
+        $('#nombreFalla').val(data['Nombre']);
+        $('#tipoFalla').val(data['Tipo']);
         $('#Observacion').val(data['Observacion']);
     }
 
     window.InterfazElegirBuscador = function(fila){
         var parametros = {
-            "id":           fila.find('td:eq(0)').text().trim(),
-            "Nombre":       fila.find('td:eq(1)').text().trim(),
-            "Observacion":  fila.find('td:eq(2)').text().trim()
+            "id"            : fila.find('td:eq(0)').text().trim(),
+            "Nombre"        : fila.find('td:eq(1)').text().trim(),
+            "Tipo"          : fila.find('td:eq(2)').text().trim(),
+            "Observacion"   : fila.find('td:eq(3)').text().trim()
         }
         LlenarFormulario(parametros);
         $('#SiamaModalBusqueda').modal('hide');
@@ -161,14 +165,15 @@ $(function(){
 
     window.AccionEliminarFormulario = function(data){
         
-        if(data['Datos']['mar_id'] == ""){
+        if(data['Datos']['fal_id'] == ""){
             ClearForm();
             AgregarBotoneraPrimariaNULL();
         }else{
             var parametros = {
-                "id":           data['Datos']['mar_id'].trim(),
-                "Nombre":       data['Datos']['nombre'].trim(),
-                "Observacion":  data['Datos']['observaciones'].trim()
+                "id"            : data['Datos']['fal_id'].trim(),
+                "Nombre"        : data['Datos']['nombre'].trim(),
+                "Tipo"          : data['Datos']['tipo'].trim(),
+                "Observacion"   : data['Datos']['observaciones'].trim()
             }
     
             LlenarFormulario(parametros);

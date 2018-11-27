@@ -35,7 +35,7 @@ $(function(){
 
         var parametros = {
             "Titulo":"Advertencia",
-            "Cuerpo": "<h4>¿Est&aacute; usted seguro de querer borrar el usuario?</h4>",
+            "Cuerpo": "<h4>¿Est&aacute; usted seguro de querer eliminar el usuario?</h4>",
             "Botones":Botones
         }
 

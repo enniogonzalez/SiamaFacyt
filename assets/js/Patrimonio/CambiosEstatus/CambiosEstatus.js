@@ -69,7 +69,7 @@ $(function(){
     $('.BorrarBienCambios').on('click',function(){
         
         if(ExistePiezaCE())
-            AdvertenciaCambiarBien("borrar");
+            AdvertenciaCambiarBien("eliminar");
         else{
             $('#idBieCambios').text("");
             $('#nomBieCambios').val("");
@@ -94,7 +94,7 @@ $(function(){
 
         var parametros = {
             "Titulo":"Advertencia",
-            "Cuerpo": "<h4>¿Est&aacute; usted seguro de querer borrar el Cambio de Estatus?</h4>",
+            "Cuerpo": "<h4>¿Est&aacute; usted seguro de querer eliminar el Cambio de Estatus?</h4>",
             "Botones":Botones
         }
 

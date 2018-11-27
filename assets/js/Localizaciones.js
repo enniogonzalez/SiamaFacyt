@@ -68,7 +68,7 @@ $(function(){
 
         var parametros = {
             "Titulo":"Advertencia",
-            "Cuerpo": "<h4>¿Est&aacute; usted seguro de querer borrar la localización?</h4>",
+            "Cuerpo": "<h4>¿Est&aacute; usted seguro de querer eliminar la localización?</h4>",
             "Botones":Botones
         }
 

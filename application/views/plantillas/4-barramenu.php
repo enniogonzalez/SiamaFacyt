@@ -33,6 +33,12 @@
                 </a>
             </li>
             <li class="submenu submenu<?=$posMenu?>">
+                <a href='<?=base_url()?>fallas'>
+                    <span class="fa fa-exclamation-triangle" style="width:20px;" ></span>
+                    <label>Fallas</label>
+                </a>
+            </li>
+            <li class="submenu submenu<?=$posMenu?>">
                 <a href='<?=base_url()?>plantilla'>
                     <span class="fa fa-sticky-note" style="width:20px;" ></span>
                     <label>Plantilla</label>
