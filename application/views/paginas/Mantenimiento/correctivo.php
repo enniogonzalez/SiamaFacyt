@@ -151,6 +151,9 @@
             <select readonly disabled  id="listaBusquedaBien">
                 <?=$listaBusquedaBien?>
             </select> 
+            <select readonly disabled  id="listaBusquedaFalla">
+                <?=$listaBusquedaFalla?>
+            </select> 
         </div>
         <div style="display:none;" id ="ControladorActual"><?=site_url('/correctivo')?></div>
         <div style="background-color: #95a5a6; padding: 10px;">

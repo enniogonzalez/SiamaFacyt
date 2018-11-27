@@ -92,6 +92,19 @@ CREATE TABLE EsSubpartida(
 	FOREIGN KEY (PAP_ID) References Partidas
 );
 
+CREATE TABLE Fallas(
+	FAL_ID			SERIAL			PRIMARY KEY,
+	Nombre			VARCHAR(255)	NOT NULL,
+	Tipo			VARCHAR(100)	NOT NULL,
+	Usu_Cre			INT				NOT NULL,--Usuario Creador
+	Fec_Cre			TIMESTAMP		NOT NULL DEFAULT(NOW()), --fecha Creacion
+	Usu_Mod			INT				NULL,--Usuario Creador
+	Fec_Mod			TIMESTAMP		NOT NULL DEFAULT(NOW()),
+	Observaciones	TEXT			NULL,
+	FOREIGN KEY (Usu_Cre) References Usuarios,
+	FOREIGN KEY (Usu_Mod) References Usuarios
+);
+
 CREATE TABLE Bienes(
 	BIE_ID			SERIAL				PRIMARY KEY,
 	Nombre			VARCHAR(100)		NOT NULL,
@@ -255,7 +268,7 @@ CREATE TABLE CambioCorrectivo(
 	ESTATUS			VARCHAR(100)	NOT NULL,--Solicitado, Aprobado, Realizado
 	Fec_Ini			DATE			NOT NULL,
 	Fec_Fin			DATE			NOT NULL,
-	Falla			TEXT			NOT NULL,
+	fal_id			INT				NOT NULL,
 	Usu_Cre			INT				NOT NULL,--Usuario Creador
 	Fec_Cre			TIMESTAMP		NOT NULL DEFAULT(NOW()),--fecha Creacion
 	Usu_Mod			INT				NOT NULL,--Usuario Modificador
@@ -264,6 +277,7 @@ CREATE TABLE CambioCorrectivo(
 
 	FOREIGN KEY (PDA_ID) References Piezas,
 	FOREIGN KEY (PCA_ID) References Piezas,
+	FOREIGN KEY (fal_id) References Fallas,
 	FOREIGN KEY (USU_ID) References Usuarios,
 	FOREIGN KEY (Usu_Cre) References Usuarios,
 	FOREIGN KEY (Usu_Mod) References Usuarios,
@@ -286,13 +300,14 @@ CREATE TABLE ReparacionCorrectiva(
 	ESTATUS			VARCHAR(100)	NOT NULL,--Solicitado, Aprobado, Realizado
 	Fec_Ini			DATE			NOT NULL,
 	Fec_Fin			DATE			NOT NULL,
-	Falla			TEXT			NOT NULL,
+	fal_id			INT				NOT NULL,
 	Usu_Cre			INT				NOT NULL, --Usuario Creador
 	Fec_Cre			TIMESTAMP		NOT NULL DEFAULT(NOW()), --fecha Creacion
 	Usu_Mod			INT				NOT NULL, --Usuario Creador
 	Fec_Mod			TIMESTAMP		NOT NULL DEFAULT(NOW()),
 	Observaciones	TEXT,
 	FOREIGN KEY (PIE_ID) References Piezas,
+	FOREIGN KEY (fal_id) References Fallas,
 	FOREIGN KEY (MCO_ID) References MantenimientoCorrectivo ON DELETE CASCADE,
 	FOREIGN KEY (USU_ID) References Usuarios,
 	FOREIGN KEY (Usu_Cre) References Usuarios,
@@ -470,19 +485,6 @@ CREATE TABLE CambioEstatusPieza(
 	Observaciones	TEXT			NOT NULL,
 	FOREIGN KEY (PIE_ID) References Piezas,
 	FOREIGN KEY (CAM_ID) References CambiosEstatus ON DELETE CASCADE,
-	FOREIGN KEY (Usu_Cre) References Usuarios,
-	FOREIGN KEY (Usu_Mod) References Usuarios
-);
-
-CREATE TABLE Fallas(
-	FAL_ID			SERIAL			PRIMARY KEY,
-	Nombre			VARCHAR(255)	NOT NULL,
-	Tipo			VARCHAR(100)	NOT NULL,
-	Usu_Cre			INT				NOT NULL,--Usuario Creador
-	Fec_Cre			TIMESTAMP		NOT NULL DEFAULT(NOW()), --fecha Creacion
-	Usu_Mod			INT				NULL,--Usuario Creador
-	Fec_Mod			TIMESTAMP		NOT NULL DEFAULT(NOW()),
-	Observaciones	TEXT			NULL,
 	FOREIGN KEY (Usu_Cre) References Usuarios,
 	FOREIGN KEY (Usu_Mod) References Usuarios
 );

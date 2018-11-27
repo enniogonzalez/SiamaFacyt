@@ -288,6 +288,7 @@ $(function(){
             }
             
             if(!Guardando){
+                console.log(parametros)
                 EstablecerBuscador();
                 Guardando = true;
                 GuardarFormulario(parametros);
@@ -457,6 +458,10 @@ $(function(){
             case UsuarioR:
                 controlador = "usuarios/busqueda";
             break;
+            case FallaC:
+            case FallaR:
+                controlador = "fallas/busqueda";
+            break;
             case PiezaCC:
                 controlador = "piezas/busquedaDisponibles";
             break;
@@ -486,6 +491,10 @@ $(function(){
             case UsuarioC:
             case UsuarioR:
                 controlador = "Usuarios";
+            break;
+            case FallaC:
+            case FallaR:
+                controlador = "Fallas";
             break;
             case PiezaDC:
             case PiezaDR:
@@ -769,6 +778,33 @@ $(function(){
 
     }
     
+    window.BuscarFalla = function(tipo){
+
+        SetSearchThead(thFallas);
+        parametros = {
+            "Lista": $('#listaBusquedaFalla').html().trim(),
+            "Tipo": tipo,
+        }
+
+        switch(tipo){
+            case FallaR:
+                idBuscadorActual = $('#idFallaReparacion').text().trim();
+                nombreBuscadorActual = $('#nomFallaReparacion').val().trim();
+            break;
+            case FallaC:
+                idBuscadorActual = $('#idFallaCambio').text().trim();
+                nombreBuscadorActual = $('#nomFallaCambio').val().trim();
+            break;
+            case UsuarioR:
+                idBuscadorActual = $('#idUsuReparacion').text().trim();
+                nombreBuscadorActual = $('#nomUsuReparacion').val().trim();
+            break;
+        }
+
+        SetSearchModal(parametros)
+
+    }
+
     window.BuscarPieza = function(tipo){
 
 
@@ -817,6 +853,14 @@ $(function(){
             case PiezaDC:
                 $('#idPiezaDC').text(fila.find("td:eq(0)").text().trim());
                 $('#nomPiezaDC').val(fila.find("td:eq(2)").text().trim());
+            break;
+            case FallaC:
+                $('#idFallaCambio').text(fila.find("td:eq(0)").text().trim());
+                $('#nomFallaCambio').val(fila.find("td:eq(1)").text().trim());
+            break;
+            case FallaR:
+                $('#idFallaReparacion').text(fila.find("td:eq(0)").text().trim());
+                $('#nomFallaReparacion').val(fila.find("td:eq(1)").text().trim());
             break;
             case PiezaDR:
                 $('#idPiezaDR').text(fila.find("td:eq(0)").text().trim());

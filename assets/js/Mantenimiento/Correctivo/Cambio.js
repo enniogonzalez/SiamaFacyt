@@ -1,5 +1,6 @@
 
 const ProveedorC = "ProveedorC";
+const FallaC = "FallaC";
 const UsuarioC = "UsuariosC";
 const PiezaDC = "PiezaDC";
 const PiezaCC = "PiezaCC";
@@ -27,6 +28,24 @@ $(function(){
         $('#nomProC').val('');
     });
     
+
+    /************************************/
+    /*      Manejo Fallas             */
+    /************************************/
+    
+    $('#SiamaModalFunciones').on('click','#nomFallaCambio',function(){
+        BuscarFalla(FallaC);
+    });
+
+    $('#SiamaModalFunciones').on('click','.BuscarFallaCambio',function(){
+        BuscarFalla(FallaC);
+    });
+
+    $('#SiamaModalFunciones').on('click','.BorrarFallaCambio',function(){
+        $('#idFallaCambio').text('');
+        $('#nomFallaCambio').val('');
+    });
+
     /************************************/
     /*      Manejo Usuarios             */
     /************************************/
@@ -61,7 +80,6 @@ $(function(){
         $('#nomPiezaDC').val('');
     });
     
-
     $('#SiamaModalFunciones').on('click','#nomPiezaCC',function(){
         BuscarPieza(PiezaCC);
     });
@@ -133,23 +151,24 @@ $(function(){
         </button>`;
 
         var data = {
-            "Titulo"        :   "Editar Cambio Correctivo",
-            "EstatusDoc"    :   $('#EstatusCorrectivo').val(),
-            "Fila"          :   $(this).parent('tr').index(),
-            "Botones"       :   Botones,
-            "idPiezaDC"     :   fila.find('td:eq(1)').text().trim(),
-            "nomPiezaDC"    :   fila.find('td:eq(2)').text().trim(),
-            "idBienPiezaCC" :   fila.find('td:eq(3)').text().trim(),
-            "idPiezaCC"     :   fila.find('td:eq(4)').text().trim(),
-            "nomPiezaCC"    :   fila.find('td:eq(5)').text().trim(),
-            "idUsuCambio"   :   fila.find('td:eq(6)').text().trim(),
-            "nomUsuCambio"  :   fila.find('td:eq(7)').text().trim(),
-            "idProC"        :   fila.find('td:eq(8)').text().trim(),
-            "nomProC"       :   fila.find('td:eq(9)').text().trim(),
-            "InicioCambio"  :   fila.find('td:eq(10)').text().trim(),
-            "FinCambio"     :   fila.find('td:eq(11)').text().trim(),
-            "ObservacionC"  :   fila.find('td:eq(12)').text().trim(),
-            "FallaCambio"   :   fila.find('td:eq(14)').text().trim(),
+            "Titulo"            :   "Editar Cambio Correctivo",
+            "EstatusDoc"        :   $('#EstatusCorrectivo').val(),
+            "Fila"              :   $(this).parent('tr').index(),
+            "Botones"           :   Botones,
+            "idPiezaDC"         :   fila.find('td:eq(1)').text().trim(),
+            "nomPiezaDC"        :   fila.find('td:eq(2)').text().trim(),
+            "idBienPiezaCC"     :   fila.find('td:eq(3)').text().trim(),
+            "idPiezaCC"         :   fila.find('td:eq(4)').text().trim(),
+            "nomPiezaCC"        :   fila.find('td:eq(5)').text().trim(),
+            "idUsuCambio"       :   fila.find('td:eq(6)').text().trim(),
+            "nomUsuCambio"      :   fila.find('td:eq(7)').text().trim(),
+            "idProC"            :   fila.find('td:eq(8)').text().trim(),
+            "nomProC"           :   fila.find('td:eq(9)').text().trim(),
+            "InicioCambio"      :   fila.find('td:eq(10)').text().trim(),
+            "FinCambio"         :   fila.find('td:eq(11)').text().trim(),
+            "ObservacionC"      :   fila.find('td:eq(12)').text().trim(),
+            "idFallaCambio"     :   fila.find('td:eq(14)').text().trim(),
+            "nomFallaCambio"    :   fila.find('td:eq(15)').text().trim(),
         }
 
         SetModalFuncionesCambios(data);
@@ -273,7 +292,8 @@ $(function(){
             fila.find('td:eq(10)').text($('#InicioCambio').val().trim());
             fila.find('td:eq(11)').text($('#FinCambio').val().trim());
             fila.find('td:eq(12)').text($('#ObservacionC').val().trim());
-            fila.find('td:eq(14)').text($('#FallaCambio').val().trim());
+            fila.find('td:eq(14)').text($('#idFallaCambio').text().trim());
+            fila.find('td:eq(15)').text($('#nomFallaCambio').val().trim());
     
             CerrarFunciones();
         }
@@ -319,7 +339,7 @@ $(function(){
                     "Fin"           : $(this).find('td:eq(11)').text(),
                     "Observacion"   : $(this).find('td:eq(12)').text(),
                     "Estatus"       : $(this).find('td:eq(13)').text(),
-                    "Falla"         : $(this).find('td:eq(14)').text()
+                    "FallaCambio"   : $(this).find('td:eq(14)').text()
                 });
             }
         });
@@ -361,6 +381,7 @@ $(function(){
                 <td style="display:none;"></td>
                 <td style="display:none;"></td>
                 <td style="display:none;"></td>
+                <td style="display:none;"></td>
                 <td colspan="2" class ="editarCambio" style="text-align: center;cursor: pointer;">
                     <span class="fa fa-pencil fa-lg"></span>
                 </td>
@@ -395,11 +416,11 @@ $(function(){
         <form class="form-horizontal" id="formEditarCambio">
             <div style="${pointer}">
             <div class="form-group row">
-                <label class="col-md-3 col-form-label">Pieza Dañada:</label>
-                <div class="col-md-9">
+                <label class="col-lg-3 col-form-label">Pieza Dañada:</label>
+                <div class="col-lg-9">
                     <div style="width:80%;float:left;">
                         <div style="display:none;" id="idPiezaDC">${data['idPiezaDC']}</div>
-                        <input type="text" title="Pieza Dañada" ${atributos}
+                        <input type="text" title="Pieza Dañada" ${atributos} readonly
                             class="form-control texto obligatorio buscador Cambio" id="nomPiezaDC" value="${data['nomPiezaDC']}">
                         <div class="invalid-feedback">Campo Obligatorio</div>
                     </div>
@@ -413,12 +434,12 @@ $(function(){
             </div>
 
             <div class="form-group row">
-                <label class="col-md-3 col-form-label">Pieza Cambio:</label>
-                <div class="col-md-9">
+                <label class="col-lg-3 col-form-label">Pieza Cambio:</label>
+                <div class="col-lg-9">
                     <div style="width:80%;float:left;">
                         <div style="display:none;" id="idBienPiezaCC">${data['idBienPiezaCC']}</div>
                         <div style="display:none;" id="idPiezaCC">${data['idPiezaCC']}</div>
-                        <input type="text" title="Pieza Cambio" ${atributos}
+                        <input type="text" title="Pieza Cambio" ${atributos} readonly
                             class="form-control texto obligatorio buscador Cambio" id="nomPiezaCC" value="${data['nomPiezaCC']}">
                         <div class="invalid-feedback">Campo Obligatorio</div>
                     </div>
@@ -432,11 +453,11 @@ $(function(){
             </div>
 
             <div class="form-group row">
-                <label class="col-md-3 col-form-label">Usuario:</label>
-                <div class="col-md-9">
+                <label class="col-lg-3 col-form-label">Usuario:</label>
+                <div class="col-lg-9">
                     <div style="width:80%;float:left;">
                         <div style="display:none;" id="idUsuCambio">${data['idUsuCambio']}</div>
-                        <input type="text" title="Usuario que realiza cambio" ${atributos}
+                        <input type="text" title="Usuario que realiza cambio" ${atributos} readonly
                             class="form-control texto  buscador Cambio" id="nomUsuCambio" value="${data['nomUsuCambio']}">
                         <div class="invalid-feedback">Campo Obligatorio</div>
                     </div>
@@ -450,11 +471,11 @@ $(function(){
             </div>
 
             <div class="form-group row">
-                <label class="col-md-3 col-form-label">Proveedor:</label>
-                <div class="col-md-9">
+                <label class="col-lg-3 col-form-label">Proveedor:</label>
+                <div class="col-lg-9">
                     <div style="width:80%;float:left;">
                         <div style="display:none;" id="idProC">${data['idProC']}</div>
-                        <input type="text" title="Proveedor que realiza cambio" ${atributos}
+                        <input type="text" title="Proveedor que realiza cambio" ${atributos} readonly
                             class="form-control texto  buscador Cambio" id="nomProC" value="${data['nomProC']}">
                         <div class="invalid-feedback">Campo Obligatorio</div>
                     </div>
@@ -484,11 +505,22 @@ $(function(){
                     <div class="invalid-feedback">Campo Obligatorio</div>
                 </div>
             </div>
+            
             <div class="form-group row">
-                <label for="FallaCambio" class="col-lg-3 col-form-label">Falla:</label>
+                <label class="col-lg-3 col-form-label">Falla:</label>
                 <div class="col-lg-9">
-                    <textarea  class="form-control obligatorio texto" rows="3"
-                    style = "resize:vertical;" id="FallaCambio">${data['FallaCambio']}</textarea>
+                    <div style="width:80%;float:left;">
+                        <div style="display:none;" id="idFallaCambio">${data['idFallaCambio']}</div>
+                        <input type="text" title="Falla" ${atributos} readonly
+                            class="form-control texto obligatorio buscador Cambio" id="nomFallaCambio" value="${data['nomFallaCambio']}">
+                        <div class="invalid-feedback">Campo Obligatorio</div>
+                    </div>
+                    <div style="width:20%;float:right;padding:10px;">
+                        <span title="Buscar Falla" class="fa fa-search BuscarFallaCambio" 
+                            style="cursor: pointer;float:left;"></span>
+                        <span title="Borrar Falla" class="fa fa-trash-o BorrarFallaCambio" 
+                            style="cursor: pointer;float:right;"></span>
+                    </div>
                 </div>
             </div>
 

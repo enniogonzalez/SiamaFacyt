@@ -57,6 +57,7 @@
             $listaBusquedaBien   = $this->listasdesplegables_model->Obtener('','COB-BIENES');
             $listaBusquedaUsuario= $this->listasdesplegables_model->Obtener('','COB-USUARI');
             $listaBusquedaPieza= $this->listasdesplegables_model->Obtener('','COB-PIEZAS');
+            $listaBusquedaFalla= $this->listasdesplegables_model->Obtener('','COB-FALLAS');
 
             
             $dataLD['OrdenarBusqueda'] = $this->liblistasdesplegables->FormatearListaDesplegable($ld);
@@ -65,6 +66,7 @@
             $data['listaBusquedaBien'] = $this->liblistasdesplegables->FormatearListaDesplegable($listaBusquedaBien);
             $data['listaBusquedaUsuario'] = $this->liblistasdesplegables->FormatearListaDesplegable($listaBusquedaUsuario);
             $data['listaBusquedaPieza'] = $this->liblistasdesplegables->FormatearListaDesplegable($listaBusquedaPieza);
+            $data['listaBusquedaFalla'] = $this->liblistasdesplegables->FormatearListaDesplegable($listaBusquedaFalla);
 
             $dataAlerta['cantAlertas'] = $this->alertas_model->CantidadAlertas();
 

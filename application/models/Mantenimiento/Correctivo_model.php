@@ -850,7 +850,7 @@
 
                     $query = "INSERT INTO CambioCorrectivo( MCO_ID,PDA_ID,BIE_ID,PCA_ID,
                                                             USU_ID,PRO_ID,ESTATUS,
-                                                            Fec_Ini,Fec_Fin,Falla,
+                                                            Fec_Ini,Fec_Fin,fal_id,
                                                             Usu_Cre,Usu_Mod,Observaciones)"
                             . "VALUES('"
                             . str_replace("'", "''",$correctivo)    . "','"
@@ -862,7 +862,7 @@
                             . "'Solicitado','"
                             . str_replace("'", "''",$data['Inicio'])    . "','"
                             . str_replace("'", "''",$data['Fin'])    . "','"
-                            . str_replace("'", "''",$data['Falla'])    . "',"
+                            . str_replace("'", "''",$data['FallaCambio'])    . "',"
                             . $this->session->userdata("usu_id")    . ","
                             . $this->session->userdata("usu_id")    . ",'"
                             . str_replace("'", "''",$data['Observacion'])    . "');";
@@ -954,7 +954,8 @@
                                 CCO.ESTATUS,			
                                 CCO.Fec_Ini,			
                                 CCO.Fec_Fin,
-                                CCO.Falla,			
+                                CCO.fal_id,		
+                                FAL.nombre falla,	
                                 CCO.Usu_Cre,			
                                 CCO.Fec_Cre,			
                                 CCO.Usu_Mod,			
@@ -963,6 +964,7 @@
                         FROM CambioCorrectivo CCO
                             JOIN Piezas PDA ON PDA.PIE_ID = CCO.PDA_ID
                             JOIN Piezas PCA ON PCA.PIE_ID = CCO.PCA_ID
+                            JOIN Fallas FAL ON FAL.fal_id = CCO.fal_id
                             LEFT JOIN Usuarios USU ON USU.USU_ID = CCO.USU_ID
                             LEFT JOIN Proveedores PRO ON PRO.PRO_ID = CCO.PRO_ID
                         WHERE CCO.MCO_ID = " . $correctivo;
@@ -990,6 +992,7 @@
                     . "    <td>" . $line['fec_fin'] . "</td>"
                     . "    <td style=\"display:none;\">" . $line['observaciones'] . "</td>"
                     . "    <td style=\"display:none;\">" . $line['estatus'] . "</td>"
+                    . "    <td style=\"display:none;\">" . $line['fal_id'] . "</td>"
                     . "    <td style=\"display:none;\">" . $line['falla'] . "</td>";
 
                 if($line['estatus'] == "Solicitado"){
@@ -1037,13 +1040,15 @@
                                 COALESCE(PRO.Raz_Soc,'') PRO_NOM,
                                 PCA.Nombre PCA_NOM,			
                                 CCO.ESTATUS,
-                                CCO.Falla,
+                                CCO.fal_id,
+                                FAL.nombre falla,
                                 COALESCE(to_char(CCO.Fec_Ini,'DD/MM/YYYY'),'') Fec_Ini,			
                                 COALESCE(to_char(CCO.Fec_Fin,'DD/MM/YYYY'),'') Fec_Fin,				
                                 COALESCE(CCO.Observaciones,'') Observaciones
                         FROM CambioCorrectivo CCO
                             JOIN Piezas PDA ON PDA.PIE_ID = CCO.PDA_ID
                             JOIN Piezas PCA ON PCA.PIE_ID = CCO.PCA_ID
+                            JOIN Fallas FAL ON FAL.fal_id = CCO.fal_id
                             LEFT JOIN Usuarios USU ON USU.USU_ID = CCO.USU_ID
                             LEFT JOIN Proveedores PRO ON PRO.PRO_ID = CCO.PRO_ID
                         WHERE CCO.MCO_ID = " . $correctivo;
@@ -1132,7 +1137,7 @@
                     
                     $query = "INSERT INTO ReparacionCorrectiva( MCO_ID,PIE_ID,
                                                                 USU_ID,PRO_ID,ESTATUS,
-                                                                Fec_Ini,Fec_Fin,Falla,
+                                                                Fec_Ini,Fec_Fin,fal_id,
                                                                 Usu_Cre,Usu_Mod,Observaciones)"
                             . "VALUES('"
                             . str_replace("'", "''",$correctivo)    . "','"
@@ -1148,6 +1153,7 @@
                             . str_replace("'", "''",$data['Observacion'])    . "');";
                     array_push($transacciones,$query);
                 }
+
             }
 
             return $transacciones;
@@ -1169,7 +1175,8 @@
                                 RCO.ESTATUS,			
                                 RCO.Fec_Ini,			
                                 RCO.Fec_Fin,			
-                                RCO.Falla,			
+                                RCO.fal_id,			
+                                FAL.nombre falla,			
                                 RCO.Usu_Cre,			
                                 RCO.Fec_Cre,			
                                 RCO.Usu_Mod,			
@@ -1177,6 +1184,7 @@
                                 COALESCE(RCO.Observaciones,'') Observaciones
                         FROM ReparacionCorrectiva RCO
                             JOIN Piezas PIE ON PIE.PIE_ID = RCO.PIE_ID
+                            JOIN Fallas FAL ON FAL.fal_id = RCO.fal_id
                             LEFT JOIN Usuarios USU ON USU.USU_ID = RCO.USU_ID
                             LEFT JOIN Proveedores PRO ON PRO.PRO_ID = RCO.PRO_ID
                         WHERE RCO.MCO_ID = " . $correctivo;
@@ -1201,6 +1209,7 @@
                     . "    <td>" . $line['fec_fin'] . "</td>"
                     . "    <td style=\"display:none;\">" . $line['observaciones'] . "</td>"
                     . "    <td style=\"display:none;\">" . $line['estatus'] . "</td>"
+                    . "    <td style=\"display:none;\">" . $line['fal_id'] . "</td>"
                     . "    <td style=\"display:none;\">" . $line['falla'] . "</td>";
 
                     if($line['estatus'] == "Solicitado"){
@@ -1246,11 +1255,13 @@
                                 COALESCE(USU.Nombre,'') USU_NOM,		
                                 COALESCE(PRO.Raz_Soc,'') PRO_NOM,	
                                 RCO.ESTATUS,	
+                                FAL.nombre falla,
                                 COALESCE(to_char(RCO.Fec_Ini,'DD/MM/YYYY'),'') Fec_Ini,			
                                 COALESCE(to_char(RCO.Fec_Fin,'DD/MM/YYYY'),'') Fec_Fin,			
                                 COALESCE(RCO.Observaciones,'') Observaciones
                         FROM ReparacionCorrectiva RCO
                             JOIN Piezas PIE ON PIE.PIE_ID = RCO.PIE_ID
+                            JOIN Fallas FAL ON FAL.fal_id = RCO.fal_id
                             LEFT JOIN Usuarios USU ON USU.USU_ID = RCO.USU_ID
                             LEFT JOIN Proveedores PRO ON PRO.PRO_ID = RCO.PRO_ID
                         WHERE RCO.MCO_ID = " . $correctivo;

@@ -1,5 +1,6 @@
 
 const ProveedorR = "ProveedorR";
+const FallaR = "FallaR";
 const UsuarioR = "UsuariosR";
 const PiezaDR = "PiezaDR";
 
@@ -25,6 +26,23 @@ $(function(){
     $('#SiamaModalFunciones').on('click','.BorrarProveedorR',function(){
         $('#idProR').text('');
         $('#nomProR').val('');
+    });
+
+    /************************************/
+    /*      Manejo Fallas             */
+    /************************************/
+    
+    $('#SiamaModalFunciones').on('click','#nomFallaReparacion',function(){
+        BuscarFalla(FallaR);
+    });
+
+    $('#SiamaModalFunciones').on('click','.BuscarFallaReparacion',function(){
+        BuscarFalla(FallaR);
+    });
+
+    $('#SiamaModalFunciones').on('click','.BorrarFallaReparacion',function(){
+        $('#idFallaReparacion').text('');
+        $('#nomFallaReparacion').val('');
     });
 
     /************************************/
@@ -130,7 +148,8 @@ $(function(){
             "InicioReparacion"  :   fila.find('td:eq(7)').text().trim(),
             "FinReparacion"     :   fila.find('td:eq(8)').text().trim(),
             "ObservacionR"      :   fila.find('td:eq(9)').text().trim(),
-            "FallaReparacion"   :   fila.find('td:eq(11)').text().trim(),
+            "idFallaReparacion" :   fila.find('td:eq(11)').text().trim(),
+            "nomFallaReparacion" :   fila.find('td:eq(12)').text().trim(),
         }
         SetModalFuncionesReparaciones(data);
 
@@ -227,7 +246,8 @@ $(function(){
             fila.find('td:eq(7)').text($('#InicioReparacion').val().trim());
             fila.find('td:eq(8)').text($('#FinReparacion').val().trim());
             fila.find('td:eq(9)').text($('#ObservacionR').val().trim());
-            fila.find('td:eq(11)').text($('#FallaReparacion').val().trim());
+            fila.find('td:eq(11)').text($('#idFallaReparacion').text().trim());
+            fila.find('td:eq(12)').text($('#nomFallaReparacion').val().trim());
     
             CerrarFunciones();
         }
@@ -324,6 +344,7 @@ $(function(){
                 <td style="display:none;"></td>
                 <td style="display:none;"></td>
                 <td style="display:none;"></td>
+                <td style="display:none;"></td>
                 <td colspan="2" class ="editarReparacion" style="text-align: center;cursor: pointer;">
                     <span class="fa fa-pencil fa-lg"></span>
                 </td>
@@ -346,8 +367,8 @@ $(function(){
 
             <div style="${pointer}">
             <div class="form-group row">
-                <label class="col-md-3 col-form-label">Pieza Dañada:</label>
-                <div class="col-md-9">
+                <label class="col-lg-3 col-form-label">Pieza Dañada:</label>
+                <div class="col-lg-9">
                     <div style="width:80%;float:left;">
                         <div style="display:none;" id="idPiezaDR">${data['idPiezaDR']}</div>
                         <input type="text" title="Pieza Dañada" ${atributos} readonly
@@ -364,8 +385,8 @@ $(function(){
             </div>
 
             <div class="form-group row">
-                <label class="col-md-3 col-form-label">Usuario:</label>
-                <div class="col-md-9">
+                <label class="col-lg-3 col-form-label">Usuario:</label>
+                <div class="col-lg-9">
                     <div style="width:80%;float:left;">
                         <div style="display:none;" id="idUsuReparacion">${data['idUsuReparacion']}</div>
                         <input type="text" title="Usuario que realiza reparacion" ${atributos} readonly
@@ -383,11 +404,11 @@ $(function(){
             </div>
 
             <div class="form-group row">
-                <label class="col-md-3 col-form-label">Proveedor:</label>
-                <div class="col-md-9">
+                <label class="col-lg-3 col-form-label">Proveedor:</label>
+                <div class="col-lg-9">
                     <div style="width:80%;float:left;">
                         <div style="display:none;" id="idProR">${data['idProR']}</div>
-                        <input type="text" title="Proveedor que realiza reparacion" ${atributos}
+                        <input type="text" title="Proveedor que realiza reparacion" ${atributos} readonly
                             class="form-control texto  buscador Reparacion" id="nomProR" value="${data['nomProR']}">
                         <div class="invalid-feedback">Campo Obligatorio</div>
                     </div>
@@ -419,11 +440,20 @@ $(function(){
             </div>
             
             <div class="form-group row">
-                <label for="FallaReparacion" class="col-lg-3 col-form-label">Falla:</label>
+                <label class="col-lg-3 col-form-label">Falla:</label>
                 <div class="col-lg-9">
-                    <textarea  class="form-control obligatorio texto Reparacion" rows="3"
-                    style = "resize:vertical;" id="FallaReparacion">${data['FallaReparacion']}</textarea>
-                    <div class="invalid-feedback">Campo Obligatorio</div>
+                    <div style="width:80%;float:left;">
+                        <div style="display:none;" id="idFallaReparacion">${data['idFallaReparacion']}</div>
+                        <input type="text" title="Falla" ${atributos} readonly
+                            class="form-control texto obligatorio buscador Cambio" id="nomFallaReparacion" value="${data['nomFallaReparacion']}">
+                        <div class="invalid-feedback">Campo Obligatorio</div>
+                    </div>
+                    <div style="width:20%;float:right;padding:10px;">
+                        <span title="Buscar Falla" class="fa fa-search BuscarFallaReparacion" 
+                            style="cursor: pointer;float:left;"></span>
+                        <span title="Borrar Falla" class="fa fa-trash-o BorrarFallaReparacion" 
+                            style="cursor: pointer;float:right;"></span>
+                    </div>
                 </div>
             </div>
             </div>
