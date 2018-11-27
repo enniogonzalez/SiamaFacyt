@@ -80,21 +80,28 @@
                 $result = pg_query($query);
             }
 
+            if($result){
+                $data['idActual'] = $UltimoId['bie_id'];
+                $datos = array(
+                    'Opcion' => 'Insertar',
+                    'Tabla' => 'Bienes', 
+                    'Tab_id' => $UltimoId['bie_id'],
+                    'Datos' => json_encode($data)
+                );
+                
+                $result = $this->auditorias_model->Insertar($datos);
+            }
+
             if(!$result){
+                $error = pg_last_error();
                 pg_query("ROLLBACK") or die("Transaction rollback failed");
-                die(pg_last_error());
+                die($error);
             }else
                 pg_query("COMMIT") or die("Transaction commit failed");
-
-            //Liberar memoria
-            pg_free_result($result);
 
             //liberar conexion
             $this->bd_model->CerrarConexion($conexion);
             
-
-
-
             return true;
         }
 
@@ -173,19 +180,27 @@
                 }
             }
 
+            if($result){
+                $datos = array(
+                    'Opcion' => 'Actualizar',
+                    'Tabla' => 'Bienes', 
+                    'Tab_id' => $data['idActual'],
+                    'Datos' => json_encode($data)
+                );
+                
+                $result = $this->auditorias_model->Insertar($datos);
+            }
+
             
             if(!$result){
+                $error = pg_last_error();
                 pg_query("ROLLBACK") or die("Transaction rollback failed");
-                die(pg_last_error());
+                die($error);
             }else
                 pg_query("COMMIT") or die("Transaction commit failed");
-
-            //Liberar memoria
-            pg_free_result($result);
-
+                
             //liberar conexion
             $this->bd_model->CerrarConexion($conexion);
-
 
             return true;
         }
@@ -393,30 +408,44 @@
         
         public function Eliminar($id){
 
-            
+            $datosActual = $this->Obtener($id);
+            unset($datosActual['Piezas']);
+
             //Abrir conexion
             $conexion = $this->bd_model->ObtenerConexion();
     
+            //Abrir Transaccion
+            pg_query("BEGIN") or die("Could not start transaction");
+
             //Eliminar Bien
             $query = " DELETE FROM Bienes "
                 . " WHERE Bie_Id = '" .str_replace("'", "''",$id) . "';";
                 
             //Ejecutar Query
-            $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
+            $result = pg_query($query);
             
-            //Si existe registro, se guarda. Sino se guarda false
-            if ($result) 
-                $retorno = true;
-            else
-                $retorno = false;
+            if($result){
+                $datos = array(
+                    'Opcion' => 'Eliminar',
+                    'Tabla' => 'Bienes', 
+                    'Tab_id' => $id,
+                    'Datos' => json_encode($datosActual)
+                );
+                
+                $result = $this->auditorias_model->Insertar($datos);
+            }
 
-            //Liberar memoria
-            pg_free_result($result);
+            if(!$result){
+                $error = pg_last_error();
+                pg_query("ROLLBACK") or die("Transaction rollback failed");
+                die($error);
+            }else
+                pg_query("COMMIT") or die("Transaction commit failed");
 
             //liberar conexion
             $this->bd_model->CerrarConexion($conexion);
 
-            return $retorno;
+            return true;
 
         }
 

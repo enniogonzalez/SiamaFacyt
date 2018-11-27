@@ -449,7 +449,7 @@ CREATE TABLE HistoricoCustodios(
 	PRIMARY KEY(usu_cus,bie_id,Fec_Cre),
 	FOREIGN KEY (usu_cus) References Usuarios,
 	FOREIGN KEY (Usu_Cre) References Usuarios,
-	FOREIGN KEY (BIE_ID) References Bienes
+	FOREIGN KEY (BIE_ID) References Bienes ON DELETE CASCADE
 );
 
 CREATE TABLE CambiosEstatus(
