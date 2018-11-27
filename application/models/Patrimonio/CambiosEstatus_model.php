@@ -2,11 +2,6 @@
 <?php
     class CambiosEstatus_model extends CI_Model{
         
-
-        /************************************/
-        /*          Cambios                 */
-        /************************************/
-
         public function Insertar($data){
             //Abrir conexion
             $conexion = $this->bd_model->ObtenerConexion();
@@ -24,13 +19,10 @@
             . $this->session->userdata("usu_id")    . ",'"
             . str_replace("'", "''", $data['Observaciones']) . "');";
 
-
             //Ejecutar Query
             $result = pg_query($query);
 
-
             if ($result){
-
                 $UltimoId = $this->ObtenerUltimoIdInsertado();
 
                 $result = pg_query("DELETE FROM CambioEstatusPieza WHERE CAM_ID = " . $UltimoId['cam_id']);
@@ -44,57 +36,64 @@
                     $result = pg_query($TransAgregado[$i]);
                 }
                     
-                $query = "  SELECT  CAM.Documento,
-                                    to_char(CAM.Fec_Cre,'DD/MM/YYYY') Fecha,
-                                    BIE.nombre BIE_NOM,
-                                    USU.Nombre USU_NOM,
-                                    LOC.nombre LOC_NOM
-                            FROM CambiosEstatus CAM
-                                JOIN Bienes BIE ON BIE.BIE_ID = CAM.BIE_ID
-                                JOIN Usuarios USU ON USU.USU_ID = CAM.USU_CRE
-                                JOIN Localizaciones LOC ON LOC.LOC_ID = BIE.LOC_ID
-                            WHERE CAM.CAM_ID = " . $UltimoId['cam_id'];
+            }
 
-                if($result){
+            $query = "  SELECT  CAM.Documento,
+                                to_char(CAM.Fec_Cre,'DD/MM/YYYY') Fecha,
+                                BIE.nombre BIE_NOM,
+                                USU.Nombre USU_NOM,
+                                LOC.nombre LOC_NOM
+                        FROM CambiosEstatus CAM
+                            JOIN Bienes BIE ON BIE.BIE_ID = CAM.BIE_ID
+                            JOIN Usuarios USU ON USU.USU_ID = CAM.USU_CRE
+                            JOIN Localizaciones LOC ON LOC.LOC_ID = BIE.LOC_ID
+                        WHERE CAM.CAM_ID = " . $UltimoId['cam_id'];
+
+            $documento = "";
+
+            if($result){
+                $result = pg_query($query);
+
+                if($line = pg_fetch_array($result, null, PGSQL_ASSOC)){
+                    $documento = $line['documento'];
+                    $titulo = "Cambio de Estatus Solicitado " . $line['documento'];
+                    $descripcion = "El d&iacute;a " . $line['fecha'] . " el usuario " . $line['usu_nom'] . " solicit&oacute; el cambio de estatus "
+                            . $line['documento'] . " para el bien " . $line['bie_nom'] . " ubicado en " .  $line['loc_nom'] . "."; 
+
+                    $query = "INSERT INTO Alertas(Titulo, Menu, Tabla, TAB_ID,Usu_Cre,Descripcion)
+                        VALUES('" . $titulo . "','Patrimonio','CambiosEstatus',"
+                        . $UltimoId['cam_id'] . ","
+                        .$this->session->userdata("usu_id") . ",'"
+                        . $descripcion . "')";
+                        
                     $result = pg_query($query);
-
-                    if($line = pg_fetch_array($result, null, PGSQL_ASSOC)){
-                        $titulo = "Cambio de Estatus Solicitado " . $line['documento'];
-                        $descripcion = "El d&iacute;a " . $line['fecha'] . " el usuario " . $line['usu_nom'] . " solicit&oacute; el cambio de estatus "
-                                . $line['documento'] . " para el bien " . $line['bie_nom'] . " ubicado en " .  $line['loc_nom'] . "."; 
-
-                        $query = "INSERT INTO Alertas(Titulo, Menu, Tabla, TAB_ID,Usu_Cre,Descripcion)
-                            VALUES('" . $titulo . "','Patrimonio','CambiosEstatus',"
-                            . $UltimoId['cam_id'] . ","
-                            .$this->session->userdata("usu_id") . ",'"
-                            . $descripcion . "')";
-                            
-                        $result = pg_query($query);
-                    }else{
-                        $result = false;
-                    }
+                }else{
+                    $result = false;
                 }
+            }
 
-
-
-                if(!$result)
-                    pg_query("ROLLBACK") or die("Transaction rollback failed");
-                else
-                    pg_query("COMMIT") or die("Transaction commit failed");
+            if($result){
+                $data['Documento'] = $documento;
+                $data['idActual'] = $UltimoId['cam_id'];
+                $datos = array(
+                    'Opcion' => 'Insertar',
+                    'Tabla' => 'CambiosEstatus', 
+                    'Tab_id' => $UltimoId['cam_id'],
+                    'Datos' => json_encode($data)
+                );
                 
-                $Valido = $result;
+                $result = $this->auditorias_model->Insertar($datos);
+            }
+
+            if(!$result){
+                $error = pg_last_error();
+                pg_query("ROLLBACK") or die("Transaction rollback failed");
+                die($error);
             }else
-                $Valido = false;
-
-
-            //Liberar memoria
-            pg_free_result($result);
-
+                pg_query("COMMIT") or die("Transaction commit failed");
+    
             //liberar conexion
             $this->bd_model->CerrarConexion($conexion);
-
-            if(!$Valido)
-                die();
 
             return $UltimoId['cam_id'];
         }
@@ -104,7 +103,6 @@
             //Abrir conexion
             $conexion = $this->bd_model->ObtenerConexion();
 
-            
             //Abrir Transaccion
             pg_query("BEGIN") or die("Could not start transaction");
 
@@ -118,45 +116,44 @@
                 . ", Observaciones = "
                 . (($data['Observaciones'] == "") ? "null" : ("'" .str_replace("'", "''", $data['Observaciones']) . "'"))
                 . " WHERE CAM_ID = '" . str_replace("'", "''",$data['idActual']) . "';";
-
-
-            
+  
             //Ejecutar Query
             $result = pg_query($query);
 
-
             if ($result){
-                
                 $TransAgregado = $this->ObtenerTransCEP($data['PiezaCEs'],$data['idActual']);
 
                 for($i = 0; $result && $i < count($TransAgregado); $i++){
                     $result = pg_query($TransAgregado[$i]);
                 }
-                    
+            }
 
-                if(!$result)
-                    pg_query("ROLLBACK") or die("Transaction rollback failed");
-                else
-                    pg_query("COMMIT") or die("Transaction commit failed");
+            if($result){
+
+                $datos = array(
+                    'Opcion' => 'Actualizar',
+                    'Tabla' => 'CambiosEstatus', 
+                    'Tab_id' => $data['idActual'],
+                    'Datos' => json_encode($data)
+                );
                 
-                $retorno = $result;
+                $result = $this->auditorias_model->Insertar($datos);
+            }
+
+            if(!$result){
+                $error = pg_last_error();
+                pg_query("ROLLBACK") or die("Transaction rollback failed");
+                die($error);
             }else
-                $retorno = false;
-
-
-            //Liberar memoria
-            pg_free_result($result);
-
+                pg_query("COMMIT") or die("Transaction commit failed");
+    
             //liberar conexion
             $this->bd_model->CerrarConexion($conexion);
 
-            if(!$retorno)
-                die();
-
-            return $retorno;
+            return true;
         }
 
-        public function Obtener($id = ''){
+        public function Obtener($id = '',$array = false){
             
             //Abrir conexion
             $conexion = $this->bd_model->ObtenerConexion();
@@ -194,9 +191,14 @@
             $this->bd_model->CerrarConexion($conexion);
 
             if($retorno){
-                $retorno['PiezaCEs'] = $this->ObtenerCEP($retorno['cam_id']);
-            }
+                $piezas = $this->ObtenerCEP($retorno['cam_id']);
 
+                if($array){
+                    $retorno['PiezaCEs'] = $piezas['Array'];
+                }else{
+                    $retorno['PiezaCEs'] = $piezas['html'];
+                }
+            }
 
             return $retorno;
         }
@@ -366,6 +368,8 @@
 
         public function Eliminar($id){
       
+            $datosActual = $this->Obtener($id,true);
+
             //Abrir conexion
             $conexion = $this->bd_model->ObtenerConexion();
     
@@ -378,33 +382,34 @@
             //Ejecutar Query
             $result = pg_query($query);
 
-            
-            
-            //Si existe registro, se guarda. Sino se guarda false
             if ($result){
-                
                 $query = " DELETE FROM Alertas WHERE Tabla = 'CambiosEstatus' AND TAB_ID = " . $id;
                 $result = pg_query($query);
+            }
 
+            if($result){
+                $datos = array(
+                    'Opcion' => 'Eliminar',
+                    'Tabla' => 'CambiosEstatus', 
+                    'Tab_id' => $id,
+                    'Datos' => json_encode($datosActual)
+                );
+                
+                $result = $this->auditorias_model->Insertar($datos);
+            }
 
-                if(!$result){
-                    pg_query("ROLLBACK") or die("Transaction rollback failed");
-                    die();
-                }else{
-                    pg_query("COMMIT") or die("Transaction commit failed");
-                }
-
-                $retorno = true;
+            if(!$result){
+                $error = pg_last_error();
+                pg_query("ROLLBACK") or die("Transaction rollback failed");
+                die($error);
             }else
-                $retorno = false;
+                pg_query("COMMIT") or die("Transaction commit failed");
 
-            //Liberar memoria
-            pg_free_result($result);
 
             //liberar conexion
             $this->bd_model->CerrarConexion($conexion);
 
-            return $retorno;
+            return true;
 
         }
 
@@ -453,6 +458,8 @@
 
         public function AprobarCambioEstatus($id){
             
+            $datosActual = $this->Obtener($id,true);
+
             //Abrir conexion
             $conexion = $this->bd_model->ObtenerConexion();
     
@@ -488,20 +495,29 @@
                     $result = pg_query($TransAgregado[$i]);
                 }
                     
-
                 $query = " DELETE FROM Alertas WHERE Tabla = 'CambiosEstatus' AND TAB_ID = " . $id;
                 $result = pg_query($query);
                 
             }
 
+            if($result){
+                $datos = array(
+                    'Opcion' => 'Aprobar',
+                    'Tabla' => 'CambiosEstatus', 
+                    'Tab_id' => $id,
+                    'Datos' => json_encode($datosActual)
+                );
+                
+                $result = $this->auditorias_model->Insertar($datos);
+            }
 
             if(!$result){
+                $error = pg_last_error();
                 pg_query("ROLLBACK") or die("Transaction rollback failed");
-                die();
+                die($error);
             }else
                 pg_query("COMMIT") or die("Transaction commit failed");
-            //Liberar memoria
-            pg_free_result($result);
+
 
             //liberar conexion
             $this->bd_model->CerrarConexion($conexion);
@@ -643,8 +659,10 @@
             $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
 
             $html = "";
-            
+            $retorno = [];
+
             while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)){
+                array_push($retorno,$line);
                 $html = $html
                     . "<tr>"
                     . "    <td style=\"display:none;\">" . $line['cep_id'] . "</td>"
@@ -666,8 +684,7 @@
             //liberar conexion
             $this->bd_model->CerrarConexion($conexion);
 
-
-            return $html;
+            return array("Array"=> $retorno, "html" => $html);
         }
 
         private function ObtenerCepPDF($cambio){

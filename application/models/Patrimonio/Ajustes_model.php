@@ -403,7 +403,6 @@
             //Ejecutar Query
             $result = pg_query($query);
 
-            //Si existe registro, se guarda. Sino se guarda false
             if ($result){  
                 $query = " DELETE FROM Alertas WHERE Tabla = 'Ajustes' AND TAB_ID = " . $id;
                 $result = pg_query($query);

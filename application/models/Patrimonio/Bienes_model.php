@@ -1,8 +1,7 @@
 
 <?php
     class Bienes_model extends CI_Model{
-        
-    
+         
         public function Insertar($data){
 
             //Abrir conexion
