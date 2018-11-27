@@ -489,6 +489,17 @@ CREATE TABLE CambioEstatusPieza(
 	FOREIGN KEY (Usu_Mod) References Usuarios
 );
 
+CREATE TABLE Auditorias(
+	AUD_ID			SERIAL			PRIMARY KEY,
+	Opcion			VARCHAR(100)	NOT NULL,
+	Tabla			VARCHAR(50)		NOT NULL,
+	TAB_ID			INT 			NOT NULL,
+	Datos			TEXT			NOT NULL,
+	Usu_Cre			INT				NOT NULL, --Usuario Creador
+	Fec_Cre			TIMESTAMP		NOT NULL DEFAULT(NOW()), --fecha Creacion
+	FOREIGN KEY (Usu_Cre) References Usuarios
+);
+
 GRANT CONNECT ON DATABASE siamafacyt TO userapp;
 
 -- Grant usage the schema

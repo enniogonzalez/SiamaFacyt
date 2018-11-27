@@ -24,10 +24,8 @@
             . (($data['Observaciones'] == "") ? "null" : ("'" .str_replace("'", "''", $data['Observaciones']) . "'"))
             . ");";
 
-
             //Ejecutar Query
             $result = pg_query($query);
-
 
             if ($result){
 
@@ -60,11 +58,13 @@
                                 JOIN Localizaciones LOC ON LOC.LOC_ID = BIE.LOC_ID
                             WHERE AJU.AJU_ID = " . $UltimoId['aju_id'];
 
+                $documento = "";
                 if($result){
                     $result = pg_query($query);
 
                     if($line = pg_fetch_array($result, null, PGSQL_ASSOC)){
                         $titulo = "Ajuste Solicitado " . $line['documento'];
+                        $documento = $line['documento'];
                         $descripcion = "El d&iacute;a " . $line['fecha'] . " el usuario " . $line['usu_nom'] . " solicit&oacute; el ajuste "
                                 . $line['documento'] . " para el bien " . $line['bie_nom'] . " ubicado en " .  $line['loc_nom'] . "."; 
 
@@ -80,26 +80,31 @@
                     }
                 }
 
+                if($result){
+                    $data['Documento'] = $documento;
+                    $data['idActual'] = $UltimoId['aju_id'];
+                    $datos = array(
+                        'Opcion' => 'Insertar',
+                        'Tabla' => 'Ajustes', 
+                        'Tab_id' => $UltimoId['aju_id'],
+                        'Datos' => json_encode($data)
+                    );
+                    
+                    $result = $this->auditorias_model->Insertar($datos);
+                }
 
-
-                if(!$result)
-                    pg_query("ROLLBACK") or die("Transaction rollback failed");
-                else
-                    pg_query("COMMIT") or die("Transaction commit failed");
-                
-                $Valido = $result;
+            }
+            
+            if(!$result){
+                $error = pg_last_error();
+                pg_query("ROLLBACK") or die("Transaction rollback failed");
+                die($error);
             }else
-                $Valido = false;
+                pg_query("COMMIT") or die("Transaction commit failed");
 
-
-            //Liberar memoria
-            pg_free_result($result);
 
             //liberar conexion
             $this->bd_model->CerrarConexion($conexion);
-
-            if(!$Valido)
-                die();
 
             return $UltimoId['aju_id'];
         }
@@ -142,29 +147,35 @@
                     $result = pg_query($TransQuitado[$i]);
                 }
 
-                if(!$result)
-                    pg_query("ROLLBACK") or die("Transaction rollback failed");
-                else
-                    pg_query("COMMIT") or die("Transaction commit failed");
+            }
+
+
+            if($result){
+
+                $datos = array(
+                    'Opcion' => 'Actualizar',
+                    'Tabla' => 'Ajustes', 
+                    'Tab_id' => $data['idActual'],
+                    'Datos' => json_encode($data)
+                );
                 
-                $retorno = $result;
+                $result = $this->auditorias_model->Insertar($datos);
+            }
+
+            if(!$result){
+                $error = pg_last_error();
+                pg_query("ROLLBACK") or die("Transaction rollback failed");
+                die($error);
             }else
-                $retorno = false;
-
-
-            //Liberar memoria
-            pg_free_result($result);
+                pg_query("COMMIT") or die("Transaction commit failed");
 
             //liberar conexion
             $this->bd_model->CerrarConexion($conexion);
 
-            if(!$retorno)
-                die();
-
-            return $retorno;
+            return true;
         }
 
-        public function Obtener($id = ''){
+        public function Obtener($id = '',$array = false){
             
             //Abrir conexion
             $conexion = $this->bd_model->ObtenerConexion();
@@ -201,10 +212,17 @@
             $this->bd_model->CerrarConexion($conexion);
 
             if($retorno){
-                $retorno['Agregados'] = $this->ObtenerAgregados($retorno['aju_id']);
-                $retorno['Quitados'] = $this->ObtenerQuitados($retorno['aju_id']);
-            }
+                $agregados = $this->ObtenerAgregados($retorno['aju_id']);
+                $quitados = $this->ObtenerQuitados($retorno['aju_id']);
 
+                if($array){
+                    $retorno['Agregados'] = $agregados['Array'];
+                    $retorno['Quitados'] =  $quitados['Array'];
+                }else{
+                    $retorno['Agregados'] = $agregados['html'];
+                    $retorno['Quitados'] =  $quitados['html'];
+                }
+            }
 
             return $retorno;
         }
@@ -371,6 +389,8 @@
 
         public function Eliminar($id){
       
+            $datosActual = $this->Obtener($id,true);
+
             //Abrir conexion
             $conexion = $this->bd_model->ObtenerConexion();
     
@@ -383,33 +403,35 @@
             //Ejecutar Query
             $result = pg_query($query);
 
-            
-            
             //Si existe registro, se guarda. Sino se guarda false
-            if ($result){
-                
+            if ($result){  
                 $query = " DELETE FROM Alertas WHERE Tabla = 'Ajustes' AND TAB_ID = " . $id;
                 $result = pg_query($query);
+            }
 
+            if($result){
+                $datos = array(
+                    'Opcion' => 'Eliminar',
+                    'Tabla' => 'Ajustes', 
+                    'Tab_id' => $id,
+                    'Datos' => json_encode($datosActual)
+                );
+                
+                $result = $this->auditorias_model->Insertar($datos);
+            }
 
-                if(!$result){
-                    pg_query("ROLLBACK") or die("Transaction rollback failed");
-                    die();
-                }else{
-                    pg_query("COMMIT") or die("Transaction commit failed");
-                }
-
-                $retorno = true;
+            if(!$result){
+                $error = pg_last_error();
+                pg_query("ROLLBACK") or die("Transaction rollback failed");
+                die($error);
             }else
-                $retorno = false;
+                pg_query("COMMIT") or die("Transaction commit failed");
 
-            //Liberar memoria
-            pg_free_result($result);
 
             //liberar conexion
             $this->bd_model->CerrarConexion($conexion);
 
-            return $retorno;
+            return true;
 
         }
 
@@ -458,6 +480,8 @@
 
         public function AprobarAjuste($id){
             
+            $datosActual = $this->Obtener($id,true);
+
             //Abrir conexion
             $conexion = $this->bd_model->ObtenerConexion();
     
@@ -491,24 +515,29 @@
                 $query = " DELETE FROM Alertas WHERE Tabla = 'Ajustes' AND TAB_ID = " . $id;
                 $result = pg_query($query);
 
-                if(!$result)
-                    pg_query("ROLLBACK") or die("Transaction rollback failed");
-                else
-                    pg_query("COMMIT") or die("Transaction commit failed");
+            }
+
+            if($result){
+                $datos = array(
+                    'Opcion' => 'Aprobar',
+                    'Tabla' => 'Ajustes', 
+                    'Tab_id' => $id,
+                    'Datos' => json_encode($datosActual)
+                );
                 
-                $Valido = $result;
+                $result = $this->auditorias_model->Insertar($datos);
+            }
+
+            if(!$result){
+                $error = pg_last_error();
+                pg_query("ROLLBACK") or die("Transaction rollback failed");
+                die($error);
             }else
-                $Valido = false;
-
-
-            //Liberar memoria
-            pg_free_result($result);
+                pg_query("COMMIT") or die("Transaction commit failed");
+    
 
             //liberar conexion
             $this->bd_model->CerrarConexion($conexion);
-
-            if(!$Valido)
-                die();
 
             return true;
         }
@@ -648,8 +677,11 @@
             $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
 
             $html = "";
-            
+            $retorno = [];
+
             while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)){
+                
+                array_push($retorno,$line);
                 $html = $html
                     . "<tr>"
                     . "    <td style=\"display:none;\">" . $line['aac_id'] . "</td>"
@@ -671,7 +703,7 @@
             $this->bd_model->CerrarConexion($conexion);
 
 
-            return $html;
+            return array("Array"=> $retorno, "html" => $html);
         }
 
         private function ObtenerAgregadosPDF($ajuste){
@@ -795,8 +827,10 @@
             $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
 
             $html = "";
+            $retorno = [];
             //Si existe registro, se guarda. Sino se guarda false
             while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)){
+                array_push($retorno,$line);
                 $html = $html
                     . "<tr>"
                     . "    <td style=\"display:none;\">" . $line['aac_id'] . "</td>"
@@ -818,7 +852,7 @@
             $this->bd_model->CerrarConexion($conexion);
 
 
-            return $html;
+            return array("Array"=> $retorno, "html" => $html);
         }
 
         private function ObtenerQuitadosPDF($ajuste){

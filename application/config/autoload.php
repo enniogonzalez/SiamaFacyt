@@ -134,5 +134,6 @@ $autoload['language'] = array();
 */
 $autoload['model'] = array(
     'bd_model',
-    'alertas_model'
+    'alertas_model',
+    'auditorias_model'
 );
