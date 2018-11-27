@@ -89,6 +89,8 @@
                 . "', Ubicacion = '".str_replace("'", "''",$data['Ubicacion'])
                 . "', Tipo = '".str_replace("'", "''",$data['Tipo'])
                 . "', Cap_Amp = ".str_replace("'", "''",$data['Cap_Amp'])
+                . ", Usu_Mod = " . $this->session->userdata("usu_id") 
+                . ", Fec_Mod = NOW()" 
                 . ", Observaciones = " 
                 .(($data['Observaciones'] == "") ? "null" : ("'" .str_replace("'", "''", $data['Observaciones']) . "'"))
                 . " WHERE LOC_ID = '" . str_replace("'", "''",$data['idActual']) . "';";

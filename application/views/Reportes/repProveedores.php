@@ -103,6 +103,10 @@ $tbl = "
             <td style=\"width:35%;\">" . $datos['reg_nac_con'] . "</td>
         </tr>
         <tr>
+            <td style=\"width:15%;\"> <strong>Razón Social:</strong></td>
+            <td style=\"width:75%;\">" . $datos['raz_soc'] . "</td>
+        </tr>
+        <tr>
             <td style=\"width:15%;\"> <strong>Correo:</strong></td>
             <td style=\"width:35%;\">" . $datos['correo'] . "</td>
             <td style=\"width:15%;\"><strong>Teléfonos:</strong></td>
