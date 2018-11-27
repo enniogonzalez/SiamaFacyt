@@ -49,4 +49,4 @@ INSERT INTO "public"."piezas" VALUES ('7', '1', 'Motor de Aire Acondicionador ha
 INSERT INTO "public"."piezas" VALUES ('8', null, 'Condensador aire acondicionado', null, '2342342', 'KERIA3465432', '3', '4', '7', '2018-11-28', '2018-11-08', '2018-11-15', 'Donacion', 'Activo', '1', '2018-11-25 17:39:45.808732', '1', '2018-11-25 17:39:45.808732', null);
 
 
-SELECT setval('bienes_bie_id_seq', 8, true);
+SELECT setval('piezas_pie_id_seq', 8, true);

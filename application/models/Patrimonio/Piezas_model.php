@@ -7,7 +7,10 @@
             //Abrir conexion
             $conexion = $this->bd_model->ObtenerConexion();
 
-            //Insertar Bien
+            //Abrir Transaccion
+            pg_query("BEGIN") or die("Could not start transaction");
+
+            //Insertar Pieza
             $query = " INSERT INTO Piezas ( Nombre, Estatus, Modelo, 
                                             Pie_ser, PRO_ID, PAR_ID, MAR_ID, Fec_Fab, 
                                             Fec_adq, Fec_ins, Tip_Adq, Inv_UC,Usu_Cre,
@@ -29,31 +32,51 @@
             . $this->session->userdata("usu_id")    . ","
             . $this->session->userdata("usu_id")    . ","
             . (($data['Observaciones'] == "") ? "null" : ("'" .str_replace("'", "''", $data['Observaciones']) . "'"))
-            . ");";
+            . ")RETURNING pie_id;";
 
             //Ejecutar Query
-            $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
+            $result = pg_query($query);
             
-            //Liberar memoria
-            pg_free_result($result);
+
+            if($result){
+                $row = pg_fetch_row($result); 
+                $new_id = $row['0']; 
+            }
+
+            if($result){
+                $data['idActual'] = $new_id;
+                $datos = array(
+                    'Opcion' => 'Insertar',
+                    'Tabla' => 'Piezas', 
+                    'Tab_id' => $new_id,
+                    'Datos' => json_encode($data)
+                );
+                
+                $result = $this->auditorias_model->Insertar($datos);
+            }
+            
+            if(!$result){
+                $error = pg_last_error();
+                pg_query("ROLLBACK") or die("Transaction rollback failed");
+                die($error);
+            }else
+                pg_query("COMMIT") or die("Transaction commit failed");
+
 
             //liberar conexion
             $this->bd_model->CerrarConexion($conexion);
             
-            //Si existe registro, se guarda. Sino se guarda false
-            if ($result)
-                $retorno = true;
-            else
-                $retorno = false;
-
-
-            return $retorno;
+            return true;
         }
 
         public function Actualizar($data){
             
             //Abrir conexion
             $conexion = $this->bd_model->ObtenerConexion();
+
+            //Abrir Transaccion
+            pg_query("BEGIN") or die("Could not start transaction");
+
             $query = " UPDATE Piezas "
                 . " SET Nombre = '" . str_replace("'", "''",$data['Nombre']) 
                 . "', Estatus = '" . str_replace("'", "''",$data['Estatus']) 
@@ -76,22 +99,31 @@
 
 
             //Ejecutar Query
-            $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
+            $result = pg_query($query);
             
-            //Liberar memoria
-            pg_free_result($result);
+
+            if($result){
+                $datos = array(
+                    'Opcion' => 'Actualizar',
+                    'Tabla' => 'Piezas', 
+                    'Tab_id' => $data['idActual'],
+                    'Datos' => json_encode($data)
+                );
+                
+                $result = $this->auditorias_model->Insertar($datos);
+            }
+
+            if(!$result){
+                $error = pg_last_error();
+                pg_query("ROLLBACK") or die("Transaction rollback failed");
+                die($error);
+            }else
+                pg_query("COMMIT") or die("Transaction commit failed");
 
             //liberar conexion
             $this->bd_model->CerrarConexion($conexion);
 
-            //Si existe registro, se guarda. Sino se guarda false
-            if ($result)
-                $retorno = true;
-            else
-                $retorno = false;
-
-
-            return $retorno;
+            return true;
         }
 
         public function Obtener($id = ''){
@@ -365,29 +397,43 @@
         
         public function Eliminar($id){
       
+            $datosActual = $this->Obtener($id);
+
             //Abrir conexion
             $conexion = $this->bd_model->ObtenerConexion();
     
-            //Eliminar Bien
+            //Abrir Transaccion
+            pg_query("BEGIN") or die("Could not start transaction");
+
+            //Eliminar Pieza
             $query = " DELETE FROM Piezas "
                 . " WHERE Pie_Id = '" .str_replace("'", "''",$id) . "';";
                 
             //Ejecutar Query
-            $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
+            $result = pg_query($query);
             
-            //Si existe registro, se guarda. Sino se guarda false
-            if ($result) 
-                $retorno = true;
-            else
-                $retorno = false;
+            if($result){
+                $datos = array(
+                    'Opcion' => 'Eliminar',
+                    'Tabla' => 'Piezas', 
+                    'Tab_id' => $id,
+                    'Datos' => json_encode($datosActual)
+                );
+                
+                $result = $this->auditorias_model->Insertar($datos);
+            }
 
-            //Liberar memoria
-            pg_free_result($result);
+            if(!$result){
+                $error = pg_last_error();
+                pg_query("ROLLBACK") or die("Transaction rollback failed");
+                die($error);
+            }else
+                pg_query("COMMIT") or die("Transaction commit failed");
 
             //liberar conexion
             $this->bd_model->CerrarConexion($conexion);
 
-            return $retorno;
+            return true;
 
         }
 
