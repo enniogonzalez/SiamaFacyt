@@ -501,6 +501,7 @@
             }
 
             if($result){
+                $datosActual['doc_estatus'] = 'Aprobado';
                 $datos = array(
                     'Opcion' => 'Aprobar',
                     'Tabla' => 'CambiosEstatus', 

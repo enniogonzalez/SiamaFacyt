@@ -2,7 +2,6 @@
 <?php
     class Correctivo_model extends CI_Model{
         
-
         /************************************/
         /*          Mantenimiento           */
         /************************************/
@@ -26,12 +25,9 @@
             . (($data['Observaciones'] == "") ? "null" : ("'" .str_replace("'", "''", $data['Observaciones']) . "'"))
             . ");";
 
-
             //Ejecutar Query
             $result = pg_query($query);
 
-
-            //Si existe registro, se guarda. Sino se guarda false
             if ($result){
 
                 $UltimoId = $this->ObtenerUltimoIdInsertado();
@@ -49,49 +45,60 @@
                     $result = pg_query($TransReparacion[$i]);
                 }
 
-
-                $query = "  SELECT  MCO.Documento,
-                                    to_char(MCO.Fec_Cre,'DD/MM/YYYY') Fecha,
-                                    BIE.nombre BIE_NOM,
-                                    USU.Nombre USU_NOM,
-                                    LOC.nombre LOC_NOM
-                            FROM MantenimientoCorrectivo MCO
-                                JOIN Bienes BIE ON BIE.BIE_ID = MCO.BIE_ID
-                                JOIN Usuarios USU ON USU.USU_ID = MCO.USU_CRE
-                                JOIN Localizaciones LOC ON LOC.LOC_ID = BIE.LOC_ID
-                            WHERE MCO.mco_id = " . $UltimoId['mco_id'];
-
-                if($result){
-                    $result = pg_query($query);
-
-                    if($line = pg_fetch_array($result, null, PGSQL_ASSOC)){
-                        $titulo = "Mantenimiento Correctivo Solicitado " . $line['documento'];
-                        $descripcion = "El d&iacute;a " . $line['fecha'] . " el usuario " . $line['usu_nom'] . " solict&oacute; el mantenimiento correctivo "
-                                . $line['documento'] . " para el bien " . $line['bie_nom'] . " ubicado en " .  $line['loc_nom'] . "."; 
-
-                        $query = "INSERT INTO Alertas(Titulo, Menu, Tabla, TAB_ID,Usu_Cre,Descripcion)
-                            VALUES('" . $titulo . "','Mantenimiento','MantenimientoCorrectivo',"
-                            . $UltimoId['mco_id'] . ","
-                            .$this->session->userdata("usu_id") . ",'"
-                            . $descripcion . "')";
-                            
-                        $result = pg_query($query);
-                    }else{
-                        $result = false;
-                    }
-                }
-                
             }
 
+            $query = "  SELECT  MCO.Documento,
+                                to_char(MCO.Fec_Cre,'DD/MM/YYYY') Fecha,
+                                BIE.nombre BIE_NOM,
+                                USU.Nombre USU_NOM,
+                                LOC.nombre LOC_NOM
+                        FROM MantenimientoCorrectivo MCO
+                            JOIN Bienes BIE ON BIE.BIE_ID = MCO.BIE_ID
+                            JOIN Usuarios USU ON USU.USU_ID = MCO.USU_CRE
+                            JOIN Localizaciones LOC ON LOC.LOC_ID = BIE.LOC_ID
+                        WHERE MCO.mco_id = " . $UltimoId['mco_id'];
+
+            $documento = "";
+            if($result){
+                $result = pg_query($query);
+
+                if($line = pg_fetch_array($result, null, PGSQL_ASSOC)){
+                    $documento = $line['documento'];
+                    $titulo = "Mantenimiento Correctivo Solicitado " . $line['documento'];
+                    $descripcion = "El d&iacute;a " . $line['fecha'] . " el usuario " . $line['usu_nom'] . " solict&oacute; el mantenimiento correctivo "
+                            . $line['documento'] . " para el bien " . $line['bie_nom'] . " ubicado en " .  $line['loc_nom'] . "."; 
+
+                    $query = "INSERT INTO Alertas(Titulo, Menu, Tabla, TAB_ID,Usu_Cre,Descripcion)
+                        VALUES('" . $titulo . "','Mantenimiento','MantenimientoCorrectivo',"
+                        . $UltimoId['mco_id'] . ","
+                        .$this->session->userdata("usu_id") . ",'"
+                        . $descripcion . "')";
+                        
+                    $result = pg_query($query);
+                }else{
+                    $result = false;
+                }
+            }
+
+            if($result){
+                $data['Documento'] = $documento;
+                $data['idActual'] = $UltimoId['mco_id'];
+                $datos = array(
+                    'Opcion' => 'Insertar',
+                    'Tabla' => 'MantenimientoCorrectivo', 
+                    'Tab_id' => $UltimoId['mco_id'],
+                    'Datos' => json_encode($data)
+                );
+                
+                $result = $this->auditorias_model->Insertar($datos);
+            }
+            
             if(!$result){
+                $error = pg_last_error();
                 pg_query("ROLLBACK") or die("Transaction rollback failed");
-                die(pg_last_error());
+                die($error);
             }else
                 pg_query("COMMIT") or die("Transaction commit failed");
-                
-
-            //Liberar memoria
-            pg_free_result($result);
 
             //liberar conexion
             $this->bd_model->CerrarConexion($conexion);
@@ -104,7 +111,6 @@
             //Abrir conexion
             $conexion = $this->bd_model->ObtenerConexion();
 
-            
             //Abrir Transaccion
             pg_query("BEGIN") or die("Could not start transaction");
 
@@ -120,11 +126,8 @@
                 . (($data['Observaciones'] == "") ? "null" : ("'" .str_replace("'", "''", $data['Observaciones']) . "'"))
                 . " WHERE MCO_ID = '" . str_replace("'", "''",$data['idActual']) . "';";
 
-
-            
             //Ejecutar Query
             $result = pg_query($query);
-
 
             if ($result){
                 
@@ -139,26 +142,31 @@
                     $result = pg_query($TransReparacion[$i]);
                 }
 
-                if(!$result)
-                    pg_query("ROLLBACK") or die("Transaction rollback failed");
-                else
-                    pg_query("COMMIT") or die("Transaction commit failed");
+            }
+
+            if($result){
+
+                $datos = array(
+                    'Opcion' => 'Actualizar',
+                    'Tabla' => 'MantenimientoCorrectivo', 
+                    'Tab_id' => $data['idActual'],
+                    'Datos' => json_encode($data)
+                );
                 
-                $retorno = $result;
+                $result = $this->auditorias_model->Insertar($datos);
+            }
+
+            if(!$result){
+                $error = pg_last_error();
+                pg_query("ROLLBACK") or die("Transaction rollback failed");
+                die($error);
             }else
-                $retorno = false;
-
-
-            //Liberar memoria
-            pg_free_result($result);
+                pg_query("COMMIT") or die("Transaction commit failed");
 
             //liberar conexion
             $this->bd_model->CerrarConexion($conexion);
 
-            if(!$retorno)
-                die();
-
-            return $retorno;
+            return true;
         }
 
         public function RealizarOperaciones($data){
@@ -292,11 +300,46 @@
             //liberar conexion
             $this->bd_model->CerrarConexion($conexion);
 
+
+            
+            /************************************/
+            /*         Inicio Auditorias        */
+            /************************************/
+
+            $datosActual = $this->Obtener($data['idActual'],true);
+
+            //Abrir conexion
+            $conexion = $this->bd_model->ObtenerConexion();
+            
+            $datos = array(
+                'Opcion' => 'Realizar Operaciones',
+                'Tabla' => 'MantenimientoCorrectivo', 
+                'Tab_id' => $data['idActual'],
+                'Datos' => json_encode($datosActual)
+            );
+            
+            $result = $this->auditorias_model->Insertar($datos);
+            
+
+            if(!$result){
+                $error = pg_last_error();
+                pg_query("ROLLBACK") or die("Transaction rollback failed");
+                die($error);
+            }else
+                pg_query("COMMIT") or die("Transaction commit failed");
+
+            //liberar conexion
+            $this->bd_model->CerrarConexion($conexion);
+
+            /************************************/
+            /*         Fin Auditorias           */
+            /************************************/
+
             return true;
 
         }
 
-        public function Obtener($id = ''){
+        public function Obtener($id = '',$array = false){
             
             //Abrir conexion
             $conexion = $this->bd_model->ObtenerConexion();
@@ -335,8 +378,16 @@
             $this->bd_model->CerrarConexion($conexion);
 
             if($retorno){
-                $retorno['Cambios'] = $this->ObtenerCambiosHTML($retorno['mco_id']);
-                $retorno['Reparaciones'] = $this->ObtenerReparacionesHTML($retorno['mco_id']);
+                $cambios = $this->ObtenerCambiosHTML($retorno['mco_id']);
+                $reparaciones = $this->ObtenerReparacionesHTML($retorno['mco_id']);
+
+                if($array){
+                    $retorno['Cambios'] = $cambios['Array'];
+                    $retorno['Reparaciones'] = $reparaciones['Array'];
+                }else{
+                    $retorno['Cambios'] = $cambios['html'];
+                    $retorno['Reparaciones'] = $reparaciones['html'];
+                }
             }
 
 
@@ -510,6 +561,8 @@
 
         public function Eliminar($id){
       
+            $datosActual = $this->Obtener($id,true);
+
             //Abrir conexion
             $conexion = $this->bd_model->ObtenerConexion();
     
@@ -527,14 +580,23 @@
                 $result = pg_query($query);
             }
 
+            if($result){
+                $datos = array(
+                    'Opcion' => 'Eliminar',
+                    'Tabla' => 'MantenimientoCorrectivo', 
+                    'Tab_id' => $id,
+                    'Datos' => json_encode($datosActual)
+                );
+                
+                $result = $this->auditorias_model->Insertar($datos);
+            }
+
             if(!$result){
+                $error = pg_last_error();
                 pg_query("ROLLBACK") or die("Transaction rollback failed");
-                die(pg_last_error());
+                die($error);
             }else
                 pg_query("COMMIT") or die("Transaction commit failed");
-                
-            //Liberar memoria
-            pg_free_result($result);
 
             //liberar conexion
             $this->bd_model->CerrarConexion($conexion);
@@ -588,6 +650,8 @@
 
         public function AprobarMantenimiento($id){
             
+            $datosActual = $this->Obtener($id,true);
+
             //Abrir conexion
             $conexion = $this->bd_model->ObtenerConexion();
     
@@ -649,14 +713,24 @@
                 
             }
 
+            if($result){
+                $datosActual['estatus'] = 'Aprobado';
+                $datos = array(
+                    'Opcion' => 'Aprobar',
+                    'Tabla' => 'MantenimientoCorrectivo', 
+                    'Tab_id' => $id,
+                    'Datos' => json_encode($datosActual)
+                );
+                
+                $result = $this->auditorias_model->Insertar($datos);
+            }
+            
             if(!$result){
+                $error = pg_last_error();
                 pg_query("ROLLBACK") or die("Transaction rollback failed");
-                die(pg_last_error());
+                die($error);
             }else
                 pg_query("COMMIT") or die("Transaction commit failed");
-
-            //Liberar memoria
-            pg_free_result($result);
 
             //liberar conexion
             $this->bd_model->CerrarConexion($conexion);
@@ -666,6 +740,8 @@
 
         public function ReversarMantenimiento($id){
             
+            $datosActual = $this->Obtener($id,true);
+
             //Abrir conexion
             $conexion = $this->bd_model->ObtenerConexion();
     
@@ -684,7 +760,6 @@
             //Ejecutar Query
             $result = pg_query($query);
             
-            //Si existe registro, se guarda. Sino se guarda false
             if ($result){
                 $result = pg_query($this->ObtenerTransaccionesCambiosReversada($id));
 
@@ -729,15 +804,24 @@
                 }
             }
 
+            if($result){
+                $datosActual['estatus'] = 'Solicitado';
+                $datos = array(
+                    'Opcion' => 'Reversar',
+                    'Tabla' => 'MantenimientoCorrectivo', 
+                    'Tab_id' => $id,
+                    'Datos' => json_encode($datosActual)
+                );
+                
+                $result = $this->auditorias_model->Insertar($datos);
+            }
+
             if(!$result){
+                $error = pg_last_error();
                 pg_query("ROLLBACK") or die("Transaction rollback failed");
-                die(pg_last_error());
+                die($error);
             }else
                 pg_query("COMMIT") or die("Transaction commit failed");
-
-
-            //Liberar memoria
-            pg_free_result($result);
 
             //liberar conexion
             $this->bd_model->CerrarConexion($conexion);
@@ -974,8 +1058,10 @@
             $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
 
             $html = "";
-            //Si existe registro, se guarda. Sino se guarda false
+            $retorno = [];
+
             while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)){
+                array_push($retorno,$line);
                 $html = $html
                     . "<tr>"
                     . "    <td style=\"display:none;\">" . $line['cco_id'] . "</td>"
@@ -1026,7 +1112,7 @@
             $this->bd_model->CerrarConexion($conexion);
 
 
-            return $html;
+            return array("Array"=> $retorno, "html" => $html);
         }
         
         private function ObtenerCambioPDF($correctivo){
@@ -1070,7 +1156,6 @@
 
             return $retorno;
         }
-
 
         /************************************/
         /*          Reparaciones            */
@@ -1194,8 +1279,10 @@
             $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
 
             $html = "";
-            //Si existe registro, se guarda. Sino se guarda false
+            $retorno = [];
+
             while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)){
+                array_push($retorno,$line);
                 $html = $html
                     . "<tr>"
                     . "    <td style=\"display:none;\">" . $line['rco_id'] . "</td>"
@@ -1243,7 +1330,7 @@
             $this->bd_model->CerrarConexion($conexion);
 
 
-            return $html;
+            return array("Array"=> $retorno, "html" => $html);
         }
         
         private function ObtenerReparacionesPDF($correctivo){
