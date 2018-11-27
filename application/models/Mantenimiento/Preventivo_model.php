@@ -72,8 +72,9 @@
 
             if($result){
                 $result = pg_query($query);
-
+                $documento = "";
                 if($line = pg_fetch_array($result, null, PGSQL_ASSOC)){
+                    $documento = $line['documento'];
                     $titulo = "Mantenimiento Preventivo Solicitado " . $line['documento'];
                     $descripcion = "El d&iacute;a " . $line['fecha'] . " el usuario " . $line['usu_nom'] . " solicit&oacute; el mantenimiento preventivo "
                             . $line['documento'] . " para el bien " . $line['bie_nom'] . " ubicado en " .  $line['loc_nom'] . "."; 
@@ -171,7 +172,6 @@
                 die($error);
             }else
                 pg_query("COMMIT") or die("Transaction commit failed");
-
 
             //liberar conexion
             $this->bd_model->CerrarConexion($conexion);
@@ -521,6 +521,8 @@
         
         public function Eliminar($id){
       
+            $datosActual = $this->Obtener($id,true);
+
             //Abrir conexion
             $conexion = $this->bd_model->ObtenerConexion();
     
@@ -536,6 +538,17 @@
             if ($result){
                 $query = " DELETE FROM Alertas WHERE Tabla = 'Mantenimiento' AND TAB_ID = " . $id;
                 $result = pg_query($query);
+            }
+
+            if($result){
+                $datos = array(
+                    'Opcion' => 'Eliminar',
+                    'Tabla' => 'Mantenimiento', 
+                    'Tab_id' => $id,
+                    'Datos' => json_encode($datosActual)
+                );
+                
+                $result = $this->auditorias_model->Insertar($datos);
             }
 
             if(!$result){
@@ -632,6 +645,8 @@
 
         public function AprobarMantenimiento($id){
             
+            $datosActual = $this->Obtener($id,true);
+
             //Abrir conexion
             $conexion = $this->bd_model->ObtenerConexion();
     
@@ -718,6 +733,8 @@
 
         public function ReversarMantenimiento($id){
             
+            $datosActual = $this->Obtener($id,true);
+
             //Abrir conexion
             $conexion = $this->bd_model->ObtenerConexion();
     
@@ -1018,7 +1035,6 @@
             $html = "";
             $retorno = [];
 
-            //Si existe registro, se guarda. Sino se guarda false
             while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)){
                 array_push($retorno,$line);
                 $html = $html

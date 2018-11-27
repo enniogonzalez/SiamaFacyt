@@ -56,10 +56,12 @@
                                 JOIN Localizaciones LOC ON LOC.LOC_ID = BIE.LOC_ID
                             WHERE PLM.plm_id = " . $UltimoId['plm_id'];
 
+                $documento = "";
                 if($result){
                     $result = pg_query($query);
 
                     if($line = pg_fetch_array($result, null, PGSQL_ASSOC)){
+                        $documento = $line['documento'];
                         $titulo = "Plantilla de Mantenimiento Solicitada " . $line['documento'];
                         $descripcion = "El d&iacute;a " . $line['fecha'] . " el usuario " . $line['usu_nom'] . " solicit&oacute; la plantilla de mantenimiento "
                                 . $line['documento'] . " para el bien " . $line['bie_nom'] . " ubicado en " .  $line['loc_nom'] . "."; 
@@ -78,15 +80,25 @@
             }
 
 
+            if($result){
+                $data['Documento'] = $documento;
+                $data['idActual'] = $UltimoId['plm_id'];
+                $datos = array(
+                    'Opcion' => 'Insertar',
+                    'Tabla' => 'PlantillaMantenimiento', 
+                    'Tab_id' => $UltimoId['plm_id'],
+                    'Datos' => json_encode($data)
+                );
+                
+                $result = $this->auditorias_model->Insertar($datos);
+            }
+
             if(!$result){
+                $error = pg_last_error();
                 pg_query("ROLLBACK") or die("Transaction rollback failed");
-                die(pg_last_error());
+                die($error);
             }else
                 pg_query("COMMIT") or die("Transaction commit failed");
-                
-            //Liberar memoria
-            pg_free_result($result);
-
             //liberar conexion
             $this->bd_model->CerrarConexion($conexion);
 
@@ -129,94 +141,32 @@
                 }
             }
 
-            if(!$result){
-                pg_query("ROLLBACK") or die("Transaction rollback failed");
-                die(pg_last_error());
-            }else
-                pg_query("COMMIT") or die("Transaction commit failed");
+            if($result){
+
+                $datos = array(
+                    'Opcion' => 'Actualizar',
+                    'Tabla' => 'PlantillaMantenimiento', 
+                    'Tab_id' => $data['idActual'],
+                    'Datos' => json_encode($data)
+                );
                 
-            //Liberar memoria
-            pg_free_result($result);
-
-            //liberar conexion
-            $this->bd_model->CerrarConexion($conexion);
-
-            return true;
-        }
-
-        public function RealizarOperaciones($data){
-
-            //Abrir conexion
-            $conexion = $this->bd_model->ObtenerConexion();
-
-            //Abrir Transaccion
-            pg_query("BEGIN") or die("Could not start transaction");
-
-            $TransTarea = $this->ObtenerTransaccionesTareasRealizados($data['Tareas'],$data['idActual'],$data['Bie_Id']);
-            
-            $result = true;
-
-            for($i = 0; $result && $i < count($TransTarea); $i++){
-                $result = pg_query($TransTarea[$i]);
+                $result = $this->auditorias_model->Insertar($datos);
             }
 
-            $query = "  UPDATE PlantillaMantenimiento
-                        SET Estatus = 'Afectado'
-                        WHERE PLM_ID = " . $data['idActual'] . "
-                            AND EXISTS(
-                                SELECT 1 
-                                FROM PlantillaMantenimientoTarea 
-                                WHERE PLM_ID = " . $data['idActual'] . "
-                                    AND Estatus <> 'Realizado'
-                        
-                                UNION
-                        
-                                SELECT 1 
-                                FROM ReparacionCorrectiva 
-                                WHERE PLM_ID = " . $data['idActual'] . "
-                                    AND Estatus <> 'Realizado'
-                            );
-            ";
-
-            $result = pg_query($query);
-
-            $query = "  UPDATE PlantillaMantenimiento
-                        SET Estatus = 'Realizado'
-                        WHERE PLM_ID = " . $data['idActual'] . "
-                            AND NOT EXISTS(
-                                SELECT 1 
-                                FROM PlantillaMantenimientoTarea 
-                                WHERE PLM_ID = " . $data['idActual'] . "
-                                    AND Estatus <> 'Realizado'
-                        
-                                UNION
-                        
-                                SELECT 1 
-                                FROM ReparacionCorrectiva 
-                                WHERE PLM_ID = " . $data['idActual'] . "
-                                    AND Estatus <> 'Realizado'
-                            );
-            ";
-
-            $result = pg_query($query);
-
             if(!$result){
+                $error = pg_last_error();
                 pg_query("ROLLBACK") or die("Transaction rollback failed");
-                die(pg_last_error());
+                die($error);
             }else
                 pg_query("COMMIT") or die("Transaction commit failed");
-                
-            //Liberar memoria
-            pg_free_result($result);
+
             //liberar conexion
             $this->bd_model->CerrarConexion($conexion);
 
-
             return true;
-
         }
 
-        public function Obtener($id = ''){
+        public function Obtener($id = '',$array = false){
             
             //Abrir conexion
             $conexion = $this->bd_model->ObtenerConexion();
@@ -255,9 +205,14 @@
             $this->bd_model->CerrarConexion($conexion);
 
             if($retorno){
-                $retorno['Tareas'] = $this->ObtenerTareas($retorno['plm_id'],$retorno['estatus']);
-            }
+                $tareas = $this->ObtenerTareas($retorno['plm_id'],$retorno['estatus']);
 
+                if($array){
+                    $retorno['Tareas'] = $tareas['Array'];
+                }else{
+                    $retorno['Tareas'] = $tareas['html'];
+                }
+            }
 
             return $retorno;
         }
@@ -438,9 +393,10 @@
         
         public function Eliminar($id){
       
+            $datosActual = $this->Obtener($id,true);
+
             //Abrir conexion
             $conexion = $this->bd_model->ObtenerConexion();
-    
     
             //Abrir Transaccion
             pg_query("BEGIN") or die("Could not start transaction");
@@ -456,14 +412,23 @@
                 $result = pg_query($query);
             }
 
+            if($result){
+                $datos = array(
+                    'Opcion' => 'Eliminar',
+                    'Tabla' => 'PlantillaMantenimiento', 
+                    'Tab_id' => $id,
+                    'Datos' => json_encode($datosActual)
+                );
+                
+                $result = $this->auditorias_model->Insertar($datos);
+            }
+
             if(!$result){
+                $error = pg_last_error();
                 pg_query("ROLLBACK") or die("Transaction rollback failed");
-                die(pg_last_error());
+                die($error);
             }else
                 pg_query("COMMIT") or die("Transaction commit failed");
-                
-            //Liberar memoria
-            pg_free_result($result);
 
             //liberar conexion
             $this->bd_model->CerrarConexion($conexion);
@@ -552,6 +517,8 @@
 
         public function AprobarMantenimiento($id){
             
+            $datosActual = $this->Obtener($id,true);
+
             //Abrir conexion
             $conexion = $this->bd_model->ObtenerConexion();
     
@@ -571,19 +538,28 @@
             
             //Si existe registro, se guarda. Sino se guarda false
             if ($result){
-                
                 $query = " DELETE FROM Alertas WHERE Tabla = 'PlantillaMantenimiento' AND TAB_ID = " . $id;
                 $result = pg_query($query);
-
             }
+
+            if($result){
+                $datosActual['estatus'] = 'Aprobado';
+                $datos = array(
+                    'Opcion' => 'Aprobar',
+                    'Tabla' => 'PlantillaMantenimiento', 
+                    'Tab_id' => $id,
+                    'Datos' => json_encode($datosActual)
+                );
+                
+                $result = $this->auditorias_model->Insertar($datos);
+            }
+
             if(!$result){
+                $error = pg_last_error();
                 pg_query("ROLLBACK") or die("Transaction rollback failed");
-                die(pg_last_error());
+                die($error);
             }else
                 pg_query("COMMIT") or die("Transaction commit failed");
-                    
-            //Liberar memoria
-            pg_free_result($result);
 
             //liberar conexion
             $this->bd_model->CerrarConexion($conexion);
@@ -593,6 +569,8 @@
 
         public function ReversarMantenimiento($id){
             
+            $datosActual = $this->Obtener($id,true);
+
             //Abrir conexion
             $conexion = $this->bd_model->ObtenerConexion();
     
@@ -609,7 +587,7 @@
 
                 
             //Ejecutar Query
-            $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
+            $result = pg_query($query);
             
             //Si existe registro, se guarda. Sino se guarda false
             if ($result){
@@ -648,14 +626,24 @@
 
             }
 
+            if($result){
+                $datosActual['estatus'] = 'Solicitado';
+                $datos = array(
+                    'Opcion' => 'Reversar',
+                    'Tabla' => 'PlantillaMantenimiento', 
+                    'Tab_id' => $id,
+                    'Datos' => json_encode($datosActual)
+                );
+                
+                $result = $this->auditorias_model->Insertar($datos);
+            }
+
             if(!$result){
+                $error = pg_last_error();
                 pg_query("ROLLBACK") or die("Transaction rollback failed");
-                die(pg_last_error());
+                die($error);
             }else
                 pg_query("COMMIT") or die("Transaction commit failed");
-                    
-            //Liberar memoria
-            pg_free_result($result);
 
             //liberar conexion
             $this->bd_model->CerrarConexion($conexion);
@@ -813,8 +801,10 @@
             $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
 
             $html = "";
-            //Si existe registro, se guarda. Sino se guarda false
+            $retorno = [];
+
             while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)){
+                array_push($retorno,$line);
                 $html = $html
                     . "<tr>"
                     . "    <td style=\"display:none;\">" . $line['pmt_id'] . "</td>"
@@ -845,8 +835,7 @@
             //liberar conexion
             $this->bd_model->CerrarConexion($conexion);
 
-
-            return $html;
+            return array("Array"=> $retorno, "html" => $html);
         }
         
         private function ObtenerTareasPDF($plantilla){

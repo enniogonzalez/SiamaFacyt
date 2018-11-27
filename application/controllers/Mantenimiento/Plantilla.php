@@ -105,6 +105,8 @@
             echo json_encode(array("isValid"=>true,"Datos"=>$data,"Caso" =>  $this->input->post("Caso") ));
         }
 
+        //Funcion usada para obtener un mantenimiento preventivo 
+        //a partir de una plantilla de mantenimiento
         public function obtenerMantenimiento(){
 
             if(!$this->session->userdata("nombre") || $this->input->post("id") == ""){
@@ -138,7 +140,7 @@
                     if($this->plantilla_model->ExisteDocumento($parametros['Documento'])){
                         echo json_encode(array(
                             "isValid"=>false,
-                            "Mensaje"=>"Ya existe un Mantenimiento Correctivo registrado con el mismo codigo Documento.",
+                            "Mensaje"=>"Ya existe una Plantilla de Mantenimiento registrada con el mismo codigo Documento.",
                             "id"=>""));
                     }else{
                         $id = $this->plantilla_model->Insertar($parametros);
@@ -146,7 +148,7 @@
     
                         echo json_encode(array(
                             "isValid"=>true,
-                            "Mensaje"=>"Se ha guardado el Mantenimiento Correctivo exitosamente",
+                            "Mensaje"=>"Se ha guardado la Plantilla de Mantenimiento",
                             "id"=>$id,
                             "Datos"=>$Datos
                         ));
@@ -155,7 +157,7 @@
                     if($this->plantilla_model->ExisteDocumento($parametros['Documento'],$parametros['idActual'])){
                         echo json_encode(array(
                             "isValid"=>false,
-                            "Mensaje"=>"Ya existe un Mantenimiento Correctivo registrado con el mismo codigo Documento.",
+                            "Mensaje"=>"Ya existe una Plantilla de Mantenimiento registrada con el mismo codigo Documento.",
                             "id"=>$this->input->post("id")));
                     }else{
                         $respuesta = $this->plantilla_model->Actualizar($parametros);
@@ -163,22 +165,12 @@
     
                         echo json_encode(array(
                             "isValid"=>true,
-                            "Mensaje"=>"Se ha actualizado el Mantenimiento Correctivo exitosamente",
+                            "Mensaje"=>"Se ha actualizado la plantilla de mantenimiento exitosamente",
                             "id"=>$this->input->post("id"),
                             "Datos"=>$Datos
                         ));
                     }
                 }
-            }else{
-                $this->plantilla_model->RealizarOperaciones($parametros);
-                
-                $Datos = $this->plantilla_model->Obtener($this->input->post("id"));
-                echo json_encode(array(
-                    "isValid"=>true,
-                    "Mensaje"=>"Se ha actualizado el Mantenimiento Correctivo exitosamente",
-                    "id"=>$this->input->post("id"),
-                    "Datos"=>$Datos
-                ));
             }
             
 
