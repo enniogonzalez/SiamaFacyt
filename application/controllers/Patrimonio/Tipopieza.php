@@ -140,7 +140,7 @@
         public function imprimir($id){
             $data['datos'] = $this->FormatearImpresion($this->tipopieza_model->ObtenerInfoPDF($id));
             $this->load->library('tcpdf/Pdf');
-            $this->load->view('Reportes/repMarcas',$data);
+            $this->load->view('Reportes/repTipoPieza',$data);
         }
 
         private function FormatearImpresion($respuesta){

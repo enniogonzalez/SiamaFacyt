@@ -2,7 +2,10 @@
         <header>
             <nav class="navbar navbar-expand-md navbar-dark bg-dark header-siama" style="background-color:#2C3E50 !important;">
                 
-                <a class="navbar-brand" href="<?=site_url('home')?>"><h1>SiamaFACYT</h1></a>
+                <a class="navbar-brand" href="<?=site_url('home')?>" style="margin-left: 30px;">
+                    <img src="<?=base_url()?>assets/images/logoPagina.png" style="height: 50px;margin-top: -15px;">  
+                    <h1 style="display: inline-block;">SiAMa FACYT</h1>
+                </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
