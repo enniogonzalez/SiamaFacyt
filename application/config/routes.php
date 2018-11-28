@@ -114,6 +114,8 @@ $route['marcas/guardar'] = 'marcas/guardar';
 $route['marcas/imprimir/(:any)'] = 'marcas/imprimir/$1';
 $route['marcas'] = 'marcas/view';
 
+$route['reportes/marcas/listadomarcas'] = 'Reportes/marcasrep/listadomarcas';
+$route['reportes/marcas'] = 'Reportes/marcasrep/view';
 
 $route['reportes/localizaciones/listadolocalizaciones'] = 'Reportes/localizacionesrep/listadolocalizaciones';
 $route['reportes/localizaciones'] = 'Reportes/localizacionesrep/view';

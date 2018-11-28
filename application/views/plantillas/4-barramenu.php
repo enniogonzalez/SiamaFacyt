@@ -136,25 +136,31 @@
             if($this->session->userdata("Permisos")['Reportes']){
                 $posMenu++;
             ?>
-            <li class="oMenu">
-                <a>
-                    <span class="fa fa-file-text" style="width:20px;"></span> 
-                    <label>Reportes</label>
-                    <span style="float:right;" class="fa fa-caret-down"></span>
-                </a>
-            </li>
-            <li class="submenu submenu<?=$posMenu?>">
-                <a href='<?=base_url()?>reportes/localizaciones'>
-                    <span class="fa fa-map-marker" style="width:20px;" ></span>
-                    <label>Localizaci&oacute;n</label>
-                </a>
-            </li>
-            <li class="submenu submenu<?=$posMenu?>">
-                <a href='<?=base_url()?>reportes/mantenimiento'>
-                    <span class="fa fa-sliders" style="width:20px;" ></span>
-                    <label>Mantenimiento</label>
-                </a>
-            </li>
+                <li class="oMenu">
+                    <a>
+                        <span class="fa fa-file-text" style="width:20px;"></span> 
+                        <label>Reportes</label>
+                        <span style="float:right;" class="fa fa-caret-down"></span>
+                    </a>
+                </li>
+                <li class="submenu submenu<?=$posMenu?>">
+                    <a href='<?=base_url()?>reportes/localizaciones'>
+                        <span class="fa fa-map-marker" style="width:20px;" ></span>
+                        <label>Localizaci&oacute;n</label>
+                    </a>
+                </li>
+                <li class="submenu submenu<?=$posMenu?>">
+                    <a href='<?=base_url()?>reportes/mantenimiento'>
+                        <span class="fa fa-sliders" style="width:20px;" ></span>
+                        <label>Mantenimiento</label>
+                    </a>
+                </li>
+                <li class="submenu submenu<?=$posMenu?>">
+                    <a href='<?=base_url()?>reportes/marcas'>
+                        <span class="fa fa-meetup" style="width:20px;" ></span>
+                        <label>Marcas</label>
+                    </a>
+                </li>
             <?php
             }
 

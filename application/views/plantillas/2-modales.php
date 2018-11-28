@@ -50,6 +50,7 @@
                     <div style="margin:0;" id="alertaModal" class="alert alert-danger text-center">
                     </div>
                 </div>
+                
                 <div class="modal-body body-siama" >
                     <div class="form-group row">
                         <label class="col-md-2 col-form-label">Busqueda:</label>
