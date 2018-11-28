@@ -144,7 +144,7 @@
                 </a>
             </li>
             <li class="submenu submenu<?=$posMenu?>">
-                <a href='<?=base_url()?>localizaciones/reportes'>
+                <a href='<?=base_url()?>reportes/localizaciones'>
                     <span class="fa fa-map-marker" style="width:20px;" ></span>
                     <label>Localizaci&oacute;n</label>
                 </a>
