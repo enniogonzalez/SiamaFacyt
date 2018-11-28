@@ -72,6 +72,22 @@
                     $descripcion .= "<td><strong>Solicitante:</strong> </td><td>" . $line['usu_nom'] . "</td></tr>";
                     $descripcion .= "<td><strong>Fecha:</strong> </td><td>" . $line['fecha'] . "</td></tr></table>";
 
+                    $MensajeCorreo = "<strong>Documento:</strong> " . $line['documento'] . "<br/>";
+                    $MensajeCorreo .= "<strong>Bien:</strong> " . $line['bie_nom'] . "<br/>";
+                    $MensajeCorreo .= "<strong>Localizaci&oacute;n:</strong> " . $line['loc_nom'] . "<br/>";
+                    $MensajeCorreo .= "<strong>Solicitante:</strong> " . $line['usu_nom'] . "<br/>";
+                    $MensajeCorreo .= "<strong>Fecha:</strong> " . $line['fecha'];
+                    
+                    $correoMasivo = array(
+                        "id"        => $UltimoId['mco_id'],
+                        "Opcion"    => "Mantenimiento Correctivo",
+                        "Tabla"     => "MantenimientoCorrectivo",
+                        "Estatus"   => "Solicitado",
+                        "Titulo"    => $titulo,
+                        "Menu"      => "Mantenimiento", 
+                        "Cuerpo"    =>$MensajeCorreo
+                    );
+
                     $query = "INSERT INTO Alertas(Titulo, Menu, Tabla, TAB_ID,Usu_Cre,Descripcion)
                         VALUES('" . $titulo . "','Mantenimiento','MantenimientoCorrectivo',"
                         . $UltimoId['mco_id'] . ","
@@ -84,6 +100,9 @@
                 }
             }
 
+            /************************************/
+            /*         Inicio Auditorias        */
+            /************************************/
             if($result){
                 $data['Documento'] = $documento;
                 $data['idActual'] = $UltimoId['mco_id'];
@@ -97,6 +116,10 @@
                 $result = $this->auditorias_model->Insertar($datos);
             }
             
+            /************************************/
+            /*         Fin Auditorias           */
+            /************************************/
+
             if(!$result){
                 $error = pg_last_error();
                 pg_query("ROLLBACK") or die("Transaction rollback failed");
@@ -107,6 +130,8 @@
             //liberar conexion
             $this->bd_model->CerrarConexion($conexion);
 
+            $this->alertas_model->EnviarCorreo($correoMasivo);
+            
             return $UltimoId['mco_id'];
         }
 
@@ -148,6 +173,9 @@
 
             }
 
+            /************************************/
+            /*         Inicio Auditorias        */
+            /************************************/
             if($result){
 
                 $datos = array(
@@ -159,6 +187,10 @@
                 
                 $result = $this->auditorias_model->Insertar($datos);
             }
+
+            /************************************/
+            /*         Fin Auditorias           */
+            /************************************/
 
             if(!$result){
                 $error = pg_last_error();
@@ -274,9 +306,23 @@
                     $descripcion .= "<td><strong>Aprobador:</strong> </td><td>" . $line['apr_nom'] . "</td></tr>";
                     $descripcion .= "<td><strong>Fecha:</strong> </td><td>" . $line['fecha'] . "</td></tr></table>";
 
-                    // $descripcion = "El d&iacute;a " . $line['fecha'] . " el usuario " . $line['usu_nom'] . " solict&oacute; el mantenimiento correctivo "
-                    //         . $line['documento'] . " para el bien " . $line['bie_nom'] . " ubicado en " .  $line['loc_nom'] . ", el cual actualmente se encuentra afectado."; 
-    
+                    $MensajeCorreo = "<strong>Documento:</strong> " . $line['documento'] . "<br/>";
+                    $MensajeCorreo .= "<strong>Bien:</strong> " . $line['bie_nom'] . "<br/>";
+                    $MensajeCorreo .= "<strong>Localizaci&oacute;n:</strong> " . $line['loc_nom'] . "<br/>";
+                    $MensajeCorreo .= "<strong>Solicitante:</strong> " . $line['usu_nom'] . "<br/>";
+                    $MensajeCorreo .= "<strong>Aprobador:</strong> " . $line['apr_nom'] . "<br/>";
+                    $MensajeCorreo .= "<strong>Fecha:</strong> " . $line['fecha'];
+                    
+                    $correoMasivo = array(
+                        "id"        => $data['idActual'],
+                        "Opcion"    => "Mantenimiento Correctivo",
+                        "Tabla"     => "MantenimientoCorrectivo",
+                        "Estatus"   => "Afectado",
+                        "Titulo"    => $titulo,
+                        "Menu"      => "Mantenimiento", 
+                        "Cuerpo"    =>$MensajeCorreo
+                    );
+
                     $query = "INSERT INTO Alertas(Titulo, Menu, Tabla, TAB_ID,Usu_Cre,Descripcion)
                         VALUES('" . $titulo . "','Mantenimiento','MantenimientoCorrectivo',"
                         . $data['idActual'] . ","
@@ -315,6 +361,7 @@
             $this->bd_model->CerrarConexion($conexion);
 
 
+            $this->alertas_model->EnviarCorreo($correoMasivo);
             
             /************************************/
             /*         Inicio Auditorias        */
@@ -720,8 +767,22 @@
                         $descripcion .= "<td><strong>Aprobador:</strong> </td><td>" . $line['apr_nom'] . "</td></tr>";
                         $descripcion .= "<td><strong>Fecha:</strong> </td><td>" . $line['fecha'] . "</td></tr></table>";
 
-                        // $descripcion = "El d&iacute;a " . $line['fecha'] . " el usuario " . $line['usu_nom'] . " aprob&oacute; el mantenimiento correctivo "
-                        //         . $line['documento'] . " para el bien " . $line['bie_nom'] . " ubicado en " .  $line['loc_nom'] . "."; 
+                        $MensajeCorreo = "<strong>Documento:</strong> " . $line['documento'] . "<br/>";
+                        $MensajeCorreo .= "<strong>Bien:</strong> " . $line['bie_nom'] . "<br/>";
+                        $MensajeCorreo .= "<strong>Localizaci&oacute;n:</strong> " . $line['loc_nom'] . "<br/>";
+                        $MensajeCorreo .= "<strong>Solicitante:</strong> " . $line['usu_nom'] . "<br/>";
+                        $MensajeCorreo .= "<strong>Aprobador:</strong> " . $line['apr_nom'] . "<br/>";
+                        $MensajeCorreo .= "<strong>Fecha:</strong> " . $line['fecha'];
+                        
+                        $correoMasivo = array(
+                            "id"        => $id,
+                            "Opcion"    => "Mantenimiento Correctivo",
+                            "Tabla"     => "MantenimientoCorrectivo",
+                            "Estatus"   => "Aprobado",
+                            "Titulo"    => $titulo,
+                            "Menu"      => "Mantenimiento", 
+                            "Cuerpo"    =>$MensajeCorreo
+                        );
 
                         $query = "INSERT INTO Alertas(Titulo, Menu, Tabla, TAB_ID,Usu_Cre,Descripcion)
                             VALUES('" . $titulo . "','Mantenimiento','MantenimientoCorrectivo',"
@@ -737,6 +798,10 @@
                 
             }
 
+
+            /************************************/
+            /*         Inicio Auditorias        */
+            /************************************/
             if($result){
                 $datosActual['estatus'] = 'Aprobado';
                 $datos = array(
@@ -749,6 +814,9 @@
                 $result = $this->auditorias_model->Insertar($datos);
             }
             
+            /************************************/
+            /*         Fin Auditorias           */
+            /************************************/
             if(!$result){
                 $error = pg_last_error();
                 pg_query("ROLLBACK") or die("Transaction rollback failed");
@@ -758,6 +826,8 @@
 
             //liberar conexion
             $this->bd_model->CerrarConexion($conexion);
+
+            $this->alertas_model->EnviarCorreo($correoMasivo);
 
             return true;
         }
@@ -818,8 +888,22 @@
                         $descripcion .= "<td><strong>Solicitante:</strong> </td><td>" . $line['usu_nom'] . "</td></tr>";
                         $descripcion .= "<td><strong>Fecha:</strong> </td><td>" . $line['fecha'] . "</td></tr></table>";
 
-                        // $descripcion = "El d&iacute;a " . $line['fecha'] . " el usuario " . $line['usu_nom'] . " solict&oacute; el mantenimiento correctivo "
-                        //         . $line['documento'] . " para el bien " . $line['bie_nom'] . " ubicado en " .  $line['loc_nom'] . "."; 
+
+                        $MensajeCorreo = "<strong>Documento:</strong> " . $line['documento'] . "<br/>";
+                        $MensajeCorreo .= "<strong>Bien:</strong> " . $line['bie_nom'] . "<br/>";
+                        $MensajeCorreo .= "<strong>Localizaci&oacute;n:</strong> " . $line['loc_nom'] . "<br/>";
+                        $MensajeCorreo .= "<strong>Solicitante:</strong> " . $line['usu_nom'] . "<br/>";
+                        $MensajeCorreo .= "<strong>Fecha:</strong> " . $line['fecha'];
+                        
+                        $correoMasivo = array(
+                            "id"        => $id,
+                            "Opcion"    => "Mantenimiento Correctivo",
+                            "Tabla"     => "MantenimientoCorrectivo",
+                            "Estatus"   => "Solicitado",
+                            "Titulo"    => $titulo,
+                            "Menu"      => "Mantenimiento", 
+                            "Cuerpo"    =>$MensajeCorreo
+                        );
 
                         $query = "INSERT INTO Alertas(Titulo, Menu, Tabla, TAB_ID,Usu_Cre,Descripcion)
                             VALUES('" . $titulo . "','Mantenimiento','MantenimientoCorrectivo',"
@@ -834,6 +918,9 @@
                 }
             }
 
+            /************************************/
+            /*         Inicio Auditorias        */
+            /************************************/
             if($result){
                 $datosActual['estatus'] = 'Solicitado';
                 $datos = array(
@@ -853,8 +940,14 @@
             }else
                 pg_query("COMMIT") or die("Transaction commit failed");
 
+            /************************************/
+            /*         Fin Auditorias           */
+            /************************************/
+
             //liberar conexion
             $this->bd_model->CerrarConexion($conexion);
+
+            $this->alertas_model->EnviarCorreo($correoMasivo);
 
             return true;
         }
