@@ -163,6 +163,12 @@ $route['restablecer/reset'] = 'resetpassword/reset/';
 $route['restablecer/guardar'] = 'resetpassword/guardar/';
 $route['restablecer/(:any)'] = 'resetpassword/view/$1';
 
+$route['tipopieza/busqueda'] = 'Patrimonio/tipopieza/busqueda';
+$route['tipopieza/eliminar'] = 'Patrimonio/tipopieza/eliminar';
+$route['tipopieza/guardar'] = 'Patrimonio/tipopieza/guardar';
+$route['tipopieza/imprimir/(:any)'] = 'Patrimonio/tipopieza/imprimir/$1';
+$route['tipopieza'] = 'Patrimonio/tipopieza/view';
+
 $route['usuarios/busqueda'] = 'Sistema/usuarios/busqueda';
 $route['usuarios/eliminar'] = 'Sistema/usuarios/eliminar';
 $route['usuarios/guardar'] = 'Sistema/usuarios/guardar';

@@ -100,6 +100,12 @@ const thProveedores = `
     </tr>
 `;
 
+const thTipoPieza = `
+    <tr>
+        <th style="width:100%;">Nombre</th>
+    </tr>
+`;
+
 const thUsuarios = `
     <tr>
         <th style="width:30%;">Usuario</th>

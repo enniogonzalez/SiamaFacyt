@@ -275,6 +275,14 @@ Values(
     '[{"Valor":"Nombre","Opcion":"Nombre","Descripcion":""},{"Valor":"Tipo","Opcion":"Tipo","Descripcion":""},{"Valor":"Observacion","Opcion":"Observacion","Descripcion":""}]'
 );
 
+INSERT INTO Listas_Desplegables( Codigo,Nombre,Descripcion,Opciones) 
+Values(
+    'COB-TIPOPI',
+    'Campos para Ordenar Busqueda Tipo de Marca',
+    null,
+    '[{"Valor":"Nombre","Opcion":"Nombre","Descripcion":""}]'
+);
+
 /*
 INSERT INTO Listas_Desplegables( Codigo,Nombre,Descripcion,Opciones) 
 Values(

@@ -1,6 +1,6 @@
 
 <?php
-    class ListasDesplegables_model extends CI_Model{
+    class Listasdesplegables_model extends CI_Model{
         
         public function Insertar($data){
             

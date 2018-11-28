@@ -1,6 +1,6 @@
 
 <?php
-    class ResetPassword_model extends CI_Model{
+    class Resetpassword_model extends CI_Model{
         
         private $Permisos = array();
     

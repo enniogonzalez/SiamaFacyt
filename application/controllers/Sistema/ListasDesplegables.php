@@ -1,6 +1,6 @@
 <?php
 
-    class ListasDesplegables extends CI_Controller{
+    class Listasdesplegables extends CI_Controller{
 
         
         public function __construct(){

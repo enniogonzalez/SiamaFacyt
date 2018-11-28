@@ -45,6 +45,18 @@ CREATE TABLE Usuarios(
 	FOREIGN KEY (Usu_Mod) References Usuarios
 );
 
+CREATE TABLE TipoPieza(
+	TPI_ID			SERIAL			PRIMARY KEY,
+	Nombre			VARCHAR(255)	NOT NULL,
+	Usu_Cre			INT				NOT NULL,--Usuario Creador
+	Fec_Cre			TIMESTAMP		NOT NULL DEFAULT(NOW()), --fecha Creacion
+	Usu_Mod			INT				NULL,--Usuario Creador
+	Fec_Mod			TIMESTAMP		NOT NULL DEFAULT(NOW()),
+	Observaciones	TEXT			NULL,
+	FOREIGN KEY (Usu_Cre) References Usuarios,
+	FOREIGN KEY (Usu_Mod) References Usuarios
+);
+
 CREATE TABLE PermisosUsuarios(
 	USU_ID	INT				NOT NULL,
 	Menu	VARCHAR(100)	NOT NULL,

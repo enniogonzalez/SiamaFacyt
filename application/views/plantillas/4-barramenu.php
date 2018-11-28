@@ -86,6 +86,7 @@
             if($this->session->userdata("Permisos")['Patrimonio']){
                 $posMenu++;
             ?>
+            
             <li class="oMenu">
                 <a>
                     <span class="fa fa-product-hunt" style="width:20px;" ></span>
@@ -115,6 +116,12 @@
                 <a href='<?=base_url()?>piezas'>
                     <span class="fa fa-cubes " style="width:20px;" ></span>
                     <label>Piezas</label>
+                </a>
+            </li>
+            <li class="submenu submenu<?=$posMenu?>">
+                <a href='<?=base_url()?>tipopieza'>
+                    <span class="fa fa-bandcamp " style="width:20px;" ></span>
+                    <label>Tipo de Pieza</label>
                 </a>
             </li>
             <?php

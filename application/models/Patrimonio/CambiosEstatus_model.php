@@ -1,6 +1,6 @@
 
 <?php
-    class CambiosEstatus_model extends CI_Model{
+    class Cambiosestatus_model extends CI_Model{
         
         public function Insertar($data){
             //Abrir conexion

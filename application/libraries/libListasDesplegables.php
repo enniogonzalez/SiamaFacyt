@@ -1,6 +1,6 @@
 <?php
 
-class libListasDesplegables {
+class Liblistasdesplegables {
 
     public function FormatearListaDesplegable($datos,$PrimeroVacio = false,$seleccion = ''){
 

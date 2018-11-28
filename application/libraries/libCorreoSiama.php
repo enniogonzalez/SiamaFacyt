@@ -1,6 +1,6 @@
 <?php
 
-class libCorreoSiama {
+class Libcorreosiama {
 
     public function EnviarCorreo($data){
         
