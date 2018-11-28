@@ -161,6 +161,12 @@
                         <label>Marcas</label>
                     </a>
                 </li>
+                <li class="submenu submenu<?=$posMenu?>">
+                    <a href='<?=base_url()?>reportes/proveedores'>
+                        <span class="fa fa-user" style="width:20px;" ></span>
+                        <label>Proveedores</label>
+                    </a>
+                </li>
             <?php
             }
 
