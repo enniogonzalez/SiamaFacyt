@@ -64,11 +64,14 @@
 
             $query ="SELECT plm.plm_id,	
                             plm.documento, 
-                            plm.fec_ult,
+                            to_char(plm.fec_ult,'DD/MM/YYYY') fec_ult,
                             plm.frecuencia,
-                            B.nombre				
+                            B.nombre,
+                            LOC.nombre LOC_NOM
+
                     FROM plantillamantenimiento plm
                         JOIN bienes B ON B.bie_id = plm.bie_id
+                        JOIN Localizaciones LOC ON LOC.LOC_ID = B.LOC_ID
                     WHERE plm.estatus = 'Aprobado'
                         AND (plm.fec_ult + interval '1' MONTH * plm.frecuencia) <= now()
                         AND NOT EXISTS(
@@ -87,15 +90,22 @@
             while($result2 && $line = pg_fetch_array($result, null, PGSQL_ASSOC)){
 
                 $titulo = "Plantilla de Mantenimiento Vencida " . $line['documento'];
-                $descripcion = "Se debe realizar el mantenimiento preventivo especificado en la plantilla de mantenimiento "
-                            . "<strong>" . $line['documento'] . "</strong> al bien <strong>" . $line['nombre'] . "</strong>. "
-                            . "Dicho mantenimiento se debe realizar cada <strong>" . $line['frecuencia'] . " meses</strong> y "
-                            . "se realiz&oacute; por ultima vez el d&iacute;a <strong>" . $line['fec_ult'] . "</strong>.";
+                
+                $descripcion = "<table style=\"width:100%\"><tr><td style=\"width:30%\"><strong>Documento:</strong></td><td style=\"width:70%\">" . $line['documento'] . "</td></tr>";
+                $descripcion .= "<td><strong>Bien:</strong> </td><td>" . $line['nombre'] . "</td></tr>";
+                $descripcion .= "<td><strong>Localizaci&oacute;n:</strong> </td><td>" . $line['loc_nom'] . "</td></tr>";
+                $descripcion .= "<td><strong>Frecuencia Man.:</strong> </td><td>" . $line['frecuencia'] . " meses</td></tr>";
+                $descripcion .= "<td><strong>&Uacute;ltimo Man.:</strong> </td><td>" . $line['fec_ult'] . "</td></tr></table>";
+
+                // $descripcion = "Se debe realizar el mantenimiento preventivo especificado en la plantilla de mantenimiento "
+                //             . "<strong>" . $line['documento'] . "</strong> al bien <strong>" . $line['nombre'] . "</strong>. "
+                //             . "Dicho mantenimiento se debe realizar cada <strong>" . $line['frecuencia'] . " meses</strong> y "
+                //             . "se realiz&oacute; por ultima vez el d&iacute;a <strong>" . $line['fec_ult'] . "</strong>.";
 
                 $query = "INSERT INTO Alertas(Titulo, Menu, Tabla, TAB_ID,Usu_Cre,Descripcion)
                     VALUES('" . $titulo . "','Mantenimiento','PlantillaMantenimiento',"
                     . $line['plm_id'] . ",1,'"
-                    . $descripcion . "') ON CONFLICT DO NOTHING";
+                    . str_replace("'", "''",$descripcion) . "') ON CONFLICT DO NOTHING";
                     
                 $result2 = pg_query($query);
             }

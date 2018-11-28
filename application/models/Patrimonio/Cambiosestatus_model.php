@@ -57,14 +57,21 @@
                 if($line = pg_fetch_array($result, null, PGSQL_ASSOC)){
                     $documento = $line['documento'];
                     $titulo = "Cambio de Estatus Solicitado " . $line['documento'];
-                    $descripcion = "El d&iacute;a " . $line['fecha'] . " el usuario " . $line['usu_nom'] . " solicit&oacute; el cambio de estatus "
-                            . $line['documento'] . " para el bien " . $line['bie_nom'] . " ubicado en " .  $line['loc_nom'] . "."; 
+
+                    $descripcion = "<table style=\"width:100%\"><tr><td style=\"width:30%\"><strong>Documento:</strong></td><td style=\"width:70%\">" . $line['documento'] . "</td></tr>";
+                    $descripcion .= "<td><strong>Bien:</strong> </td><td>" . $line['bie_nom'] . "</td></tr>";
+                    $descripcion .= "<td><strong>Localizaci&oacute;n:</strong> </td><td>" . $line['loc_nom'] . "</td></tr>";
+                    $descripcion .= "<td><strong>Solicitante:</strong> </td><td>" . $line['usu_nom'] . "</td></tr>";
+                    $descripcion .= "<td><strong>Fecha:</strong> </td><td>" . $line['fecha'] . "</td></tr></table>";
+
+                    // $descripcion = "El d&iacute;a " . $line['fecha'] . " el usuario " . $line['usu_nom'] . " solicit&oacute; el cambio de estatus "
+                    //         . $line['documento'] . " para el bien " . $line['bie_nom'] . " ubicado en " .  $line['loc_nom'] . "."; 
 
                     $query = "INSERT INTO Alertas(Titulo, Menu, Tabla, TAB_ID,Usu_Cre,Descripcion)
                         VALUES('" . $titulo . "','Patrimonio','CambiosEstatus',"
                         . $UltimoId['cam_id'] . ","
                         .$this->session->userdata("usu_id") . ",'"
-                        . $descripcion . "')";
+                        . str_replace("'", "''",$descripcion)  . "')";
                         
                     $result = pg_query($query);
                 }else{

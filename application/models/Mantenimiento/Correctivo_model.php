@@ -65,14 +65,18 @@
                 if($line = pg_fetch_array($result, null, PGSQL_ASSOC)){
                     $documento = $line['documento'];
                     $titulo = "Mantenimiento Correctivo Solicitado " . $line['documento'];
-                    $descripcion = "El d&iacute;a " . $line['fecha'] . " el usuario " . $line['usu_nom'] . " solict&oacute; el mantenimiento correctivo "
-                            . $line['documento'] . " para el bien " . $line['bie_nom'] . " ubicado en " .  $line['loc_nom'] . "."; 
+
+                    $descripcion = "<table style=\"width:100%\"><tr><td style=\"width:30%\"><strong>Documento:</strong></td><td style=\"width:70%\">" . $line['documento'] . "</td></tr>";
+                    $descripcion .= "<td><strong>Bien:</strong> </td><td>" . $line['bie_nom'] . "</td></tr>";
+                    $descripcion .= "<td><strong>Localizaci&oacute;n:</strong> </td><td>" . $line['loc_nom'] . "</td></tr>";
+                    $descripcion .= "<td><strong>Solicitante:</strong> </td><td>" . $line['usu_nom'] . "</td></tr>";
+                    $descripcion .= "<td><strong>Fecha:</strong> </td><td>" . $line['fecha'] . "</td></tr></table>";
 
                     $query = "INSERT INTO Alertas(Titulo, Menu, Tabla, TAB_ID,Usu_Cre,Descripcion)
                         VALUES('" . $titulo . "','Mantenimiento','MantenimientoCorrectivo',"
                         . $UltimoId['mco_id'] . ","
                         .$this->session->userdata("usu_id") . ",'"
-                        . $descripcion . "')";
+                        . str_replace("'", "''",$descripcion) . "')";
                         
                     $result = pg_query($query);
                 }else{
@@ -248,10 +252,12 @@
                                 to_char(MCO.Fec_Cre,'DD/MM/YYYY') Fecha,
                                 BIE.nombre BIE_NOM,
                                 USU.Nombre USU_NOM,
+                                COALESCE(APR.Nombre) apr_nom,
                                 LOC.nombre LOC_NOM
                         FROM MantenimientoCorrectivo MCO
                             JOIN Bienes BIE ON BIE.BIE_ID = MCO.BIE_ID
                             JOIN Usuarios USU ON USU.USU_ID = MCO.USU_CRE
+                            LEFT JOIN Usuarios APR ON APR.usu_id = MCO.USU_apr
                             JOIN Localizaciones LOC ON LOC.LOC_ID = BIE.LOC_ID
                         WHERE MCO.mco_id = " . $data['idActual'];
 
@@ -260,14 +266,22 @@
                 
                 if($line = pg_fetch_array($result, null, PGSQL_ASSOC)){
                     $titulo = "Mantenimiento Correctivo Afectado " . $line['documento'];
-                    $descripcion = "El d&iacute;a " . $line['fecha'] . " el usuario " . $line['usu_nom'] . " solict&oacute; el mantenimiento correctivo "
-                            . $line['documento'] . " para el bien " . $line['bie_nom'] . " ubicado en " .  $line['loc_nom'] . ", el cual actualmente se encuentra afectado."; 
+              
+                    $descripcion = "<table style=\"width:100%\"><tr><td style=\"width:30%\"><strong>Documento:</strong></td><td style=\"width:70%\">" . $line['documento'] . "</td></tr>";
+                    $descripcion .= "<td><strong>Bien:</strong> </td><td>" . $line['bie_nom'] . "</td></tr>";
+                    $descripcion .= "<td><strong>Localizaci&oacute;n:</strong> </td><td>" . $line['loc_nom'] . "</td></tr>";
+                    $descripcion .= "<td><strong>Solicitante:</strong> </td><td>" . $line['usu_nom'] . "</td></tr>";
+                    $descripcion .= "<td><strong>Aprobador:</strong> </td><td>" . $line['apr_nom'] . "</td></tr>";
+                    $descripcion .= "<td><strong>Fecha:</strong> </td><td>" . $line['fecha'] . "</td></tr></table>";
+
+                    // $descripcion = "El d&iacute;a " . $line['fecha'] . " el usuario " . $line['usu_nom'] . " solict&oacute; el mantenimiento correctivo "
+                    //         . $line['documento'] . " para el bien " . $line['bie_nom'] . " ubicado en " .  $line['loc_nom'] . ", el cual actualmente se encuentra afectado."; 
     
                     $query = "INSERT INTO Alertas(Titulo, Menu, Tabla, TAB_ID,Usu_Cre,Descripcion)
                         VALUES('" . $titulo . "','Mantenimiento','MantenimientoCorrectivo',"
                         . $data['idActual'] . ","
                         .$this->session->userdata("usu_id") . ",'"
-                        . $descripcion . "')";
+                        . str_replace("'", "''",$descripcion) . "')";
                         
                     $result = pg_query($query);
                 }else{
@@ -680,15 +694,17 @@
                 if($result)
                     $result = pg_query($query);
 
-                $query = "  SELECT  MCO.Documento,
-                                    to_char(MCO.Fec_Cre,'DD/MM/YYYY') Fecha,
-                                    BIE.nombre BIE_NOM,
-                                    USU.Nombre USU_NOM,
-                                    LOC.nombre LOC_NOM
-                            FROM MantenimientoCorrectivo MCO
-                                JOIN Bienes BIE ON BIE.BIE_ID = MCO.BIE_ID
-                                JOIN Usuarios USU ON USU.USU_ID = MCO.USU_Apr
-                                JOIN Localizaciones LOC ON LOC.LOC_ID = BIE.LOC_ID
+                    $query = "  SELECT  MCO.Documento,
+                                        to_char(MCO.Fec_Cre,'DD/MM/YYYY') Fecha,
+                                        BIE.nombre BIE_NOM,
+                                        USU.Nombre USU_NOM,
+                                        COALESCE(APR.Nombre) apr_nom,
+                                        LOC.nombre LOC_NOM
+                                FROM MantenimientoCorrectivo MCO
+                                    JOIN Bienes BIE ON BIE.BIE_ID = MCO.BIE_ID
+                                    JOIN Usuarios USU ON USU.USU_ID = MCO.USU_CRE
+                                    LEFT JOIN Usuarios APR ON APR.usu_id = MCO.USU_apr
+                                    JOIN Localizaciones LOC ON LOC.LOC_ID = BIE.LOC_ID
                             WHERE MCO.mco_id = " . $id;
 
                 if($result){
@@ -696,14 +712,22 @@
 
                     if($line = pg_fetch_array($result, null, PGSQL_ASSOC)){
                         $titulo = "Mantenimiento Correctivo Aprobado " . $line['documento'];
-                        $descripcion = "El d&iacute;a " . $line['fecha'] . " el usuario " . $line['usu_nom'] . " aprob&oacute; el mantenimiento correctivo "
-                                . $line['documento'] . " para el bien " . $line['bie_nom'] . " ubicado en " .  $line['loc_nom'] . "."; 
+                        
+                        $descripcion = "<table style=\"width:100%\"><tr><td style=\"width:30%\"><strong>Documento:</strong></td><td style=\"width:70%\">" . $line['documento'] . "</td></tr>";
+                        $descripcion .= "<td><strong>Bien:</strong> </td><td>" . $line['bie_nom'] . "</td></tr>";
+                        $descripcion .= "<td><strong>Localizaci&oacute;n:</strong> </td><td>" . $line['loc_nom'] . "</td></tr>";
+                        $descripcion .= "<td><strong>Solicitante:</strong> </td><td>" . $line['usu_nom'] . "</td></tr>";
+                        $descripcion .= "<td><strong>Aprobador:</strong> </td><td>" . $line['apr_nom'] . "</td></tr>";
+                        $descripcion .= "<td><strong>Fecha:</strong> </td><td>" . $line['fecha'] . "</td></tr></table>";
+
+                        // $descripcion = "El d&iacute;a " . $line['fecha'] . " el usuario " . $line['usu_nom'] . " aprob&oacute; el mantenimiento correctivo "
+                        //         . $line['documento'] . " para el bien " . $line['bie_nom'] . " ubicado en " .  $line['loc_nom'] . "."; 
 
                         $query = "INSERT INTO Alertas(Titulo, Menu, Tabla, TAB_ID,Usu_Cre,Descripcion)
                             VALUES('" . $titulo . "','Mantenimiento','MantenimientoCorrectivo',"
                             . $id . ","
                             .$this->session->userdata("usu_id") . ",'"
-                            . $descripcion . "')";
+                            . str_replace("'", "''",$descripcion)  . "')";
                             
                         $result = pg_query($query);
                     }else{
@@ -788,14 +812,20 @@
 
                     if($line = pg_fetch_array($result, null, PGSQL_ASSOC)){
                         $titulo = "Mantenimiento Correctivo Solicitado " . $line['documento'];
-                        $descripcion = "El d&iacute;a " . $line['fecha'] . " el usuario " . $line['usu_nom'] . " solict&oacute; el mantenimiento correctivo "
-                                . $line['documento'] . " para el bien " . $line['bie_nom'] . " ubicado en " .  $line['loc_nom'] . "."; 
+                        $descripcion = "<table style=\"width:100%\"><tr><td style=\"width:30%\"><strong>Documento:</strong></td><td style=\"width:70%\">" . $line['documento'] . "</td></tr>";
+                        $descripcion .= "<td><strong>Bien:</strong> </td><td>" . $line['bie_nom'] . "</td></tr>";
+                        $descripcion .= "<td><strong>Localizaci&oacute;n:</strong> </td><td>" . $line['loc_nom'] . "</td></tr>";
+                        $descripcion .= "<td><strong>Solicitante:</strong> </td><td>" . $line['usu_nom'] . "</td></tr>";
+                        $descripcion .= "<td><strong>Fecha:</strong> </td><td>" . $line['fecha'] . "</td></tr></table>";
+
+                        // $descripcion = "El d&iacute;a " . $line['fecha'] . " el usuario " . $line['usu_nom'] . " solict&oacute; el mantenimiento correctivo "
+                        //         . $line['documento'] . " para el bien " . $line['bie_nom'] . " ubicado en " .  $line['loc_nom'] . "."; 
 
                         $query = "INSERT INTO Alertas(Titulo, Menu, Tabla, TAB_ID,Usu_Cre,Descripcion)
                             VALUES('" . $titulo . "','Mantenimiento','MantenimientoCorrectivo',"
                             . $id . ","
                             .$this->session->userdata("usu_id") . ",'"
-                            . $descripcion . "')";
+                            . str_replace("'", "''",$descripcion)  . "')";
                             
                         $result = pg_query($query);
                     }else{

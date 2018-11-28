@@ -16,7 +16,7 @@ class MYPDF extends TCPDF {
         
         $this->SetFont('helvetica', 'B', 15);
 		$this->SetY(23);
-        $this->Cell(200, 10, "Arblos de Localizaciones", 0, false, 'C', 0, '', 0, false, 'M', 'M');
+        $this->Cell(200, 10, "Arbol de Localizaciones", 0, false, 'C', 0, '', 0, false, 'M', 'M');
 		$this->SetY(28);
         $this->SetFont('helvetica', 'B', 8);
         $this->Cell(320, 10, "Fecha Impresión: " . date("d/m/Y"), 0, false, 'C', 0, '', 0, false, 'M', 'M');
@@ -41,8 +41,8 @@ $pdf = new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8',
 // set document information
 $pdf->SetCreator(PDF_CREATOR);
 $pdf->SetAuthor('Ennio Gonzalez');
-$pdf->SetTitle('Arblos de Localizaciones');
-$pdf->SetSubject('Arblos de Localizaciones');
+$pdf->SetTitle('Arbol de Localizaciones');
+$pdf->SetSubject('Arbol de Localizaciones');
 $pdf->SetKeywords('TCPDF, PDF, example, test, guide');
 
 // set default header data
@@ -108,4 +108,4 @@ foreach($datos as $dato){
 // -----------------------------------------------------------------------------
 
 //Close and output PDF document
-$pdf->Output('ArblosLocalizaciones.pdf', 'I');
+$pdf->Output('ArbolLocalizaciones.pdf', 'I');
