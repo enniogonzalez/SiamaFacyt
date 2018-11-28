@@ -121,6 +121,7 @@ $route['reportes/proveedores/listadoproveedores'] = 'Reportes/proveedoresrep/lis
 $route['reportes/proveedores'] = 'Reportes/proveedoresrep/view';
 
 $route['reportes/localizaciones/listadolocalizaciones'] = 'Reportes/localizacionesrep/listadolocalizaciones';
+$route['reportes/localizaciones/arbollocalizaciones'] = 'Reportes/localizacionesrep/arbollocalizaciones';
 $route['reportes/localizaciones'] = 'Reportes/localizacionesrep/view';
 
 $route['reportes/mantenimiento/RepManLoc'] = 'Reportes/mantenimientorep/RepManLoc';

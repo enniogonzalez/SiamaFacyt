@@ -3,7 +3,7 @@
 
     class Localizacionesrep_model extends CI_Model{
         
-        public function listadolocalizaciones($data){
+        public function ObtenerLocalizaciones($data){
             
             //Abrir conexion
             $conexion = $this->bd_model->ObtenerConexion();
@@ -22,7 +22,7 @@
             }
 
             $query ="
-            SELECT 	nombre,ubicacion,tipo
+            SELECT 	nombre,ubicacion,tipo,secuencia
             FROM Localizaciones 
             " . $filtros . "
             ORDER BY Secuencia ASC";

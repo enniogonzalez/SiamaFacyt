@@ -54,9 +54,25 @@
                 "Localizacion"  => $this->input->post("Localizacion"),
             );
 
-            $data['datos'] = $this->localizacionesrep_model->listadolocalizaciones($parametros);
+            $data['datos'] = $this->localizacionesrep_model->ObtenerLocalizaciones($parametros);
             $this->load->library('tcpdf/Pdf');
             $this->load->view('Reportes/Listadolocalizaciones',$data);
+        }
+        
+
+        public function arbollocalizaciones(){
+
+            $this->ValidarPermiso();
+
+            $parametros = array(
+                "Localizacion"  => $this->input->post("Localizacion"),
+            );
+
+            $data['datos'] = $this->localizacionesrep_model->ObtenerLocalizaciones($parametros);
+
+
+            $this->load->library('tcpdf/Pdf');
+            $this->load->view('Reportes/Arbollocalizaciones',$data);
         }
 
     }

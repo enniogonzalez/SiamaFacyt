@@ -21,6 +21,7 @@
                 <div class="col-lg-10">
                     <select class="form-control obligatorio lista" id="reporte">
                         <option value="listadolocalizaciones">Listado de Localizaciones</option>
+                        <option value="arbollocalizaciones">Arbol de Localizaciones</option>
                     </select>
                 </div>
             </div>
