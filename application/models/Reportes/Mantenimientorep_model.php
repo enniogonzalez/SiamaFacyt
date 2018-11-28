@@ -1,7 +1,7 @@
 
 <?php
 
-    class Reportes_model extends CI_Model{
+    class Mantenimientorep_model extends CI_Model{
         
         public function RepManPro($data){
             

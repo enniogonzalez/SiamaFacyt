@@ -7,7 +7,7 @@
         <meta name="description" content="Sistema automatizado de mantenimiento">
         
 		<link rel="icon" type="image/x-icon" href="<?=base_url()?>assets/images/logoPagina.png" />
-        <title>SiamaFACYT</title>
+        <title>SiAMa FACYT</title>
         
         <link rel="stylesheet" type="text/css" href="<?=base_url()?>assets/css/bootstrap.css">
         <link rel="stylesheet" type="text/css" href="<?=base_url()?>assets/css/menu.css">

@@ -1,11 +1,11 @@
 <?php
 
-    class Reportes extends CI_Controller{
+    class Mantenimientorep extends CI_Controller{
 
         public function __construct(){
             parent::__construct();
             $this->load->library('liblistasdesplegables','liblistasdesplegables');
-            $this->load->model('Mantenimiento/Reportes_model' , 'Reportes_model');
+            $this->load->model('Reportes/mantenimientorep_model' , 'mantenimientorep_model');
         }
 
         private function ValidarPermiso(){
@@ -17,7 +17,7 @@
         public function view(){
             $this->ValidarPermiso();
             
-            $JsFile = "<script src=\"". base_url() . "assets/js/Mantenimiento/Reportes.js\"></script>";
+            $JsFile = "<script src=\"". base_url() . "assets/js/Reportes/Mantenimientorep.js\"></script>";
             
             $datafile['JsFile'] = $JsFile ;
 
@@ -46,7 +46,7 @@
             $this->load->view('plantillas/3-iniciomain');
             $this->load->view('plantillas/4-barramenu');
             $this->load->view('plantillas/5-iniciopagina');
-            $this->load->view('paginas/Mantenimiento/reportes',$data);
+            $this->load->view('paginas/Reportes/mantenimientorep',$data);
             $this->load->view('plantillas/7-footer');
         }
 
@@ -62,7 +62,7 @@
                 "Localizacion"  => $this->input->post("Localizacion"),
             );
 
-            $data['datos'] = $this->Reportes_model->RepManUsu($parametros);
+            $data['datos'] = $this->mantenimientorep_model->RepManUsu($parametros);
             $this->load->library('tcpdf/Pdf');
             $this->load->view('Reportes/repManUsu',$data);
         }
@@ -79,7 +79,7 @@
                 "Localizacion"  => $this->input->post("Localizacion"),
             );
 
-            $data['datos'] = $this->Reportes_model->RepManPro($parametros);
+            $data['datos'] = $this->mantenimientorep_model->RepManPro($parametros);
             $this->load->library('tcpdf/Pdf');
             $this->load->view('Reportes/repManPro',$data);
 
@@ -98,7 +98,7 @@
                 "Localizacion"  => $this->input->post("Localizacion"),
             );
 
-            $data['datos'] = $this->Reportes_model->RepManBie($parametros);
+            $data['datos'] = $this->mantenimientorep_model->RepManBie($parametros);
             $this->load->library('tcpdf/Pdf');
             $this->load->view('Reportes/repManBie',$data);
 
@@ -117,7 +117,7 @@
                 "Localizacion"  => $this->input->post("Localizacion"),
             );
 
-            $data['datos'] = $this->Reportes_model->RepManLoc($parametros);
+            $data['datos'] = $this->mantenimientorep_model->RepManLoc($parametros);
             $this->load->library('tcpdf/Pdf');
             $this->load->view('Reportes/repManLoc',$data);
 

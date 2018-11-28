@@ -114,11 +114,11 @@ $route['marcas/guardar'] = 'marcas/guardar';
 $route['marcas/imprimir/(:any)'] = 'marcas/imprimir/$1';
 $route['marcas'] = 'marcas/view';
 
-$route['mantenimiento/reportes/RepManLoc'] = 'Mantenimiento/reportes/RepManLoc';
-$route['mantenimiento/reportes/RepManPro'] = 'Mantenimiento/reportes/RepManPro';
-$route['mantenimiento/reportes/RepManBie'] = 'Mantenimiento/reportes/RepManBie';
-$route['mantenimiento/reportes/RepManUsu'] = 'Mantenimiento/reportes/RepManUsu';
-$route['mantenimiento/reportes'] = 'Mantenimiento/reportes/view';
+$route['reportes/mantenimiento/RepManLoc'] = 'Reportes/mantenimientorep/RepManLoc';
+$route['reportes/mantenimiento/RepManPro'] = 'Reportes/mantenimientorep/RepManPro';
+$route['reportes/mantenimiento/RepManBie'] = 'Reportes/mantenimientorep/RepManBie';
+$route['reportes/mantenimiento/RepManUsu'] = 'Reportes/mantenimientorep/RepManUsu';
+$route['reportes/mantenimiento'] = 'Reportes/mantenimientorep/view';
 
 $route['partidas/busqueda'] = 'partidas/busqueda';
 $route['partidas/eliminar'] = 'partidas/eliminar';

@@ -6,7 +6,7 @@
     
         function __construct(){
             parent::__construct();
-            $this->Permisos = array("Localizacion","Mantenimiento","Marcas","Partidas","Patrimonio","Proveedores","Sistema");
+            $this->Permisos = array("Localizacion","Mantenimiento","Marcas","Partidas","Patrimonio","Proveedores","Sistema","Reportes");
         }
 
         public function Insertar($data){

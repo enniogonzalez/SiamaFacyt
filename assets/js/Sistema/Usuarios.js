@@ -118,6 +118,7 @@ $(function(){
                 "Partidas"          : per[3],
                 "Patrimonio"        : per[4],
                 "Proveedores"       : per[5],
+                "Reportes"          : per[5],
                 "Sistema"           : per[6],
             }
             

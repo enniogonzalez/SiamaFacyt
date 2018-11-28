@@ -1,14 +1,14 @@
 <div class="container">
     <div class="row">
         <div class="col-lg-9" style="padding: 0px;">
-            <h2><span class="fa fa-file-text"></span> Reportes</h2> 
+            <h2><span class="fa fa-file-text"></span> Reportes de Mantenimiento</h2> 
         </div>
     </div>
 </div>
 
 <div class="container">
     <div class="formulario-siama">
-        <form class ="" id="FormularioActual" method="POST" action = "<?=site_url('/mantenimiento/reportes/')?>">
+        <form class ="" id="FormularioActual" method="POST" action = "<?=site_url('/reportes/mantenimiento/')?>">
 
             <div style="margin: 10px 15px;display:none;" id="alertaFormularioActual" class="alert alert-danger text-center">
             </div>
@@ -122,7 +122,7 @@
                 <?=$listaBusquedaProveedor?>
             </select> 
         </div>
-        <div style="display:none;" id ="ControladorActual"><?=site_url('/marcas')?></div>
+        <div style="display:none;" id ="ControladorActual"><?=site_url('/reportes/mantenimiento/')?></div>
         <div style="background-color: #95a5a6; padding: 10px;">
 
             <div class="form-group row botoneraFormulario" >

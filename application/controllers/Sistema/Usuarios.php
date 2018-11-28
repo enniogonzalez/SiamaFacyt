@@ -98,6 +98,7 @@
                 "Partidas"      => ($this->input->post("Partidas") == "true" ? true:false),
                 "Patrimonio"    => ($this->input->post("Patrimonio") == "true" ? true:false),
                 "Proveedores"   => ($this->input->post("Proveedores") == "true" ? true:false),
+                "Reportes"      => ($this->input->post("Reportes") == "true" ? true:false),
                 "Sistema"       => ($this->input->post("Sistema") == "true" ? true:false),
                 "Observaciones" => trim($this->input->post("Observacion"))
             );

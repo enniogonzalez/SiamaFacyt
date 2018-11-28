@@ -118,6 +118,12 @@
                             </td>
                         </tr>
                         <tr>
+                            <td style="font-size:13px;">Reportes</td>
+                            <td class = "seleccionarPermiso" id="perRep" style="text-align: center;">
+                                <span class="fa <?=($Permisos['Reportes'] ? "fa-check-square-o":"fa-square-o")?> fa-lg"></span>
+                            </td>
+                        </tr>
+                        <tr>
                             <td style="font-size:13px;">Sistema</td>
                             <td class = "seleccionarPermiso" id="perSis" style="text-align: center;">
                                 <span class="fa <?=($Permisos['Sistema'] ? "fa-check-square-o":"fa-square-o")?> fa-lg"></span>
