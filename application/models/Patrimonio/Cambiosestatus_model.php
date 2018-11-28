@@ -64,15 +64,28 @@
                     $descripcion .= "<td><strong>Solicitante:</strong> </td><td>" . $line['usu_nom'] . "</td></tr>";
                     $descripcion .= "<td><strong>Fecha:</strong> </td><td>" . $line['fecha'] . "</td></tr></table>";
 
-                    // $descripcion = "El d&iacute;a " . $line['fecha'] . " el usuario " . $line['usu_nom'] . " solicit&oacute; el cambio de estatus "
-                    //         . $line['documento'] . " para el bien " . $line['bie_nom'] . " ubicado en " .  $line['loc_nom'] . "."; 
+                    $MensajeCorreo = "<strong>Documento:</strong> " . $line['documento'] . "<br/>";
+                    $MensajeCorreo .= "<strong>Bien:</strong> " . $line['bie_nom'] . "<br/>";
+                    $MensajeCorreo .= "<strong>Localizaci&oacute;n:</strong> " . $line['loc_nom'] . "<br/>";
+                    $MensajeCorreo .= "<strong>Solicitante:</strong> " . $line['usu_nom'] . "<br/>";
+                    $MensajeCorreo .= "<strong>Fecha:</strong> " . $line['fecha'];
 
                     $query = "INSERT INTO Alertas(Titulo, Menu, Tabla, TAB_ID,Usu_Cre,Descripcion)
                         VALUES('" . $titulo . "','Patrimonio','CambiosEstatus',"
                         . $UltimoId['cam_id'] . ","
                         .$this->session->userdata("usu_id") . ",'"
                         . str_replace("'", "''",$descripcion)  . "')";
-                        
+                    
+                    $correoMasivo = array(
+                        "id"        => $UltimoId['cam_id'],
+                        "Opcion"    => "Cambio de Estatus",
+                        "Tabla"     => "CambiosEstatus",
+                        "Estatus"   => "Solicitado",
+                        "Titulo"    => $titulo,
+                        "Menu"      => "Patrimonio", 
+                        "Cuerpo"    =>$MensajeCorreo
+                    );
+
                     $result = pg_query($query);
                 }else{
                     $result = false;
@@ -101,6 +114,8 @@
     
             //liberar conexion
             $this->bd_model->CerrarConexion($conexion);
+
+            $this->alertas_model->EnviarCorreo($correoMasivo);
 
             return $UltimoId['cam_id'];
         }

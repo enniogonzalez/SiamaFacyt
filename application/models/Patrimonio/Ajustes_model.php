@@ -71,6 +71,23 @@
                         $descripcion .= "<td><strong>Solicitante:</strong> </td><td>" . $line['usu_nom'] . "</td></tr>";
                         $descripcion .= "<td><strong>Fecha:</strong> </td><td>" . $line['fecha'] . "</td></tr></table>";
 
+                        $MensajeCorreo = "<strong>Documento:</strong> " . $line['documento'] . "<br/>";
+                        $MensajeCorreo .= "<strong>Bien:</strong> " . $line['bie_nom'] . "<br/>";
+                        $MensajeCorreo .= "<strong>Localizaci&oacute;n:</strong> " . $line['loc_nom'] . "<br/>";
+                        $MensajeCorreo .= "<strong>Solicitante:</strong> " . $line['usu_nom'] . "<br/>";
+                        $MensajeCorreo .= "<strong>Fecha:</strong> " . $line['fecha'];
+
+                        $correoMasivo = array(
+                            "id"        => $UltimoId['aju_id'],
+                            "Opcion"    => "Ajuste",
+                            "Tabla"     => "Ajuste",
+                            "Estatus"   => "Solicitado",
+                            "Titulo"    => $titulo,
+                            "Menu"      => "Patrimonio", 
+                            "Cuerpo"    =>$MensajeCorreo
+                        );
+
+
                         // $descripcion = "El d&iacute;a " . $line['fecha'] . " el usuario " . $line['usu_nom'] . " solicit&oacute; el ajuste "
                         //         . $line['documento'] . " para el bien " . $line['bie_nom'] . " ubicado en " .  $line['loc_nom'] . "."; 
 
@@ -114,6 +131,8 @@
             //liberar conexion
             $this->bd_model->CerrarConexion($conexion);
 
+            $this->alertas_model->EnviarCorreo($correoMasivo);
+            
             return $UltimoId['aju_id'];
         }
 

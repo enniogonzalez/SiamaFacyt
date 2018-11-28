@@ -2,9 +2,13 @@
 <?php
     class Alertas_model extends CI_Model{
         
+        function __construct(){
+            parent::__construct();
+            $this->load->library('libcorreosiama','libcorreosiama');
+        }
+
         public function Obtener(){
             
-
             //Abrir conexion
             $conexion = $this->bd_model->ObtenerConexion();
 
@@ -111,6 +115,116 @@
             }
         }
         
+        public function EnviarCorreo($data){
+
+            $correos = $this->ObtenerCorreos($data['Menu']);
+            $Enviado = $this->ExisteEnvio($data);
+
+            //Abrir conexion
+            $conexion = $this->bd_model->ObtenerConexion();
+
+            if(!$Enviado && count($correos) > 0){
+
+                $mensaje = "Saludos, <br/><br/> Se ha detectado un " . $data['Opcion'] . " " . $data['Estatus'] 
+                    . " con la siguiente informaci&oacute;n: <br/><br/>" . $data['Cuerpo'];
+
+                $Parametros = array(
+                    "Correo" => $correos,
+                    "Asunto" => $data['Titulo'],
+                    "Mensaje" => $mensaje
+                );
+                
+                $estatusCorreo = $this->libcorreosiama->EnviarCorreo($Parametros);
+                
+
+                if($estatusCorreo['enviado']){
+
+                    $query = " INSERT INTO LogCorreo(correo,asunto,Mensaje,Tabla,Id) VALUES('"
+                    . str_replace("'", "''",implode(",", $Parametros['Correo']) ) . "','"
+                    . str_replace("'", "''",$Parametros['Asunto']) . "','"
+                    . str_replace("'", "''",$Parametros['Mensaje']) . "','"
+                    . str_replace("'", "''",$data['Tabla']) . "','"
+                    . str_replace("'", "''",$data['id']) . "');";
+
+                    $result = pg_query($query);
+                    
+
+                    $query = " INSERT INTO AlertaCorreo(Tabla,tab_id,Estatus) VALUES('"
+                    . str_replace("'", "''",$data['Tabla']) . "','"
+                    . str_replace("'", "''",$data['id']) . "','"
+                    . str_replace("'", "''",$data['Estatus']) . "') ON CONFLICT DO NOTHING;";
+
+                    $result = pg_query($query);
+
+                }else{
+                    
+                    $query = " INSERT INTO LogCorreo(correo,asunto,Mensaje,Tabla,Id,Estatus,Error) VALUES('"
+                    . str_replace("'", "''",implode(",", $Parametros['Correo']) ) . "','"
+                    . str_replace("'", "''",$Parametros['Asunto']) . "','"
+                    . str_replace("'", "''",$Parametros['Mensaje']) . "','"
+                    . str_replace("'", "''",$data['Tabla']) . "','"
+                    . str_replace("'", "''",$data['id']) . "','Error','"
+                    . str_replace("'", "''",$estatusCorreo['Mensaje']) ."');";
+
+                    $result = pg_query($query);
+                }
+            }
+            
+            //liberar conexion
+            $this->bd_model->CerrarConexion($conexion);
+        }
+
+        private function ExisteEnvio($data){
+
+            //Abrir conexion
+            $conexion = $this->bd_model->ObtenerConexion();
+
+            $retorno = false;
+
+            $query = "    SELECT 1 
+                        FROM alertacorreo
+                        WHERE Tabla = '" . $data['Tabla'] ."'
+                            AND Tab_id = '" . $data['id'] . "'
+                            AND estatus = '" . $data['Estatus'] . "'";
+
+            
+            $result = pg_query($query);
+                        
+            if($result && pg_num_rows($result) > 0) 
+                $retorno = true;
+
+            //liberar conexion
+            $this->bd_model->CerrarConexion($conexion);
+
+            return $retorno;
+        }
+
+        private function ObtenerCorreos($menu){
+
+            //Abrir conexion
+            $conexion = $this->bd_model->ObtenerConexion();
+
+            $query ="   SELECT correo
+                        FROM usuarios U
+                            JOIN permisosusuarios PU ON PU.usu_id = U.usu_id
+                        WHERE (U.correo is not NULL OR U.correo <> '')
+                            AND PU.menu = '" . $menu ."'";
+
+            //Ejecutar Query
+            $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
+            
+            $retorno = [];
+            while($line = pg_fetch_array($result, null, PGSQL_ASSOC))
+                array_push($retorno,$line['correo']);
+
+            //Liberar memoria
+            pg_free_result($result);
+
+            //liberar conexion
+            $this->bd_model->CerrarConexion($conexion);
+
+            return $retorno;
+        }
     }
 
 ?>

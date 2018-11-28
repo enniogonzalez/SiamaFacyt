@@ -514,6 +514,15 @@ CREATE TABLE Auditorias(
 	FOREIGN KEY (Usu_Cre) References Usuarios
 );
 
+CREATE TABLE AlertaCorreo(
+	ACO_ID			SERIAL			PRIMARY KEY,
+	Tabla			VARCHAR(50)		NOT NULL,
+	TAB_ID			INT 			NOT NULL,
+	Estatus			VARCHAR(100)	NOT NULL,
+	Fecha			TIMESTAMP		NOT NULL DEFAULT(NOW()),
+	UNIQUE(Tabla,TAB_ID,Estatus)
+);
+
 GRANT CONNECT ON DATABASE siamafacyt TO userapp;
 
 -- Grant usage the schema
