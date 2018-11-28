@@ -87,12 +87,6 @@
                             "Cuerpo"    =>$MensajeCorreo
                         );
 
-
-                        // $descripcion = "El d&iacute;a " . $line['fecha'] . " el usuario " . $line['usu_nom'] . " solicit&oacute; el ajuste "
-                        //         . $line['documento'] . " para el bien " . $line['bie_nom'] . " ubicado en " .  $line['loc_nom'] . "."; 
-
-
-
                         $query = "INSERT INTO Alertas(Titulo, Menu, Tabla, TAB_ID,Usu_Cre,Descripcion)
                             VALUES('" . $titulo . "','Patrimonio','Ajustes',"
                             . $UltimoId['aju_id'] . ","
@@ -132,7 +126,7 @@
             $this->bd_model->CerrarConexion($conexion);
 
             $this->alertas_model->EnviarCorreo($correoMasivo);
-            
+
             return $UltimoId['aju_id'];
         }
 
