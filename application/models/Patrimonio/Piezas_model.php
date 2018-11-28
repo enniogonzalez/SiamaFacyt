@@ -12,7 +12,7 @@
 
             //Insertar Pieza
             $query = " INSERT INTO Piezas ( Nombre, Estatus, Modelo, 
-                                            Pie_ser, PRO_ID, PAR_ID, MAR_ID, Fec_Fab, 
+                                            Pie_ser, PRO_ID, PAR_ID, MAR_ID,Tpi_ID, Fec_Fab, 
                                             Fec_adq, Fec_ins, Tip_Adq, Inv_UC,Usu_Cre,
                                             Usu_Mod, Observaciones) 
                         VALUES('"
@@ -23,6 +23,7 @@
             . str_replace("'", "''",$data['Pro_Id'])    . "','"
             . str_replace("'", "''",$data['Par_Id'])    . "','"
             . str_replace("'", "''",$data['Mar_Id'])    . "','"
+            . str_replace("'", "''",$data['Tpi_Id'])    . "','"
             . str_replace("'", "''",$data['Fec_Fab'])   . "','"
             . str_replace("'", "''",$data['Fec_adq'])   . "','"
             . str_replace("'", "''",$data['Fec_ins'])   . "','"
@@ -85,6 +86,7 @@
                 . "', Pro_Id = '" . str_replace("'", "''",$data['Pro_Id']) 
                 . "', Par_Id = '" . str_replace("'", "''",$data['Par_Id']) 
                 . "', Mar_Id = '" . str_replace("'", "''",$data['Mar_Id']) 
+                . "', Tpi_Id = '" . str_replace("'", "''",$data['Tpi_Id']) 
                 . "', Fec_Fab = '" . str_replace("'", "''",$data['Fec_Fab']) 
                 . "', Fec_adq = '" . str_replace("'", "''",$data['Fec_adq']) 
                 . "', Fec_ins = '" . str_replace("'", "''",$data['Fec_ins']) 
@@ -136,6 +138,8 @@
                                 P.Nombre,   P.Estatus,    P.Modelo, 
                                 P.Pie_ser,  P.PRO_ID,   P.PAR_ID,   P.MAR_ID,     P.Fec_Fab, 
                                 P.Fec_adq,  P.Fec_ins,  P.Tip_Adq, 
+                                P.tpi_id,
+                                TPI.nombre nomtpi,
                                 COALESCE(P.Inv_UC,'') Inv_UC,
                                 COALESCE(P.Observaciones,'') Observaciones,
                                 Par.nombre  nomPar,
@@ -146,6 +150,7 @@
                             JOIN Proveedores Pro ON Pro.pro_id = P.pro_id
                             JOIN Marcas M ON M.mar_id = P.mar_id
                             JOIN Partidas Par ON Par.par_id =P.par_id
+                            JOIN Tipopieza TPI ON TPI.tpi_id = P.tpi_id
                             LEFT JOIN Bienes B ON b.bie_id =P.bie_id
                     ";
 

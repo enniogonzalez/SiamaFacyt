@@ -13,6 +13,7 @@ $(function(){
     const Marcas = "Marcas";
     const Piezas = "Piezas";
     const Bienes = "Bienes";
+    const TipoPieza = "Tipos de Piezas";
 
     var idActual ="";
     var dataInputs= [];
@@ -22,6 +23,7 @@ $(function(){
     var idProveedor = "";
     var idPartidas = "";
     var idBien = "";
+    var idTipoBien = "";
 
     EstablecerBuscador();
 
@@ -68,6 +70,22 @@ $(function(){
     });
 
 
+    /************************************/
+    /*      Manejo Tipo de Piezas       */
+    /************************************/
+    
+    $('#nomTipPie').on('click',function(){
+        BuscarTipoPieza();
+    });
+
+    $('.BuscarTipoPieza').on('click',function(){
+        BuscarTipoPieza();
+    });
+
+    $('.BorrarTipoPieza').on('click',function(){
+        $('#idTipPie').text("");
+        $('#nomTipPie').val("");
+    });
     /************************************/
     /*          Manejo Partidas         */
     /************************************/
@@ -227,6 +245,7 @@ $(function(){
                 "Marca":            $('#idMar').text().trim(),
                 "Proveedor":        $('#idPro').text().trim(),
                 "Partidas":         $('#idPar').text().trim(),
+                "TipoPieza":        $('#idTipPie').text().trim(),
                 "Fabricacion":      $('#fabPieza').val().trim(),
                 "fAdquisicion":     $('#fAdqPieza').val().trim(),
                 "Instalacion":      $('#Instalacion').val().trim(),
@@ -255,6 +274,21 @@ $(function(){
 
         idBuscadorActual = $('#idPro').text().trim();
         nombreBuscadorActual = $('#nomPro').val().trim();
+        SetSearchModal(parametros)
+
+    }
+
+    function BuscarTipoPieza(){
+
+        SetSearchThead(thTipoPieza);
+
+        parametros = {
+            "Lista": $('#listaBusquedaTipoPieza').html().trim(),
+            "Tipo": TipoPieza
+        }
+
+        idBuscadorActual = $('#idTipPie').text().trim();
+        nombreBuscadorActual = $('#nomTipPie').val().trim();
         SetSearchModal(parametros)
 
     }
@@ -320,6 +354,9 @@ $(function(){
             case Bienes:
                 controlador = "bienes";
             break;
+            case TipoPieza:
+                controlador = "tipopieza";
+            break;
             default: 
                 controlador = "proveedores";
         }
@@ -364,10 +401,11 @@ $(function(){
         dataInputs = [];
         idActual =$('#IdForm').text().trim();
 
-        idMarca         = $('#idMar').text().trim();
-        idProveedor     = $('#idPro').text().trim();
-        idPartidas      = $('#idPar').text().trim();
-        idBien          = $('#idBie').text().trim();
+        idMarca     = $('#idMar').text().trim();
+        idProveedor = $('#idPro').text().trim();
+        idPartidas  = $('#idPar').text().trim();
+        idBien      = $('#idBie').text().trim();
+        idTipoBien  = $('#idTipPie').text().trim();
 
         $('.formulario-siama form .form-control').each(function(){
             dataInputs.push($(this).val().trim());
@@ -381,6 +419,7 @@ $(function(){
             "idBien":           idBien.trim(),       
             "idProveedor":      idProveedor.trim(),    
             "idPartidas":       idPartidas.trim(),       
+            "idTipoBien":       idTipoBien.trim(),       
             "Estatus":          dataInputs[0].trim(),
             "Nombre":           dataInputs[1].trim(),
             "Modelo":           dataInputs[2].trim(),
@@ -390,11 +429,12 @@ $(function(){
             "Marca":            dataInputs[6].trim(),
             "Proveedor":        dataInputs[7].trim(),
             "Partidas":         dataInputs[8].trim(),
-            "Fabricacion":      dataInputs[9].trim(),
-            "fAdquisicion":     dataInputs[10].trim(),
-            "Instalacion":      dataInputs[11].trim(),
-            "tAdquisicion":     dataInputs[12].trim(),
-            "Observacion":      dataInputs[13].trim()
+            "TipoBien":         dataInputs[9].trim(),
+            "Fabricacion":      dataInputs[10].trim(),
+            "fAdquisicion":     dataInputs[11].trim(),
+            "Instalacion":      dataInputs[12].trim(),
+            "tAdquisicion":     dataInputs[13].trim(),
+            "Observacion":      dataInputs[14].trim()
         }
         LlenarFormulario(parametros);
     }
@@ -406,6 +446,7 @@ $(function(){
         $('#idPro').text(data['idProveedor']);
         $('#idPar').text(data['idPartidas']);
         $('#idBie').text(data['idBien']);
+        $('#idTipPie').text(data['idTipoBien']);
         $('#estatusPieza').val(data['Estatus']);
         $('#NombrePieza').val(data['Nombre']);
         $('#modeloPieza').val(data['Modelo']);
@@ -415,6 +456,7 @@ $(function(){
         $('#nomPro').val(data['Proveedor']);
         $('#nomPar').val(data['Partidas']);
         $('#nomBie').val(data['Bien']);
+        $('#nomTipPie').val(data['TipoBien']);
         $('#fabPieza').val(data['Fabricacion']);
         $('#fAdqPieza').val(data['fAdquisicion']);
         $('#Instalacion').val(data['Instalacion']);
@@ -450,6 +492,7 @@ $(function(){
             "id":               data['Datos']['pie_id'].trim(),
             "idBien":           data['Datos']['bie_id'].trim(),
             "idMarca":          data['Datos']['mar_id'].trim(),
+            "idTipPie":         data['Datos']['tpi_id'].trim(),
             "idProveedor":      data['Datos']['pro_id'].trim(), 
             "idPartidas":       data['Datos']['par_id'].trim(), 
             "Estatus":          data['Datos']['estatus'].trim(),
@@ -461,6 +504,7 @@ $(function(){
             "Marca":            data['Datos']['nommar'].trim(),
             "Proveedor":        data['Datos']['nompro'].trim(),
             "Partidas":         data['Datos']['nompar'].trim(),
+            "TipoBien":         data['Datos']['nomtpi'].trim(),
             "Fabricacion":      data['Datos']['fec_fab'].trim(),
             "fAdquisicion":     data['Datos']['fec_adq'].trim(),
             "Instalacion":      data['Datos']['fec_ins'].trim(),
@@ -495,6 +539,10 @@ $(function(){
             case Bienes:
                 $('#idBie').text(fila.find("td:eq(0)").text().trim());
                 $('#nomBie').val(fila.find("td:eq(1)").text().trim());
+            break;
+            case TipoPieza:
+                $('#idTipPie').text(fila.find("td:eq(0)").text().trim());
+                $('#nomTipPie').val(fila.find("td:eq(1)").text().trim());
             break;
         }
 

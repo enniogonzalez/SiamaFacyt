@@ -126,6 +126,22 @@
                     </div>
                 </div>
             </div>
+            
+            <div class="form-group row">
+                <label for="nomTipPie" class="col-lg-3 col-form-label">Tipo de Pieza:</label>
+                <div class="col-lg-9">
+                    <div style="width:86%;float:left;">
+                        <div style="display:none;" id="idTipPie"><?=$tpi_id?></div>
+                        <input readonly disabled type="text"
+                            class="form-control texto obligatorio buscador" id="nomTipPie" value="<?=$nomtpi?>">
+                        <div class="invalid-feedback">Campo Obligatorio</div>
+                    </div>
+                    <div style="width:14%;float:right;padding:10px;">
+                        <span title="Buscar Tipo de Pieza" class="fa fa-search BuscarTipoPieza" style="cursor: pointer;float:left;"></span>
+                        <span title="Borrar Tipo de Pieza" class="fa fa-trash-o BorrarTipoPieza" style="cursor: pointer;float:right;"></span>
+                    </div>
+                </div>
+            </div>
 
             <div class="form-group row">
                 <label for="fabPieza" class="col-lg-3 col-form-label">Fecha Fabricaci&oacute;n:</label>
@@ -188,6 +204,9 @@
             </select> 
             <select readonly disabled  id="listaBusquedaBien">
                 <?=$listaBusquedaBien?>
+            </select> 
+            <select readonly disabled  id="listaBusquedaTipoPieza">
+                <?=$listaBusquedaTipoPieza?>
             </select> 
         </div>
         <div style="display:none;" id ="ControladorActual"><?=site_url('/piezas')?></div>

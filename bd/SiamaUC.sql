@@ -188,6 +188,7 @@ CREATE TABLE Piezas(
 	PRO_ID			INT					NOT NULL,--proveedor
 	PAR_ID			INT					NOT NULL,--partida
 	MAR_ID			INT					NOT NULL,--Marca
+	TPI_ID			INT					NULL,--Tipo de pieza
 
 	Fec_Fab			DATE				NOT NULL,--fecha de fabricacion
 	Fec_adq			DATE				NOT NULL,--fecha de adquisicion
@@ -202,6 +203,7 @@ CREATE TABLE Piezas(
 	FOREIGN KEY (PAR_ID) References Partidas,
 	FOREIGN KEY (BIE_ID) References Bienes,
 	FOREIGN KEY (MAR_ID) References Marcas,
+	FOREIGN KEY (TPI_ID) References TipoPieza,
 	FOREIGN KEY (Usu_Cre) References Usuarios,
 	FOREIGN KEY (Usu_Mod) References Usuarios,
 	FOREIGN KEY (PRO_ID) References Proveedores

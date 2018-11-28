@@ -39,14 +39,14 @@ INSERT INTO "public"."bienes" VALUES ('2', 'Aire Acondicionado Split', '1321-EE-
 
 SELECT setval('bienes_bie_id_seq', 2, true);
 
-INSERT INTO "public"."piezas" VALUES ('1', '1', 'Amortiguador Izquierdo', '2342SFS5554', 'Platino', 'SD54233421A', '3', '2', '2', '2018-09-06', '2018-09-13', '2018-09-21', 'Compra', 'Activo', '1', '2018-09-06 21:24:27.310642', '1', '2018-09-06 21:24:27.310642', null);
-INSERT INTO "public"."piezas" VALUES ('2', null, 'Amortiguador Derecho', '2342SFS34323', 'Platino', 'SD54LSDF21A', '3', '2', '2', '2018-09-06', '2018-09-13', '2018-09-21', 'Compra', 'Activo', '1', '2018-09-07 01:43:00.882001', '1', '2018-11-25 18:02:17.024545', null);
-INSERT INTO "public"."piezas" VALUES ('3', null, 'Amortiguador REPUESTO', '2342SFS34323SS', 'Platino', 'SD54LSDF21A', '3', '2', '2', '2018-09-06', '2018-09-13', '2018-09-21', 'Compra', 'Activo', '1', '2018-09-07 01:43:55.503738', '1', '2018-09-07 01:43:55.503738', null);
-INSERT INTO "public"."piezas" VALUES ('4', '1', 'Aleternador', '2342SFSDF3445', 'CHIVERA', '2AASD32345', '3', '2', '2', '2018-09-06', '2018-09-13', '2018-09-21', 'Compra', 'Inactivo', '1', '2018-09-07 01:46:01.902304', '1', '2018-11-25 18:02:17.024545', null);
-INSERT INTO "public"."piezas" VALUES ('5', null, 'Radiador', '32DFZAS113', 'TXdeluxe', 'TXKSJDELUX', '3', '2', '2', '2018-09-06', '2018-09-13', '2018-09-21', 'Compra', 'Activo', '1', '2018-09-07 01:48:14.268667', '1', '2018-09-07 01:49:54.961485', null);
-INSERT INTO "public"."piezas" VALUES ('6', '2', 'Caucho delantero Izquierdo', 'ASDD345AA', 'AXDPIRELLI', 'TXKSJDELUX', '3', '2', '2', '2018-09-06', '2018-09-13', '2018-09-21', 'Compra', 'Activo', '1', '2018-09-07 01:50:55.594752', '1', '2018-11-25 18:08:46.340836', null);
-INSERT INTO "public"."piezas" VALUES ('7', '1', 'Motor de Aire Acondicionador haire', '2342342', '2424jkl', '321321543265', '3', '3', '7', '2018-11-17', '2018-11-20', '2018-11-30', 'Compra', 'Activo', '1', '2018-11-25 17:39:03.525196', '1', '2018-11-25 18:52:44.873799', null);
-INSERT INTO "public"."piezas" VALUES ('8', null, 'Condensador aire acondicionado', null, '2342342', 'KERIA3465432', '3', '4', '7', '2018-11-28', '2018-11-08', '2018-11-15', 'Donacion', 'Activo', '1', '2018-11-25 17:39:45.808732', '1', '2018-11-25 17:39:45.808732', null);
+INSERT INTO "public"."piezas" VALUES ('1', '1', 'Amortiguador Izquierdo', '2342SFS5554', 'Platino', 'SD54233421A', '3', '2', '2',null, '2018-09-06', '2018-09-13', '2018-09-21', 'Compra', 'Activo', '1', '2018-09-06 21:24:27.310642', '1', '2018-09-06 21:24:27.310642', null);
+INSERT INTO "public"."piezas" VALUES ('2', null, 'Amortiguador Derecho', '2342SFS34323', 'Platino', 'SD54LSDF21A', '3', '2', '2',null, '2018-09-06', '2018-09-13', '2018-09-21', 'Compra', 'Activo', '1', '2018-09-07 01:43:00.882001', '1', '2018-11-25 18:02:17.024545', null);
+INSERT INTO "public"."piezas" VALUES ('3', null, 'Amortiguador REPUESTO', '2342SFS34323SS', 'Platino', 'SD54LSDF21A', '3', '2', '2',null, '2018-09-06', '2018-09-13', '2018-09-21', 'Compra', 'Activo', '1', '2018-09-07 01:43:55.503738', '1', '2018-09-07 01:43:55.503738', null);
+INSERT INTO "public"."piezas" VALUES ('4', '1', 'Aleternador', '2342SFSDF3445', 'CHIVERA', '2AASD32345', '3', '2', '2',null, '2018-09-06', '2018-09-13', '2018-09-21', 'Compra', 'Inactivo', '1', '2018-09-07 01:46:01.902304', '1', '2018-11-25 18:02:17.024545', null);
+INSERT INTO "public"."piezas" VALUES ('5', null, 'Radiador', '32DFZAS113', 'TXdeluxe', 'TXKSJDELUX', '3', '2', '2',null, '2018-09-06', '2018-09-13', '2018-09-21', 'Compra', 'Activo', '1', '2018-09-07 01:48:14.268667', '1', '2018-09-07 01:49:54.961485', null);
+INSERT INTO "public"."piezas" VALUES ('6', '2', 'Caucho delantero Izquierdo', 'ASDD345AA', 'AXDPIRELLI', 'TXKSJDELUX', '3', '2', '2',null, '2018-09-06', '2018-09-13', '2018-09-21', 'Compra', 'Activo', '1', '2018-09-07 01:50:55.594752', '1', '2018-11-25 18:08:46.340836', null);
+INSERT INTO "public"."piezas" VALUES ('7', '1', 'Motor de Aire Acondicionador haire', '2342342', '2424jkl', '321321543265', '3', '3', '7',null, '2018-11-17', '2018-11-20', '2018-11-30', 'Compra', 'Activo', '1', '2018-11-25 17:39:03.525196', '1', '2018-11-25 18:52:44.873799', null);
+INSERT INTO "public"."piezas" VALUES ('8', null, 'Condensador aire acondicionado', null, '2342342', 'KERIA3465432', '3', '4', '7',null, '2018-11-28', '2018-11-08', '2018-11-15', 'Donacion', 'Activo', '1', '2018-11-25 17:39:45.808732', '1', '2018-11-25 17:39:45.808732', null);
 
 
 SELECT setval('piezas_pie_id_seq', 8, true);

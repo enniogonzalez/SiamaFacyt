@@ -58,7 +58,6 @@
             $this->load->view('paginas/Patrimonio/tipopieza',$data);
             $this->load->view('plantillas/7-footer');
 
-
         }
 
         public function guardar(){

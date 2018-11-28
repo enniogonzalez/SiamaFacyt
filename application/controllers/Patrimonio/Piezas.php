@@ -24,12 +24,14 @@
                 "tip_adq"       =>"",
                 "par_id"        =>"",
                 "mar_id"        =>"",
+                "tpi_id"        =>"",
                 "estatus"       =>"",
                 "observaciones" =>"",
                 "nombie"        =>"",
                 "nompar"        =>"",
                 "nompro"        =>"",
                 "nommar"        =>"",
+                "nomtpi"        =>"",
             );
 
             if($respuesta){
@@ -65,6 +67,7 @@
             $listaBusquedaProveedor = $this->listasdesplegables_model->Obtener('','COB-PROVEE');
             $listaBusquedaPartida   = $this->listasdesplegables_model->Obtener('','COB-PARTID');
             $listaBusquedaBien   = $this->listasdesplegables_model->Obtener('','COB-BIENES');
+            $listaBusquedaTipoPieza   = $this->listasdesplegables_model->Obtener('','COB-TIPOPI');
 
             $ldAdquisicion  = $this->listasdesplegables_model->Obtener('','BIE-ADQUIS');
             $ldEstatus      = $this->listasdesplegables_model->Obtener('','BIE-ESTATU');
@@ -75,6 +78,7 @@
             $data['listaBusquedaProveedor'] = $this->liblistasdesplegables->FormatearListaDesplegable($listaBusquedaProveedor);
             $data['listaBusquedaPartida'] = $this->liblistasdesplegables->FormatearListaDesplegable($listaBusquedaPartida);
             $data['listaBusquedaBien'] = $this->liblistasdesplegables->FormatearListaDesplegable($listaBusquedaBien);
+            $data['listaBusquedaTipoPieza'] = $this->liblistasdesplegables->FormatearListaDesplegable($listaBusquedaTipoPieza);
 
 
             $data['ldAdquisicion'] = $this->liblistasdesplegables->FormatearListaDesplegable($ldAdquisicion,true,$data['tip_adq']);
@@ -126,6 +130,7 @@
                 "Tip_Adq"       => $this->input->post("tAdquisicion"),
                 "Par_Id"        => $this->input->post("Partidas"),
                 "Mar_Id"        => $this->input->post("Marca"),
+                "Tpi_Id"        => $this->input->post("TipoPieza"),
                 "Estatus"       => $this->input->post("Estatus"),
                 "Observaciones" => trim($this->input->post("Observacion"))
             );
