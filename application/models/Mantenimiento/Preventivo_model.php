@@ -84,8 +84,21 @@
                     $descripcion .= "<td><strong>Solicitante:</strong> </td><td>" . $line['usu_nom'] . "</td></tr>";
                     $descripcion .= "<td><strong>Fecha:</strong> </td><td>" . $line['fecha'] . "</td></tr></table>";
 
-                    // $descripcion = "El d&iacute;a " . $line['fecha'] . " el usuario " . $line['usu_nom'] . " solicit&oacute; el mantenimiento preventivo "
-                    //         . $line['documento'] . " para el bien " . $line['bie_nom'] . " ubicado en " .  $line['loc_nom'] . "."; 
+                    $MensajeCorreo = "<strong>Documento:</strong> " . $line['documento'] . "<br/>";
+                    $MensajeCorreo .= "<strong>Bien:</strong> " . $line['bie_nom'] . "<br/>";
+                    $MensajeCorreo .= "<strong>Localizaci&oacute;n:</strong> " . $line['loc_nom'] . "<br/>";
+                    $MensajeCorreo .= "<strong>Solicitante:</strong> " . $line['usu_nom'] . "<br/>";
+                    $MensajeCorreo .= "<strong>Fecha:</strong> " . $line['fecha'];
+                    
+                    $correoMasivo = array(
+                        "id"        => $UltimoId['man_id'],
+                        "Opcion"    => "Mantenimiento Preventivo",
+                        "Tabla"     => "Mantenimiento",
+                        "Estatus"   => "Solicitado",
+                        "Titulo"    => $titulo,
+                        "Menu"      => "Mantenimiento", 
+                        "Cuerpo"    =>$MensajeCorreo
+                    );
 
                     $query = "INSERT INTO Alertas(Titulo, Menu, Tabla, TAB_ID,Usu_Cre,Descripcion)
                         VALUES('" . $titulo . "','Mantenimiento','Mantenimiento',"
@@ -121,6 +134,8 @@
 
             //liberar conexion
             $this->bd_model->CerrarConexion($conexion);
+
+            $this->alertas_model->EnviarCorreo($correoMasivo);
 
             return $UltimoId['man_id'];
         }
@@ -258,9 +273,24 @@
                     $descripcion .= "<td><strong>Aprobador:</strong> </td><td>" . $line['apr_nom'] . "</td></tr>";
                     $descripcion .= "<td><strong>Fecha:</strong> </td><td>" . $line['fecha'] . "</td></tr></table>";
 
-                    // $descripcion = "El d&iacute;a " . $line['fecha'] . " el usuario " . $line['usu_nom'] . " solicit&oacute; el mantenimiento preventivo "
-                    //         . $line['documento'] . " para el bien " . $line['bie_nom'] . " ubicado en " .  $line['loc_nom'] . ", el cual actualmente se encuentra afectado."; 
-    
+
+                    $MensajeCorreo = "<strong>Documento:</strong> " . $line['documento'] . "<br/>";
+                    $MensajeCorreo .= "<strong>Bien:</strong> " . $line['bie_nom'] . "<br/>";
+                    $MensajeCorreo .= "<strong>Localizaci&oacute;n:</strong> " . $line['loc_nom'] . "<br/>";
+                    $MensajeCorreo .= "<strong>Solicitante:</strong> " . $line['usu_nom'] . "<br/>";
+                    $MensajeCorreo .= "<strong>Aprobador:</strong> " . $line['apr_nom'] . "<br/>";
+                    $MensajeCorreo .= "<strong>Fecha:</strong> " . $line['fecha'];
+                    
+                    $correoMasivo = array(
+                        "id"        => $data['idActual'],
+                        "Opcion"    => "Mantenimiento Preventivo",
+                        "Tabla"     => "Mantenimiento",
+                        "Estatus"   => "Afectado",
+                        "Titulo"    => $titulo,
+                        "Menu"      => "Mantenimiento", 
+                        "Cuerpo"    =>$MensajeCorreo
+                    );
+
                     $query = "INSERT INTO Alertas(Titulo, Menu, Tabla, TAB_ID,Usu_Cre,Descripcion)
                         VALUES('" . $titulo . "','Mantenimiento','Mantenimiento',"
                         . $data['idActual'] . ","
@@ -343,6 +373,8 @@
             /************************************/
             /*         Fin Auditorias           */
             /************************************/
+
+            $this->alertas_model->EnviarCorreo($correoMasivo);
 
             return true;
         }
@@ -719,8 +751,22 @@
                     $descripcion .= "<td><strong>Aprobador:</strong> </td><td>" . $line['apr_nom'] . "</td></tr>";
                     $descripcion .= "<td><strong>Fecha:</strong> </td><td>" . $line['fecha'] . "</td></tr></table>";
 
-                    // $descripcion = "El d&iacute;a " . $line['fecha'] . " el usuario " . $line['usu_nom'] . " aprob&oacute; el mantenimiento preventivo "
-                    //         . $line['documento'] . " para el bien " . $line['bie_nom'] . " ubicado en " .  $line['loc_nom'] . "."; 
+                    $MensajeCorreo = "<strong>Documento:</strong> " . $line['documento'] . "<br/>";
+                    $MensajeCorreo .= "<strong>Bien:</strong> " . $line['bie_nom'] . "<br/>";
+                    $MensajeCorreo .= "<strong>Localizaci&oacute;n:</strong> " . $line['loc_nom'] . "<br/>";
+                    $MensajeCorreo .= "<strong>Solicitante:</strong> " . $line['usu_nom'] . "<br/>";
+                    $MensajeCorreo .= "<strong>Aprobador:</strong> " . $line['apr_nom'] . "<br/>";
+                    $MensajeCorreo .= "<strong>Fecha:</strong> " . $line['fecha'];
+                    
+                    $correoMasivo = array(
+                        "id"        => $id,
+                        "Opcion"    => "Mantenimiento Preventivo",
+                        "Tabla"     => "Mantenimiento",
+                        "Estatus"   => "Aprobado",
+                        "Titulo"    => $titulo,
+                        "Menu"      => "Mantenimiento", 
+                        "Cuerpo"    =>$MensajeCorreo
+                    );
 
                     $query = "INSERT INTO Alertas(Titulo, Menu, Tabla, TAB_ID,Usu_Cre,Descripcion)
                         VALUES('" . $titulo . "','Mantenimiento','Mantenimiento',"
@@ -756,6 +802,8 @@
 
             //liberar conexion
             $this->bd_model->CerrarConexion($conexion);
+
+            $this->alertas_model->EnviarCorreo($correoMasivo);
 
             return true;
         }
@@ -815,8 +863,23 @@
                     $descripcion .= "<td><strong>Solicitante:</strong> </td><td>" . $line['usu_nom'] . "</td></tr>";
                     $descripcion .= "<td><strong>Fecha:</strong> </td><td>" . $line['fecha'] . "</td></tr></table>";
 
-                    // $descripcion = "El d&iacute;a " . $line['fecha'] . " el usuario " . $line['usu_nom'] . " solicit&oacute; el mantenimiento preventivo "
-                    //         . $line['documento'] . " para el bien " . $line['bie_nom'] . " ubicado en " .  $line['loc_nom'] . "."; 
+
+
+                    $MensajeCorreo = "<strong>Documento:</strong> " . $line['documento'] . "<br/>";
+                    $MensajeCorreo .= "<strong>Bien:</strong> " . $line['bie_nom'] . "<br/>";
+                    $MensajeCorreo .= "<strong>Localizaci&oacute;n:</strong> " . $line['loc_nom'] . "<br/>";
+                    $MensajeCorreo .= "<strong>Solicitante:</strong> " . $line['usu_nom'] . "<br/>";
+                    $MensajeCorreo .= "<strong>Fecha:</strong> " . $line['fecha'];
+                    
+                    $correoMasivo = array(
+                        "id"        => $id,
+                        "Opcion"    => "Mantenimiento Preventivo",
+                        "Tabla"     => "Mantenimiento",
+                        "Estatus"   => "Solicitado",
+                        "Titulo"    => $titulo,
+                        "Menu"      => "Mantenimiento", 
+                        "Cuerpo"    =>$MensajeCorreo
+                    );
 
                     $query = "INSERT INTO Alertas(Titulo, Menu, Tabla, TAB_ID,Usu_Cre,Descripcion)
                         VALUES('" . $titulo . "','Mantenimiento','Mantenimiento',"
@@ -852,6 +915,8 @@
 
             //liberar conexion
             $this->bd_model->CerrarConexion($conexion);
+
+            $this->alertas_model->EnviarCorreo($correoMasivo);
 
             return true;
         }

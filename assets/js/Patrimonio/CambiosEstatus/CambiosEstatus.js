@@ -480,7 +480,7 @@ $(function(){
     function LlenarFormularioRequest(data){
       
         var parametros = {
-            "id"                : data['aju_id'],
+            "id"                : data['cam_id'],
             "Documento"         : data['documento'],
             "idBien"            : data['bie_id'],
             "nomBien"           : data['bie_nom'],
@@ -629,7 +629,7 @@ $(function(){
 
     window.AccionEliminarFormulario = function(data){
         
-        if(data['Datos']['aju_id'] == ""){
+        if(data['Datos']['cam_id'] == ""){
             ClearForm();
             AgregarBotoneraPrimariaNULL();
         }else{
