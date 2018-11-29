@@ -47,7 +47,7 @@
                     <div style="width:86%;float:left;">
                         <div style="display:none;" id="idPad"><?=$idpad?></div>
                         <input readonly disabled type="text"
-                            class="form-control texto" id="ParPad" value="<?=$nombrepadre?> ">
+                            class="form-control texto buscador" id="ParPad" value="<?=$nombrepadre?> ">
                     </div>
                     <div style="width:14%;float:right;padding:5px;">
                         <span title="Buscar Padre" class="fa fa-search BuscarPadre" style="cursor: pointer;float:left;"></span>

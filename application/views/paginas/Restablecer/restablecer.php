@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
         <meta name="author" content="Ennio Gonzalez">
         <meta name="description" content="Sistema automatizado de mantenimiento">
-        <title>SiamaFACYT</title>
+        <title>SiAMa FACYT</title>
 
         <link rel="stylesheet" type="text/css" href="<?=base_url()?>assets/css/bootstrap.css">
         <link rel="stylesheet" type="text/css" href="<?=base_url()?>assets/css/Siama.css">
@@ -17,7 +17,8 @@
 
         <header class="header-siama">
             <div class="container text-center">
-                <h1>Bienvenido a SiamaFACYT</h1>
+                <img src="<?=base_url()?>assets/images/logoPagina.png" style="height: 50px;margin-top: -15px;">  
+                <h1 style="display: inline-block;">Bienvenido a SiAMa FACYT</h1>
             </div>
         </header>
         <div class="container container-login-siama">

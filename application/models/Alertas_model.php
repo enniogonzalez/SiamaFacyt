@@ -109,7 +109,7 @@
                 $query = "INSERT INTO Alertas(Titulo, Menu, Tabla, TAB_ID,Usu_Cre,Descripcion)
                     VALUES('" . $titulo . "','Mantenimiento','PlantillaMantenimiento',"
                     . $line['plm_id'] . ",1,'"
-                    . str_replace("'", "''",$descripcion) . "') ON CONFLICT DO NOTHING";
+                    . str_replace("'", "''",$descripcion) . "')";
                     
                 $result2 = pg_query($query);
             }
@@ -152,7 +152,7 @@
                     $query = " INSERT INTO AlertaCorreo(Tabla,tab_id,Estatus) VALUES('"
                     . str_replace("'", "''",$data['Tabla']) . "','"
                     . str_replace("'", "''",$data['id']) . "','"
-                    . str_replace("'", "''",$data['Estatus']) . "') ON CONFLICT DO NOTHING;";
+                    . str_replace("'", "''",$data['Estatus']) . "');";
 
                     $result = pg_query($query);
 

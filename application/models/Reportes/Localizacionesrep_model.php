@@ -25,7 +25,7 @@
             SELECT 	nombre,ubicacion,tipo,secuencia
             FROM Localizaciones 
             " . $filtros . "
-            ORDER BY Secuencia ASC";
+            ORDER BY REPLACE(secuencia,'-','0') ASC";
 
             //Ejecutar Query
             $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());

@@ -88,16 +88,16 @@
             $queryEliminar = "DELETE FROM PermisosUsuarios WHERE usu_id = '" . str_replace("'", "''",$data['idActual']) . "' AND  menu = ";
 
             while($result && $iterador < $cantidad){
+                
+                $result = pg_query($queryEliminar . "'" . $this->Permisos[$iterador] . "';");
                 if($data[$this->Permisos[$iterador]]){
-                    $result = pg_query($queryPermiso . "'" . $this->Permisos[$iterador] . "') on conflict do nothing;");
-                }else{
-                    $result = pg_query($queryEliminar . "'" . $this->Permisos[$iterador] . "';");
+                    
+                    $result = pg_query($queryPermiso . "'" . $this->Permisos[$iterador] . "');");
                 }
+                
                 $iterador++;
             }
             
-
-
             if(!$result){
                 pg_query("ROLLBACK") or die("Transaction rollback failed");
                 die(pg_last_error());

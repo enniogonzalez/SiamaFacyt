@@ -9,6 +9,7 @@ INSERT INTO permisosusuarios ("usu_id", "menu") VALUES ('1', 'Marcas');
 INSERT INTO permisosusuarios ("usu_id", "menu") VALUES ('1', 'Partidas');
 INSERT INTO permisosusuarios ("usu_id", "menu") VALUES ('1', 'Patrimonio');
 INSERT INTO permisosusuarios ("usu_id", "menu") VALUES ('1', 'Proveedores');
+INSERT INTO permisosusuarios ("usu_id", "menu") VALUES ('1', 'Reportes');
 
 
 INSERT INTO Listas_Desplegables( Codigo,Nombre,Descripcion,Opciones) 

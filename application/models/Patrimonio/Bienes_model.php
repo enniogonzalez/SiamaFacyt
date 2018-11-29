@@ -74,9 +74,9 @@
                 $query = "INSERT INTO HistoricoCustodios( usu_cus, bie_id, usu_cre) VALUES('"   
                         . str_replace("'", "''",$data['Custodio'])  . "','"
                         . str_replace("'", "''",$UltimoId['bie_id'])  . "',"
-                        . $this->session->userdata("usu_id") . ")  ON CONFLICT DO NOTHING;";
+                        . $this->session->userdata("usu_id") . ");";
                         
-                $result = pg_query($query);
+                pg_query($query);
             }
 
             if($result){
@@ -169,13 +169,23 @@
             if($result){
                 
                 if($CustodioActual['custodio'] != $data['Custodio']){
+                    $query = "  DELETE FROM HistoricoCustodios 
+                                WHERE usu_cus = '"
+                            . str_replace("'", "''",$data['Custodio']) . "' AND bie_id = '"
+                            . str_replace("'", "''",$data['idActual']) . "' AND fec_cre = cast(now() as date) ;";
 
-                    $query = "INSERT INTO HistoricoCustodios( usu_cus, bie_id, usu_cre) VALUES('"   
-                    . str_replace("'", "''",$data['Custodio'])  . "','"
-                    . str_replace("'", "''",$data['idActual'])  . "',"
-                    . $this->session->userdata("usu_id") . ") ON CONFLICT DO NOTHING;";
                     
                     $result = pg_query($query);
+
+                    if($result){
+                        $query = "INSERT INTO HistoricoCustodios( usu_cus, bie_id, usu_cre) VALUES('"   
+                        . str_replace("'", "''",$data['Custodio'])  . "','"
+                        . str_replace("'", "''",$data['idActual'])  . "',"
+                        // . $this->session->userdata("usu_id") . ") ON CONFLICT DO NOTHING;";
+                        . $this->session->userdata("usu_id") . ") ;";
+                        
+                        $result = pg_query($query);
+                    }
                 }
             }
 

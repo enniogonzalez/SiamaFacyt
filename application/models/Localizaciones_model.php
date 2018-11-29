@@ -50,7 +50,7 @@
             if($result){
                 $secuencia = $sec_pad . "-" . $new_id . "-";
                 $query = "  UPDATE Localizaciones 
-                                SET Secuencia = '-" . $secuencia . "-' 
+                                SET Secuencia = '" . $secuencia . "' 
                             WHERE loc_id = " . $new_id;
 
                 $result = pg_query($query);
