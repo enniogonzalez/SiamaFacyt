@@ -83,6 +83,12 @@
                             FROM mantenimiento man
                             WHERE man.plm_id = plm.plm_id
                                 AND man.fec_ini > (plm.fec_ult + interval '1' MONTH * plm.frecuencia)
+                        ) 
+                        AND NOT EXISTS( 
+                            SELECT 1 
+                            FROM Alertas 
+                            WHERE Titulo = CONCAT('Plantilla de Mantenimiento Vencida ',plm.documento)
+
                         )
                     ";
 
@@ -91,6 +97,7 @@
             $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
 
             $result2 = true;
+            $correoMasivo = array();
             while($result2 && $line = pg_fetch_array($result, null, PGSQL_ASSOC)){
 
                 $titulo = "Plantilla de Mantenimiento Vencida " . $line['documento'];
@@ -101,10 +108,23 @@
                 $descripcion .= "<td><strong>Frecuencia Man.:</strong> </td><td>" . $line['frecuencia'] . " meses</td></tr>";
                 $descripcion .= "<td><strong>&Uacute;ltimo Man.:</strong> </td><td>" . $line['fec_ult'] . "</td></tr></table>";
 
-                // $descripcion = "Se debe realizar el mantenimiento preventivo especificado en la plantilla de mantenimiento "
-                //             . "<strong>" . $line['documento'] . "</strong> al bien <strong>" . $line['nombre'] . "</strong>. "
-                //             . "Dicho mantenimiento se debe realizar cada <strong>" . $line['frecuencia'] . " meses</strong> y "
-                //             . "se realiz&oacute; por ultima vez el d&iacute;a <strong>" . $line['fec_ult'] . "</strong>.";
+
+                $MensajeCorreo = "<strong>Documento:</strong> " . $line['documento'] . "<br/>";
+                $MensajeCorreo .= "<strong>Bien:</strong> " . $line['nombre'] . "<br/>";
+                $MensajeCorreo .= "<strong>Localizaci&oacute;n:</strong> " . $line['loc_nom'] . "<br/>";
+                $MensajeCorreo .= "<strong>Frecuencia Man.:</strong> " . $line['frecuencia'] . " meses<br/>";
+                $MensajeCorreo .= "<strong>&Uacute;ltimo Man.:</strong> " . $line['fec_ult'];
+                
+                $correoMasivo = array(
+                    "id"        => $line['plm_id'],
+                    "Opcion"    => "Plantilla de Mantenimiento",
+                    "Tabla"     => "PlantillaMantenimiento",
+                    "Estatus"   => "Vencida",
+                    "Titulo"    => $titulo,
+                    "Menu"      => "Mantenimiento", 
+                    "Cuerpo"    =>$MensajeCorreo
+                );
+
 
                 $query = "INSERT INTO Alertas(Titulo, Menu, Tabla, TAB_ID,Usu_Cre,Descripcion)
                     VALUES('" . $titulo . "','Mantenimiento','PlantillaMantenimiento',"
@@ -113,6 +133,12 @@
                     
                 $result2 = pg_query($query);
             }
+
+            //liberar conexion
+            $this->bd_model->CerrarConexion($conexion);
+            
+            if(count($correoMasivo) > 0)
+                $this->EnviarCorreo($correoMasivo);
         }
         
         public function EnviarCorreo($data){
@@ -185,7 +211,8 @@
                         FROM alertacorreo
                         WHERE Tabla = '" . $data['Tabla'] ."'
                             AND Tab_id = '" . $data['id'] . "'
-                            AND estatus = '" . $data['Estatus'] . "'";
+                            AND estatus = '" . $data['Estatus'] . "'
+                            AND fecha = cast(now() as date)";
 
             
             $result = pg_query($query);

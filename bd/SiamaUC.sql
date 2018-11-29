@@ -233,7 +233,7 @@ CREATE TABLE PlantillaMantenimiento(
 CREATE TABLE PlantillaMantenimientoTarea(
 	PMT_ID			SERIAL			PRIMARY KEY,
 	PLM_ID			INT				NOT NULL,--Plantilla de mantenimiento
-	Titulo			VARCHAR(20)		NOT NULL,--Titulo tarea
+	Titulo			VARCHAR(255)	NOT NULL,--Titulo tarea
 	PIE_ID			INT				NOT NULL,--Pieza a la que se le est� haciendo mantenimiento
 	Minutos			INT				NOT NULL,--Tiempo Estimado en el que se realizara el mantenimiento
 	Descripcion		TEXT			NOT NULL,
@@ -360,7 +360,7 @@ CREATE TABLE MantenimientoTarea(
 	MTA_ID			SERIAL	PRIMARY KEY,
 	MAN_ID			INT				NOT NULL,
 	PIE_ID			INT				NOT NULL,
-	Titulo			VARCHAR(20)		NOT NULL,--Titulo tarea
+	Titulo			VARCHAR(250)	NOT NULL,--Titulo tarea
 	ESTATUS			VARCHAR(100)	NOT NULL,--Solicitado, Aprobado, Realizado
 	USU_ID			INT				NULL,
 	PRO_ID			INT				NULL,
@@ -519,8 +519,8 @@ CREATE TABLE AlertaCorreo(
 	Tabla			VARCHAR(50)		NOT NULL,
 	TAB_ID			INT 			NOT NULL,
 	Estatus			VARCHAR(100)	NOT NULL,
-	Fecha			TIMESTAMP		NOT NULL DEFAULT(NOW()),
-	UNIQUE(Tabla,TAB_ID,Estatus)
+	Fecha			DATE			NOT NULL DEFAULT(NOW()),
+	UNIQUE(Tabla,TAB_ID,Estatus,Fecha)
 );
 
 GRANT CONNECT ON DATABASE siamafacyt TO userapp;
