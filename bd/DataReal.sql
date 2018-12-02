@@ -292,6 +292,14 @@ Values(
     '[{"Valor":"Nombre","Opcion":"Nombre","Descripcion":""}]'
 );
 
+INSERT INTO Listas_Desplegables( Codigo,Nombre,Descripcion,Opciones) 
+Values(
+    'COB-OBRERO',
+    'Campos para Ordenar Busqueda Obreros',
+    null,
+    '[{"Valor":"cedula","Opcion":"Cedula","Descripcion":""},{"Valor":"nombre","Opcion":"Nombre","Descripcion":""}]'
+);
+
 /*
 INSERT INTO Listas_Desplegables( Codigo,Nombre,Descripcion,Opciones) 
 Values(

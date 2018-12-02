@@ -65,6 +65,18 @@
             <?php
             }
 
+            if($this->session->userdata("Permisos")['Obreros']){
+                $posMenu++;
+            ?>
+            <li class="oMenu">
+                <a href='<?=site_url('obreros')?>'>
+                    <span class="fa fa-meetup" style="width:20px;"></span> 
+                    <label>Obreros</label>
+                </a>
+            </li>
+            <?php
+            }
+
             if($this->session->userdata("Permisos")['Partidas']){
                 $posMenu++;
             ?>

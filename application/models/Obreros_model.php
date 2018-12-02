@@ -1,6 +1,6 @@
 
 <?php
-    class Herramientas_model extends CI_Model{
+    class Obreros_model extends CI_Model{
         
         public function Insertar($data){
             //Abrir conexion
@@ -9,12 +9,17 @@
             //Abrir Transaccion
             pg_query("BEGIN") or die("Could not start transaction");
 
-            //Insertar Herramientas
-            $query = " INSERT INTO Herramientas(Nombre,usu_cre,Observaciones) VALUES('"
+            //Insertar Obreros
+            $query = " INSERT INTO Obreros(Cedula,Nombre,usu_cre,Telefonos,Correo,Observaciones) VALUES('"
+            . str_replace("'", "''",$data['Cedula']) . "','"
             . str_replace("'", "''",$data['Nombre']) . "',"
             . $this->session->userdata("usu_id")    . ","
+            . (($data['Telefonos'] == "") ? "null" : ("'" .str_replace("'", "''", $data['Telefonos']) . "'"))
+            . ","
+            . (($data['Correo'] == "") ? "null" : ("'" .str_replace("'", "''", $data['Correo']) . "'"))
+            . ","
             . (($data['Observaciones'] == "") ? "null" : ("'" .str_replace("'", "''", $data['Observaciones']) . "'"))
-            . ") RETURNING her_id;";
+            . ") RETURNING obr_id;";
 
             //Ejecutar Query
             $result = pg_query($query);
@@ -26,18 +31,17 @@
             }
 
             if($result){
-                $data['her_id'] = $new_id;
-                unset($data['idActual']);
+                $data['obr_id'] = $new_id;
                 $datos = array(
                     'Opcion' => 'Insertar',
-                    'Tabla' => 'Herramientas', 
+                    'Tabla' => 'Obreros', 
                     'Tab_id' => $new_id,
                     'Datos' => json_encode($data)
                 );
                 
                 $result = $this->auditorias_model->Insertar($datos);
             }
-                
+
             if(!$result){
                 $error = pg_last_error();
                 pg_query("ROLLBACK") or die("Transaction rollback failed");
@@ -55,29 +59,32 @@
             
             //Abrir conexion
             $conexion = $this->bd_model->ObtenerConexion();
-
+            
             //Abrir Transaccion
             pg_query("BEGIN") or die("Could not start transaction");
-
-            $query = " UPDATE Herramientas "
-                . " SET Nombre ='". str_replace("'", "''",$data['Nombre']) 
+            
+            $query = " UPDATE Obreros"
+                . " SET Cedula ='". str_replace("'", "''",$data['Cedula']) 
+                . "', Nombre = '".str_replace("'", "''",$data['Nombre'])
                 . "', Usu_Mod = " . $this->session->userdata("usu_id") 
                 . ", Fec_Mod = NOW()" 
+                . ", Telefonos = "
+                .(($data['Telefonos'] == "") ? "null" : ("'" .str_replace("'", "''", $data['Telefonos']) . "'"))
+                . ", Correo = "
+                .(($data['Correo'] == "") ? "null" : ("'" .str_replace("'", "''", $data['Correo']) . "'"))
                 . ", Observaciones = " 
                 .(($data['Observaciones'] == "") ? "null" : ("'" .str_replace("'", "''", $data['Observaciones']) . "'"))
-                . " WHERE her_id = '" . str_replace("'", "''",$data['idActual']) . "';";
+                . " WHERE obr_id = '" . str_replace("'", "''",$data['obr_id']) . "';";
 
 
             //Ejecutar Query
             $result = pg_query($query);
             
             if($result){
-                $data['her_id'] = $data['idActual'];
-                unset($data['idActual']);
                 $datos = array(
                     'Opcion' => 'Actualizar',
-                    'Tabla' => 'Herramientas', 
-                    'Tab_id' => $data['her_id'],
+                    'Tabla' => 'Obreros', 
+                    'Tab_id' => $data['obr_id'],
                     'Datos' => json_encode($data)
                 );
                 
@@ -91,6 +98,7 @@
             }else
                 pg_query("COMMIT") or die("Transaction commit failed");
 
+
             //liberar conexion
             $this->bd_model->CerrarConexion($conexion);
 
@@ -99,53 +107,23 @@
 
         public function Obtener($id = ''){
             
-
             //Abrir conexion
             $conexion = $this->bd_model->ObtenerConexion();
             //Query para buscar usuario
-            $query ="   SELECT  her_id,
+            $query ="   SELECT  obr_id,
+                                Cedula,
                                 Nombre,
+                                COALESCE(Telefonos,'') Telefonos,
+                                COALESCE(Correo,'') Correo,
                                 COALESCE(Observaciones,'') Observaciones
-                        FROM Herramientas
+                        FROM Obreros
                     ";
 
             if($id != ''){
-                $query = $query . " WHERE her_id = '" . $id . "'";
+                $query = $query . " WHERE obr_id = '" . $id . "'";
             }
 
-            $query = $query . " ORDER BY her_id DESC LIMIT 1;";
-
-            //Ejecutar Query
-            $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
-            
-            //Si existe registro, se guarda. Sino se guarda false
-            if ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) 
-                $retorno = $line;
-            else
-                $retorno = false;
-
-            //Liberar memoria
-            pg_free_result($result);
-
-            //liberar conexion
-            $this->bd_model->CerrarConexion($conexion);
-
-            return $retorno;
-        }
-
-        public function ObtenerInfoPDF($id){
-            
-
-            //Abrir conexion
-            $conexion = $this->bd_model->ObtenerConexion();
-            //Query para buscar usuario
-            $query ="   SELECT  her_id,
-                                Nombre,
-                                COALESCE(Observaciones,'') Observaciones
-                        FROM Herramientas
-                        WHERE her_id = '" . $id . "'";
-            
-
+            $query = $query . " ORDER BY obr_id DESC LIMIT 1;";
 
             //Ejecutar Query
             $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
@@ -173,22 +151,29 @@
 
 
             if($busqueda != ""){
-                $condicion = " WHERE (LOWER(Nombre) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
+                $condicion = " WHERE (LOWER(Cedula) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
+                            . "%' OR LOWER(Nombre) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
                             . "%')";
             }
 
             //Query para buscar usuario
-            $query ="   SELECT  her_id,
+            $query ="   SELECT  obr_id,
+                                Cedula,
                                 Nombre,
+                                Telefonos,
+                                Correo,
                                 Observaciones,
                                 Registros
                         FROM (
-                            SELECT  her_id,
+                            SELECT  obr_id,
+                                    Cedula,
                                     Nombre,
+                                    COALESCE(Telefonos,'') Telefonos,
+                                    COALESCE(Correo,'') Correo,
                                     COALESCE(Observaciones,'') Observaciones,
                                     COUNT(*) OVER() AS Registros,
                                     ROW_NUMBER() OVER(ORDER BY " . $orden .") Fila
-                            FROM Herramientas
+                            FROM Obreros
                             " . $condicion . "
 
                         ) LD
@@ -226,9 +211,9 @@
             //Abrir Transaccion
             pg_query("BEGIN") or die("Could not start transaction");
 
-            //Eliminar Herramientas
-            $query = " DELETE FROM Herramientas "
-                . " WHERE her_id = '" .str_replace("'", "''",$id) . "';";
+            //Eliminar Obreros
+            $query = " DELETE FROM Obreros"
+                . " WHERE obr_id = '" .str_replace("'", "''",$id) . "';";
                 
             //Ejecutar Query
             $result = pg_query($query);
@@ -236,7 +221,7 @@
             if($result){
                 $datos = array(
                     'Opcion' => 'Eliminar',
-                    'Tabla' => 'Herramientas', 
+                    'Tabla' => 'Obreros', 
                     'Tab_id' => $id,
                     'Datos' => json_encode($datosActual)
                 );
@@ -258,16 +243,16 @@
 
         }
 
-        public function ExisteNombre($Nombre,$id=""){
+        public function ExisteCedula($cedula,$id=""){
 
             //Abrir conexion
             $conexion = $this->bd_model->ObtenerConexion();
     
             //Query para buscar usuario
-            $query =" SELECT * FROM Herramientas WHERE LOWER(Nombre) ='" . strtolower(str_replace("'", "''",$Nombre)) . "' " ;
+            $query =" SELECT * FROM Obreros WHERE LOWER(cedula) ='" . strtolower(str_replace("'", "''",$cedula)) . "' " ;
 
             if($id != "")
-                $query = $query . " AND her_id <>'" . str_replace("'", "''",$id) . "' " ;
+                $query = $query . " AND obr_id <>'" . str_replace("'", "''",$id) . "' " ;
 
                 
             $query = $query . ";" ;

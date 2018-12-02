@@ -62,6 +62,13 @@ const thMarcas = `
     </tr>
 `;
 
+const thObreros = `
+    <tr>
+        <th style="width:30%;">C&eacute;dula</th>
+        <th style="width:70%;">Nombre</th>
+    </tr>
+`;
+
 const thPartidas = `
     <tr>
         <th style="width:20%;">C&oacute;digo</th>

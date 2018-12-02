@@ -120,6 +120,12 @@ $route['marcas/guardar'] = 'marcas/guardar';
 $route['marcas/imprimir/(:any)'] = 'marcas/imprimir/$1';
 $route['marcas'] = 'marcas/view';
 
+$route['obreros/busqueda'] = 'obreros/busqueda';
+$route['obreros/eliminar'] = 'obreros/eliminar';
+$route['obreros/guardar'] = 'obreros/guardar';
+$route['obreros/imprimir/(:any)'] = 'obreros/imprimir/$1';
+$route['obreros'] = 'obreros/view';
+
 $route['reportes/marcas/listadomarcas'] = 'Reportes/marcasrep/listadomarcas';
 $route['reportes/marcas'] = 'Reportes/marcasrep/view';
 

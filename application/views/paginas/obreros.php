@@ -1,7 +1,7 @@
 <div class="container">
     <div class="row">
         <div class="col-lg-9" style="padding: 0px;">
-            <h2><span class="fa fa-user"></span> Proveedores</h2>   
+            <h2><span class="fa fa-bookmark"></span> Obreros</h2>   
         </div>
     </div>
 </div>
@@ -16,37 +16,28 @@
             </button>
         </div>
 
-        <form class ="formulario-desactivado" id="FormularioActual" method="POST" action = "<?=site_url('/proveedores/guardar')?>">
+        <form class ="formulario-desactivado" id="FormularioActual" method="POST" action = "<?=site_url('/obreros/guardar')?>">
 
             <div style="margin: 10px 15px;display:none;" id="alertaFormularioActual" class="alert alert-danger text-center">
             </div>
             <div style="display:none;" id = "IdForm">
-                <?=$pro_id?> 
+                <?=$obr_id?> 
             </div>
 
             <div class="form-group row">
-                <label for="rif" class="col-md-3 col-form-label">RIF:</label>
+                <label for="cedula" class="col-md-3 col-form-label">C&eacute;dula:</label>
                 <div class="col-md-9">
                     <input maxlength="20" readonly disabled type="text" 
-                    class="form-control obligatorio texto" id="rif" value="<?=$rif?> ">
+                    class="form-control obligatorio texto" id="cedula" value="<?=$cedula?>">
                     <div class="invalid-feedback">Campo Obligatorio</div>
                 </div>
             </div>
 
             <div class="form-group row">
-                <label for="nombrePro" class="col-md-3 col-form-label">Raz&oacute;n Social:</label>
+                <label for="nombreObr" class="col-md-3 col-form-label">Nombre:</label>
                 <div class="col-md-9">
                     <input maxlength="100" readonly disabled type="text" 
-                    class="form-control obligatorio texto" id="nombrePro" value="<?=$raz_soc?> ">
-                    <div class="invalid-feedback">Campo Obligatorio</div>
-                </div>
-            </div>
-
-            <div class="form-group row">
-                <label for="registro" class="col-md-3 col-form-label">RNC:</label>
-                <div class="col-md-9">
-                    <input maxlength="100" readonly disabled type="text" 
-                    class="form-control obligatorio texto" id="registro" value="<?=$reg_nac_con?>">
+                    class="form-control obligatorio texto" id="nombreObr" value="<?=$nombre?>">
                     <div class="invalid-feedback">Campo Obligatorio</div>
                 </div>
             </div>
@@ -67,16 +58,6 @@
                     <div class="invalid-feedback">Correo Inv&aacute;lido</div>
                 </div>
             </div>
-
-
-            <div class="form-group row">
-                <label for="direccion" class="col-md-3 col-form-label">Direcci&oacute;n:</label>
-                <div class="col-md-9">
-                    <textarea  readonly disabled class="form-control obligatorio texto" rows="3"
-                    style = "resize:vertical;" id="direccion"><?=$direccion?></textarea>
-                    <div class="invalid-feedback">Campo Obligatorio</div>
-                </div>
-            </div>
             
             <div class="form-group row">
                 <label for="Observacion" class="col-md-3 col-form-label">Observaci&oacute;n:</label>
@@ -87,12 +68,12 @@
             </div>
 
         </form>
-        <div style="display:none;" id ="ControladorActual"><?=site_url('/proveedores')?></div>
+        <div style="display:none;" id ="ControladorActual"><?=site_url('/obreros')?></div>
         <div style="background-color: #95a5a6; padding: 10px;">
 
             <div class="form-group row botoneraFormulario" >
 
-                <?php if($pro_id != "" ) {?>
+                <?php if($obr_id != "" ) {?>
                 <button  type="button"  class="btn btn-primary-siama" id="BuscarRegistro">
                     <span class="fa fa-search"></span>
                     Buscar
@@ -109,7 +90,7 @@
                     Agregar
                 </button>
 
-                <?php if($pro_id != "" ) {?>
+                <?php if($obr_id != "" ) {?>
                 <button title="Eliminar" type="button" class="btn  btn-danger" id="EliminarRegistro">
                     <span class="fa fa-trash"></span>
                     Eliminar
