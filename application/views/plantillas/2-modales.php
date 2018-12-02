@@ -1,6 +1,6 @@
 
         <!-- Modal Funciones -->
-        <div class="modal fade" id="SiamaModalFunciones" tabindex="-1" role="dialog" aria-labelledby="SiamaModalFuncionesEtiqueta" data-backdrop="static">
+        <div class="modal fade" id="SiamaModalFunciones" tabindex="-1" role="dialog" aria-labelledby="SiamaModalFuncionesEtiqueta" data-backdrop="static" data-keyboard="false">
             <div class="modal-dialog" style="z-index:1 !important;margin-top:10vh;">
                 <div class="modal-content containerModalMensajes">
                 <div class="modal-header" style="background-color:#2C3E50;color:#fff; ">
@@ -21,7 +21,7 @@
         </div>
         
         <!-- Modal Errores -->
-        <div class="modal fade" id="SiamaModalAdvertencias" tabindex="-1" role="dialog" aria-labelledby="SiamaModalAdvertenciasEtiqueta" data-backdrop="static">
+        <div class="modal fade" id="SiamaModalAdvertencias" tabindex="-1" role="dialog" aria-labelledby="SiamaModalAdvertenciasEtiqueta" data-backdrop="static" data-keyboard="false">
             <div class="modal-dialog" style="z-index:3 !important;margin-top:7vh;">
                 <div class="modal-content containerModalMensajes">
                 <div class="modal-header" style="background-color:#dc3545;color:#fff; ">
@@ -37,7 +37,7 @@
 
         
         <!-- Modal Busqueda -->
-        <div class="modal fade" id="SiamaModalBusqueda" tabindex="-1" role="dialog" aria-labelledby="SiamaModalBusquedaEtiqueta" data-backdrop="static" >
+        <div class="modal fade" id="SiamaModalBusqueda" tabindex="-1" role="dialog" aria-labelledby="SiamaModalBusquedaEtiqueta" data-backdrop="static" data-keyboard="false" >
             <div class="modal-busqueda modal-dialog" style="z-index:2 !important;margin-top:10vh; width:85%;">
                 <div class="modal-content containerModalMensajes">
                 <div class="modal-header" style="background-color:#2C3E50;color:#fff; ">

@@ -107,6 +107,12 @@
                 </a>
             </li>
             <li class="submenu submenu<?=$posMenu?>">
+                <a href='<?=base_url()?>herramientas'>
+                    <span class="fa fa-cubes " style="width:20px;" ></span>
+                    <label>Herramientas</label>
+                </a>
+            </li>
+            <li class="submenu submenu<?=$posMenu?>">
                 <a href='<?=base_url()?>piezas'>
                     <span class="fa fa-cubes " style="width:20px;" ></span>
                     <label>Piezas</label>

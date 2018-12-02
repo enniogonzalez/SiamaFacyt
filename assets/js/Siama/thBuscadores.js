@@ -42,6 +42,12 @@ const thFallas = `
     </tr>
 `;
 
+const thHerramientas = `
+    <tr>
+        <th style="width:100%;">Nombre</th>
+    </tr>
+`;
+
 const thLocalizaciones = `
     <tr>
         <th style="width:20%;">Nombre</th>

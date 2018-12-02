@@ -90,6 +90,19 @@ CREATE TABLE Localizaciones(
 );
 
 /*Tablas de Segundo Nivel*/
+
+CREATE TABLE Herramientas(
+	HER_ID			SERIAL			PRIMARY KEY,
+	Nombre			VARCHAR(255)	NOT NULL UNIQUE,
+	Usu_Cre			INT				NOT NULL,--Usuario Creador
+	Fec_Cre			TIMESTAMP		NOT NULL DEFAULT(NOW()), --fecha Creacion
+	Usu_Mod			INT				NULL,--Usuario Creador
+	Fec_Mod			TIMESTAMP		NOT NULL DEFAULT(NOW()),
+	Observaciones	TEXT			NULL,
+	FOREIGN KEY (Usu_Cre) References Usuarios,
+	FOREIGN KEY (Usu_Mod) References Usuarios
+);
+
 CREATE TABLE Pertenece(
 	LOH_ID	INT PRIMARY KEY, --Locacion hijo
 	LOP_ID	INT NOT NULL,	--Locacion Padre
@@ -106,7 +119,7 @@ CREATE TABLE EsSubpartida(
 
 CREATE TABLE Fallas(
 	FAL_ID			SERIAL			PRIMARY KEY,
-	Nombre			VARCHAR(255)	NOT NULL,
+	Nombre			VARCHAR(255)	NOT NULL	UNIQUE,
 	Tipo			VARCHAR(100)	NOT NULL,
 	Usu_Cre			INT				NOT NULL,--Usuario Creador
 	Fec_Cre			TIMESTAMP		NOT NULL DEFAULT(NOW()), --fecha Creacion

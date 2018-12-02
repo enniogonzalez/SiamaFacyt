@@ -284,6 +284,14 @@ Values(
     '[{"Valor":"Nombre","Opcion":"Nombre","Descripcion":""}]'
 );
 
+INSERT INTO Listas_Desplegables( Codigo,Nombre,Descripcion,Opciones) 
+Values(
+    'COB-HERRAM',
+    'Campos para Ordenar Busqueda Herramientas',
+    null,
+    '[{"Valor":"Nombre","Opcion":"Nombre","Descripcion":""}]'
+);
+
 /*
 INSERT INTO Listas_Desplegables( Codigo,Nombre,Descripcion,Opciones) 
 Values(

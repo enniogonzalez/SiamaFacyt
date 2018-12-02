@@ -95,6 +95,12 @@ $route['fallas/guardar'] = 'Mantenimiento/fallas/guardar';
 $route['fallas/imprimir/(:any)'] = 'Mantenimiento/fallas/imprimir/$1';
 $route['fallas'] = 'Mantenimiento/fallas/view';
 
+$route['herramientas/busqueda'] = 'Patrimonio/herramientas/busqueda';
+$route['herramientas/eliminar'] = 'Patrimonio/herramientas/eliminar';
+$route['herramientas/guardar'] = 'Patrimonio/herramientas/guardar';
+$route['herramientas/imprimir/(:any)'] = 'Patrimonio/herramientas/imprimir/$1';
+$route['herramientas'] = 'Patrimonio/herramientas/view';
+
 $route['listasdesplegables/ObtenerLista'] = 'Sistema/listasdesplegables/ObtenerLista';
 $route['listasdesplegables/busqueda'] = 'Sistema/listasdesplegables/busqueda';
 $route['listasdesplegables/eliminar'] = 'Sistema/listasdesplegables/eliminar';
