@@ -183,7 +183,7 @@
             
             $data['datos'] = $this->FormatearRequest($this->usuarios_model->Obtener($id));
             $this->load->library('tcpdf/Pdf');
-            $this->load->view('Reportes/repUsuarios',$data);
+            $this->load->view('Formatos/formatoUsuario',$data);
             
         }
 

@@ -147,7 +147,7 @@
             $this->ValidarPermiso();
             $data['datos'] = $this->FormatearRequest($this->proveedores_model->Obtener($id));
             $this->load->library('tcpdf/Pdf');
-            $this->load->view('Reportes/repProveedores',$data);
+            $this->load->view('Formatos/formatoProveedor',$data);
         }
 
         private function FormatearBusqueda($datos){

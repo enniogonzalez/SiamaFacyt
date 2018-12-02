@@ -313,7 +313,7 @@
             $this->ValidarPermiso();
             $data['datos'] = $this->FormatearRequest($this->bienes_model->ObtenerInfoPDF($id),true);
             $this->load->library('tcpdf/Pdf');
-            $this->load->view('Reportes/repBienes',$data);
+            $this->load->view('Formatos/formatoBien',$data);
         }
 
         private function FormatearBusqueda($datos){

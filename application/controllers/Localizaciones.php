@@ -148,7 +148,7 @@
 
             $data['datos'] = $this->FormatearImpresion($this->localizaciones_model->ObtenerInfoPDF($id));
             $this->load->library('tcpdf/Pdf');
-            $this->load->view('Reportes/repLocalizaciones',$data);
+            $this->load->view('Formatos/formatoLocalizacion',$data);
         }
 
         private function FormatearImpresion($respuesta){

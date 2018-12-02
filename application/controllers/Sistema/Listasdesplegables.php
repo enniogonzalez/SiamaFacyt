@@ -203,7 +203,7 @@
             $this->ValidarPermiso();
             $data['datos'] = $this->FormatearImpresion($this->listasdesplegables_model->Obtener($id));
             $this->load->library('tcpdf/Pdf');
-            $this->load->view('Reportes/repListasDesplegables',$data);
+            $this->load->view('Formatos/formatoListaDesplegable',$data);
         }
 
         private function FormatearImpresion($respuesta){

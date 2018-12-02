@@ -16,7 +16,7 @@ class MYPDF extends TCPDF {
         
         $this->SetFont('helvetica', 'B', 15);
 		$this->SetY(23);
-        $this->Cell(200, 10, "Tipo de Pieza", 0, false, 'C', 0, '', 0, false, 'M', 'M');
+        $this->Cell(200, 10, "Formato de Falla", 0, false, 'C', 0, '', 0, false, 'M', 'M');
 		$this->SetY(28);
         $this->SetFont('helvetica', 'B', 8);
         $this->Cell(320, 10, "Fecha Impresión: " . date("d/m/Y"), 0, false, 'C', 0, '', 0, false, 'M', 'M');
@@ -41,8 +41,8 @@ $pdf = new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8',
 // set document information
 $pdf->SetCreator(PDF_CREATOR);
 $pdf->SetAuthor('Ennio Gonzalez');
-$pdf->SetTitle('Tipo de Pieza');
-$pdf->SetSubject('Tipo de Pieza');
+$pdf->SetTitle('Formato de Falla');
+$pdf->SetSubject('Formato de Falla');
 $pdf->SetKeywords('TCPDF, PDF, example, test, guide');
 
 // set default header data
@@ -91,6 +91,10 @@ $tbl = "
             <td style=\"width:86%\">" . $datos['nombre'] . "</td>
         </tr>
         <tr >
+            <td style=\"width:14%\"> <strong>Tipo:</strong></td>
+            <td style=\"width:86%\">" . $datos['tipo'] . "</td>
+        </tr>
+        <tr >
             <td style=\"width:14%\"> <strong>Observaci&oacute;n:</strong></td>
             <td style=\"width:86%\">" . $datos['observaciones'] . "</td>
         </tr>
@@ -103,4 +107,4 @@ $pdf->writeHTML($tbl, true, false, false, false, '');
 // -----------------------------------------------------------------------------
 
 //Close and output PDF document
-$pdf->Output('TipoPieza' . substr("0000000000" . trim($datos['tpi_id'] ),-10)  . '.pdf', 'I');
+$pdf->Output('formatoFalla' . substr("0000000000" . trim($datos['fal_id'] ),-10)  . '.pdf', 'I');

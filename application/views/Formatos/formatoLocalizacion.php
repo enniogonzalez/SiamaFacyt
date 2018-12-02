@@ -16,7 +16,7 @@ class MYPDF extends TCPDF {
         
         $this->SetFont('helvetica', 'B', 15);
 		$this->SetY(23);
-        $this->Cell(200, 10, "Fallas", 0, false, 'C', 0, '', 0, false, 'M', 'M');
+        $this->Cell(200, 10, "Formato de Localización", 0, false, 'C', 0, '', 0, false, 'M', 'M');
 		$this->SetY(28);
         $this->SetFont('helvetica', 'B', 8);
         $this->Cell(320, 10, "Fecha Impresión: " . date("d/m/Y"), 0, false, 'C', 0, '', 0, false, 'M', 'M');
@@ -41,8 +41,8 @@ $pdf = new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8',
 // set document information
 $pdf->SetCreator(PDF_CREATOR);
 $pdf->SetAuthor('Ennio Gonzalez');
-$pdf->SetTitle('Fallas');
-$pdf->SetSubject('Fallas');
+$pdf->SetTitle('Formato de Localización');
+$pdf->SetSubject('Formato de Localización');
 $pdf->SetKeywords('TCPDF, PDF, example, test, guide');
 
 // set default header data
@@ -87,16 +87,20 @@ $pdf->SetFont('helvetica', '', 10);
 $tbl = "
     <table cellspacing=\"0\" cellpadding=\"1\" style=\"border: 1px solid black;\">
         <tr >
-            <td style=\"width:14%\"> <strong>Nombre:</strong></td>
-            <td style=\"width:86%\">" . $datos['nombre'] . "</td>
+            <td> <strong>Nombre:</strong></td>
+            <td>" . $datos['nombre'] . "</td>
+            <td><strong>Tipo:</strong></td>
+            <td>" . $datos['tipo'] . "</td>
         </tr>
         <tr >
-            <td style=\"width:14%\"> <strong>Tipo:</strong></td>
-            <td style=\"width:86%\">" . $datos['tipo'] . "</td>
+            <td> <strong>Localización Padre:</strong></td>
+            <td>" . $datos['nombrepadre'] . "</td>
+            <td><strong>Amperaje:</strong></td>
+            <td>" . $datos['cap_amp'] . "</td>
         </tr>
         <tr >
-            <td style=\"width:14%\"> <strong>Observaci&oacute;n:</strong></td>
-            <td style=\"width:86%\">" . $datos['observaciones'] . "</td>
+            <td> <strong>Observaci&oacute;n:</strong></td>
+            <td colspan=\"3\">" . $datos['observaciones'] . "</td>
         </tr>
 </table>
 ";
@@ -107,4 +111,4 @@ $pdf->writeHTML($tbl, true, false, false, false, '');
 // -----------------------------------------------------------------------------
 
 //Close and output PDF document
-$pdf->Output('Falla' . substr("0000000000" . trim($datos['fal_id'] ),-10)  . '.pdf', 'I');
+$pdf->Output('formatoLocalizacion' . substr("0000000000" . trim($datos['loc_id'] ),-10)  . '.pdf', 'I');

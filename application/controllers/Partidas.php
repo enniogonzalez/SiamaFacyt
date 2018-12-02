@@ -149,7 +149,7 @@
             $this->ValidarPermiso();
             $data['datos'] = $this->FormatearImpresion($this->partidas_model->ObtenerInfoPDF($id));
             $this->load->library('tcpdf/Pdf');
-            $this->load->view('Reportes/repPartidas',$data);
+            $this->load->view('Formatos/formatoPartida',$data);
         }
 
         private function FormatearImpresion($respuesta){
