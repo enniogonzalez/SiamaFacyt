@@ -24,6 +24,15 @@ const thCambioEstatus = `
         <th style="width:20%;">Estatus Bien</th>
     </tr>
 `;
+
+const thCompatibilidad = `
+    <tr>
+        <th style="width:25%;">Documento</th>
+        <th style="width:50%;">Bien</th>
+        <th style="width:25%;">Estatus</th>
+    </tr>
+`;
+
 const thCorrectivos = `
 <tr>
     <th style="width:15%;">Documento</th>

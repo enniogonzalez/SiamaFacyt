@@ -77,6 +77,14 @@ $route['cambiosestatus/guardar'] = 'Patrimonio/cambiosestatus/guardar';
 $route['cambiosestatus/imprimir/(:any)'] = 'Patrimonio/cambiosestatus/imprimir/$1';
 $route['cambiosestatus'] = 'Patrimonio/cambiosestatus/view/';
 
+$route['compatibilidad/aprobar'] = 'Patrimonio/compatibilidad/aprobar';
+$route['compatibilidad/obtener'] = 'Patrimonio/compatibilidad/obtener';
+$route['compatibilidad/busqueda'] = 'Patrimonio/compatibilidad/busqueda';
+$route['compatibilidad/eliminar'] = 'Patrimonio/compatibilidad/eliminar';
+$route['compatibilidad/guardar'] = 'Patrimonio/compatibilidad/guardar';
+$route['compatibilidad/imprimir/(:any)'] = 'Patrimonio/compatibilidad/imprimir/$1';
+$route['compatibilidad'] = 'Patrimonio/compatibilidad/view/';
+
 $route['configurar/guardar'] = 'Sistema/configurarusuario/guardar';
 $route['configurar'] = 'Sistema/configurarusuario/view';
 

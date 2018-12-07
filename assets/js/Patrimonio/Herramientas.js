@@ -64,7 +64,6 @@ $(function(){
 
     $('.botoneraFormulario').on('click','#AgregarRegistro',function(){
 
-        alert('agregar')
         GuardarEstadoActualFormulario();
         ClearForm();
         HabilitarFormulario()

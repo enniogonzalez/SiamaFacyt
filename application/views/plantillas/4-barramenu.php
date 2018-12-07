@@ -70,7 +70,7 @@
             ?>
             <li class="oMenu">
                 <a href='<?=site_url('obreros')?>'>
-                    <span class="fa fa-meetup" style="width:20px;"></span> 
+                    <span class="fa fa-address-card" style="width:20px;"></span> 
                     <label>Obreros</label>
                 </a>
             </li>
@@ -119,8 +119,14 @@
                 </a>
             </li>
             <li class="submenu submenu<?=$posMenu?>">
+                <a href='<?=base_url()?>compatibilidad'>
+                    <span class="fa fa-object-group" style="width:20px;" ></span>
+                    <label>Compatibilidad</label>
+                </a>
+            </li>
+            <li class="submenu submenu<?=$posMenu?>">
                 <a href='<?=base_url()?>herramientas'>
-                    <span class="fa fa-cubes " style="width:20px;" ></span>
+                    <span class="fa fa-compass " style="width:20px;" ></span>
                     <label>Herramientas</label>
                 </a>
             </li>

@@ -551,6 +551,50 @@ CREATE TABLE AlertaCorreo(
 	UNIQUE(Tabla,TAB_ID,Estatus,Fecha)
 );
 
+CREATE TABLE Compatibilidad(
+	COM_ID			SERIAL			PRIMARY KEY,
+	Documento		VARCHAR(10)		NOT NULL UNIQUE,
+	BIE_ID			INT				NOT NULL,--Bien al que se le esta creando compatibilidad
+	Estatus			VARCHAR(100)	NOT NULL,--Solicitado, Aprobado
+	Usu_Cre			INT				NOT NULL, --Usuario Creador
+	Fec_Cre			TIMESTAMP		NOT NULL DEFAULT(NOW()), --fecha Creacion
+	Usu_Mod			INT				NOT NULL, --Usuario Modificador
+	Fec_Mod			TIMESTAMP		NOT NULL DEFAULT(NOW()), --fecha Modificacion
+	Usu_Apr			INT				NULL, --Usuario Aprobador
+	Fec_Apr			TIMESTAMP		NULL, --fecha aprobacion
+	Observaciones	TEXT,
+	FOREIGN KEY (BIE_ID) References Bienes,
+	FOREIGN KEY (Usu_Cre) References Usuarios,
+	FOREIGN KEY (Usu_Apr) References Usuarios,
+	FOREIGN KEY (Usu_Mod) References Usuarios
+);
+
+CREATE TABLE CompatibilidadAccion(
+	CAC_ID			SERIAL			PRIMARY KEY,
+	COM_ID			INT				NOT NULL,
+	TPI_ID			INT				NOT NULL,
+	Tipo			VARCHAR(7)		NOT NULL,
+	Usu_Cre			INT				NOT NULL, --Usuario Creador
+	Fec_Cre			TIMESTAMP		NOT NULL DEFAULT(NOW()), --fecha Creacion
+	Usu_Mod			INT				NOT NULL, --Usuario Modificador
+	Fec_Mod			TIMESTAMP		NOT NULL DEFAULT(NOW()), --fecha Modificacion
+	Observaciones	TEXT,
+	CONSTRAINT UQ_CAC_COM_TPI UNIQUE (COM_ID,TPI_ID),
+	CONSTRAINT CHK_CAC_TIPO CHECK (Tipo IN ('Agregar','Quitar')),
+	FOREIGN KEY (TPI_ID) References TipoPieza,
+	FOREIGN KEY (COM_ID) References Compatibilidad ON DELETE CASCADE,
+	FOREIGN KEY (Usu_Cre) References Usuarios,
+	FOREIGN KEY (Usu_Mod) References Usuarios
+);
+
+CREATE TABLE CompatibilidadBien(
+	BIE_ID	INT NOT NULL,
+	TPI_ID	INT	NOT NULL,
+	PRIMARY KEY (BIE_ID,TPI_ID),
+	FOREIGN KEY (TPI_ID) References TipoPieza,
+	FOREIGN KEY (BIE_ID) References Bienes ON DELETE CASCADE
+);
+
 GRANT CONNECT ON DATABASE siamafacyt TO userapp;
 
 -- Grant usage the schema

@@ -279,7 +279,7 @@ Values(
 INSERT INTO Listas_Desplegables( Codigo,Nombre,Descripcion,Opciones) 
 Values(
     'COB-TIPOPI',
-    'Campos para Ordenar Busqueda Tipo de Marca',
+    'Campos para Ordenar Busqueda Tipo de Pieza',
     null,
     '[{"Valor":"Nombre","Opcion":"Nombre","Descripcion":""}]'
 );
@@ -300,6 +300,13 @@ Values(
     '[{"Valor":"cedula","Opcion":"Cedula","Descripcion":""},{"Valor":"nombre","Opcion":"Nombre","Descripcion":""}]'
 );
 
+INSERT INTO Listas_Desplegables( Codigo,Nombre,Descripcion,Opciones) 
+Values(
+    'COB-COMPAT',
+    'Campos para Ordenar Busqueda Compatibilidad',
+    null,
+    '[{"Valor":"COM.Documento","Opcion":"Documento","Descripcion":""},{"Valor":"B.nombre","Opcion":"Bien","Descripcion":""},{"Valor":"COM.Estatus","Opcion":"Estatus","Descripcion":""}]'
+);
 /*
 INSERT INTO Listas_Desplegables( Codigo,Nombre,Descripcion,Opciones) 
 Values(

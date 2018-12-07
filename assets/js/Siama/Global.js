@@ -78,7 +78,7 @@ $(function(){
         $('#FormularioActual').removeClass('formulario-desactivado');
 
         $('.formulario-siama form .form-control').each(function(){
-            if(!$(this).hasClass('estatus')){
+            if(!$(this).hasClass('estatus')  &&  !$(this).hasClass('documento')){
                 $(this).removeAttr("disabled"); 
                 $(this).removeAttr("readonly");
             }

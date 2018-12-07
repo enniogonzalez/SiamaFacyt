@@ -255,6 +255,11 @@
     width: 85%;
     margin: 1.75rem auto;
 }
+
+#TablaBusquedaFormulario tbody tr{
+    cursor: pointer;
+}
+
 #TablaBusquedaFormulario td{
     padding: 0.3rem;
 }

@@ -127,11 +127,28 @@
             $pagina = (int) $this->input->post("Pagina") ;
             $regXpag = (int) $this->input->post("RegistrosPorPagina") ;
             $ordenamiento = $this->input->post("Orden") ;
+            $Condiciones = $this->input->post("Condiciones");
             
             $inicio = 1+$regXpag*($pagina-1);
             $fin = $regXpag*$pagina;
+            $bien = "";
+            $delBien = false;
 
-            $respuesta = $this->FormatearBusqueda($this->tipopieza_model->Busqueda($busqueda,$ordenamiento,$inicio,$fin));
+            if(isset($Condiciones)){
+                $delBien = $Condiciones['delBien'] == "true" ? true:false;
+                $bien = $Condiciones['Bien'];
+            }
+
+            $data = array(
+                "busqueda"      => $busqueda,
+                "orden"         => $ordenamiento,
+                "inicio"        => $inicio,
+                "fin"           => $fin,
+                "bien"          => $bien,
+                "delBien"       => $delBien
+            );
+
+            $respuesta = $this->FormatearBusqueda($this->tipopieza_model->Busqueda($data));
 
             echo json_encode(array("isValid"=>true,"Datos"=>$respuesta));
         }

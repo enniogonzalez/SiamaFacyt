@@ -165,16 +165,38 @@
             return $retorno;
         }
 
-        public function Busqueda($busqueda,$orden,$inicio,$fin){
+        public function Busqueda($data){
             
             //Abrir conexion
             $conexion = $this->bd_model->ObtenerConexion();
             $condicion ="";
 
-
-            if($busqueda != ""){
-                $condicion = " WHERE (LOWER(Nombre) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
+            if($data['busqueda'] != ""){
+                $condicion = "WHERE (LOWER(Nombre) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
                             . "%')";
+            }
+
+            if($data['bien'] != ""){
+
+                if($data['delBien']){
+                    $cond1 = "tpi_id IN (
+                        SELECT CB.tpi_id
+                        FROM CompatibilidadBien CB 
+                        WHERE CB.bie_id = '" . $data['bien'] . "'
+                    )";
+                }else{
+                    $cond1 = "tpi_id NOT IN (
+                        SELECT CB.tpi_id
+                        FROM CompatibilidadBien CB 
+                        WHERE CB.bie_id = '" . $data['bien'] . "'
+                    )";
+                }
+
+                if($condicion != ""){
+                    $condicion .= $condicion . " AND " . $cond1;
+                }else{
+                    $condicion = " WHERE " . $cond1;
+                }
             }
 
             //Query para buscar usuario
@@ -187,12 +209,12 @@
                                     Nombre,
                                     COALESCE(Observaciones,'') Observaciones,
                                     COUNT(*) OVER() AS Registros,
-                                    ROW_NUMBER() OVER(ORDER BY " . $orden .") Fila
+                                    ROW_NUMBER() OVER(ORDER BY " . $data['orden'] .") Fila
                             FROM Tipopieza
                             " . $condicion . "
 
                         ) LD
-                        WHERE Fila BETWEEN ". $inicio . " AND " . $fin . "
+                        WHERE Fila BETWEEN ". $data['inicio'] . " AND " . $data['fin'] . "
                         ORDER BY Fila ASC;";
 
             //Ejecutar Query

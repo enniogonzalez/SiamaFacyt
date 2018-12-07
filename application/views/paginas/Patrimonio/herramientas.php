@@ -1,7 +1,7 @@
 <div class="container">
     <div class="row">
         <div class="col-lg-9" style="padding: 0px;">
-            <h2><span class="fa fa-meetup"></span> Herramientas</h2> 
+            <h2><span class="fa fa-compass"></span> Herramientas</h2> 
         </div>
     </div>
 </div>
