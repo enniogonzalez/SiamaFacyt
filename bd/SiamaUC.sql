@@ -214,7 +214,7 @@ CREATE TABLE Piezas(
 	Pie_ser			VARCHAR(100)		NOT NULL,--serial
 
 	PRO_ID			INT					NOT NULL,--proveedor
-	PAR_ID			INT					NOT NULL,--partida
+	PAR_ID			INT					NULL,--partida
 	MAR_ID			INT					NOT NULL,--Marca
 	TPI_ID			INT					NULL,--Tipo de pieza
 
@@ -228,6 +228,7 @@ CREATE TABLE Piezas(
 	Usu_Mod			INT					NOT NULL, --Usuario Creador
 	Fec_Mod			TIMESTAMP			NOT NULL DEFAULT(NOW()),
 	Observaciones	TEXT,
+
 	FOREIGN KEY (PAR_ID) References Partidas,
 	FOREIGN KEY (BIE_ID) References Bienes,
 	FOREIGN KEY (MAR_ID) References Marcas,

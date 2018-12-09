@@ -117,7 +117,7 @@
                     <div style="width:86%;float:left;">
                         <div style="display:none;" id="idPar"><?=$par_id?></div>
                         <input readonly disabled type="text"
-                            class="form-control texto obligatorio buscador" id="nomPar" value="<?=$nompar?>">
+                            class="form-control texto buscador" id="nomPar" value="<?=$nompar?>">
                         <div class="invalid-feedback">Campo Obligatorio</div>
                     </div>
                     <div style="width:14%;float:right;padding:10px;">

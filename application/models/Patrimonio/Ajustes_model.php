@@ -125,7 +125,7 @@
             //liberar conexion
             $this->bd_model->CerrarConexion($conexion);
 
-            $this->alertas_model->EnviarCorreo($correoMasivo);
+            //$this->alertas_model->EnviarCorreo($correoMasivo);
 
             return $UltimoId['aju_id'];
         }
@@ -685,10 +685,12 @@
                                 AAC.Usu_Cre,			
                                 AAC.Fec_Cre,			
                                 AAC.Usu_Mod,			
-                                AAC.Fec_Mod,	
+                                AAC.Fec_Mod,
+                                TPI.nombre nomtpi,	
                                 COALESCE(AAC.Observaciones,'') Observaciones
                         FROM AjustesAccion AAC
                             JOIN Piezas PIE ON PIE.PIE_ID = AAC.PIE_ID
+                            JOIN TipoPieza TPI ON TPI.tpi_id = PIE.tpi_id
                         WHERE AAC.AJU_ID = " . $ajuste . "
                             AND AAC.Tipo = 'Agregar'
                         ORDER BY AAC.AAC_ID ASC;";
@@ -710,6 +712,7 @@
                     . "    <td>" . $line['pie_nom'] . "</td>"
                     . "    <td>" . $line['inv_uc'] . "</td>"
                     . "    <td style=\"display:none;\">" . $line['observaciones']
+                    . "    <td>" . $line['nomtpi'] . "</td>"
                     . "    <td colspan=\"2\" class =\"editarAgregado\"  style=\"text-align: center;cursor: pointer;\">"
                     . "        <span class=\"fa fa-pencil fa-lg\"></span>"
                     . "    </td>"
@@ -836,9 +839,11 @@
                                 AAC.Fec_Cre,			
                                 AAC.Usu_Mod,			
                                 AAC.Fec_Mod,	
+                                TPI.nombre nomtpi,	
                                 COALESCE(AAC.Observaciones,'') Observaciones
                         FROM AjustesAccion AAC
                             JOIN Piezas PIE ON PIE.PIE_ID = AAC.PIE_ID
+                            JOIN TipoPieza TPI ON TPI.tpi_id = PIE.tpi_id
                         WHERE AAC.AJU_ID = " . $ajuste . "
                             AND AAC.Tipo = 'Quitar'
                         ORDER BY AAC.AAC_ID ASC;";
@@ -859,6 +864,7 @@
                     . "    <td>" . $line['pie_nom'] . "</td>"
                     . "    <td>" . $line['inv_uc'] . "</td>"
                     . "    <td style=\"display:none;\">" . $line['observaciones']
+                    . "    <td>" . $line['nomtpi'] . "</td>"
                     . "    <td colspan=\"2\" class =\"editarQuitado\"  style=\"text-align: center;cursor: pointer;\">"
                     . "        <span class=\"fa fa-pencil fa-lg\"></span>"
                     . "    </td>"

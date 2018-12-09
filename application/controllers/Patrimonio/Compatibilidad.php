@@ -219,7 +219,7 @@
             $this->ValidarPermiso();
             $data['datos'] = $this->FormatearImpresion($this->compatibilidad_model->ObtenerInfoPDF($id));
             $this->load->library('tcpdf/Pdf');
-            $this->load->view('Reportes/repAjustes',$data);
+            $this->load->view('Formatos/formatoCompatibilidad',$data);
         }
 
         private function FormatearImpresion($respuesta){
@@ -232,7 +232,7 @@
                 "estatus"       =>"",
                 "solicitante"   =>"",
                 "fec_cre"       =>"",
-                "fec_apr"   =>"",
+                "fec_apr"       =>"",
                 "aprobador"     =>"",
                 "Agregados"     =>[],
                 "Quitados"      =>[],

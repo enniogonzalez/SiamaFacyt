@@ -28,7 +28,7 @@
                 <label for="DocumentoAjustes" class="col-lg-3 col-form-label">Documento:</label>
                 <div class="col-lg-9">
                     <input readonly disabled type="text" maxlength="10"
-                        class="form-control texto" id="DocumentoAjustes" value="<?=$documento?>">
+                        class="form-control documento texto" id="DocumentoAjustes" value="<?=$documento?>">
                 </div>
             </div>
 
@@ -71,8 +71,9 @@
                 <table id="TablaAgregarPiezas" class="table table-hover tabla-siama tabla-siama-desactivada">
                     <thead class="head-table-siama" style="font-size:11px;">
                         <tr>
-                            <th style="width:60%;">Pieza</th>
-                            <th style="width:30%;">Inventario UC</th>
+                            <th style="width:40%;">Pieza</th>
+                            <th style="width:25%;">Inventario UC</th>
+                            <th style="width:25%;">Tipo</th>
                             <th style="width:5%;">
                                 <span id ="agregarAP" style="color:#28a745;cursor: pointer;" class="fa fa-plus-circle fa-lg"></span>
                             </th>
@@ -94,8 +95,9 @@
                 <table id="TablaQuitarPiezas" class="table table-hover tabla-siama tabla-siama-desactivada">
                     <thead class="head-table-siama" style="font-size:11px;">
                         <tr>
-                            <th style="width:60%;">Pieza</th>
-                            <th style="width:30%;">Inventario UC</th>
+                            <th style="width:40%;">Pieza</th>
+                            <th style="width:25%;">Inventario UC</th>
+                            <th style="width:25%;">Tipo</th>
                             <th style="width:5%;">
                                 <span id ="agregarQP" style="color:#28a745;cursor: pointer;" class="fa fa-plus-circle fa-lg"></span>
                             </th>

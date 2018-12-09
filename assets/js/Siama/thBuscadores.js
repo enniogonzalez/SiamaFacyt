@@ -88,11 +88,12 @@ const thPartidas = `
 
 const thPiezas = `
     <tr>
-        <th style="width:15%;">Inventario UC</th>
+        <th style="width:9%;">Estatus</th>
         <th style="width:35%;">Nombre</th>
-        <th style="width:15%;">Marca</th>
+        <th style="width:12%;">Inventario UC</th>
+        <th style="width:12%;">Tipo</th>
+        <th style="width:12%;">Marca</th>
         <th style="width:20%;">Bien</th>
-        <th style="width:15%;">Estatus</th>
     </tr>
 `;
 

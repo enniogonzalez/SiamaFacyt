@@ -115,7 +115,7 @@ $(function(){
         BuscarMarca();
     });
 
-    $('.BorrarPartida').on('click',function(){
+    $('.BorrarMarca').on('click',function(){
         $('#idMar').text("");
         $('#nomMarca').val("");
     });
@@ -234,6 +234,8 @@ $(function(){
             SetModalEtqContador("")
             SetSearchType("Formulario");
 
+            Partida = $('#idPar').text().trim() == '-1' ? "": $('#idPar').text().trim();
+
             var parametros = {
                 "id":               $('#IdForm').text().trim(),
                 "Bien":             $('#idBie').text().trim(),
@@ -244,7 +246,7 @@ $(function(){
                 "Inventario":       $('#invPie').val().trim(),
                 "Marca":            $('#idMar').text().trim(),
                 "Proveedor":        $('#idPro').text().trim(),
-                "Partidas":         $('#idPar').text().trim(),
+                "Partidas":         Partida,
                 "TipoPieza":        $('#idTipPie').text().trim(),
                 "Fabricacion":      $('#fabPieza').val().trim(),
                 "fAdquisicion":     $('#fAdqPieza').val().trim(),

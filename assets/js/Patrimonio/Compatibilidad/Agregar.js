@@ -123,19 +123,16 @@ $(function(){
             fila = $('#mhOptionR').text().trim();
             $("#TablaAgregarTipos").find('> tbody > tr').each(function () {
 
-                if(fila != $(this).index() && ValorActual == $(this).find('td:eq(1)').text().trim()){
+                if(fila != $(this).index() && ValorActual == $(this).find('td:eq(0)').text().trim()){
                     Valido = false;
                     document.getElementsByClassName("contenedorAlertaModal")[0].scrollIntoView();
                     $('#nomTPAgregar').focus(); 
-                    $('#alertaModal').text('No se puede agregar el mismo tipo dos veces');
+                    $('#alertaModal').text('No se puede agregar el mismo tipo de pieza dos veces');
                     $('.contenedorAlertaModal').show();
                     return false;
                 }
             });
         }
-
-
-
 
         if(Valido){
 
@@ -155,7 +152,7 @@ $(function(){
     
             if( $(this).find('td:eq(1)').text().trim() != ''){
                 Agregados.push({ 
-                    "IdTipoPieza"       : $(this).find('td:eq(0)').text(),
+                    "IdTipoPieza"   : $(this).find('td:eq(0)').text(),
                     "Observacion"   : $(this).find('td:eq(2)').text()
                 });
             }
@@ -168,7 +165,7 @@ $(function(){
         var Existe = false;
 
         $("#TablaAgregarTipos").find('> tbody > tr').each(function () {
-            if($(this).find('td:eq(1)').text().trim() != ''){
+            if($(this).find('td:eq(0)').text().trim() != ''){
                 Existe = true;
 
                 //Salir del ciclo
@@ -191,18 +188,6 @@ $(function(){
                 </td>
             </tr>
         `);
-    }
-
-    window.ExistePiezaAgregada = function(Tpieza){
-        Existe = false;
-        $("#TablaAgregarTipos").find('> tbody > tr').each(function () {
-            if(Tpieza == $(this).find('td:eq(1)').text().trim()){
-                Existe = true;
-                return false;
-            }
-        });
-
-        return Existe;
     }
 
     function SetModalFuncionesAgregado(data){

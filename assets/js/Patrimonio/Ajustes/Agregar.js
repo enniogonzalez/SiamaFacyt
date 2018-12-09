@@ -137,9 +137,6 @@ $(function(){
             });
         }
 
-
-
-
         if(Valido){
 
             var row = parseInt($('#mhOptionR').text());
@@ -148,12 +145,12 @@ $(function(){
             fila.find('td:eq(2)').text($('#nomPiezaAgregar').val().trim());
             fila.find('td:eq(3)').text($('#InvAP').text().trim());
             fila.find('td:eq(4)').text($('#ObservacionAP').val().trim());
+            fila.find('td:eq(5)').text($('#TipoAP').text().trim());
     
             CerrarFunciones();
         }
     });
     
-
     window.ObtenerJsonPAgregadas = function(){
         var Agregados = [];
         $("#TablaAgregarPiezas").find('> tbody > tr').each(function () {
@@ -194,6 +191,7 @@ $(function(){
                 <td></td>
                 <td></td>
                 <td style="display:none;"></td>
+                <td></td>
                 <td colspan="2" class ="editarAgregado" style="text-align: center;cursor: pointer;">
                     <span class="fa fa-pencil fa-lg"></span>
                 </td>
@@ -219,11 +217,12 @@ $(function(){
         var html = `
         <form class="form-horizontal" id="formEditarAgregado">
             <div class="form-group row">
-                <label class="col-md-3 col-form-label">Pieza:</label>
-                <div class="col-md-9">
+                <label class="col-lg-3 col-form-label">Pieza:</label>
+                <div class="col-lg-9">
                     <div style="width:80%;float:left;">
                         <div style="display:none;" id="idPiezaAgregar">${data['idPiezaAgregar']}</div>
                         <div style="display:none;" id="InvAP">${data['InvAP']}</div>
+                        <div style="display:none;" id="TipoAP">${data['TipoAP']}</div>
                         <input type="text" title="Pieza" readonly
                             class="form-control texto obligatorio buscador Agregado" id="nomPiezaAgregar" value="${data['nomPiezaAgregar']}">
                         <div class="invalid-feedback">Campo Obligatorio</div>

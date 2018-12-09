@@ -717,7 +717,6 @@
             $conexion = $this->bd_model->ObtenerConexion();
             
             $query ="   SELECT  TPI.Nombre tpi_nom,
-                                COALESCE(TPI.Inv_UC,'') inv_uc,	
                                 COALESCE(CAC.Observaciones,'') Observaciones
                         FROM CompatibilidadAccion CAC
                             JOIN TipoPieza TPI ON TPI.tpi_id = CAC.tpi_id
@@ -849,7 +848,6 @@
             $conexion = $this->bd_model->ObtenerConexion();
 
             $query ="   SELECT  TPI.Nombre tpi_nom,
-                            COALESCE(TPI.Inv_UC,'') inv_uc,	
                             COALESCE(CAC.Observaciones,'') Observaciones
                     FROM CompatibilidadAccion CAC
                         JOIN TipoPieza TPI ON TPI.tpi_id = CAC.tpi_id

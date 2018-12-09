@@ -239,6 +239,64 @@
             echo json_encode(array("isValid"=>true,"Datos"=>$respuesta));
         }
 
+        public function busquedaAgregar(){
+
+            if(!$this->session->userdata("nombre") || $this->input->post("Pagina") == ""){
+                redirect(site_url(''));
+            }
+
+            $busqueda = $this->input->post("Busqueda") ;
+            $pagina = (int) $this->input->post("Pagina") ;
+            $regXpag = (int) $this->input->post("RegistrosPorPagina") ;
+            $ordenamiento = $this->input->post("Orden") ;
+            
+            $inicio = 1+$regXpag*($pagina-1);
+            $fin = $regXpag*$pagina;
+            $Condiciones = $this->input->post("Condiciones");
+            $idBien = $Condiciones['Bien'];
+
+            $data = array(
+                "busqueda"  =>$busqueda,
+                "orden"     =>$ordenamiento,
+                "inicio"    =>$inicio,
+                "fin"       =>$fin,
+                "idBien"    =>$idBien,
+            );
+
+            $respuesta = $this->FormatearBusqueda($this->piezas_model->busquedaAgregar($data));
+
+            echo json_encode(array("isValid"=>true,"Datos"=>$respuesta));
+        }
+
+        public function busquedaQuitar(){
+
+            if(!$this->session->userdata("nombre") || $this->input->post("Pagina") == ""){
+                redirect(site_url(''));
+            }
+
+            $busqueda = $this->input->post("Busqueda") ;
+            $pagina = (int) $this->input->post("Pagina") ;
+            $regXpag = (int) $this->input->post("RegistrosPorPagina") ;
+            $ordenamiento = $this->input->post("Orden") ;
+            
+            $inicio = 1+$regXpag*($pagina-1);
+            $fin = $regXpag*$pagina;
+            $Condiciones = $this->input->post("Condiciones");
+            $idBien = $Condiciones['Bien'];
+
+            $data = array(
+                "busqueda"  =>$busqueda,
+                "orden"     =>$ordenamiento,
+                "inicio"    =>$inicio,
+                "fin"       =>$fin,
+                "idBien"    =>$idBien,
+            );
+
+            $respuesta = $this->FormatearBusqueda($this->piezas_model->busquedaQuitar($data));
+
+            echo json_encode(array("isValid"=>true,"Datos"=>$respuesta));
+        }
+
         public function imprimir($id){
             $this->ValidarPermiso();
             $data['datos'] = $this->FormatearRequest($this->piezas_model->ObtenerInfoPDF($id));
@@ -263,12 +321,14 @@
                     $htmlListas = $htmlListas
                         ."<tr>"
                         .   "<td style='display:none;'>" . $elemento['pie_id'] . "</td>"
-                        .   "<td>" . $elemento['inv_uc'] . "</td>"
+                        .   "<td>" . $elemento['estatus'] . "</td>"
                         .   "<td>" . $elemento['nombre'] . "</td>"
+                        .   "<td>" . $elemento['inv_uc'] . "</td>"
+                        .   "<td style='display:none;'>" . $elemento['tpi_id'] . "</td>"
+                        .   "<td>" . $elemento['nomtpi'] . "</td>"
                         .   "<td>" . $elemento['nommar'] . "</td>"
                         .   "<td>" . $elemento['nombie'] . "</td>"
                         .   "<td style='display:none;'>" . ($elemento['bie_id'] == -1? "":$elemento['bie_id']) . "</td>"
-                        .   "<td>" . $elemento['estatus'] . "</td>"
                         ."</tr>";
                 }
                 

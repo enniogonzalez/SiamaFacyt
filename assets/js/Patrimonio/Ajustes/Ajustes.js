@@ -118,11 +118,13 @@ $(function(){
     })
 
     $('#SiamaModalAdvertencias').on('click','#ConfirmarEliminacion',function(){
+
         var parametros = {
             "id": $('#IdForm').text().trim(),
-            "Url": $('#ControladorActual').text().trim()+"/eliminar"
+            "Caso":"Eliminar",
+            "Url": $('#ControladorActual').text().trim()+"/obtener"
         }
-        Eliminar(parametros)
+        Obtener(parametros);
     });
 
     $('.botoneraFormulario').on('click','#EditarRegistro',function(){
@@ -357,7 +359,7 @@ $(function(){
     function GetUrlBusquedaOpcion(opcion){
         switch(opcion){
             case PiezaAgregar:
-                controlador = "piezas/busquedaDisponibles";
+                controlador = "piezas/busquedaAgregar";
             break;
             case PiezaQuitar:
                 controlador = "piezas/busqueda";
@@ -490,11 +492,42 @@ $(function(){
 
                 if(data['Caso'] == "Editar"){
                     Editar();
+                }else if(data['Caso'] == "Eliminar"){
+                    AccionEliminar();
                 }
             }
         }).fail(function(data){
             failAjaxRequest(data);
         });
+    }
+
+    function AccionEliminar(){
+
+        if($('#EstatusAjustes').val().trim() == "Aprobado"){
+            
+            Botones = `
+            <button data-dismiss="modal" title="Cerrar" type="button" style="margin:5px;" class="btn  btn-danger">
+            <span class="fa fa-times "></span>
+            Cerrar
+            </button>`;
+
+            Cuerpo = `No se puede eliminar <strong>Ajuste</strong> debido a que el estatus ha cambiado a 
+            <strong>Aprobado</strong>.`;
+
+            var parametros = {
+                "Titulo"    : "Advetencia",
+                "Cuerpo"    : Cuerpo,
+                "Botones"   : Botones
+            }
+
+            ModalAdvertencia(parametros,true);
+        }else{
+            var parametros = {
+                "id": $('#IdForm').text().trim(),
+                "Url": $('#ControladorActual').text().trim()+"/eliminar"
+            }
+            Eliminar(parametros)
+        }
     }
 
     function LlenarFormularioRequest(data){
@@ -592,7 +625,6 @@ $(function(){
     
     window.BuscarPieza = function(tipo){
 
-
         SetSearchThead(thPiezas);
         parametros = {
             "Lista": $('#listaBusquedaPieza').html().trim(),
@@ -633,12 +665,14 @@ $(function(){
             break;
             case PiezaAgregar:
                 $('#idPiezaAgregar').text(fila.find("td:eq(0)").text().trim());
-                $('#InvAP').text(fila.find("td:eq(1)").text().trim());
+                $('#InvAP').text(fila.find("td:eq(3)").text().trim());
+                $('#TipoAP').text(fila.find("td:eq(5)").text().trim());
                 $('#nomPiezaAgregar').val(fila.find("td:eq(2)").text().trim());
             break;
             case PiezaQuitar:
                 $('#idPiezaQuitar').text(fila.find("td:eq(0)").text().trim());
-                $('#InvQP').text(fila.find("td:eq(1)").text().trim());
+                $('#InvQP').text(fila.find("td:eq(3)").text().trim());
+                $('#TipoQP').text(fila.find("td:eq(5)").text().trim());
                 $('#nomPiezaQuitar').val(fila.find("td:eq(2)").text().trim());
             break;
             case Bienes:

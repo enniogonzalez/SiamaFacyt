@@ -124,7 +124,7 @@ $(function(){
             fila = $('#mhOptionR').text().trim();
             $("#TablaQuitarTipos").find('> tbody > tr').each(function () {
 
-                if(fila != $(this).index() && ValorActual == $(this).find('td:eq(1)').text().trim()){
+                if(fila != $(this).index() && ValorActual == $(this).find('td:eq(0)').text().trim()){
                     Valido = false;
                     $('#nomTPQuitar').focus(); 
                     $('#alertaModal').text('No se puede quitar el mismo tipo de pieza dos veces');
