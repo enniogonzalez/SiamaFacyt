@@ -263,7 +263,7 @@ CREATE TABLE PlantillaMantenimientoTarea(
 	PMT_ID			SERIAL			PRIMARY KEY,
 	PLM_ID			INT				NOT NULL,--Plantilla de mantenimiento
 	Titulo			VARCHAR(255)	NOT NULL,--Titulo tarea
-	PIE_ID			INT				NOT NULL,--Pieza a la que se le est� haciendo mantenimiento
+	TPI_ID			INT				NOT NULL,--Tipo de Pieza a la que se le hara haciendo mantenimiento
 	Minutos			INT				NOT NULL,--Tiempo Estimado en el que se realizara el mantenimiento
 	Descripcion		TEXT			NOT NULL,
 	Herramientas	TEXT			NOT NULL,
@@ -273,9 +273,17 @@ CREATE TABLE PlantillaMantenimientoTarea(
 	Fec_Mod			TIMESTAMP		NOT NULL DEFAULT(NOW()), 
 	Observaciones	TEXT,
 	FOREIGN KEY (PLM_ID) References PlantillaMantenimiento  ON DELETE CASCADE,
-	FOREIGN KEY (PIE_ID) References Piezas,
+	FOREIGN KEY (TPI_ID) References TipoPieza,
 	FOREIGN KEY (Usu_Cre) References Usuarios,
 	FOREIGN KEY (Usu_Mod) References Usuarios
+);
+
+CREATE TABLE PlantillaTareaHerramienta(
+	PMT_ID	INT	NOT NULL,
+	HER_ID	INT	NOT NULL,
+	PRIMARY KEY (PMT_ID),
+	FOREIGN KEY (PMT_ID) References PlantillaMantenimientoTarea  ON DELETE CASCADE,
+	FOREIGN KEY (HER_ID) References Herramientas
 );
 
 --Mantenimientos Correctivos

@@ -86,7 +86,16 @@ $(function(){
     /*              Manejo Modal Funciones                      */
     /************************************************************/
 
+    function ModalLimpiarFuncion(){
+        $('#SiamaModalFunciones .contenedorAlertaModal').hide();
+        $( "#SiamaModalFunciones .modal-body" ).children().remove();
+        $( "#SiamaModalFunciones .modal-footer").children().remove();
+        $('#SiamaModalFunciones #SiamaModalFuncionesEtiqueta').text('');
+
+    }
+
     window.CerrarFunciones = function (){
+        ModalLimpiarFuncion();
         $('#SiamaModalFunciones').modal('hide');
     }
     
@@ -100,11 +109,7 @@ $(function(){
     }
 
     window.ModalEditarFuncion = function(data, mostrar = true){
-        
-        $('#SiamaModalFunciones .contenedorAlertaModal').hide();
-        $( "#SiamaModalFunciones .modal-body" ).children().remove();
-        $( "#SiamaModalFunciones .modal-footer").children().remove();
-        $('#SiamaModalFunciones #SiamaModalFuncionesEtiqueta').text('');
+        ModalLimpiarFuncion();
         $('#SiamaModalFunciones #SiamaModalFuncionesEtiqueta').append(data['Titulo']);
         $('#SiamaModalFunciones #mhOptionC').text(data['Columna']);
         $('#SiamaModalFunciones #mhOptionR').text(data['Fila']);
@@ -443,7 +448,7 @@ $(function(){
         }).done(function(data){
             
             HabilitarBotonera();
-            $('#SiamaModalFunciones').modal('hide');
+            $('#SiamaModalFunciones').hide();
             if(data['isValid']){
                 CerrarEstatus();
                 Registros = (data['Datos']['Registros'] == "") ? 0: data['Datos']['Registros'];

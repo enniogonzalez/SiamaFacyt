@@ -72,13 +72,14 @@
             $ld = $this->listasdesplegables_model->Obtener('','COB-PLANTI');
 
             $listaBusquedaBien   = $this->listasdesplegables_model->Obtener('','COB-BIENES');
-            $listaBusquedaPieza= $this->listasdesplegables_model->Obtener('','COB-PIEZAS');
+            $listaBusquedaTipoPieza= $this->listasdesplegables_model->Obtener('','COB-TIPOPI');
+            $listaBusquedaHerramienta= $this->listasdesplegables_model->Obtener('','COB-HERRAM');
 
-            
             $dataLD['OrdenarBusqueda'] = $this->liblistasdesplegables->FormatearListaDesplegable($ld);
             $data['listaBusquedaFormulario'] = $dataLD['OrdenarBusqueda'];
             $data['listaBusquedaBien'] = $this->liblistasdesplegables->FormatearListaDesplegable($listaBusquedaBien);
-            $data['listaBusquedaPieza'] = $this->liblistasdesplegables->FormatearListaDesplegable($listaBusquedaPieza);
+            $data['listaBusquedaTipoPieza'] = $this->liblistasdesplegables->FormatearListaDesplegable($listaBusquedaTipoPieza);
+            $data['listaBusquedaHerramienta'] = $this->liblistasdesplegables->FormatearListaDesplegable($listaBusquedaHerramienta);
 
             $dataAlerta['cantAlertas'] = $this->alertas_model->CantidadAlertas();
 

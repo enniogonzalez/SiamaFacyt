@@ -28,7 +28,7 @@
                 <label for="DocumentoPlantilla" class="col-lg-3 col-form-label">Documento:</label>
                 <div class="col-lg-9">
                     <input readonly disabled type="text" maxlength="10"
-                        class="form-control texto" id="DocumentoPlantilla" value="<?=$documento?>">
+                        class="form-control texto documento" id="DocumentoPlantilla" value="<?=$documento?>">
                 </div>
             </div>
 
@@ -89,9 +89,9 @@
                 <table id="TablaTareasPlantilla" class="table table-hover tabla-siama tabla-siama-desactivada">
                     <thead class="head-table-siama" style="font-size:11px;">
                         <tr>
-                            <th style="width:25%;">Pieza</th>
+                            <th style="width:35%;">Tipo de Pieza</th>
                             <th style="width:40%;">Titulo</th>
-                            <th style="width:25%;">Minutos Estimados</th>
+                            <th style="width:15%;">Minutos Estimados</th>
                             <th style="width:5%;">
                                 <span id ="agregarTarea" style="color:#28a745;cursor: pointer;" class="fa fa-plus-circle fa-lg"></span>
                             </th>
@@ -111,11 +111,14 @@
             <select readonly disabled  id="listaBusquedaFormulario">
                 <?=$listaBusquedaFormulario?>
             </select> 
-            <select readonly disabled  id="listaBusquedaPieza">
-                <?=$listaBusquedaPieza?>
+            <select readonly disabled  id="listaBusquedaTipoPieza">
+                <?=$listaBusquedaTipoPieza?>
             </select> 
             <select readonly disabled  id="listaBusquedaBien">
                 <?=$listaBusquedaBien?>
+            </select> 
+            <select readonly disabled  id="listaBusquedaHerramienta">
+                <?=$listaBusquedaHerramienta?>
             </select> 
         </div>
         <div style="display:none;" id ="ControladorActual"><?=site_url('/plantilla')?></div>

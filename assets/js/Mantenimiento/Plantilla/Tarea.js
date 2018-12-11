@@ -1,5 +1,6 @@
 
-const Pieza = "Pieza";
+const TipoPieza = "TipoPieza";
+const Herramienta = "Herramienta";
 
 $(function(){
 
@@ -12,20 +13,20 @@ $(function(){
     /************************************/
 
     /************************************/
-    /*      Manejo Pieza                */
+    /*      Manejo TipoPieza                */
     /************************************/
     
-    $('#SiamaModalFunciones').on('click','#nomPiezaTarea',function(){
-        BuscarPieza(Pieza);
+    $('#SiamaModalFunciones').on('click','#nomTPTarea',function(){
+        BuscarTipoPieza(TipoPieza);
     });
 
-    $('#SiamaModalFunciones').on('click','.BuscarPiezaTarea',function(){
-        BuscarPieza(Pieza);
+    $('#SiamaModalFunciones').on('click','.BuscarTPTarea',function(){
+        BuscarTipoPieza(TipoPieza);
     });
 
-    $('#SiamaModalFunciones').on('click','.BorrarPiezaTarea',function(){
-        $('#idPiezaTarea').text('');
-        $('#nomPiezaTarea').val('');
+    $('#SiamaModalFunciones').on('click','.BorrarTPTarea',function(){
+        $('#idTPTarea').text('');
+        $('#nomTPTarea').val('');
     });
 
     /************************************/
@@ -35,26 +36,69 @@ $(function(){
 
     $('#agregarTarea').on('click',function(){
 
-        if($('#idBiePlantilla').text().trim() == ""){
+        // if($('#idBiePlantilla').text().trim() == ""){
 
-            Botones = `
-            <button data-dismiss="modal" title="Cerrar" type="button" style="margin:5px;" class="btn btn-primary-siama">
-            <span class="fa fa-times-circle"></span>
-            Cerrar
-            </button>`;
+        //     Botones = `
+        //     <button data-dismiss="modal" title="Cerrar" type="button" style="margin:5px;" class="btn btn-primary-siama">
+        //     <span class="fa fa-times-circle"></span>
+        //     Cerrar
+        //     </button>`;
     
-            Cuerpo = "No se puede agregar una <strong>Tarea</strong> debido a que no se ha seleccionado un <strong>Bien</strong>.";
+        //     Cuerpo = "No se puede agregar una <strong>Tarea</strong> debido a que no se ha seleccionado un <strong>Bien</strong>.";
     
     
-            var parametros = {
-                "Titulo":"Advetencia",
-                "Cuerpo": Cuerpo,
-                "Botones":Botones
-            }
+        //     var parametros = {
+        //         "Titulo":"Advetencia",
+        //         "Cuerpo": Cuerpo,
+        //         "Botones":Botones
+        //     }
 
-            ModalAdvertencia(parametros);
-        }else
+        //     ModalAdvertencia(parametros);
+        // }else
             agregarTareaPlantilla();
+    });
+
+    $('#SiamaModalFunciones').on('click','#agregarHerramienta',function(){
+
+        $('#TablaTareasHerramientas > tbody:last-child').append(`
+            <tr>
+                <td style="display:none;"></td>
+                <td></td>
+                <td colspan="2" class ="editarHerramienta" style="text-align: center;cursor: pointer;">
+                    <span class="fa fa-pencil fa-lg"></span>
+                </td>
+            </tr>
+        `);
+
+    });
+
+    $('#SiamaModalFunciones').on('click','#eliminarHerramienta',function(){
+        $('#TablaTareasHerramientas .tr-activa-siama').remove();
+    });
+
+    $('#SiamaModalFunciones').on('click','#TablaTareasHerramientas tbody td',function(){
+       
+        var indexAnt = $('#TablaTareasHerramientas .tr-activa-siama').index();
+        var fila = $(this).parent('tr');
+        var indexAct = fila.index();
+
+        $('#TablaTareasHerramientas .tr-activa-siama').removeClass('tr-activa-siama');
+        $('#actHer').text(indexAct);
+
+        if(indexAnt != indexAct)
+            fila.addClass('tr-activa-siama');
+
+        var cell = $(this).index();
+        
+        if(cell == 2){
+            if(!fila.hasClass('tr-activa-siama'))
+                $(this).parent('tr').addClass('tr-activa-siama');
+
+            $('#TablaTareasHerramientas .tr-activa-siama').removeClass('tr-activa-siama');
+            $(this).parent('tr').addClass('tr-activa-siama');
+            BuscarHerramienta(Herramienta);
+        }
+
     });
 
     $('#eliminarTarea').on('click',function(){
@@ -83,16 +127,33 @@ $(function(){
           Cancelar
         </button>`;
 
+        trHerramienta = '';
+        if(fila.find('td:eq(5)').text().trim() != ""){
+            arrayHerramienta = JSON.parse(fila.find('td:eq(5)').text().trim());
+
+            for(her in arrayHerramienta){
+                trHerramienta += `
+                    <tr>
+                        <td style="display:none;">${arrayHerramienta[her].Id}</td>
+                        <td>${arrayHerramienta[her].Herramienta}</td>
+                        <td colspan="2" class ="editarHerramienta" style="text-align: center;cursor: pointer;">
+                            <span class="fa fa-pencil fa-lg"></span>
+                        </td>
+                    </tr>
+                `;                
+            }
+        }
+
         var data = {
             "Titulo"        :   "Editar Tarea",
             "EstatusDoc"    :   $('#EstatusPlantilla').val(),
             "Fila"          :   $(this).parent('tr').index(),
             "Botones"       :   Botones,
-            "idPiezaTarea"  :   fila.find('td:eq(1)').text().trim(),
-            "nomPiezaTarea" :   fila.find('td:eq(2)').text().trim(),
+            "idTPTarea"  :   fila.find('td:eq(1)').text().trim(),
+            "nomTPTarea" :   fila.find('td:eq(2)').text().trim(),
             "TituloCambio"  :   fila.find('td:eq(3)').text().trim(),
             "MinutosEst"    :   fila.find('td:eq(4)').text().trim(),
-            "HerramientasT" :   fila.find('td:eq(5)').text().trim(),
+            "HerramientasT" :   trHerramienta,
             "DescripcionT"  :   fila.find('td:eq(6)').text().trim(),
             "ObservacionT"  :   fila.find('td:eq(7)').text().trim()
         }
@@ -127,9 +188,17 @@ $(function(){
             }
         })
 
-        if(Valido && $('#MinutosEst').val() < 0){
+        if(Valido && $('#MinutosEst').val() <= 0){
             Valido = false;
             $('#alertaModal').text('Los minutos estimados tienen que se un numero mayor a 0.');
+            $('.contenedorAlertaModal').show();
+            
+            document.getElementsByClassName("contenedorAlertaModal")[0].scrollIntoView();
+        }
+
+        if(Valido && !ExisteHerramienta()){
+            Valido = false;
+            $('#alertaModal').text('No se puede guardar una tarea sin herramientas asignadas.');
             $('.contenedorAlertaModal').show();
             
             document.getElementsByClassName("contenedorAlertaModal")[0].scrollIntoView();
@@ -139,11 +208,11 @@ $(function(){
 
             var row = parseInt($('#mhOptionR').text());
             var fila = $('#TablaTareasPlantilla tbody tr').eq(row);
-            fila.find('td:eq(1)').text($('#idPiezaTarea').text().trim());
-            fila.find('td:eq(2)').text($('#nomPiezaTarea').val().trim());
+            fila.find('td:eq(1)').text($('#idTPTarea').text().trim());
+            fila.find('td:eq(2)').text($('#nomTPTarea').val().trim());
             fila.find('td:eq(3)').text($('#TituloCambio').val().trim());
             fila.find('td:eq(4)').text($('#MinutosEst').val().trim());
-            fila.find('td:eq(5)').text($('#HerramientasT').val().trim());
+            fila.find('td:eq(5)').text(JSON.stringify(ObtenerJsonHerramienta()));
             fila.find('td:eq(6)').text($('#DescripcionT').val().trim());
             fila.find('td:eq(7)').text($('#ObservacionT').val().trim());
     
@@ -151,59 +220,31 @@ $(function(){
         }
     });
     
-    window.ObtenerJsonTareas = function(){
-        var Tareas = [];
-        var estatuDoc = $('#EstatusPlantilla').val().trim();
-        $("#TablaTareasPlantilla").find('> tbody > tr').each(function () {
-    
-            if( $(this).find('td:eq(1)').text().trim() != ''){
-                Tareas.push({ 
+    function ExisteHerramienta(){
+        existe = false;
+        $("#TablaTareasHerramientas").find('> tbody > tr').each(function () {
+            if( $(this).find('td:eq(0)').text().trim() != ''){
+                existe = true;
+                return;
+            }
+        });
+
+        return existe;
+    }
+
+    function ObtenerJsonHerramienta(){
+        
+        var jsonHer = [];
+        $("#TablaTareasHerramientas").find('> tbody > tr').each(function () {
+            if( $(this).find('td:eq(0)').text().trim() != ''){
+                jsonHer.push({ 
                     "Id"            : $(this).find('td:eq(0)').text(),
-                    "IdPieza"       : $(this).find('td:eq(1)').text(),
-                    "Titulo"        : $(this).find('td:eq(3)').text(),
-                    "Minutos"       : $(this).find('td:eq(4)').text(),
-                    "Herramientas"  : $(this).find('td:eq(5)').text(),
-                    "Descripcion"   : $(this).find('td:eq(6)').text(),
-                    "Observacion"   : $(this).find('td:eq(7)').text()
+                    "Herramienta"   : $(this).find('td:eq(1)').text()
                 });
             }
         });
 
-        return Tareas;
-    }
-
-    window.ExisteTarea = function(){
-        var Existe = false;
-
-        $("#TablaTareasPlantilla").find('> tbody > tr').each(function () {
-            if($(this).find('td:eq(1)').text().trim() != ''){
-                Existe = true;
-
-                //Salir del ciclo
-                return false;
-            }
-        });
-
-        return Existe;
-    }
-    
-    window.agregarTareaPlantilla = function(){
-        //Agregar registro a la tabla de listas desplegables al final
-        $('#TablaTareasPlantilla > tbody:last-child').append(`
-            <tr>
-                <td style="display:none;"></td>
-                <td style="display:none;"></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td style="display:none;"></td>
-                <td style="display:none;"></td>
-                <td style="display:none;"></td>
-                <td colspan="2" class ="editarTarea" style="text-align: center;cursor: pointer;">
-                    <span class="fa fa-pencil fa-lg"></span>
-                </td>
-            </tr>
-        `);
+        return jsonHer;
     }
 
     function SetModalFuncionesCambios(data){
@@ -218,25 +259,25 @@ $(function(){
         //Se crea cuerpo html que va a tener la ventana modal de edicion
         var html = `
         <form class="form-horizontal" id="formEditarTarea">
+            <div style="display:none;" id="actHer"></div>
             <div class="form-group row">
-                <label class="col-lg-3 col-form-label">Pieza:</label>
+                <label class="col-lg-3 col-form-label">Tipo de Pieza:</label>
                 <div class="col-lg-9">
                     <div style="width:80%;float:left;">
-                        <div style="display:none;" id="idPiezaTarea">${data['idPiezaTarea']}</div>
-                        <input type="text" title="Pieza" 
-                            class="form-control texto obligatorio buscador Tarea" id="nomPiezaTarea" value="${data['nomPiezaTarea']}">
+                        <div style="display:none;" id="idTPTarea">${data['idTPTarea']}</div>
+                        <input type="text" title="Tipo de Pieza" readonly
+                            class="form-control texto obligatorio buscador Tarea" id="nomTPTarea" value="${data['nomTPTarea']}">
                         <div class="invalid-feedback">Campo Obligatorio</div>
                     </div>
                     <div style="width:20%;float:right;padding:10px;">
-                        <span title="Buscar Pieza" class="fa fa-search BuscarPiezaTarea" 
+                        <span title="Buscar Tipo de Pieza" class="fa fa-search BuscarTPTarea" 
                             style="cursor: pointer;float:left;"></span>
-                        <span title="Borrar Pieza" class="fa fa-trash-o BorrarPiezaTarea" 
+                        <span title="Borrar Tipo de Pieza" class="fa fa-trash-o BorrarTPTarea" 
                             style="cursor: pointer;float:right;"></span>
                     </div>
                 </div>
             </div>
 
-            
             <div class="form-group row">
                 <label for="TituloCambio" class="col-lg-3 col-form-label">Titulo:</label>
                 <div class="col-lg-9">
@@ -246,21 +287,11 @@ $(function(){
                 </div>
             </div>
 
-            
             <div class="form-group row">
                 <label for="MinutosEst" class="col-lg-3 col-form-label">Minutos Estimados:</label>
                 <div class="col-lg-9">
                     <input type="number" step = "1" min = "0"
                     class="form-control obligatorio Tarea"  id="MinutosEst" value="${data['MinutosEst']}">
-                    <div class="invalid-feedback">Campo Obligatorio</div>
-                </div>
-            </div>
-
-            <div class="form-group row">
-                <label for="HerramientasT" class="col-lg-3 col-form-label">Herramientas:</label>
-                <div class="col-lg-9">
-                    <textarea  class="form-control texto obligatorio Tarea" rows="3"
-                    style = "resize:vertical;" id="HerramientasT">${data['HerramientasT']}</textarea>
                     <div class="invalid-feedback">Campo Obligatorio</div>
                 </div>
             </div>
@@ -281,6 +312,28 @@ $(function(){
                     style = "resize:vertical;" id="ObservacionT">${data['ObservacionT']}</textarea>
                 </div>
             </div>
+
+            <h3>
+                Herramientas
+            </h3>
+            <div class="table-responsive">
+                <table id="TablaTareasHerramientas" class="table table-hover tabla-siama">
+                    <thead class="head-table-siama">
+                        <tr>
+                            <th style="width:90%;">Herramienta</th>
+                            <th style="width:5%;">
+                                <span id ="agregarHerramienta" style="color:#28a745;cursor: pointer;" class="fa fa-plus-circle fa-lg"></span>
+                            </th>
+                            <th style="width:5%;">
+                                <span id ="eliminarHerramienta" style="color:#dc3545;cursor: pointer;" class="fa fa-minus-circle fa-lg"></span>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${data['HerramientasT']}
+                    </tbody>
+                </table>
+            </div>
         </form>`;
         
 
@@ -299,4 +352,99 @@ $(function(){
 
 
     }
+
+    window.agregarTareaPlantilla = function(){
+        $('#TablaTareasPlantilla > tbody:last-child').append(`
+            <tr>
+                <td style="display:none;"></td>
+                <td style="display:none;"></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td style="display:none;"></td>
+                <td style="display:none;"></td>
+                <td style="display:none;"></td>
+                <td colspan="2" class ="editarTarea" style="text-align: center;cursor: pointer;">
+                    <span class="fa fa-pencil fa-lg"></span>
+                </td>
+            </tr>
+        `);
+    }
+
+    window.ElegirHerramienta = function(fila){
+
+        var row = parseInt($('#actHer').text());
+        var filaHerramienta = $('#TablaTareasHerramientas tbody tr').eq(row);
+
+        var existe = false;
+        
+        $("#TablaTareasHerramientas").find('> tbody > tr').each(function () {
+            if( row != $(this).index() &&
+                $(this).find('td:eq(0)').text().trim() == fila.find("td:eq(0)").text().trim()
+            ){
+                existe = true;
+                return;
+            }
+        });
+
+        if(!existe){
+            filaHerramienta.find('td:eq(0)').text(fila.find("td:eq(0)").text().trim());
+            filaHerramienta.find('td:eq(1)').text(fila.find("td:eq(1)").text().trim());
+        }else{
+            
+            Botones = `
+            <button data-dismiss="modal" title="Cerrar" type="button" style="margin:5px;" class="btn btn-primary-siama">
+            <span class="fa fa-times-circle"></span>
+            Cerrar
+            </button>`;
+    
+            Cuerpo = "No se puede agregar <strong>Herramienta</strong> debido ya se ha agregado anteriormente a la plantilla.";
+    
+    
+            var parametros = {
+                "Titulo":"Advetencia",
+                "Cuerpo": Cuerpo,
+                "Botones":Botones
+            }
+
+            ModalAdvertencia(parametros,true);
+        }
+        
+    }
+
+    window.ExisteTarea = function(){
+        var Existe = false;
+
+        $("#TablaTareasPlantilla").find('> tbody > tr').each(function () {
+            if($(this).find('td:eq(1)').text().trim() != ''){
+                Existe = true;
+
+                //Salir del ciclo
+                return false;
+            }
+        });
+
+        return Existe;
+    }
+
+    window.ObtenerJsonTareas = function(){
+        var Tareas = [];
+        $("#TablaTareasPlantilla").find('> tbody > tr').each(function () {
+    
+            if( $(this).find('td:eq(1)').text().trim() != ''){
+                Tareas.push({ 
+                    "Id"            : $(this).find('td:eq(0)').text(),
+                    "IdPieza"       : $(this).find('td:eq(1)').text(),
+                    "Titulo"        : $(this).find('td:eq(3)').text(),
+                    "Minutos"       : $(this).find('td:eq(4)').text(),
+                    "Herramientas"  : $(this).find('td:eq(5)').text(),
+                    "Descripcion"   : $(this).find('td:eq(6)').text(),
+                    "Observacion"   : $(this).find('td:eq(7)').text()
+                });
+            }
+        });
+
+        return Tareas;
+    }
+    
 });

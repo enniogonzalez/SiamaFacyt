@@ -166,6 +166,17 @@
         max-width: 100% !important;
     }
 }
+
+.bordeAlertaModal{
+    width:100%;padding:3px;
+    background-color:#FFF; 
+    box-shadow: 0px 4px 8px 0 rgba(0, 0, 0, 0.2), 0px 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.modal {
+    overflow-y:auto;
+  }
+  
 .containerModalMensajes{
     overflow-y: auto;
     overflow-x: hidden;

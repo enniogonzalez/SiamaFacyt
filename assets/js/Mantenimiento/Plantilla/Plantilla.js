@@ -25,9 +25,9 @@ $(function(){
 
     $('#CancelarModalBuscar').on('click',function(){
         switch(GetSearchType()){
-            case Pieza:
-                $('#idPiezaTarea').text(idBuscadorActual.trim());
-                $('#nomPiezaTarea').val(nombreBuscadorActual.trim());
+            case TipoPieza:
+                $('#idTPTarea').text(idBuscadorActual.trim());
+                $('#nomTPTarea').val(nombreBuscadorActual.trim());
             break;
             case Bienes:
                 $('#idBiePlantilla').text(idBuscadorActual.trim());
@@ -399,8 +399,11 @@ $(function(){
 
     function GetUrlBusquedaOpcion(opcion){
         switch(opcion){
-            case Pieza:
-                controlador = "piezas";
+            case TipoPieza:
+                controlador = "tipopieza";
+            break;
+            case Herramienta:
+                controlador = "herramientas";
             break;
             case Plantilla:
                 controlador = "plantilla";
@@ -414,11 +417,15 @@ $(function(){
     }
 
     function SetSearchModal(data,buscar =true,condiciones = {}){
+
         SetSearchType(data['Tipo']);
         
         switch(data['Tipo']){
-            case Pieza:
-                controlador = "Piezas";
+            case TipoPieza:
+                controlador = "Tipo de Piezas";
+            break;
+            case Herramienta:
+                controlador = "Herramientas";
             break;
             case Plantilla:
                 controlador = "Plantillas de Mantenimiento";
@@ -618,47 +625,34 @@ $(function(){
         }
     }
 
-    window.ActivarCeldaTabla = function(fila){
-
-        //Se busca el indice de la fila que esta activa
-        var indexAnt = $('.tr-activa-siama').index();
-        //Se busca el indice de la fila que fue seleccionada
-        var indexAct = $(fila).index();
-        //Se remueve la clase activa de la fila que esta activa
-        $('.tr-activa-siama').removeClass('tr-activa-siama');
-
-        //En caso de que los dos indices encontrado anteriormente
-        //sean diferentes, de agrega la clase activa a la fila seleccionada
-        //esto con la intension de que si se selecciona la misma fila
-        //activa, la misma se desactive
-        if(indexAnt != indexAct)
-            $(fila).addClass('tr-activa-siama');
-
-    }
-
     window.AccionGuardar = function(data){
         LlenarFormularioRequest(data['Datos']);
     }
 
-    window.BuscarPieza = function(tipo){
+    window.BuscarTipoPieza = function(tipo){
 
-        SetSearchThead(thPiezas);
-
+        SetSearchThead(thTipoPieza);
         parametros = {
-            "Lista": $('#listaBusquedaPieza').html().trim(),
+            "Lista": $('#listaBusquedaTipoPieza').html().trim(),
             "Tipo": tipo,
         }
 
-        condiciones = {
-            "Bien"          : $('#idBiePlantilla').text().trim(),
-            "PiezasBien"    : true
+        idBuscadorActual = $('#idTPTarea').text().trim();
+        nombreBuscadorActual = $('#nomTPTarea').val().trim();
+
+        SetSearchModal(parametros,true);
+    }
+
+    window.BuscarHerramienta = function(tipo){
+
+        SetSearchThead(thHerramientas);
+
+        parametros = {
+            "Lista": $('#listaBusquedaHerramienta').html().trim(),
+            "Tipo": tipo,
         }
 
-        idBuscadorActual = $('#idPiezaTarea').text().trim();
-        nombreBuscadorActual = $('#nomPiezaTarea').val().trim();
-        condiciones['PiezasBien'] = true;
-
-        SetSearchModal(parametros,true,condiciones);
+        SetSearchModal(parametros,true);
     }
 
     window.InterfazElegirBuscador = function(fila){
@@ -672,9 +666,12 @@ $(function(){
                 }
                 Obtener(parametros);
             break;
-            case Pieza:
-                $('#idPiezaTarea').text(fila.find("td:eq(0)").text().trim());
-                $('#nomPiezaTarea').val(fila.find("td:eq(2)").text().trim());
+            case TipoPieza:
+                $('#idTPTarea').text(fila.find("td:eq(0)").text().trim());
+                $('#nomTPTarea').val(fila.find("td:eq(1)").text().trim());
+            break;
+            case Herramienta:
+                ElegirHerramienta(fila);
             break;
             case Bienes:
                 $('#idBiePlantilla').text(fila.find("td:eq(0)").text().trim());
@@ -684,10 +681,7 @@ $(function(){
 
         if(GetSearchType() != "Formulario"  ){
             $('#SiamaModalBusqueda').modal('hide');
-
-            //Prevenir solapamientos de modales
-            if(GetSearchType() != Bienes)
-                setTimeout(function(){ $('#SiamaModalFunciones').modal('show');}, 400);
+            $('#SiamaModalFunciones').show();
         }
     }
 

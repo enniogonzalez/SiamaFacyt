@@ -9,7 +9,9 @@
                     <label style="display:none;" id = "mhOptionC"></label>
                 </div>
                 <div style="width: 100%;padding:5px 20px;display:none;" class="body-siama contenedorAlertaModal">
-                    <div style="margin:0;" id="alertaModal" class="alert alert-danger text-center">
+                    <div class="bordeAlertaModal">
+                        <div style="margin:0;" id="alertaModal" class="alert alert-danger text-center">
+                        </div>
                     </div>
                 </div>
                 <div class="modal-body body-siama" >
@@ -23,7 +25,7 @@
         <!-- Modal Errores -->
         <div class="modal fade" id="SiamaModalAdvertencias" tabindex="-1" role="dialog" aria-labelledby="SiamaModalAdvertenciasEtiqueta" data-backdrop="static" data-keyboard="false">
             <div class="modal-dialog" style="z-index:3 !important;margin-top:7vh;">
-                <div class="modal-content containerModalMensajes">
+                <div class="modal-content containerModalMensajes" style="width: 94%;">
                 <div class="modal-header" style="background-color:#dc3545;color:#fff; ">
                     <h4 class="modal-title" id="SiamaModalAdvertenciasEtiqueta" style="text-align:center;width:100%;"></h4>
                 </div>

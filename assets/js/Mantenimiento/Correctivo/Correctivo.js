@@ -709,23 +709,6 @@ $(function(){
         }
     }
 
-    window.ActivarCeldaTabla = function(fila){
-
-        //Se busca el indice de la fila que esta activa
-        var indexAnt = $('.tr-activa-siama').index();
-        //Se busca el indice de la fila que fue seleccionada
-        var indexAct = $(fila).index();
-        //Se remueve la clase activa de la fila que esta activa
-        $('.tr-activa-siama').removeClass('tr-activa-siama');
-
-        //En caso de que los dos indices encontrado anteriormente
-        //sean diferentes, de agrega la clase activa a la fila seleccionada
-        //esto con la intension de que si se selecciona la misma fila
-        //activa, la misma se desactive
-        if(indexAnt != indexAct)
-            $(fila).addClass('tr-activa-siama');
-
-    }
 
     window.BuscarProveedor = function(tipo){
 
