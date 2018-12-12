@@ -266,7 +266,6 @@ CREATE TABLE PlantillaMantenimientoTarea(
 	TPI_ID			INT				NOT NULL,--Tipo de Pieza a la que se le hara haciendo mantenimiento
 	Minutos			INT				NOT NULL,--Tiempo Estimado en el que se realizara el mantenimiento
 	Descripcion		TEXT			NOT NULL,
-	Herramientas	TEXT			NOT NULL,
 	Usu_Cre			INT				NOT NULL,--Usuario Creador
 	Fec_Cre			TIMESTAMP		NOT NULL DEFAULT(NOW()),--fecha Creacion
 	Usu_Mod			INT				NOT NULL,--Usuario Modificador
@@ -281,7 +280,7 @@ CREATE TABLE PlantillaMantenimientoTarea(
 CREATE TABLE PlantillaTareaHerramienta(
 	PMT_ID	INT	NOT NULL,
 	HER_ID	INT	NOT NULL,
-	PRIMARY KEY (PMT_ID),
+	PRIMARY KEY (PMT_ID,HER_ID),
 	FOREIGN KEY (PMT_ID) References PlantillaMantenimientoTarea  ON DELETE CASCADE,
 	FOREIGN KEY (HER_ID) References Herramientas
 );

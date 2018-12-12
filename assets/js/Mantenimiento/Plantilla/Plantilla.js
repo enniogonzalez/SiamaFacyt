@@ -79,6 +79,89 @@ $(function(){
     /*          Fin Buscadores          */
     /************************************/
 
+    $('.botoneraFormulario').on('click','#AgregarRegistro',function(){
+        GuardarEstadoActualFormulario();
+        ClearForm();
+        HabilitarFormulario();
+        
+        ActivarTareas();
+        $('#EstatusPlantilla').val("Solicitado");
+        $('#EstatusPlantilla').attr("disabled", "disabled");
+        $('#EstatusPlantilla').attr("readonly", "readonly");
+        $(window).scrollTop(0);
+    });
+
+    $('.botoneraFormulario').on('click','#AprobarRegistro',function(){
+        
+        var parametros = {
+            "id": $('#IdForm').text(),
+            "Tipo": "Aprobar",
+            "Url":$('#ControladorActual').text().trim() + "/aprobar" 
+        }
+
+        //Evitar doble click
+        if(!Guardando){
+            Guardando = true;
+            CambioEstatusMantenimiento(parametros)
+        }
+    });
+
+    $('.botoneraFormulario').on('click','#CancelarRegistro',function(){
+        ClearForm();
+        RestablecerEstadoAnteriorFormulario();
+        EstablecerBuscador();
+        DeshabilitarFormulario();
+
+        AgregarBotoneraPlantilla($('#EstatusPlantilla').val().trim());
+
+        parametros = {
+            "Lista": $('#listaBusquedaFormulario').html().trim(),
+            "Tipo": Plantilla
+        }
+
+        SetSearchModal(parametros,false)
+        SetModalEtqContador("")
+        SetSearchType("Formulario");
+    });
+
+    $('.botoneraFormulario').on('click','#BuscarRegistro',function(){
+        SetSearchType('Formulario');
+        SetSearchTitle('Busqueda Plantillas de Mantenimiento');
+        PrimeraVezBusqueda = true;
+        DeshabilitarBotonera();
+        SetUrlBusqueda($('#ControladorActual').text().trim()+"/busqueda");
+        Busqueda(1);
+        
+        setTimeout(function(){
+            HabilitarBotonera();
+        }, 900);
+    });
+
+    $('.botoneraFormulario').on('click','#DesaprobarRegistro',function(){
+        
+        var parametros = {
+            "id": $('#IdForm').text(),
+            "Tipo": "Desaprobar",
+            "Url":$('#ControladorActual').text().trim() + "/reversar" 
+        }
+        
+        //Evitar doble click
+        if(!Guardando){
+            Guardando = true;
+            CambioEstatusMantenimiento(parametros)
+        }
+    });
+
+    $('.botoneraFormulario').on('click','#EditarRegistro',function(){
+        
+        var parametros = {
+            "id": $('#IdForm').text().trim(),
+            "Caso":"Editar",
+            "Url": $('#ControladorActual').text().trim()+"/obtener"
+        }
+        Obtener(parametros);
+    });
+
     $('.botoneraFormulario').on('click','#EliminarRegistro',function(){
         Botones = `
         <button data-dismiss="modal" type="submit" id ="ConfirmarEliminacion" title="Confirmar Eliminar Registro" 
@@ -98,97 +181,6 @@ $(function(){
         }
 
         ModalAdvertencia(parametros);
-    })
-
-    $('.botoneraFormulario').on('click','#BuscarRegistro',function(){
-        SetSearchType('Formulario');
-        SetSearchTitle('Busqueda Plantillas de Mantenimiento');
-        PrimeraVezBusqueda = true;
-        DeshabilitarBotonera();
-        SetUrlBusqueda($('#ControladorActual').text().trim()+"/busqueda");
-        Busqueda(1);
-        
-        setTimeout(function(){
-            HabilitarBotonera();
-        }, 900);
-    })
-
-    $('#SiamaModalAdvertencias').on('click','#ConfirmarEliminacion',function(){
-        var parametros = {
-            "id": $('#IdForm').text().trim(),
-            "Url": $('#ControladorActual').text().trim()+"/eliminar"
-        }
-        Eliminar(parametros)
-    });
-
-    $('.botoneraFormulario').on('click','#EditarRegistro',function(){
-        
-        var parametros = {
-            "id": $('#IdForm').text().trim(),
-            "Caso":"Editar",
-            "Url": $('#ControladorActual').text().trim()+"/obtener"
-        }
-        Obtener(parametros);
-    });
-
-    $('.botoneraFormulario').on('click','#AgregarRegistro',function(){
-        GuardarEstadoActualFormulario();
-        ClearForm();
-        HabilitarFormulario();
-        
-        ActivarTareas();
-        $('#EstatusPlantilla').val("Solicitado");
-        $('#EstatusPlantilla').attr("disabled", "disabled");
-        $('#EstatusPlantilla').attr("readonly", "readonly");
-        $(window).scrollTop(0);
-    })
-
-    $('.botoneraFormulario').on('click','#AprobarRegistro',function(){
-        
-        var parametros = {
-            "id": $('#IdForm').text(),
-            "Tipo": "Aprobar",
-            "Url":$('#ControladorActual').text().trim() + "/aprobar" 
-        }
-
-        //Evitar doble click
-        if(!Guardando){
-            Guardando = true;
-            CambioEstatusMantenimiento(parametros)
-        }
-    });
-
-    $('.botoneraFormulario').on('click','#DesaprobarRegistro',function(){
-        
-        var parametros = {
-            "id": $('#IdForm').text(),
-            "Tipo": "Desaprobar",
-            "Url":$('#ControladorActual').text().trim() + "/reversar" 
-        }
-        
-        //Evitar doble click
-        if(!Guardando){
-            Guardando = true;
-            CambioEstatusMantenimiento(parametros)
-        }
-    })
-
-    $('.botoneraFormulario').on('click','#CancelarRegistro',function(){
-        ClearForm();
-        RestablecerEstadoAnteriorFormulario();
-        EstablecerBuscador();
-        DeshabilitarFormulario();
-
-        AgregarBotoneraPlantilla($('#EstatusPlantilla').val().trim());
-
-        parametros = {
-            "Lista": $('#listaBusquedaFormulario').html().trim(),
-            "Tipo": Plantilla
-        }
-
-        SetSearchModal(parametros,false)
-        SetModalEtqContador("")
-        SetSearchType("Formulario");
     })
 
     $('.botoneraFormulario').on('click','#GuardarRegistro',function(){
@@ -252,7 +244,16 @@ $(function(){
         
     });
 
-    function Editar(){
+    $('#SiamaModalAdvertencias').on('click','#ConfirmarEliminacion',function(){
+        var parametros = {
+            "id": $('#IdForm').text().trim(),
+            "Caso":"Eliminar",
+            "Url": $('#ControladorActual').text().trim()+"/obtener"
+        }
+        Obtener(parametros);
+    });
+
+    function AccionEliminar(){
 
         if($('#EstatusPlantilla').val().trim() == "Aprobado"){
             
@@ -262,97 +263,23 @@ $(function(){
             Cerrar
             </button>`;
 
-            Cuerpo = `No se puede editar <strong>Plantilla de Mantenimiento</strong> debido a que el estatus ha cambiado a 
-            <strong>aprobado</strong>.`;
+            Cuerpo = `No se puede eliminar <strong>Plantilla</strong> debido a que el estatus ha cambiado a 
+            <strong>Aprobado</strong>.`;
 
             var parametros = {
-                "Titulo":"Advetencia",
-                "Cuerpo": Cuerpo,
-                "Botones":Botones
+                "Titulo"    : "Advetencia",
+                "Cuerpo"    : Cuerpo,
+                "Botones"   : Botones
             }
 
-            ModalAdvertencia(parametros);
+            ModalAdvertencia(parametros,true);
         }else{
-            GuardarEstadoActualFormulario();
-            HabilitarFormulario()
-
-            if($('#EstatusPlantilla').val() == "Solicitado"){
-                $('#EstatusPlantilla').attr("disabled", "disabled");
-                $('#EstatusPlantilla').attr("readonly", "readonly");
-                ActivarTareas();
-            }else{
-                $('.formulario-siama form .form-control').each(function(){
-                    $(this).attr("disabled", "disabled");
-                    $(this).attr("readonly", "readonly");
-                })
-
-                DesactivarTareas();
-                $('#ObservacionPlantilla').removeAttr("disabled"); 
-                $('#ObservacionPlantilla').removeAttr("readonly");
-                setTimeout(function(){$('#ObservacionPlantilla').focus();}, 400);
+            var parametros = {
+                "id": $('#IdForm').text().trim(),
+                "Url": $('#ControladorActual').text().trim()+"/eliminar"
             }
-
-            
-            $(window).scrollTop(0);
+            Eliminar(parametros)
         }
-    }
-
-    function CambioEstatusMantenimiento(parametros){
-
-        if(parametros['Tipo'] ==  "Aprobar")
-            MostrarEstatus(6); 
-        else
-            MostrarEstatus(8); 
-
-        DeshabilitarBotonera();
-
-        $.ajax({
-            url: parametros['Url'] ,
-            type: 'POST',
-            data: parametros,
-            dataType: 'json'
-        }).done(function(data){
-            Guardando = false;
-            HabilitarBotonera();
-            if(data['isValid']){
-                LlenarFormularioRequest(data['Datos']);
-
-                if(data['Tipo'] ==  "Aprobar")
-                    MostrarEstatus(7,true); 
-                else
-                    MostrarEstatus(9,true); 
-                
-
-                setTimeout(function(){
-                    CerrarEstatus();
-                }, 6000);
-            }else{
-                
-                CerrarEstatus();
-                Botones = `
-                <button data-dismiss="modal" title="Cerrar" type="button" style="margin:5px;" class="btn  btn-danger">
-                  <span class="fa fa-times "></span>
-                  Cerrar
-                </button>`;
-        
-                var parametros = {
-                    "Titulo":"Advertencia",
-                    "Cuerpo": data['Mensaje'],
-                    "Botones":Botones
-                }
-        
-                ModalAdvertencia(parametros);
-            }
-        }).fail(function(data){
-            Guardando = false;
-            HabilitarFormulario(false);
-            failAjaxRequest(data);
-        });
-    }
-    
-    function DesactivarTareas(){
-        $('#TablaTareasPlantilla th:nth-child(4)').hide();
-        $('#TablaTareasPlantilla th:nth-child(5)').hide();
     }
 
     function ActivarTareas(){
@@ -360,22 +287,6 @@ $(function(){
         $('#TablaTareasPlantilla th:nth-child(5)').show();
     }
 
-    function BuscarBien(){
-
-        SetSearchThead(thBienes);
-
-        parametros = {
-            "Lista": $('#listaBusquedaBien').html().trim(),
-            "Tipo": Bienes
-        }
-
-        idBuscadorActual = $('#idBiePlantilla').text().trim();
-        nombreBuscadorActual = $('#nomBiePlantilla').val().trim();
-
-        SetSearchModal(parametros)
-
-    }
-    
     function AdvertenciaCambiarBien(opcion){
 
         Botones = `
@@ -395,173 +306,6 @@ $(function(){
         }
 
         ModalAdvertencia(parametros);
-    }
-
-    function GetUrlBusquedaOpcion(opcion){
-        switch(opcion){
-            case TipoPieza:
-                controlador = "tipopieza";
-            break;
-            case Herramienta:
-                controlador = "herramientas";
-            break;
-            case Plantilla:
-                controlador = "plantilla";
-            break;
-            case Bienes:
-                controlador = "bienes";
-            break;
-        }
-
-        return $('#UrlBase').text() + "/" + controlador + "/busqueda"
-    }
-
-    function SetSearchModal(data,buscar =true,condiciones = {}){
-
-        SetSearchType(data['Tipo']);
-        
-        switch(data['Tipo']){
-            case TipoPieza:
-                controlador = "Tipo de Piezas";
-            break;
-            case Herramienta:
-                controlador = "Herramientas";
-            break;
-            case Plantilla:
-                controlador = "Plantillas de Mantenimiento";
-            break;
-            case Bienes:
-            controlador = "Bienes";
-            break;
-        }
-
-        SetModalEtqContador(controlador)
-        SetSearchCOB(data['Lista']);
-
-
-        SetSearchTitle('Busqueda ' + controlador);
-        PrimeraVezBusqueda = true;
-        SetUrlBusqueda(GetUrlBusquedaOpcion(data['Tipo']));
-
-        if(buscar)
-            Busqueda(1,false,condiciones);
-    }
-
-    function EstablecerBuscador(){
-        SetSearchThead(thPlantillas);
-    }
-
-    function ClearForm(){
-        
-        $('#IdForm').text(''); 
-        $('#idBiePlantilla').text('');
-        $('#alertaFormularioActual').hide();
-        $('#TablaTareasPlantilla > tbody').children().remove();
-        $('#TablaReparacionesCorrectivas > tbody').children().remove();
-
-        $('.formulario-siama form .form-control').each(function(){
-            $(this).removeClass('is-invalid');
-            if($(this).hasClass('texto') || $(this).hasClass('fecha'))
-                $(this).val('')
-            else if($(this).hasClass('lista'))
-                $(this)[0].selectedIndex = 0;
-            else if ($(this).hasClass('decimal'))
-                $(this).val('0.00')
-        })
-    }
-    
-    function GuardarEstadoActualFormulario(){
-        dataInputs = [];
-        idActual =$('#IdForm').text().trim();
-        idBiePlantilla = $('#idBiePlantilla').text().trim();
-
-        Tareas = $('#TablaTareasPlantilla > tbody').html();
-        $('.formulario-siama form .form-control').each(function(){
-            dataInputs.push($(this).val().trim());
-        })
-    }
-
-    function RestablecerEstadoAnteriorFormulario(){
-        
-        var parametros = {
-            "id"            : idActual.trim(),
-            "idBien"        : idBiePlantilla.trim(),     
-            "Documento"     : dataInputs[0].trim(),  
-            "Estatus"       : dataInputs[1].trim(),
-            "nomBien"       : dataInputs[2].trim(),
-            "Frecuencia"    : dataInputs[3].trim(),
-            "UltMan"        : dataInputs[4].trim(),
-            "Observaciones" : dataInputs[5].trim(),
-            "Tareas"        : Tareas
-        }
-
-        LlenarFormulario(parametros);
-    }
-    
-    function LlenarFormulario(data){
-        $('#TablaTareasPlantilla > tbody').children().remove();
-
-        if(data['Estatus'] != "Solicitado")
-            DesactivarTareas();
-        else
-            ActivarTareas();
-
-        AgregarBotoneraPlantilla(data['Estatus']);
-
-
-        $('#IdForm').text(data['id']);
-        $('#DocumentoPlantilla').val(data['Documento']);
-        $('#EstatusPlantilla').val(data['Estatus']);
-        $('#idBiePlantilla').text(data['idBien']);
-        $('#UltimoMantenimiento').val(data['UltMan']);
-        $('#nomBiePlantilla').val(data['nomBien']);
-        $('#FrecuenciaMan').val(data['Frecuencia']);
-        $('#ObservacionPlantilla').val(data['Observaciones']);
-        $('#TablaTareasPlantilla > tbody:last-child').append(data['Tareas']);
-
-    }
-
-    function Obtener(parametros){
-
-        MostrarEstatus(5); 
-
-        $.ajax({
-            url: parametros['Url'],
-            type: "POST",
-            data: parametros,
-            dataType: 'json'
-        }).done(function(data){
-            $(window).scrollTop(0);
-            if(data['isValid']){
-                CerrarEstatus();
-                LlenarFormularioRequest(data['Datos']);
-                $('#SiamaModalBusqueda').modal('hide');
-                
-                if(data['Caso'] == "Editar"){
-                    Editar();
-                }
-            }
-        }).fail(function(data){
-            failAjaxRequest(data);
-        });
-    }
-
-    function LlenarFormularioRequest(data){
-        
-        var parametros = {
-            "id"            : data['plm_id'],
-            "idBien"        : data['bie_id'],     
-            "Documento"     : data['documento'],  
-            "Estatus"       : data['estatus'],
-            "UltMan"        : data['fec_ult'],
-            "nomBien"       : data['bie_nom'],
-            "Frecuencia"    : data['frecuencia'],
-            "Observaciones" : data['observaciones'],
-            "Tareas"        : data['Tareas']
-        }
-
-        LlenarFormulario(parametros);
-        
     }
 
     function AgregarBotoneraPlantilla(Tipo){
@@ -624,9 +368,325 @@ $(function(){
             $('.botoneraFormulario').append(html);
         }
     }
+    
+    function BuscarBien(){
+
+        SetSearchThead(thBienes);
+
+        parametros = {
+            "Lista": $('#listaBusquedaBien').html().trim(),
+            "Tipo": Bienes
+        }
+
+        idBuscadorActual = $('#idBiePlantilla').text().trim();
+        nombreBuscadorActual = $('#nomBiePlantilla').val().trim();
+
+        SetSearchModal(parametros)
+
+    }
+
+    function CambioEstatusMantenimiento(parametros){
+
+        if(parametros['Tipo'] ==  "Aprobar")
+            MostrarEstatus(6); 
+        else
+            MostrarEstatus(8); 
+
+        DeshabilitarBotonera();
+
+        $.ajax({
+            url: parametros['Url'] ,
+            type: 'POST',
+            data: parametros,
+            dataType: 'json'
+        }).done(function(data){
+            Guardando = false;
+            HabilitarBotonera();
+            if(data['isValid']){
+                LlenarFormularioRequest(data['Datos']);
+
+                if(data['Tipo'] ==  "Aprobar")
+                    MostrarEstatus(7,true); 
+                else
+                    MostrarEstatus(9,true); 
+                
+
+                setTimeout(function(){
+                    CerrarEstatus();
+                }, 6000);
+            }else{
+                
+                CerrarEstatus();
+                Botones = `
+                <button data-dismiss="modal" title="Cerrar" type="button" style="margin:5px;" class="btn  btn-danger">
+                  <span class="fa fa-times "></span>
+                  Cerrar
+                </button>`;
+        
+                var parametros = {
+                    "Titulo":"Advertencia",
+                    "Cuerpo": data['Mensaje'],
+                    "Botones":Botones
+                }
+        
+                ModalAdvertencia(parametros);
+            }
+        }).fail(function(data){
+            Guardando = false;
+            HabilitarFormulario(false);
+            failAjaxRequest(data);
+        });
+    }
+
+    function ClearForm(){
+        
+        $('#IdForm').text(''); 
+        $('#idBiePlantilla').text('');
+        $('#alertaFormularioActual').hide();
+        $('#TablaTareasPlantilla > tbody').children().remove();
+        $('#TablaReparacionesCorrectivas > tbody').children().remove();
+
+        $('.formulario-siama form .form-control').each(function(){
+            $(this).removeClass('is-invalid');
+            if($(this).hasClass('texto') || $(this).hasClass('fecha'))
+                $(this).val('')
+            else if($(this).hasClass('lista'))
+                $(this)[0].selectedIndex = 0;
+            else if ($(this).hasClass('decimal'))
+                $(this).val('0.00')
+        })
+    }
+
+    function DesactivarTareas(){
+        $('#TablaTareasPlantilla th:nth-child(4)').hide();
+        $('#TablaTareasPlantilla th:nth-child(5)').hide();
+    }
+
+    function Editar(){
+
+        if($('#EstatusPlantilla').val().trim() == "Aprobado"){
+            
+            Botones = `
+            <button data-dismiss="modal" title="Cerrar" type="button" style="margin:5px;" class="btn  btn-danger">
+            <span class="fa fa-times "></span>
+            Cerrar
+            </button>`;
+
+            Cuerpo = `No se puede editar <strong>Plantilla de Mantenimiento</strong> debido a que el estatus ha cambiado a 
+            <strong>aprobado</strong>.`;
+
+            var parametros = {
+                "Titulo":"Advetencia",
+                "Cuerpo": Cuerpo,
+                "Botones":Botones
+            }
+
+            ModalAdvertencia(parametros);
+        }else{
+            GuardarEstadoActualFormulario();
+            HabilitarFormulario()
+
+            if($('#EstatusPlantilla').val() == "Solicitado"){
+                $('#EstatusPlantilla').attr("disabled", "disabled");
+                $('#EstatusPlantilla').attr("readonly", "readonly");
+                ActivarTareas();
+            }else{
+                $('.formulario-siama form .form-control').each(function(){
+                    $(this).attr("disabled", "disabled");
+                    $(this).attr("readonly", "readonly");
+                })
+
+                DesactivarTareas();
+                $('#ObservacionPlantilla').removeAttr("disabled"); 
+                $('#ObservacionPlantilla').removeAttr("readonly");
+                setTimeout(function(){$('#ObservacionPlantilla').focus();}, 400);
+            }
+
+            
+            $(window).scrollTop(0);
+        }
+    }
+    
+    function EstablecerBuscador(){
+        SetSearchThead(thPlantillas);
+    }
+
+    function GetUrlBusquedaOpcion(opcion){
+        switch(opcion){
+            case TipoPieza:
+                controlador = "tipopieza";
+            break;
+            case Herramienta:
+                controlador = "herramientas";
+            break;
+            case Plantilla:
+                controlador = "plantilla";
+            break;
+            case Bienes:
+                controlador = "bienes";
+            break;
+        }
+
+        return $('#UrlBase').text() + "/" + controlador + "/busqueda"
+    }
+
+    function GuardarEstadoActualFormulario(){
+        dataInputs = [];
+        idActual =$('#IdForm').text().trim();
+        idBiePlantilla = $('#idBiePlantilla').text().trim();
+
+        Tareas = $('#TablaTareasPlantilla > tbody').html();
+        $('.formulario-siama form .form-control').each(function(){
+            dataInputs.push($(this).val().trim());
+        })
+    }
+
+    function RestablecerEstadoAnteriorFormulario(){
+        
+        var parametros = {
+            "id"            : idActual.trim(),
+            "idBien"        : idBiePlantilla.trim(),     
+            "Documento"     : dataInputs[0].trim(),  
+            "Estatus"       : dataInputs[1].trim(),
+            "nomBien"       : dataInputs[2].trim(),
+            "Frecuencia"    : dataInputs[3].trim(),
+            "UltMan"        : dataInputs[4].trim(),
+            "Observaciones" : dataInputs[5].trim(),
+            "Tareas"        : Tareas
+        }
+
+        LlenarFormulario(parametros);
+    }
+
+    function LlenarFormulario(data){
+        $('#TablaTareasPlantilla > tbody').children().remove();
+
+        if(data['Estatus'] != "Solicitado")
+            DesactivarTareas();
+        else
+            ActivarTareas();
+
+        AgregarBotoneraPlantilla(data['Estatus']);
+
+
+        $('#IdForm').text(data['id']);
+        $('#DocumentoPlantilla').val(data['Documento']);
+        $('#EstatusPlantilla').val(data['Estatus']);
+        $('#idBiePlantilla').text(data['idBien']);
+        $('#UltimoMantenimiento').val(data['UltMan']);
+        $('#nomBiePlantilla').val(data['nomBien']);
+        $('#FrecuenciaMan').val(data['Frecuencia']);
+        $('#ObservacionPlantilla').val(data['Observaciones']);
+        $('#TablaTareasPlantilla > tbody:last-child').append(data['Tareas']);
+
+    }
+
+    function LlenarFormularioRequest(data){
+        
+        var parametros = {
+            "id"            : data['plm_id'],
+            "idBien"        : data['bie_id'],     
+            "Documento"     : data['documento'],  
+            "Estatus"       : data['estatus'],
+            "UltMan"        : data['fec_ult'],
+            "nomBien"       : data['bie_nom'],
+            "Frecuencia"    : data['frecuencia'],
+            "Observaciones" : data['observaciones'],
+            "Tareas"        : data['Tareas']
+        }
+
+        LlenarFormulario(parametros);
+        
+    }
+
+    function Obtener(parametros){
+
+        if(parametros['Caso'] == 'Eliminar')
+            MostrarEstatus(3); 
+        else
+            MostrarEstatus(5); 
+
+        $.ajax({
+            url: parametros['Url'],
+            type: "POST",
+            data: parametros,
+            dataType: 'json'
+        }).done(function(data){
+            $(window).scrollTop(0);
+            if(data['isValid']){
+                setTimeout(function(){
+
+                    CerrarEstatus();
+                },600)
+                LlenarFormularioRequest(data['Datos']);
+                $('#SiamaModalBusqueda').modal('hide');
+                
+                if(data['Caso'] == "Editar"){
+                    Editar();
+                }else if(data['Caso'] == "Eliminar"){
+                    AccionEliminar();
+                }
+            }
+        }).fail(function(data){
+            failAjaxRequest(data);
+        });
+    }
+
+    function SetSearchModal(data,buscar =true,condiciones = {}){
+
+        SetSearchType(data['Tipo']);
+        
+        switch(data['Tipo']){
+            case TipoPieza:
+                controlador = "Tipo de Piezas";
+            break;
+            case Herramienta:
+                controlador = "Herramientas";
+            break;
+            case Plantilla:
+                controlador = "Plantillas de Mantenimiento";
+            break;
+            case Bienes:
+            controlador = "Bienes";
+            break;
+        }
+
+        SetModalEtqContador(controlador)
+        SetSearchCOB(data['Lista']);
+
+
+        SetSearchTitle('Busqueda ' + controlador);
+        PrimeraVezBusqueda = true;
+        SetUrlBusqueda(GetUrlBusquedaOpcion(data['Tipo']));
+
+        if(buscar)
+            Busqueda(1,false,condiciones);
+    }
+
+    window.AccionEliminarFormulario = function(data){
+        
+        if(data['Datos']['plm_id'] == ""){
+            ClearForm();
+            AgregarBotoneraPrimariaNULL();
+        }else{
+            LlenarFormularioRequest(data['Datos']);
+        }
+    }
 
     window.AccionGuardar = function(data){
         LlenarFormularioRequest(data['Datos']);
+    }
+
+    window.BuscarHerramienta = function(tipo){
+
+        SetSearchThead(thHerramientas);
+
+        parametros = {
+            "Lista": $('#listaBusquedaHerramienta').html().trim(),
+            "Tipo": tipo,
+        }
+
+        SetSearchModal(parametros,true);
     }
 
     window.BuscarTipoPieza = function(tipo){
@@ -639,18 +699,6 @@ $(function(){
 
         idBuscadorActual = $('#idTPTarea').text().trim();
         nombreBuscadorActual = $('#nomTPTarea').val().trim();
-
-        SetSearchModal(parametros,true);
-    }
-
-    window.BuscarHerramienta = function(tipo){
-
-        SetSearchThead(thHerramientas);
-
-        parametros = {
-            "Lista": $('#listaBusquedaHerramienta').html().trim(),
-            "Tipo": tipo,
-        }
 
         SetSearchModal(parametros,true);
     }
@@ -681,17 +729,11 @@ $(function(){
 
         if(GetSearchType() != "Formulario"  ){
             $('#SiamaModalBusqueda').modal('hide');
-            $('#SiamaModalFunciones').show();
+
+            if(GetSearchType() != Bienes){
+                $('#SiamaModalFunciones').show();
+            }
         }
     }
 
-    window.AccionEliminarFormulario = function(data){
-        
-        if(data['Datos']['plm_id'] == ""){
-            ClearForm();
-            AgregarBotoneraPrimariaNULL();
-        }else{
-            LlenarFormularioRequest(data['Datos']);
-        }
-    }
 });

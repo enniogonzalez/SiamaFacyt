@@ -58,49 +58,6 @@ $(function(){
             agregarTareaPlantilla();
     });
 
-    $('#SiamaModalFunciones').on('click','#agregarHerramienta',function(){
-
-        $('#TablaTareasHerramientas > tbody:last-child').append(`
-            <tr>
-                <td style="display:none;"></td>
-                <td></td>
-                <td colspan="2" class ="editarHerramienta" style="text-align: center;cursor: pointer;">
-                    <span class="fa fa-pencil fa-lg"></span>
-                </td>
-            </tr>
-        `);
-
-    });
-
-    $('#SiamaModalFunciones').on('click','#eliminarHerramienta',function(){
-        $('#TablaTareasHerramientas .tr-activa-siama').remove();
-    });
-
-    $('#SiamaModalFunciones').on('click','#TablaTareasHerramientas tbody td',function(){
-       
-        var indexAnt = $('#TablaTareasHerramientas .tr-activa-siama').index();
-        var fila = $(this).parent('tr');
-        var indexAct = fila.index();
-
-        $('#TablaTareasHerramientas .tr-activa-siama').removeClass('tr-activa-siama');
-        $('#actHer').text(indexAct);
-
-        if(indexAnt != indexAct)
-            fila.addClass('tr-activa-siama');
-
-        var cell = $(this).index();
-        
-        if(cell == 2){
-            if(!fila.hasClass('tr-activa-siama'))
-                $(this).parent('tr').addClass('tr-activa-siama');
-
-            $('#TablaTareasHerramientas .tr-activa-siama').removeClass('tr-activa-siama');
-            $(this).parent('tr').addClass('tr-activa-siama');
-            BuscarHerramienta(Herramienta);
-        }
-
-    });
-
     $('#eliminarTarea').on('click',function(){
         $('#TablaTareasPlantilla .tr-activa-siama').remove();
     });
@@ -169,8 +126,26 @@ $(function(){
         ActivarCeldaTabla(this)
     });
 
+    $('#SiamaModalFunciones').on('click','#agregarHerramienta',function(){
+
+        $('#TablaTareasHerramientas > tbody:last-child').append(`
+            <tr>
+                <td style="display:none;"></td>
+                <td></td>
+                <td colspan="2" class ="editarHerramienta" style="text-align: center;cursor: pointer;">
+                    <span class="fa fa-pencil fa-lg"></span>
+                </td>
+            </tr>
+        `);
+
+    });
+
     $('#SiamaModalFunciones').on('click','#CancelarEdicionTarea',function(){
         ClearModalFunction();
+    });
+
+    $('#SiamaModalFunciones').on('click','#eliminarHerramienta',function(){
+        $('#TablaTareasHerramientas .tr-activa-siama').remove();
     });
 
     $('#SiamaModalFunciones').on('click','#GuardarEdicionTarea',function(){
@@ -218,6 +193,31 @@ $(function(){
     
             CerrarFunciones();
         }
+    });
+
+    $('#SiamaModalFunciones').on('click','#TablaTareasHerramientas tbody td',function(){
+       
+        var indexAnt = $('#TablaTareasHerramientas .tr-activa-siama').index();
+        var fila = $(this).parent('tr');
+        var indexAct = fila.index();
+
+        $('#TablaTareasHerramientas .tr-activa-siama').removeClass('tr-activa-siama');
+        $('#actHer').text(indexAct);
+
+        if(indexAnt != indexAct)
+            fila.addClass('tr-activa-siama');
+
+        var cell = $(this).index();
+        
+        if(cell == 2){
+            if(!fila.hasClass('tr-activa-siama'))
+                $(this).parent('tr').addClass('tr-activa-siama');
+
+            $('#TablaTareasHerramientas .tr-activa-siama').removeClass('tr-activa-siama');
+            $(this).parent('tr').addClass('tr-activa-siama');
+            BuscarHerramienta(Herramienta);
+        }
+
     });
     
     function ExisteHerramienta(){
@@ -437,7 +437,7 @@ $(function(){
                     "IdPieza"       : $(this).find('td:eq(1)').text(),
                     "Titulo"        : $(this).find('td:eq(3)').text(),
                     "Minutos"       : $(this).find('td:eq(4)').text(),
-                    "Herramientas"  : $(this).find('td:eq(5)').text(),
+                    "Herramientas"  : JSON.parse($(this).find('td:eq(5)').text()),
                     "Descripcion"   : $(this).find('td:eq(6)').text(),
                     "Observacion"   : $(this).find('td:eq(7)').text()
                 });
