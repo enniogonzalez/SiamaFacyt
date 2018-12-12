@@ -102,57 +102,22 @@ $(function(){
     /*          Fin Buscadores          */
     /************************************/
 
-    $('.botoneraFormulario').on('click','#EliminarRegistro',function(){
-        Botones = `
-        <button data-dismiss="modal" type="submit" id ="ConfirmarEliminacion" title="Confirmar Eliminar Registro" 
-            type="button" style="margin:5px;" class="btn  btn-success">
-          <span class="fa fa-check"></span>
-          Confirmar
-        </button>
-        <button data-dismiss="modal" title="Cancelar Eliminacion de Registro" type="button" style="margin:5px;" class="btn  btn-danger">
-          <span class="fa fa-ban "></span>
-          Cancelar
-        </button>`;
-
-        var parametros = {
-            "Titulo":"Advertencia",
-            "Cuerpo": "<h4>¿Est&aacute; usted seguro de querer eliminar el Cambio Correctivo?</h4>",
-            "Botones":Botones
+    $('#FinCorrectivo').on('change',function(){
+        if($(this).val() != "" && 
+        $('#InicioCorrectivo').val() != "" 
+        && $(this).val() < $('#InicioCorrectivo').val()){
+            $('#InicioCorrectivo').val($(this).val());
         }
 
-        ModalAdvertencia(parametros);
     })
 
-    $('.botoneraFormulario').on('click','#BuscarRegistro',function(){
-        SetSearchType('Formulario');
-        SetSearchTitle('Busqueda Mantenimientos Correctivos');
-        PrimeraVezBusqueda = true;
-        DeshabilitarBotonera();
-        SetUrlBusqueda($('#ControladorActual').text().trim()+"/busqueda");
-        Busqueda(1,true);
-        
-        setTimeout(function(){
-            HabilitarBotonera();
-        }, 900);
-    })
-
-    $('#SiamaModalAdvertencias').on('click','#ConfirmarEliminacion',function(){
-        var parametros = {
-            "id": $('#IdForm').text().trim(),
-            "Url": $('#ControladorActual').text().trim()+"/eliminar"
+    $('#InicioCorrectivo').on('change',function(){
+        if($(this).val() != "" && 
+        $('#FinCorrectivo').val() != "" 
+        && $(this).val() > $('#FinCorrectivo').val()){
+            $('#FinCorrectivo').val($(this).val());
         }
-        Eliminar(parametros)
-    });
 
-    $('.botoneraFormulario').on('click','#EditarRegistro',function(){
-        
-        var parametros = {
-            "id": $('#IdForm').text().trim(),
-            "Caso":"Editar",
-            "Url": $('#ControladorActual').text().trim()+"/obtener"
-        }
-        Obtener(parametros);
-        
     });
 
     $('.botoneraFormulario').on('click','#AgregarRegistro',function(){
@@ -183,19 +148,17 @@ $(function(){
         }
     });
 
-    $('.botoneraFormulario').on('click','#DesaprobarRegistro',function(){
+    $('.botoneraFormulario').on('click','#BuscarRegistro',function(){
+        SetSearchType('Formulario');
+        SetSearchTitle('Busqueda Mantenimientos Correctivos');
+        PrimeraVezBusqueda = true;
+        DeshabilitarBotonera();
+        SetUrlBusqueda($('#ControladorActual').text().trim()+"/busqueda");
+        Busqueda(1,true);
         
-        var parametros = {
-            "id": $('#IdForm').text(),
-            "Tipo": "Desaprobar",
-            "Url":$('#ControladorActual').text().trim() + "/reversar" 
-        }
-        
-        //Evitar doble click
-        if(!Guardando){
-            Guardando = true;
-            CambioEstatusMantenimiento(parametros)
-        }
+        setTimeout(function(){
+            HabilitarBotonera();
+        }, 900);
     })
 
     $('.botoneraFormulario').on('click','#CancelarRegistro',function(){
@@ -216,22 +179,51 @@ $(function(){
         SetSearchType("Formulario");
     })
 
-    $('#InicioCorrectivo').on('change',function(){
-        if($(this).val() != "" && 
-        $('#FinCorrectivo').val() != "" 
-        && $(this).val() > $('#FinCorrectivo').val()){
-            $('#FinCorrectivo').val($(this).val());
+    $('.botoneraFormulario').on('click','#DesaprobarRegistro',function(){
+        
+        var parametros = {
+            "id": $('#IdForm').text(),
+            "Tipo": "Desaprobar",
+            "Url":$('#ControladorActual').text().trim() + "/reversar" 
         }
+        
+        //Evitar doble click
+        if(!Guardando){
+            Guardando = true;
+            CambioEstatusMantenimiento(parametros)
+        }
+    })
 
+    $('.botoneraFormulario').on('click','#EditarRegistro',function(){
+        
+        var parametros = {
+            "id": $('#IdForm').text().trim(),
+            "Caso":"Editar",
+            "Url": $('#ControladorActual').text().trim()+"/obtener"
+        }
+        Obtener(parametros);
+        
     });
 
-    $('#FinCorrectivo').on('change',function(){
-        if($(this).val() != "" && 
-        $('#InicioCorrectivo').val() != "" 
-        && $(this).val() < $('#InicioCorrectivo').val()){
-            $('#InicioCorrectivo').val($(this).val());
+    $('.botoneraFormulario').on('click','#EliminarRegistro',function(){
+        Botones = `
+        <button data-dismiss="modal" type="submit" id ="ConfirmarEliminacion" title="Confirmar Eliminar Registro" 
+            type="button" style="margin:5px;" class="btn  btn-success">
+          <span class="fa fa-check"></span>
+          Confirmar
+        </button>
+        <button data-dismiss="modal" title="Cancelar Eliminacion de Registro" type="button" style="margin:5px;" class="btn  btn-danger">
+          <span class="fa fa-ban "></span>
+          Cancelar
+        </button>`;
+
+        var parametros = {
+            "Titulo":"Advertencia",
+            "Cuerpo": "<h4>¿Est&aacute; usted seguro de querer eliminar el Cambio Correctivo?</h4>",
+            "Botones":Botones
         }
 
+        ModalAdvertencia(parametros);
     })
 
     $('.botoneraFormulario').on('click','#GuardarRegistro',function(){
@@ -297,110 +289,14 @@ $(function(){
         
     });
 
-    function Editar(){
-        
-        if($('#EstatusCorrectivo').val().trim() == "Realizado"){
-            
-            Botones = `
-            <button data-dismiss="modal" title="Cerrar" type="button" style="margin:5px;" class="btn  btn-danger">
-            <span class="fa fa-times "></span>
-            Cerrar
-            </button>`;
-
-            Cuerpo = `No se puede editar <strong>Mantenimiento Correctivo</strong> debido a que el estatus ha cambiado a 
-            <strong>realizado</strong>.`;
-
-            var parametros = {
-                "Titulo":"Advetencia",
-                "Cuerpo": Cuerpo,
-                "Botones":Botones
-            }
-
-            ModalAdvertencia(parametros);
-        }else{
-            GuardarEstadoActualFormulario();
-            HabilitarFormulario()
-
-            if($('#EstatusCorrectivo').val() == "Solicitado"){
-                $('#EstatusCorrectivo').attr("disabled", "disabled");
-                $('#EstatusCorrectivo').attr("readonly", "readonly");
-                ActivarCambiosReparaciones();
-            }else{
-                $('.formulario-siama form .form-control').each(function(){
-                    $(this).attr("disabled", "disabled");
-                    $(this).attr("readonly", "readonly");
-                })
-
-                DesactivarCambiosReparaciones();
-                $('#ObservacionCorrectivo').removeAttr("disabled"); 
-                $('#ObservacionCorrectivo').removeAttr("readonly");
-                setTimeout(function(){$('#ObservacionCorrectivo').focus();}, 400);
-            }
-
-            
-            $(window).scrollTop(0);
+    $('#SiamaModalAdvertencias').on('click','#ConfirmarEliminacion',function(){
+        var parametros = {
+            "id": $('#IdForm').text().trim(),
+            "Url": $('#ControladorActual').text().trim()+"/eliminar"
         }
-    }
+        Eliminar(parametros)
+    });
 
-    function CambioEstatusMantenimiento(parametros){
-
-        if(parametros['Tipo'] ==  "Aprobar")
-            MostrarEstatus(6); 
-        else
-            MostrarEstatus(8); 
-
-        DeshabilitarBotonera();
-
-        $.ajax({
-            url: parametros['Url'] ,
-            type: 'POST',
-            data: parametros,
-            dataType: 'json'
-        }).done(function(data){
-            Guardando = false;
-
-            HabilitarBotonera();
-            if(data['isValid']){
-                LlenarFormularioRequest(data['Datos']);
-
-                if(data['Tipo'] ==  "Aprobar")
-                    MostrarEstatus(7,true); 
-                else
-                    MostrarEstatus(9,true); 
-
-                setTimeout(function(){
-                    CerrarEstatus();
-                }, 6000);
-            }else{
-                
-                CerrarEstatus();
-                Botones = `
-                <button data-dismiss="modal" title="Cerrar" type="button" style="margin:5px;" class="btn  btn-danger">
-                  <span class="fa fa-times "></span>
-                  Cerrar
-                </button>`;
-        
-                var parametros = {
-                    "Titulo":"Advertencia",
-                    "Cuerpo": data['Mensaje'],
-                    "Botones":Botones
-                }
-        
-                ModalAdvertencia(parametros);
-            }
-        }).fail(function(data){
-            Guardando = false;
-            HabilitarFormulario(false);
-            failAjaxRequest(data);
-        });
-    }
-    
-    function DesactivarCambiosReparaciones(){
-        $('#agregarCambio').hide();
-        $('#eliminarCambio').hide();
-        $('#agregarReparacion').hide();
-        $('#eliminarReparacion').hide();
-    }
 
     function ActivarCambiosReparaciones(){
         $('#agregarCambio').show();
@@ -408,25 +304,7 @@ $(function(){
         $('#agregarReparacion').show();
         $('#eliminarReparacion').show();
     }
-
-    function BuscarBien(){
-
-        SetSearchThead(thBienes);
-
-        parametros = {
-            "Lista": $('#listaBusquedaBien').html().trim(),
-            "Tipo": Bienes
-        }
-
-        idBuscadorActual = $('#idBieCorrectivo').text().trim();
-        nombreBuscadorActual = $('#nomBieCorrectivo').val().trim();
-        condiciones = {
-            "BienesDisponibles":true
-        }
-        SetSearchModal(parametros,true,condiciones)
-
-    }
-    
+  
     function AdvertenciaCambiarBien(opcion){
 
         Botones = `
@@ -446,200 +324,6 @@ $(function(){
         }
 
         ModalAdvertencia(parametros);
-    }
-
-    function GetUrlBusquedaOpcion(opcion){
-        switch(opcion){
-            case ProveedorC:
-            case ProveedorR:
-                controlador = "proveedores/busqueda";
-            break;
-            case UsuarioC:
-            case UsuarioR:
-                controlador = "usuarios/busqueda";
-            break;
-            case FallaC:
-            case FallaR:
-                controlador = "fallas/busqueda";
-            break;
-            case PiezaCC:
-                controlador = "piezas/busquedaDisponibles";
-            break;
-            case PiezaDR:
-            case PiezaDC:
-                controlador = "piezas/busqueda";
-            break;
-            case Correctivo:
-                controlador = "correctivo/busqueda";
-            break;
-            case Bienes:
-                controlador = "bienes/busqueda";
-            break;
-        }
-
-        return $('#UrlBase').text() + "/" + controlador
-    }
-
-    function SetSearchModal(data,buscar =true,condiciones = {}){
-        SetSearchType(data['Tipo']);
-        
-        switch(data['Tipo']){
-            case ProveedorC:
-            case ProveedorR:
-                controlador = "Proveedores";
-            break;
-            case UsuarioC:
-            case UsuarioR:
-                controlador = "Usuarios";
-            break;
-            case FallaC:
-            case FallaR:
-                controlador = "Fallas";
-            break;
-            case PiezaDC:
-            case PiezaDR:
-            case PiezaCC:
-                controlador = "Piezas Disponibles";
-            break;
-            case Correctivo:
-                controlador = "Mantenimientos Correctivo";
-            break;
-            case Bienes:
-                controlador = "Bienes Disponibles";
-            break;
-        }
-
-        SetModalEtqContador(controlador)
-        SetSearchCOB(data['Lista']);
-
-
-        SetSearchTitle('Busqueda ' + controlador);
-        PrimeraVezBusqueda = true;
-        SetUrlBusqueda(GetUrlBusquedaOpcion(data['Tipo']));
-
-        if(buscar)
-            Busqueda(1,false,condiciones);
-    }
-
-    function EstablecerBuscador(){
-        SetSearchThead(thCorrectivos);
-    }
-
-    function ClearForm(){
-        
-        $('#IdForm').text(''); 
-        $('#idBieCorrectivo').text('');
-        $('#alertaFormularioActual').hide();
-        $('#TablaCambiosCorrectivos > tbody').children().remove();
-        $('#TablaReparacionesCorrectivas > tbody').children().remove();
-
-        $('.formulario-siama form .form-control').each(function(){
-            $(this).removeClass('is-invalid');
-            if($(this).hasClass('texto') || $(this).hasClass('fecha'))
-                $(this).val('');
-            else if($(this).hasClass('lista'))
-                $(this)[0].selectedIndex = 0;
-            else if ($(this).hasClass('decimal'))
-                $(this).val('0.00')
-        });
-    }
-    
-    function GuardarEstadoActualFormulario(){
-        dataInputs = [];
-        idActual =$('#IdForm').text().trim();
-        idBieCorrectivo = $('#idBieCorrectivo').text().trim();
-
-        Cambios = $('#TablaCambiosCorrectivos > tbody').html();
-        Reparaciones = $('#TablaReparacionesCorrectivas > tbody').html();
-        $('.formulario-siama form .form-control').each(function(){
-            dataInputs.push($(this).val().trim());
-        })
-    }
-
-    function RestablecerEstadoAnteriorFormulario(){
-        
-        var parametros = {
-            "id"            : idActual.trim(),
-            "idBien"        : idBieCorrectivo.trim(),     
-            "Documento"     : dataInputs[0].trim(),  
-            "Estatus"       : dataInputs[1].trim(),
-            "nomBien"       : dataInputs[2].trim(),
-            "Inicio"        : dataInputs[3].trim(),
-            "Fin"           : dataInputs[4].trim(),
-            "Observaciones" : dataInputs[5].trim(),
-            "Cambios"       : Cambios,
-            "Reparaciones"  : Reparaciones
-        }
-
-        LlenarFormulario(parametros);
-    }
-    
-    function LlenarFormulario(data){
-        $('#TablaCambiosCorrectivos > tbody').children().remove();
-        $('#TablaReparacionesCorrectivas > tbody').children().remove();
-
-        if(data['Estatus'] != "Solicitado")
-            DesactivarCambiosReparaciones();
-        else
-            ActivarCambiosReparaciones();
-
-        AgregarBotoneraCorrectiva(data['Estatus']);
-
-        $('#IdForm').text(data['id']);
-        $('#DocumentoCorrectivo').val(data['Documento']);
-        $('#EstatusCorrectivo').val(data['Estatus']);
-        $('#idBieCorrectivo').text(data['idBien']);
-        $('#nomBieCorrectivo').val(data['nomBien']);
-        $('#InicioCorrectivo').val(data['Inicio']);
-        $('#FinCorrectivo').val(data['Fin']);
-        $('#ObservacionCorrectivo').val(data['Observaciones']);
-        $('#TablaCambiosCorrectivos > tbody:last-child').append(data['Cambios']);
-        $('#TablaReparacionesCorrectivas > tbody:last-child').append(data['Reparaciones']);
-
-    }
-
-    function Obtener(parametros){
-
-        MostrarEstatus(5); 
-
-        $.ajax({
-            url: parametros['Url'],
-            type: "POST",
-            data: parametros,
-            dataType: 'json'
-        }).done(function(data){
-            $(window).scrollTop(0);
-            if(data['isValid']){
-                CerrarEstatus();
-                LlenarFormularioRequest(data['Datos']);
-                $('#SiamaModalBusqueda').modal('hide');
-
-                if(data['Caso'] == "Editar"){
-                    Editar();
-                }
-            }
-        }).fail(function(data){
-            failAjaxRequest(data);
-        });
-    }
-
-    function LlenarFormularioRequest(data){
-        
-        var parametros = {
-            "id"            : data['mco_id'],
-            "Documento"     : data['documento'],
-            "idBien"        : data['bie_id'],
-            "nomBien"       : data['bie_nom'],
-            "Inicio"        : data['fec_ini'],
-            "Fin"           : data['fec_fin'],
-            "Observaciones" : data['observaciones'],
-            "Cambios"       : data['Cambios'],
-            "Estatus"       : data['estatus'],   
-            "Reparaciones"  : data['Reparaciones']
-        }
-
-        LlenarFormulario(parametros);
-        
     }
 
     function AgregarBotoneraCorrectiva(Tipo){
@@ -709,58 +393,337 @@ $(function(){
         }
     }
 
+    function BuscarBien(){
 
-    window.BuscarProveedor = function(tipo){
-
-        SetSearchThead(thProveedores);
+        SetSearchThead(thBienes);
 
         parametros = {
-            "Lista": $('#listaBusquedaProveedor').html().trim(),
-            "Tipo": tipo
+            "Lista": $('#listaBusquedaBien').html().trim(),
+            "Tipo": Bienes
         }
 
-        switch(tipo){
+        idBuscadorActual = $('#idBieCorrectivo').text().trim();
+        nombreBuscadorActual = $('#nomBieCorrectivo').val().trim();
+        condiciones = {
+            "BienesDisponibles":true
+        }
+        SetSearchModal(parametros,true,condiciones)
+
+    }
+
+    function CambioEstatusMantenimiento(parametros){
+
+        if(parametros['Tipo'] ==  "Aprobar")
+            MostrarEstatus(6); 
+        else
+            MostrarEstatus(8); 
+
+        DeshabilitarBotonera();
+
+        $.ajax({
+            url: parametros['Url'] ,
+            type: 'POST',
+            data: parametros,
+            dataType: 'json'
+        }).done(function(data){
+            Guardando = false;
+
+            HabilitarBotonera();
+            if(data['isValid']){
+                LlenarFormularioRequest(data['Datos']);
+
+                if(data['Tipo'] ==  "Aprobar")
+                    MostrarEstatus(7,true); 
+                else
+                    MostrarEstatus(9,true); 
+
+                setTimeout(function(){
+                    CerrarEstatus();
+                }, 6000);
+            }else{
+                
+                CerrarEstatus();
+                Botones = `
+                <button data-dismiss="modal" title="Cerrar" type="button" style="margin:5px;" class="btn  btn-danger">
+                  <span class="fa fa-times "></span>
+                  Cerrar
+                </button>`;
+        
+                var parametros = {
+                    "Titulo":"Advertencia",
+                    "Cuerpo": data['Mensaje'],
+                    "Botones":Botones
+                }
+        
+                ModalAdvertencia(parametros);
+            }
+        }).fail(function(data){
+            Guardando = false;
+            HabilitarFormulario(false);
+            failAjaxRequest(data);
+        });
+    }
+
+    function ClearForm(){
+        
+        $('#IdForm').text(''); 
+        $('#idBieCorrectivo').text('');
+        $('#alertaFormularioActual').hide();
+        $('#TablaCambiosCorrectivos > tbody').children().remove();
+        $('#TablaReparacionesCorrectivas > tbody').children().remove();
+
+        $('.formulario-siama form .form-control').each(function(){
+            $(this).removeClass('is-invalid');
+            if($(this).hasClass('texto') || $(this).hasClass('fecha'))
+                $(this).val('');
+            else if($(this).hasClass('lista'))
+                $(this)[0].selectedIndex = 0;
+            else if ($(this).hasClass('decimal'))
+                $(this).val('0.00')
+        });
+    }
+    
+    function DesactivarCambiosReparaciones(){
+        $('#agregarCambio').hide();
+        $('#eliminarCambio').hide();
+        $('#agregarReparacion').hide();
+        $('#eliminarReparacion').hide();
+    }
+
+    function Editar(){
+        
+        if($('#EstatusCorrectivo').val().trim() == "Realizado"){
+            
+            Botones = `
+            <button data-dismiss="modal" title="Cerrar" type="button" style="margin:5px;" class="btn  btn-danger">
+            <span class="fa fa-times "></span>
+            Cerrar
+            </button>`;
+
+            Cuerpo = `No se puede editar <strong>Mantenimiento Correctivo</strong> debido a que el estatus ha cambiado a 
+            <strong>realizado</strong>.`;
+
+            var parametros = {
+                "Titulo":"Advetencia",
+                "Cuerpo": Cuerpo,
+                "Botones":Botones
+            }
+
+            ModalAdvertencia(parametros);
+        }else{
+            GuardarEstadoActualFormulario();
+            HabilitarFormulario()
+
+            if($('#EstatusCorrectivo').val() == "Solicitado"){
+                $('#EstatusCorrectivo').attr("disabled", "disabled");
+                $('#EstatusCorrectivo').attr("readonly", "readonly");
+                ActivarCambiosReparaciones();
+            }else{
+                $('.formulario-siama form .form-control').each(function(){
+                    $(this).attr("disabled", "disabled");
+                    $(this).attr("readonly", "readonly");
+                })
+
+                DesactivarCambiosReparaciones();
+                $('#ObservacionCorrectivo').removeAttr("disabled"); 
+                $('#ObservacionCorrectivo').removeAttr("readonly");
+                setTimeout(function(){$('#ObservacionCorrectivo').focus();}, 400);
+            }
+
+            
+            $(window).scrollTop(0);
+        }
+    }
+
+    function EstablecerBuscador(){
+        SetSearchThead(thCorrectivos);
+    }
+
+    function GetUrlBusquedaOpcion(opcion){
+        switch(opcion){
             case ProveedorC:
-                idBuscadorActual = $('#idProC').text().trim();
-                nombreBuscadorActual = $('#nomProC').val().trim();
-            break;
             case ProveedorR:
-                idBuscadorActual = $('#idProR').text().trim();
-                nombreBuscadorActual = $('#nomProR').val().trim();
+                controlador = "proveedores/busqueda";
+            break;
+            case UsuarioC:
+            case UsuarioR:
+                controlador = "usuarios/busqueda";
+            break;
+            case FallaC:
+            case FallaR:
+                controlador = "fallas/busqueda";
+            break;
+            case PiezaCC:
+                controlador = "piezas/busquedaDisponibles";
+            break;
+            case PiezaDR:
+            case PiezaDC:
+                controlador = "piezas/busqueda";
+            break;
+            case Correctivo:
+                controlador = "correctivo/busqueda";
+            break;
+            case Bienes:
+                controlador = "bienes/busqueda";
             break;
         }
 
-        SetSearchModal(parametros)
+        return $('#UrlBase').text() + "/" + controlador
+    }
+    
+    function GuardarEstadoActualFormulario(){
+        dataInputs = [];
+        idActual =$('#IdForm').text().trim();
+        idBieCorrectivo = $('#idBieCorrectivo').text().trim();
 
+        Cambios = $('#TablaCambiosCorrectivos > tbody').html();
+        Reparaciones = $('#TablaReparacionesCorrectivas > tbody').html();
+        $('.formulario-siama form .form-control').each(function(){
+            dataInputs.push($(this).val().trim());
+        })
+    }
+    
+    function LlenarFormulario(data){
+        $('#TablaCambiosCorrectivos > tbody').children().remove();
+        $('#TablaReparacionesCorrectivas > tbody').children().remove();
+
+        if(data['Estatus'] != "Solicitado")
+            DesactivarCambiosReparaciones();
+        else
+            ActivarCambiosReparaciones();
+
+        AgregarBotoneraCorrectiva(data['Estatus']);
+
+        $('#IdForm').text(data['id']);
+        $('#DocumentoCorrectivo').val(data['Documento']);
+        $('#EstatusCorrectivo').val(data['Estatus']);
+        $('#idBieCorrectivo').text(data['idBien']);
+        $('#nomBieCorrectivo').val(data['nomBien']);
+        $('#InicioCorrectivo').val(data['Inicio']);
+        $('#FinCorrectivo').val(data['Fin']);
+        $('#ObservacionCorrectivo').val(data['Observaciones']);
+        $('#TablaCambiosCorrectivos > tbody:last-child').append(data['Cambios']);
+        $('#TablaReparacionesCorrectivas > tbody:last-child').append(data['Reparaciones']);
+
+    }
+
+    function LlenarFormularioRequest(data){
+        
+        var parametros = {
+            "id"            : data['mco_id'],
+            "Documento"     : data['documento'],
+            "idBien"        : data['bie_id'],
+            "nomBien"       : data['bie_nom'],
+            "Inicio"        : data['fec_ini'],
+            "Fin"           : data['fec_fin'],
+            "Observaciones" : data['observaciones'],
+            "Cambios"       : data['Cambios'],
+            "Estatus"       : data['estatus'],   
+            "Reparaciones"  : data['Reparaciones']
+        }
+
+        LlenarFormulario(parametros);
+        
+    }
+
+    function Obtener(parametros){
+
+        MostrarEstatus(5); 
+
+        $.ajax({
+            url: parametros['Url'],
+            type: "POST",
+            data: parametros,
+            dataType: 'json'
+        }).done(function(data){
+            $(window).scrollTop(0);
+            if(data['isValid']){
+                CerrarEstatus();
+                LlenarFormularioRequest(data['Datos']);
+                $('#SiamaModalBusqueda').modal('hide');
+
+                if(data['Caso'] == "Editar"){
+                    Editar();
+                }
+            }
+        }).fail(function(data){
+            failAjaxRequest(data);
+        });
+    }
+
+    function RestablecerEstadoAnteriorFormulario(){
+        
+        var parametros = {
+            "id"            : idActual.trim(),
+            "idBien"        : idBieCorrectivo.trim(),     
+            "Documento"     : dataInputs[0].trim(),  
+            "Estatus"       : dataInputs[1].trim(),
+            "nomBien"       : dataInputs[2].trim(),
+            "Inicio"        : dataInputs[3].trim(),
+            "Fin"           : dataInputs[4].trim(),
+            "Observaciones" : dataInputs[5].trim(),
+            "Cambios"       : Cambios,
+            "Reparaciones"  : Reparaciones
+        }
+
+        LlenarFormulario(parametros);
+    }
+
+    function SetSearchModal(data,buscar =true,condiciones = {}){
+        SetSearchType(data['Tipo']);
+        
+        switch(data['Tipo']){
+            case ProveedorC:
+            case ProveedorR:
+                controlador = "Proveedores";
+            break;
+            case UsuarioC:
+            case UsuarioR:
+                controlador = "Usuarios";
+            break;
+            case FallaC:
+            case FallaR:
+                controlador = "Fallas";
+            break;
+            case PiezaDC:
+            case PiezaDR:
+            case PiezaCC:
+                controlador = "Piezas Disponibles";
+            break;
+            case Correctivo:
+                controlador = "Mantenimientos Correctivo";
+            break;
+            case Bienes:
+                controlador = "Bienes Disponibles";
+            break;
+        }
+
+        SetModalEtqContador(controlador)
+        SetSearchCOB(data['Lista']);
+
+
+        SetSearchTitle('Busqueda ' + controlador);
+        PrimeraVezBusqueda = true;
+        SetUrlBusqueda(GetUrlBusquedaOpcion(data['Tipo']));
+
+        if(buscar)
+            Busqueda(1,false,condiciones);
     }
 
     window.AccionGuardar = function(data){
         LlenarFormularioRequest(data['Datos']);
     }
 
-    window.BuscarUsuario = function(tipo){
-
-        SetSearchThead(thUsuarios);
-        parametros = {
-            "Lista": $('#listaBusquedaUsuario').html().trim(),
-            "Tipo": tipo,
+    window.AccionEliminarFormulario = function(data){
+        
+        if(data['Datos']['mco_id'] == ""){
+            ClearForm();
+            AgregarBotoneraPrimariaNULL();
+        }else{
+            LlenarFormularioRequest(data['Datos']);
         }
-
-        switch(tipo){
-            case UsuarioC:
-                idBuscadorActual = $('#idUsuCambio').text().trim();
-                nombreBuscadorActual = $('#nomUsuCambio').val().trim();
-            break;
-            case UsuarioR:
-                idBuscadorActual = $('#idUsuReparacion').text().trim();
-                nombreBuscadorActual = $('#nomUsuReparacion').val().trim();
-            break;
-        }
-
-        SetSearchModal(parametros)
-
     }
-    
+
     window.BuscarFalla = function(tipo){
 
         SetSearchThead(thFallas);
@@ -820,6 +783,53 @@ $(function(){
         }
 
         SetSearchModal(parametros,true,condiciones);
+    }
+
+    window.BuscarProveedor = function(tipo){
+
+        SetSearchThead(thProveedores);
+
+        parametros = {
+            "Lista": $('#listaBusquedaProveedor').html().trim(),
+            "Tipo": tipo
+        }
+
+        switch(tipo){
+            case ProveedorC:
+                idBuscadorActual = $('#idProC').text().trim();
+                nombreBuscadorActual = $('#nomProC').val().trim();
+            break;
+            case ProveedorR:
+                idBuscadorActual = $('#idProR').text().trim();
+                nombreBuscadorActual = $('#nomProR').val().trim();
+            break;
+        }
+
+        SetSearchModal(parametros)
+
+    }
+
+    window.BuscarUsuario = function(tipo){
+
+        SetSearchThead(thUsuarios);
+        parametros = {
+            "Lista": $('#listaBusquedaUsuario').html().trim(),
+            "Tipo": tipo,
+        }
+
+        switch(tipo){
+            case UsuarioC:
+                idBuscadorActual = $('#idUsuCambio').text().trim();
+                nombreBuscadorActual = $('#nomUsuCambio').val().trim();
+            break;
+            case UsuarioR:
+                idBuscadorActual = $('#idUsuReparacion').text().trim();
+                nombreBuscadorActual = $('#nomUsuReparacion').val().trim();
+            break;
+        }
+
+        SetSearchModal(parametros)
+
     }
 
     window.InterfazElegirBuscador = function(fila){
@@ -890,16 +900,6 @@ $(function(){
             //Prevenir solapamientos de modales
             if(GetSearchType() != Bienes)
                 setTimeout(function(){ $('#SiamaModalFunciones').modal('show');}, 400);
-        }
-    }
-
-    window.AccionEliminarFormulario = function(data){
-        
-        if(data['Datos']['mco_id'] == ""){
-            ClearForm();
-            AgregarBotoneraPrimariaNULL();
-        }else{
-            LlenarFormularioRequest(data['Datos']);
         }
     }
 });

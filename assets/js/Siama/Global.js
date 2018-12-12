@@ -22,100 +22,25 @@ $(function(){
             window.open($('#ControladorActual').text().trim() + "/imprimir/" + $('#IdForm').text().trim(), '_blank');
     })
 
-    window.SetAlertaFormulario = function (Mensaje){
-        $('#alertaFormularioActual').children().remove();
-        $('#alertaFormularioActual').text('');
-        $('#alertaFormularioActual').append(Mensaje);
-        $('#alertaFormularioActual').show();
-        document.getElementsByClassName("informationPage")[0].scrollIntoView();
-    }
-
-    window.GuardarFormulario = function(parametros){
-
-        DeshabilitarFormulario(false);
-        DeshabilitarBotonera();
-        MostrarEstatus(1); 
-
-        $.ajax({
-            url: parametros['Url'],
-            type: 'POST',
-            data: parametros,
-            dataType: 'json'
-        }).done(function(data){
-            Guardando = false;
-
-            HabilitarBotonera();
-            if(data['isValid']){
-
-                $('#alertaFormularioActual').hide();
-                
-                $('#IdForm').text(data['id']);
-                AgregarBotoneraPrimaria()
-                AccionGuardar(data);
-                MostrarEstatus(2,true); 
-                setTimeout(function(){
-                    CerrarEstatus();
-                }, 6000);
-                
-                BuscarCantidadAlerta();
-            }else{
-                CerrarEstatus();
-                SetAlertaFormulario(data['Mensaje']);
-                HabilitarFormulario(false);
-            }
-        }).fail(function(data){
-            Guardando = false;
-            HabilitarFormulario(false);
-            failAjaxRequest(data);
-        });
-    }
-
     //Funcion a sobre escribir
     window.AccionGuardar = function(data){}
 
-    window.HabilitarFormulario = function(cambiarBotonera = true){
+    window.ActivarCeldaTabla = function(fila){
 
-        $('#FormularioActual').removeClass('formulario-desactivado');
-
-        $('.formulario-siama form .form-control').each(function(){
-            if(!$(this).hasClass('estatus')  &&  !$(this).hasClass('documento')){
-                $(this).removeAttr("disabled"); 
-                $(this).removeAttr("readonly");
-            }
-            
-            if($(this).hasClass('buscador')){
-                $(this).attr("readonly", "readonly");
-            }
-        })
-
-        $('.formulario-siama table').each(function(){
-            $(this).removeClass('tabla-siama-desactivada')
-        })
-
-        if(cambiarBotonera)
-            AgregarBotoneraSecundaria();
-    }
-
-    window.DeshabilitarFormulario = function(cambiarBotonera = true){
-
+        //Se busca el indice de la fila que esta activa
+        var indexAnt = $('.tr-activa-siama').index();
+        //Se busca el indice de la fila que fue seleccionada
+        var indexAct = $(fila).index();
+        //Se remueve la clase activa de la fila que esta activa
         $('.tr-activa-siama').removeClass('tr-activa-siama');
-        $('#FormularioActual').addClass('formulario-desactivado');
 
-        $('.formulario-siama form .form-control').each(function(){
-            $(this).attr("disabled", "disabled");
-            $(this).attr("readonly", "readonly");
-        })
-        
-        $('.formulario-siama table').each(function(){
-            $(this).addClass('tabla-siama-desactivada')
-        })
-        
-        if(cambiarBotonera){
-            if($('#IdForm').text().trim()=="")
-                AgregarBotoneraPrimariaNULL();
-            else
-                AgregarBotoneraPrimaria();
-        }
+        //En caso de que los dos indices encontrado anteriormente
+        //sean diferentes, de agrega la clase activa a la fila seleccionada
+        //esto con la intension de que si se selecciona la misma fila
+        //activa, la misma se desactive
+        if(indexAnt != indexAct)
+            $(fila).addClass('tr-activa-siama');
+
     }
 
     window.AgregarBotoneraPrimaria = function(){
@@ -184,6 +109,24 @@ $(function(){
 
     }
 
+    window.BuscarCantidadAlerta = function(){
+      
+        $.ajax({
+            url: $('#UrlBase').text().trim() + "/alertas/CantidadAlertas",
+            type: "POST",
+            dataType: 'json'
+        }).done(function(data){
+            if(data['isValid']){
+                if(data['Cantidad'] > 0){
+                    $('#CantidadAlertas').text("(" + data['Cantidad'] + ")");
+                    $('.AlertasActuales').show();
+                }else{
+                    $('.AlertasActuales').hide();
+                }
+            }
+        })
+    }
+
     window.DeshabilitarBotonera = function(){
         $('.botoneraFormulario').addClass('botoneraDeshabilitada');
         $('.botoneraFormulario').find('button').each(function(){
@@ -191,11 +134,26 @@ $(function(){
         })
     }
 
-    window.HabilitarBotonera = function(){
-        $('.botoneraFormulario').removeClass('botoneraDeshabilitada');
-        $('.botoneraFormulario').find('button').each(function(){
-            $(this).removeAttr("disabled")
+    window.DeshabilitarFormulario = function(cambiarBotonera = true){
+
+        $('.tr-activa-siama').removeClass('tr-activa-siama');
+        $('#FormularioActual').addClass('formulario-desactivado');
+
+        $('.formulario-siama form .form-control').each(function(){
+            $(this).attr("disabled", "disabled");
+            $(this).attr("readonly", "readonly");
         })
+        
+        $('.formulario-siama table').each(function(){
+            $(this).addClass('tabla-siama-desactivada')
+        })
+        
+        if(cambiarBotonera){
+            if($('#IdForm').text().trim()=="")
+                AgregarBotoneraPrimariaNULL();
+            else
+                AgregarBotoneraPrimaria();
+        }
     }
 
     window.Eliminar = function(parametros){
@@ -237,39 +195,88 @@ $(function(){
         });
     }
 
-    window.ActivarCeldaTabla = function(fila){
+    window.GuardarFormulario = function(parametros){
 
-        //Se busca el indice de la fila que esta activa
-        var indexAnt = $('.tr-activa-siama').index();
-        //Se busca el indice de la fila que fue seleccionada
-        var indexAct = $(fila).index();
-        //Se remueve la clase activa de la fila que esta activa
-        $('.tr-activa-siama').removeClass('tr-activa-siama');
+        DeshabilitarFormulario(false);
+        DeshabilitarBotonera();
+        MostrarEstatus(1); 
 
-        //En caso de que los dos indices encontrado anteriormente
-        //sean diferentes, de agrega la clase activa a la fila seleccionada
-        //esto con la intension de que si se selecciona la misma fila
-        //activa, la misma se desactive
-        if(indexAnt != indexAct)
-            $(fila).addClass('tr-activa-siama');
-
-    }
-    
-    window.BuscarCantidadAlerta = function(){
-      
         $.ajax({
-            url: $('#UrlBase').text().trim() + "/alertas/CantidadAlertas",
-            type: "POST",
+            url: parametros['Url'],
+            type: 'POST',
+            data: parametros,
             dataType: 'json'
         }).done(function(data){
+            Guardando = false;
+
+            HabilitarBotonera();
             if(data['isValid']){
-                if(data['Cantidad'] > 0){
-                    $('#CantidadAlertas').text("(" + data['Cantidad'] + ")");
-                    $('.AlertasActuales').show();
-                }else{
-                    $('.AlertasActuales').hide();
-                }
+
+                $('#alertaFormularioActual').hide();
+                
+                $('#IdForm').text(data['id']);
+                AgregarBotoneraPrimaria()
+                AccionGuardar(data);
+                MostrarEstatus(2,true); 
+                setTimeout(function(){
+                    CerrarEstatus();
+                }, 6000);
+                
+                BuscarCantidadAlerta();
+            }else{
+                CerrarEstatus();
+                SetAlertaFormulario(data['Mensaje']);
+                HabilitarFormulario(false);
             }
+        }).fail(function(data){
+            Guardando = false;
+            HabilitarFormulario(false);
+            failAjaxRequest(data);
+        });
+    }
+
+    window.HabilitarBotonera = function(){
+        $('.botoneraFormulario').removeClass('botoneraDeshabilitada');
+        $('.botoneraFormulario').find('button').each(function(){
+            $(this).removeAttr("disabled")
         })
     }
+
+    window.HabilitarFormulario = function(cambiarBotonera = true){
+
+        $('#FormularioActual').removeClass('formulario-desactivado');
+
+        $('.formulario-siama form .form-control').each(function(){
+            if(!$(this).hasClass('estatus')  &&  !$(this).hasClass('documento')){
+                $(this).removeAttr("disabled"); 
+                $(this).removeAttr("readonly");
+            }
+            
+            if($(this).hasClass('buscador')){
+                $(this).attr("readonly", "readonly");
+            }
+        })
+
+        $('.formulario-siama table').each(function(){
+            $(this).removeClass('tabla-siama-desactivada')
+        })
+
+        if(cambiarBotonera)
+            AgregarBotoneraSecundaria();
+    }
+
+    window.SetAlertaFormulario = function (Mensaje){
+        $('#alertaFormularioActual').children().remove();
+        $('#alertaFormularioActual').text('');
+        $('#alertaFormularioActual').append(Mensaje);
+        $('#alertaFormularioActual').show();
+        document.getElementsByClassName("informationPage")[0].scrollIntoView();
+    }
+
+
+
+
+
+
+    
 });

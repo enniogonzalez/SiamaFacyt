@@ -13,6 +13,10 @@ $(function(){
         CerrarEstatus();
     });
 
+    window.CerrarEstatus = function (){
+        $('.estatusTransaccion').hide();
+    }
+
     window.MostrarEstatus = function(opcion, dilay = false){
         
         $('.estatusTransaccion').hide();
@@ -73,10 +77,6 @@ $(function(){
         
     }
 
-    window.CerrarEstatus = function (){
-        $('.estatusTransaccion').hide();
-    }
-
     /************************************************************/
     /*              Fin Manejo Modal Estatus                    */
     /************************************************************/
@@ -120,6 +120,7 @@ $(function(){
             $('#SiamaModalFunciones').modal('show');
         }
     }
+
     /************************************************************/
     /*              Fin Manejo Modal Functiones                 */
     /************************************************************/
@@ -127,6 +128,15 @@ $(function(){
     /************************************************************/
     /*              Manejo Modal Busqueda                       */
     /************************************************************/
+    
+    $('#CancelarModalBuscar').on('click',function(){
+        BusquedaActiva = "";
+        OrdenamientoActivo = 0;
+        TipoOrdenamientoActivo = 0;
+        
+        SetModalEtqContador("")
+    })
+
     $('#ElegirModalBuscar').on('click',function(){
         if($('#TablaBusquedaFormulario .tr-activa-siama').length == 0){
             
@@ -149,14 +159,30 @@ $(function(){
             SetModalEtqContador("")
         }
     })
+    
+    $('#fInicioBusqueda').on('change',function(){
+        if($(this).val() != "" && 
+        $('#fFinBusqueda').val() != "" 
+        && $(this).val() > $('#fFinBusqueda').val()){
+            $('#fFinBusqueda').val($(this).val());
+        }else if($(this).val() != "" && $('#fFinBusqueda').val() == ""){
+            $('#fFinBusqueda').val($(this).val());
+        }
 
-    $('#CancelarModalBuscar').on('click',function(){
-        BusquedaActiva = "";
-        OrdenamientoActivo = 0;
-        TipoOrdenamientoActivo = 0;
-        
-        SetModalEtqContador("")
-    })
+    });
+
+    $('#fFinBusqueda').on('change',function(){
+        if($(this).val() != "" && 
+        $('#fInicioBusqueda').val() != "" 
+        && $(this).val() < $('#fInicioBusqueda').val()){
+
+            $('#fInicioBusqueda').val($(this).val());
+
+        }else if($(this).val() != "" && $('#fInicioBusqueda').val() == ""){
+            $('#fInicioBusqueda').val($(this).val());
+        }
+
+    });
 
     $('#FiltrarModalBuscar').on('click',function(){
         
@@ -300,30 +326,27 @@ $(function(){
             $(this).addClass('tr-activa-siama');
 
     });
-    
-    $('#fInicioBusqueda').on('change',function(){
-        if($(this).val() != "" && 
-        $('#fFinBusqueda').val() != "" 
-        && $(this).val() > $('#fFinBusqueda').val()){
-            $('#fFinBusqueda').val($(this).val());
-        }else if($(this).val() != "" && $('#fFinBusqueda').val() == ""){
-            $('#fFinBusqueda').val($(this).val());
-        }
 
-    });
 
-    $('#fFinBusqueda').on('change',function(){
-        if($(this).val() != "" && 
-        $('#fInicioBusqueda').val() != "" 
-        && $(this).val() < $('#fInicioBusqueda').val()){
+    function ApagarNavegacionDerecha(){
+        $('.Last').removeClass('PaginationDisabled')
+        $('.Next').removeClass('PaginationDisabled')
+    }
 
-            $('#fInicioBusqueda').val($(this).val());
+    function ApagarNavegacionIzquierda(){
+        $('.Previous').removeClass('PaginationDisabled')
+        $('.First').removeClass('PaginationDisabled')
+    }
 
-        }else if($(this).val() != "" && $('#fInicioBusqueda').val() == ""){
-            $('#fInicioBusqueda').val($(this).val());
-        }
+    function PrenderNavegacionDerecha(){
+        $('.Last').addClass('PaginationDisabled')
+        $('.Next').addClass('PaginationDisabled')
+    }
 
-    });
+    function PrenderNavegacionIzquierda(){
+        $('.Previous').addClass('PaginationDisabled')
+        $('.First').addClass('PaginationDisabled')
+    }
 
     function SetPagination(registrosActuales){
 
@@ -354,21 +377,6 @@ $(function(){
         }
     }
 
-    function ApagarNavegacionIzquierda(){
-        $('.Previous').removeClass('PaginationDisabled')
-        $('.First').removeClass('PaginationDisabled')
-    }
-
-    function PrenderNavegacionIzquierda(){
-        $('.Previous').addClass('PaginationDisabled')
-        $('.First').addClass('PaginationDisabled')
-    }
-
-    function ApagarNavegacionDerecha(){
-        $('.Last').removeClass('PaginationDisabled')
-        $('.Next').removeClass('PaginationDisabled')
-    }
-
     function SetPaginationBar(){
         $('.paginacion-siama').children().remove();
         html = `
@@ -389,27 +397,6 @@ $(function(){
 
         
         $('.paginacion-siama').append(html);
-    }
-
-    function PrenderNavegacionDerecha(){
-        $('.Last').addClass('PaginationDisabled')
-        $('.Next').addClass('PaginationDisabled')
-    }
-
-    window.SetModalEtqContador = function(etiqueta){
-        $('#etqContador').text(etiqueta);
-    }
-
-    window.SetUrlBusqueda = function(url){
-        UrlBusquedaActivo = url;
-    }
-
-    window.SetSearchType = function(tipo){
-        $('#OpcionBusqueda').text(tipo);
-    }
-    
-    window.GetSearchType = function(){
-        return $('#OpcionBusqueda').text();
     }
 
     window.Busqueda = function(paginaActual, verFecha = false,paramsRequest = {}){
@@ -477,6 +464,19 @@ $(function(){
         });
     }
 
+    window.GetSearchType = function(){
+        return $('#OpcionBusqueda').text();
+    }
+
+    window.SetModalEtqContador = function(etiqueta){
+        $('#etqContador').text(etiqueta);
+    }
+
+    window.SetSearchCOB = function (COB){
+        $('#CampoOrden').children().remove();
+        $('#CampoOrden').append(COB);
+    }
+
     window.SetSearchThead = function(thead){
 
         $('#TablaBusquedaFormulario > thead').children().remove();
@@ -487,31 +487,18 @@ $(function(){
         $('#SiamaModalBusqueda .modal-header h4').text(title);
     }
 
-    window.SetSearchCOB = function (COB){
-        $('#CampoOrden').children().remove();
-        $('#CampoOrden').append(COB);
+    window.SetSearchType = function(tipo){
+        $('#OpcionBusqueda').text(tipo);
+    }
+
+    window.SetUrlBusqueda = function(url){
+        UrlBusquedaActivo = url;
     }
 
     /************************************************************/
     /*              Fin Manejo Modal Busqueda                   */
     /************************************************************/
     
-    window.ModalAdvertencia = function(data,dilay = false){
-        
-        $('#SiamaModalAdvertencias .contenedorAlertaModal').hide();
-        $( "#SiamaModalAdvertencias .modal-body" ).children().remove();
-        $( "#SiamaModalAdvertencias .modal-body" ).text('');
-        $( "#SiamaModalAdvertencias .modal-footer").children().remove();
-        $('#SiamaModalAdvertencias #SiamaModalAdvertenciasEtiqueta').text(data['Titulo']);
-        $( "#SiamaModalAdvertencias .modal-footer" ).append(data['Botones']);
-        $( "#SiamaModalAdvertencias .modal-body" ).append( data['Cuerpo']);
-
-        if(dilay)
-            setTimeout(function(){$('#SiamaModalAdvertencias').modal('show');},600);
-        else
-            $('#SiamaModalAdvertencias').modal('show');
-    }
-
     window.failAjaxRequest = function(data){
         
         HabilitarBotonera();
@@ -539,6 +526,22 @@ $(function(){
         
         setTimeout(function(){ ModalAdvertencia(parametros); }, 600);
         
+    }
+    
+    window.ModalAdvertencia = function(data,dilay = false){
+        
+        $('#SiamaModalAdvertencias .contenedorAlertaModal').hide();
+        $( "#SiamaModalAdvertencias .modal-body" ).children().remove();
+        $( "#SiamaModalAdvertencias .modal-body" ).text('');
+        $( "#SiamaModalAdvertencias .modal-footer").children().remove();
+        $('#SiamaModalAdvertencias #SiamaModalAdvertenciasEtiqueta').text(data['Titulo']);
+        $( "#SiamaModalAdvertencias .modal-footer" ).append(data['Botones']);
+        $( "#SiamaModalAdvertencias .modal-body" ).append( data['Cuerpo']);
+
+        if(dilay)
+            setTimeout(function(){$('#SiamaModalAdvertencias').modal('show');},600);
+        else
+            $('#SiamaModalAdvertencias').modal('show');
     }
 
 });

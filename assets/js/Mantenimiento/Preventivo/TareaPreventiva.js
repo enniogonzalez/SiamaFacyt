@@ -53,6 +53,82 @@ $(function(){
     $('#eliminarTarea').on('click',function(){
         $('#TablaTareas .tr-activa-siama').remove();
     });
+
+    $('#SiamaModalFunciones').on('click','#CancelarEdicionTarea',function(){
+        ClearModalFunction();
+    });
+
+    $('#SiamaModalFunciones').on('change','#FinTarea',function(){
+        if($(this).val() != "" && 
+        $('#InicioTarea').val() != "" 
+        && $(this).val() < $('#InicioTarea').val()){
+            $('#InicioTarea').val($(this).val());
+        }
+    })
+
+    $('#SiamaModalFunciones').on('click','#GuardarEdicionTarea',function(){
+        var Valido = true;
+
+        $('#formEditarTarea .Tarea').each(function(){
+            $(this).removeClass('is-invalid');
+            if($(this).hasClass('obligatorio') && $(this).val().trim() == ""){
+
+                if(Valido)
+                    $(this).focus();
+                
+                Valido = false;
+                $(this).addClass('is-invalid');
+            }
+        })
+
+        //Validar que exista un usuario o un proveedor asignado
+        if(Valido && $('#nomUsu').val() == "" && $('#nomPro').val() == ""){
+            Valido = false;
+            $('#alertaModal').focus(); 
+            $('#alertaModal').text('La tarea del Mantenimiento Preventivo debe contar con un Usuario o un Proveedor para realizar el mismo.');
+            $('.contenedorAlertaModal').show();
+            
+            document.getElementsByClassName("contenedorAlertaModal")[0].scrollIntoView();
+        }
+
+        if(Valido && $('#EstatusPreventivo').val() != "Solicitado" && $('#MinutosRea').val() < 0){
+            Valido = false;
+            $('#alertaModal').text('Los minutos realizados tienen que ser un numero mayor a 0.');
+            $('.contenedorAlertaModal').show();
+            
+            document.getElementsByClassName("contenedorAlertaModal")[0].scrollIntoView();
+        }
+
+        if(Valido){
+
+            var row = parseInt($('#mhOptionR').text());
+            var fila = $('#TablaTareas tbody tr').eq(row);
+            fila.find('td:eq(1)').text($('#idPiezaTarea').text().trim());
+            fila.find('td:eq(2)').text($('#nomPiezaTarea').val().trim());
+            fila.find('td:eq(3)').text($('#TituloCambio').val().trim());
+            fila.find('td:eq(4)').text($('#idUsu').text().trim());
+            fila.find('td:eq(5)').text($('#nomUsu').val().trim());
+            fila.find('td:eq(6)').text($('#idPro').text().trim());
+            fila.find('td:eq(7)').text($('#nomPro').val().trim());
+            fila.find('td:eq(8)').text($('#HerramientasT').val().trim());
+            fila.find('td:eq(9)').text($('#DescripcionT').val().trim());
+            fila.find('td:eq(10)').text($('#InicioTarea').val().trim());
+            fila.find('td:eq(11)').text($('#FinTarea').val().trim());
+            fila.find('td:eq(12)').text($('#MinutosRea').val().trim());
+            fila.find('td:eq(13)').text($('#ObservacionT').val().trim());
+    
+            CerrarFunciones();
+        }
+    });
+
+    $('#SiamaModalFunciones').on('change','#InicioTarea',function(){
+        if($(this).val() != "" && 
+        $('#FinTarea').val() != "" 
+        && $(this).val() > $('#FinTarea').val()){
+            $('#FinTarea').val($(this).val());
+        }
+
+    });
     
     $('#TablaTareas').on('click','.editarTarea',function(){
 
@@ -123,131 +199,7 @@ $(function(){
     $('#TablaTareas tbody').on('click','tr',function(){
         ActivarCeldaTabla(this)
     });
-
-    $('#SiamaModalFunciones').on('change','#InicioTarea',function(){
-        if($(this).val() != "" && 
-        $('#FinTarea').val() != "" 
-        && $(this).val() > $('#FinTarea').val()){
-            $('#FinTarea').val($(this).val());
-        }
-
-    });
-
-    $('#SiamaModalFunciones').on('change','#FinTarea',function(){
-        if($(this).val() != "" && 
-        $('#InicioTarea').val() != "" 
-        && $(this).val() < $('#InicioTarea').val()){
-            $('#InicioTarea').val($(this).val());
-        }
-    })
-
-    $('#SiamaModalFunciones').on('click','#CancelarEdicionTarea',function(){
-        ClearModalFunction();
-    });
-
-    $('#SiamaModalFunciones').on('click','#GuardarEdicionTarea',function(){
-        var Valido = true;
-
-        $('#formEditarTarea .Tarea').each(function(){
-            $(this).removeClass('is-invalid');
-            if($(this).hasClass('obligatorio') && $(this).val().trim() == ""){
-
-                if(Valido)
-                    $(this).focus();
-                
-                Valido = false;
-                $(this).addClass('is-invalid');
-            }
-        })
-
-        //Validar que exista un usuario o un proveedor asignado
-        if(Valido && $('#nomUsu').val() == "" && $('#nomPro').val() == ""){
-            Valido = false;
-            $('#alertaModal').focus(); 
-            $('#alertaModal').text('La tarea del Mantenimiento Preventivo debe contar con un Usuario o un Proveedor para realizar el mismo.');
-            $('.contenedorAlertaModal').show();
-            
-            document.getElementsByClassName("contenedorAlertaModal")[0].scrollIntoView();
-        }
-
-        if(Valido && $('#EstatusPreventivo').val() != "Solicitado" && $('#MinutosRea').val() < 0){
-            Valido = false;
-            $('#alertaModal').text('Los minutos realizados tienen que ser un numero mayor a 0.');
-            $('.contenedorAlertaModal').show();
-            
-            document.getElementsByClassName("contenedorAlertaModal")[0].scrollIntoView();
-        }
-
-        if(Valido){
-
-            var row = parseInt($('#mhOptionR').text());
-            var fila = $('#TablaTareas tbody tr').eq(row);
-            fila.find('td:eq(1)').text($('#idPiezaTarea').text().trim());
-            fila.find('td:eq(2)').text($('#nomPiezaTarea').val().trim());
-            fila.find('td:eq(3)').text($('#TituloCambio').val().trim());
-            fila.find('td:eq(4)').text($('#idUsu').text().trim());
-            fila.find('td:eq(5)').text($('#nomUsu').val().trim());
-            fila.find('td:eq(6)').text($('#idPro').text().trim());
-            fila.find('td:eq(7)').text($('#nomPro').val().trim());
-            fila.find('td:eq(8)').text($('#HerramientasT').val().trim());
-            fila.find('td:eq(9)').text($('#DescripcionT').val().trim());
-            fila.find('td:eq(10)').text($('#InicioTarea').val().trim());
-            fila.find('td:eq(11)').text($('#FinTarea').val().trim());
-            fila.find('td:eq(12)').text($('#MinutosRea').val().trim());
-            fila.find('td:eq(13)').text($('#ObservacionT').val().trim());
     
-            CerrarFunciones();
-        }
-    });
-    
-    window.ObtenerJsonTareas = function(){
-        var Tareas = [];
-        var estatuDoc = $('#EstatusPreventivo').val().trim();
-        $("#TablaTareas").find('> tbody > tr').each(function () {
-
-            if( $(this).find('td:eq(1)').text().trim() != '' && 
-                (   estatuDoc == "Solicitado" || 
-                    (   estatuDoc != "Solicitado" && 
-                        $(this).find('td:eq(15)').text() == "Realizado"
-                    )
-                )
-            ){
-                Tareas.push({ 
-                    "Id"            : $(this).find('td:eq(0)').text(),
-                    "IdPieza"       : $(this).find('td:eq(1)').text(),
-                    "Titulo"        : $(this).find('td:eq(3)').text(),
-                    "idUsuario"     : $(this).find('td:eq(4)').text(),
-                    "idProveedor"   : $(this).find('td:eq(6)').text(),
-                    "Herramientas"  : $(this).find('td:eq(8)').text(),
-                    "Descripcion"   : $(this).find('td:eq(9)').text(),
-                    "Inicio"        : $(this).find('td:eq(10)').text(),
-                    "Fin"           : $(this).find('td:eq(11)').text(),
-                    "Min_Eje"       : $(this).find('td:eq(12)').text(),
-                    "Observacion"   : $(this).find('td:eq(13)').text(),
-                    "Min_Asi"       : $(this).find('td:eq(14)').text()
-                });
-            }
-        });
-
-        return Tareas;
-    }
-   
-    
-    window.PoseenEjecutor = function(){
-        var Poseen = true;
-
-        $("#TablaTareas").find('> tbody > tr').each(function () {
-            if($(this).find('td:eq(4)').text().trim() == '' && $(this).find('td:eq(6)').text().trim() == '' ){
-                Poseen = false;
-
-                //Salir del ciclo
-                return false;
-            }
-        });
-
-        return Poseen;
-    }
-
     function SetModalFuncionesCambios(data){
         var pointer= "";
         var atributos= "";
@@ -388,5 +340,52 @@ $(function(){
 
 
 
+    }
+
+    window.ObtenerJsonTareas = function(){
+        var Tareas = [];
+        var estatuDoc = $('#EstatusPreventivo').val().trim();
+        $("#TablaTareas").find('> tbody > tr').each(function () {
+
+            if( $(this).find('td:eq(1)').text().trim() != '' && 
+                (   estatuDoc == "Solicitado" || 
+                    (   estatuDoc != "Solicitado" && 
+                        $(this).find('td:eq(15)').text() == "Realizado"
+                    )
+                )
+            ){
+                Tareas.push({ 
+                    "Id"            : $(this).find('td:eq(0)').text(),
+                    "IdPieza"       : $(this).find('td:eq(1)').text(),
+                    "Titulo"        : $(this).find('td:eq(3)').text(),
+                    "idUsuario"     : $(this).find('td:eq(4)').text(),
+                    "idProveedor"   : $(this).find('td:eq(6)').text(),
+                    "Herramientas"  : $(this).find('td:eq(8)').text(),
+                    "Descripcion"   : $(this).find('td:eq(9)').text(),
+                    "Inicio"        : $(this).find('td:eq(10)').text(),
+                    "Fin"           : $(this).find('td:eq(11)').text(),
+                    "Min_Eje"       : $(this).find('td:eq(12)').text(),
+                    "Observacion"   : $(this).find('td:eq(13)').text(),
+                    "Min_Asi"       : $(this).find('td:eq(14)').text()
+                });
+            }
+        });
+
+        return Tareas;
+    }
+     
+    window.PoseenEjecutor = function(){
+        var Poseen = true;
+
+        $("#TablaTareas").find('> tbody > tr').each(function () {
+            if($(this).find('td:eq(4)').text().trim() == '' && $(this).find('td:eq(6)').text().trim() == '' ){
+                Poseen = false;
+
+                //Salir del ciclo
+                return false;
+            }
+        });
+
+        return Poseen;
     }
 });

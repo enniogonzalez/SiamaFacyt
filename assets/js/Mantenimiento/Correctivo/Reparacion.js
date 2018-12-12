@@ -271,87 +271,6 @@ $(function(){
 
     })
 
-    window.ObtenerJsonReparaciones = function(){
-        var Reparaciones = [];
-        var estatuDoc = $('#EstatusCorrectivo').val().trim();
-
-        $("#TablaReparacionesCorrectivas").find('> tbody > tr').each(function () {
-            if( $(this).find('td:eq(1)').text().trim() != '' && 
-                (   estatuDoc == "Solicitado" || 
-                    (   estatuDoc != "Solicitado" && 
-                        $(this).find('td:eq(10)').text() == "Realizado"
-                    )
-                )
-            ){
-                Reparaciones.push({ 
-                    "Id"                : $(this).find('td:eq(0)').text(),
-                    "IdPiezaD"          : $(this).find('td:eq(1)').text(),
-                    "IdUsu"             : $(this).find('td:eq(3)').text(),
-                    "IdPro"             : $(this).find('td:eq(5)').text(),
-                    "Inicio"            : $(this).find('td:eq(7)').text(),
-                    "Fin"               : $(this).find('td:eq(8)').text(),
-                    "Observacion"       : $(this).find('td:eq(9)').text(), 
-                    "Estatus"           : $(this).find('td:eq(10)').text(), 
-                    "FallaReparacion"   : $(this).find('td:eq(11)').text(), 
-                });
-            }
-        });
-
-        return Reparaciones;
-    }
-
-    window.ExisteReparacion = function(){
-        var Existe = false;
-
-        $("#TablaReparacionesCorrectivas").find('> tbody > tr').each(function () {
-            if($(this).find('td:eq(1)').text().trim() != ''){
-                Existe = true;
-
-                //Salir del ciclo
-                return false;
-            }
-        });
-
-        return Existe;
-    }
-
-    window.ExistePiezaReparacion = function(pieza){
-        Existe = false;
-        $("#TablaReparacionesCorrectivas").find('> tbody > tr').each(function () {
-
-            if(pieza == $(this).find('td:eq(1)').text().trim()){
-                Existe = true;
-                return false;
-            }
-        });
-
-        return Existe;
-    }
-
-    window.AgregarReparacionCorrectiva = function(){
-        //Agregar registro a la tabla de listas desplegables al final
-        $('#TablaReparacionesCorrectivas > tbody:last-child').append(`
-            <tr>
-                <td style="display:none;"></td>
-                <td style="display:none;"></td>
-                <td></td>
-                <td style="display:none;"></td>
-                <td></td>
-                <td style="display:none;"></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td style="display:none;"></td>
-                <td style="display:none;"></td>
-                <td style="display:none;"></td>
-                <td style="display:none;"></td>
-                <td colspan="2" class ="editarReparacion" style="text-align: center;cursor: pointer;">
-                    <span class="fa fa-pencil fa-lg"></span>
-                </td>
-            </tr>
-        `);
-    }
-
     function SetModalFuncionesReparaciones(data){
 
         var pointer= "";
@@ -479,5 +398,86 @@ $(function(){
 
         //Llamar funcion que establece ventana modal segun parametros
         ModalEditarFuncion(parametros);
+    }
+
+    window.AgregarReparacionCorrectiva = function(){
+        //Agregar registro a la tabla de listas desplegables al final
+        $('#TablaReparacionesCorrectivas > tbody:last-child').append(`
+            <tr>
+                <td style="display:none;"></td>
+                <td style="display:none;"></td>
+                <td></td>
+                <td style="display:none;"></td>
+                <td></td>
+                <td style="display:none;"></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td style="display:none;"></td>
+                <td style="display:none;"></td>
+                <td style="display:none;"></td>
+                <td style="display:none;"></td>
+                <td colspan="2" class ="editarReparacion" style="text-align: center;cursor: pointer;">
+                    <span class="fa fa-pencil fa-lg"></span>
+                </td>
+            </tr>
+        `);
+    }
+
+    window.ExistePiezaReparacion = function(pieza){
+        Existe = false;
+        $("#TablaReparacionesCorrectivas").find('> tbody > tr').each(function () {
+
+            if(pieza == $(this).find('td:eq(1)').text().trim()){
+                Existe = true;
+                return false;
+            }
+        });
+
+        return Existe;
+    }
+
+    window.ExisteReparacion = function(){
+        var Existe = false;
+
+        $("#TablaReparacionesCorrectivas").find('> tbody > tr').each(function () {
+            if($(this).find('td:eq(1)').text().trim() != ''){
+                Existe = true;
+
+                //Salir del ciclo
+                return false;
+            }
+        });
+
+        return Existe;
+    }
+    
+    window.ObtenerJsonReparaciones = function(){
+        var Reparaciones = [];
+        var estatuDoc = $('#EstatusCorrectivo').val().trim();
+
+        $("#TablaReparacionesCorrectivas").find('> tbody > tr').each(function () {
+            if( $(this).find('td:eq(1)').text().trim() != '' && 
+                (   estatuDoc == "Solicitado" || 
+                    (   estatuDoc != "Solicitado" && 
+                        $(this).find('td:eq(10)').text() == "Realizado"
+                    )
+                )
+            ){
+                Reparaciones.push({ 
+                    "Id"                : $(this).find('td:eq(0)').text(),
+                    "IdPiezaD"          : $(this).find('td:eq(1)').text(),
+                    "IdUsu"             : $(this).find('td:eq(3)').text(),
+                    "IdPro"             : $(this).find('td:eq(5)').text(),
+                    "Inicio"            : $(this).find('td:eq(7)').text(),
+                    "Fin"               : $(this).find('td:eq(8)').text(),
+                    "Observacion"       : $(this).find('td:eq(9)').text(), 
+                    "Estatus"           : $(this).find('td:eq(10)').text(), 
+                    "FallaReparacion"   : $(this).find('td:eq(11)').text(), 
+                });
+            }
+        });
+
+        return Reparaciones;
     }
 });

@@ -7,17 +7,21 @@ var PrimeraVezBusqueda = true;
 var Guardando = false;
 
 $(function(){
+
     var idActual ="";
     var idPadreActual ="";
     var dataInputs= [];
     var PadreActual = "";
+
     EstablecerBuscador();
     
-    $('#LocPad').on('click',function(){
-        BuscarPadre();
-    });
 
-    $('.BuscarPadre').on('click',function(){
+
+    /************************************/
+    /*      Inicio Buscadores           */
+    /************************************/
+
+    $('#LocPad').on('click',function(){
         BuscarPadre();
     });
 
@@ -26,9 +30,28 @@ $(function(){
         $('#LocPad').val('');
     });
 
-    $('.botoneraFormulario').on('click','#EditarRegistro',function(){
+    $('.BuscarPadre').on('click',function(){
+        BuscarPadre();
+    });
+
+    /************************************/
+    /*          Fin Buscadores          */
+    /************************************/
+
+    $('#CancelarModalBuscar').on('click',function(){
+        if(GetSearchType() == "Padre"){
+            $('#LocPad').val(PadreActual)
+            $('#idPad').text(idPadreActual)
+        }
+    })
+    
+    $('.botoneraFormulario').on('click','#AgregarRegistro',function(){
+
         GuardarEstadoActualFormulario();
+
+        ClearForm();
         HabilitarFormulario()
+
         $('#NombreLoc').focus();
     })
 
@@ -46,13 +69,17 @@ $(function(){
         
     })
 
-    $('#SiamaModalAdvertencias').on('click','#ConfirmarEliminacion',function(){
-        var parametros = {
-            "id": $('#IdForm').text().trim(),
-            "Url": $('#ControladorActual').text().trim()+"/eliminar"
-        }
-        Eliminar(parametros)
-    });
+    $('.botoneraFormulario').on('click','#CancelarRegistro',function(){
+        ClearForm();
+        RestablecerEstadoAnteriorFormulario();
+        DeshabilitarFormulario()
+    })
+
+    $('.botoneraFormulario').on('click','#EditarRegistro',function(){
+        GuardarEstadoActualFormulario();
+        HabilitarFormulario()
+        $('#NombreLoc').focus();
+    })
 
     $('.botoneraFormulario').on('click','#EliminarRegistro',function(){
         Botones = `
@@ -111,31 +138,22 @@ $(function(){
         
     });
 
-    $('#CancelarModalBuscar').on('click',function(){
-        if(GetSearchType() == "Padre"){
-            $('#LocPad').val(PadreActual)
-            $('#idPad').text(idPadreActual)
+    $('#SiamaModalAdvertencias').on('click','#ConfirmarEliminacion',function(){
+        var parametros = {
+            "id": $('#IdForm').text().trim(),
+            "Url": $('#ControladorActual').text().trim()+"/eliminar"
         }
-    })
+        Eliminar(parametros)
+    });
 
-    $('.botoneraFormulario').on('click','#CancelarRegistro',function(){
-        ClearForm();
-        RestablecerEstadoAnteriorFormulario();
-        DeshabilitarFormulario()
-    })
-
-    $('.botoneraFormulario').on('click','#AgregarRegistro',function(){
-
-        GuardarEstadoActualFormulario();
-
-        ClearForm();
-        HabilitarFormulario()
-
-        $('#NombreLoc').focus();
-    })
-
-    function EstablecerBuscador(){
-        SetSearchThead(thLocalizaciones);
+    function BuscarPadre(){
+        idPadreActual = $('#idPad').text().trim();
+        PadreActual = $('#LocPad').val().trim();
+        SetSearchType('Padre');
+        SetSearchTitle('Busqueda Localizaciones Padres');
+        PrimeraVezBusqueda = true;
+        SetUrlBusqueda($('#ControladorActual').text().trim()+"/busqueda");
+        Busqueda(1);
     }
 
     function ClearForm(){
@@ -155,6 +173,10 @@ $(function(){
         })
     }
 
+    function EstablecerBuscador(){
+        SetSearchThead(thLocalizaciones);
+    }
+
     function GuardarEstadoActualFormulario(){
         dataInputs = [];
         idActual =$('#IdForm').text().trim();
@@ -163,6 +185,17 @@ $(function(){
         $('.formulario-siama form .form-control').each(function(){
             dataInputs.push($(this).val().trim());
         })
+    }
+    
+    function LlenarFormulario(data){
+        $('#IdForm').text(data['id']); 
+        $('#NombreLoc').val(data['Nombre']);
+        $('#Ubicacion').val(data['Ubicacion']);
+        $('#Tipo').val(data['Tipo']);
+        $('#Amperaje').val(data['Amperaje']);
+        $('#Observacion').val(data['Observacion']);
+        $('#idPad').text(data['idPad'] == "-1" ? "": data['idPad']);
+        $('#LocPad').val(data['LocPad']);
     }
 
     function RestablecerEstadoAnteriorFormulario(){
@@ -178,26 +211,25 @@ $(function(){
         }
         LlenarFormulario(parametros);
     }
-    
-    function LlenarFormulario(data){
-        $('#IdForm').text(data['id']); 
-        $('#NombreLoc').val(data['Nombre']);
-        $('#Ubicacion').val(data['Ubicacion']);
-        $('#Tipo').val(data['Tipo']);
-        $('#Amperaje').val(data['Amperaje']);
-        $('#Observacion').val(data['Observacion']);
-        $('#idPad').text(data['idPad'] == "-1" ? "": data['idPad']);
-        $('#LocPad').val(data['LocPad']);
-    }
 
-    function BuscarPadre(){
-        idPadreActual = $('#idPad').text().trim();
-        PadreActual = $('#LocPad').val().trim();
-        SetSearchType('Padre');
-        SetSearchTitle('Busqueda Localizaciones Padres');
-        PrimeraVezBusqueda = true;
-        SetUrlBusqueda($('#ControladorActual').text().trim()+"/busqueda");
-        Busqueda(1);
+
+    window.AccionEliminarFormulario = function(data){
+        
+        if(data['Datos']['loc_id'] == "")
+            AgregarBotoneraPrimariaNULL();
+
+        var parametros = {
+            "id":           data['Datos']['loc_id'].trim(),
+            "Nombre":       data['Datos']['nombre'].trim(),
+            "Ubicacion":    data['Datos']['ubicacion'].trim(),
+            "Tipo":         data['Datos']['tipo'].trim(),
+            "Amperaje":     data['Datos']['cap_amp'],
+            "Observacion":  data['Datos']['observaciones'].trim(),
+            "LocPad":       data['Datos']['nombrepadre'].trim(),
+            "idPad":        data['Datos']['idpad'].trim(),
+        }
+
+        LlenarFormulario(parametros);
     }
 
     window.InterfazElegirBuscador = function(fila){
@@ -219,24 +251,5 @@ $(function(){
         }
         
         $('#SiamaModalBusqueda').modal('hide');
-    }
-
-    window.AccionEliminarFormulario = function(data){
-        
-        if(data['Datos']['loc_id'] == "")
-            AgregarBotoneraPrimariaNULL();
-
-        var parametros = {
-            "id":           data['Datos']['loc_id'].trim(),
-            "Nombre":       data['Datos']['nombre'].trim(),
-            "Ubicacion":    data['Datos']['ubicacion'].trim(),
-            "Tipo":         data['Datos']['tipo'].trim(),
-            "Amperaje":     data['Datos']['cap_amp'],
-            "Observacion":  data['Datos']['observaciones'].trim(),
-            "LocPad":       data['Datos']['nombrepadre'].trim(),
-            "idPad":        data['Datos']['idpad'].trim(),
-        }
-
-        LlenarFormulario(parametros);
     }
 });

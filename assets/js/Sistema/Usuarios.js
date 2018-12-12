@@ -14,12 +14,38 @@ $(function(){
 
     EstablecerBuscador()
 
-    $('#Usuario').on('keypress',function(e){
-        if (e.which == 32)
-            return false;
 
-        $('#Usuario').val($('#Usuario').val().replace(/[^a-z\.\-0-9]/gi,""))
+
+    $('.botoneraFormulario').on('click','#AgregarRegistro',function(){
+        GuardarEstadoActualFormulario();
+        ClearForm();
+        HabilitarFormulario()
+        $('#Usuario').focus();
     })
+
+    $('.botoneraFormulario').on('click','#BuscarRegistro',function(){
+        SetSearchType('Formulario');
+        SetSearchTitle('Busqueda Usuarios');
+        PrimeraVezBusqueda = true;
+        DeshabilitarBotonera();
+        SetUrlBusqueda($('#ControladorActual').text().trim()+"/busqueda");
+        Busqueda(1);
+        
+        setTimeout(function(){
+            HabilitarBotonera();
+        }, 900);
+    })
+
+    $('.botoneraFormulario').on('click','#CancelarRegistro',function(){
+        ClearForm();
+        RestablecerEstadoAnteriorFormulario();
+        DeshabilitarFormulario();
+    })
+
+    $('.botoneraFormulario').on('click','#EditarRegistro',function(){
+        GuardarEstadoActualFormulario();
+        HabilitarFormulario()
+    });
 
     $('.botoneraFormulario').on('click','#EliminarRegistro',function(){
         Botones = `
@@ -40,45 +66,6 @@ $(function(){
         }
 
         ModalAdvertencia(parametros);
-    })
-
-    $('.botoneraFormulario').on('click','#BuscarRegistro',function(){
-        SetSearchType('Formulario');
-        SetSearchTitle('Busqueda Usuarios');
-        PrimeraVezBusqueda = true;
-        DeshabilitarBotonera();
-        SetUrlBusqueda($('#ControladorActual').text().trim()+"/busqueda");
-        Busqueda(1);
-        
-        setTimeout(function(){
-            HabilitarBotonera();
-        }, 900);
-    })
-
-    $('#SiamaModalAdvertencias').on('click','#ConfirmarEliminacion',function(){
-        var parametros = {
-            "id": $('#IdForm').text().trim(),
-            "Url": $('#ControladorActual').text().trim()+"/eliminar"
-        }
-        Eliminar(parametros)
-    });
-
-    $('.botoneraFormulario').on('click','#EditarRegistro',function(){
-        GuardarEstadoActualFormulario();
-        HabilitarFormulario()
-    });
-
-    $('.botoneraFormulario').on('click','#AgregarRegistro',function(){
-        GuardarEstadoActualFormulario();
-        ClearForm();
-        HabilitarFormulario()
-        $('#Usuario').focus();
-    })
-
-    $('.botoneraFormulario').on('click','#CancelarRegistro',function(){
-        ClearForm();
-        RestablecerEstadoAnteriorFormulario();
-        DeshabilitarFormulario();
     })
 
     $('.botoneraFormulario').on('click','#GuardarRegistro',function(){
@@ -130,6 +117,14 @@ $(function(){
         
     });
 
+    $('#SiamaModalAdvertencias').on('click','#ConfirmarEliminacion',function(){
+        var parametros = {
+            "id": $('#IdForm').text().trim(),
+            "Url": $('#ControladorActual').text().trim()+"/eliminar"
+        }
+        Eliminar(parametros)
+    });
+
     $('#TablaPermisos').on('click','.seleccionarPermiso',function(){
         $('.tr-activa-siama').removeClass('tr-activa-siama');
         var fila = $(this).parent('tr');
@@ -146,25 +141,12 @@ $(function(){
         }
     });
 
-    function ObtenerPermisos(){
-        var p = [];
-        $('.seleccionarPermiso').each(function(){
-            p.push($(this).find('span').hasClass('fa-check-square-o'));
-        });
+    $('#Usuario').on('keypress',function(e){
+        if (e.which == 32)
+            return false;
 
-        return p;
-    }
-
-    function EstablecerBuscador(){
-        html = `
-            <tr>
-                <th style="width:30%;">Usuario</th>
-                <th style="width:40%;">Nombre</th>
-                <th style="width:30%;">Cargo</th>
-            </tr>
-        `;
-        SetSearchThead(html);
-    }
+        $('#Usuario').val($('#Usuario').val().replace(/[^a-z\.\-0-9]/gi,""))
+    })
 
     function ClearForm(){
         
@@ -184,6 +166,17 @@ $(function(){
                 $(this).val('0.00')
         })
     }
+
+    function EstablecerBuscador(){
+        html = `
+            <tr>
+                <th style="width:30%;">Usuario</th>
+                <th style="width:40%;">Nombre</th>
+                <th style="width:30%;">Cargo</th>
+            </tr>
+        `;
+        SetSearchThead(html);
+    }
     
     function GuardarEstadoActualFormulario(){
         dataInputs = [];
@@ -194,25 +187,6 @@ $(function(){
         });
 
         permisos = ObtenerPermisos();
-    }
-
-    function RestablecerEstadoAnteriorFormulario(){
-        var parametros = {
-            "id"            : idActual.trim(),
-            "Username"      : dataInputs[0].trim(),
-            "Nombre"        : dataInputs[1].trim(),
-            "Cargo"         : dataInputs[2].trim(),
-            "Correo"        : dataInputs[3].trim(),
-            "Observacion"   : dataInputs[4].trim(),
-            "Localizacion"  : permisos[0],
-            "Mantenimiento" : permisos[1],
-            "Marcas"        : permisos[2],
-            "Partidas"      : permisos[3],
-            "Patrimonio"    : permisos[4],
-            "Proveedores"   : permisos[5],
-            "Sistema"       : permisos[6],
-        }
-        LlenarFormulario(parametros);
     }
     
     function LlenarFormulario(data){
@@ -279,13 +253,32 @@ $(function(){
         });
     }
 
-    window.InterfazElegirBuscador = function(fila){
-        
+    function ObtenerPermisos(){
+        var p = [];
+        $('.seleccionarPermiso').each(function(){
+            p.push($(this).find('span').hasClass('fa-check-square-o'));
+        });
+
+        return p;
+    }
+
+    function RestablecerEstadoAnteriorFormulario(){
         var parametros = {
-            "id": fila.find("td:eq(0)").text().trim(),
-            "Url": $('#ControladorActual').text().trim()+"/obtener"
+            "id"            : idActual.trim(),
+            "Username"      : dataInputs[0].trim(),
+            "Nombre"        : dataInputs[1].trim(),
+            "Cargo"         : dataInputs[2].trim(),
+            "Correo"        : dataInputs[3].trim(),
+            "Observacion"   : dataInputs[4].trim(),
+            "Localizacion"  : permisos[0],
+            "Mantenimiento" : permisos[1],
+            "Marcas"        : permisos[2],
+            "Partidas"      : permisos[3],
+            "Patrimonio"    : permisos[4],
+            "Proveedores"   : permisos[5],
+            "Sistema"       : permisos[6],
         }
-        Obtener(parametros);
+        LlenarFormulario(parametros);
     }
 
     window.AccionEliminarFormulario = function(data){
@@ -303,5 +296,14 @@ $(function(){
             }
             LlenarFormulario(parametros);
         }
+    }
+
+    window.InterfazElegirBuscador = function(fila){
+        
+        var parametros = {
+            "id": fila.find("td:eq(0)").text().trim(),
+            "Url": $('#ControladorActual').text().trim()+"/obtener"
+        }
+        Obtener(parametros);
     }
 });

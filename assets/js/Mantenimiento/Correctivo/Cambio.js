@@ -127,79 +127,26 @@ $(function(){
     $('#eliminarCambio').on('click',function(){
         $('#TablaCambiosCorrectivos .tr-activa-siama').remove();
     });
-    
-    $('#TablaCambiosCorrectivos').on('click','.editarCambio',function(){
-
-        //Se remueve la clase activa de la fila que esta activa
-        $('.tr-activa-siama').removeClass('tr-activa-siama');
-
-        var fila = $(this).parent('tr');
-        //Se agrega la clase activa a la fila actual, esto para evitar
-        //que se le quite la clase activa a una fila que esta activa
-        //y se quiera editar (o sea, no se quiere quitar la seleccion)
-        fila.addClass('tr-activa-siama');
-
-        //Se crea los botones que va a tener la ventana modal de edicion
-        Botones = `
-        <button type="submit" id ="GuardarEdicionCambio" title="Guardar Cambios" type="button" style="margin:5px;" class="btn  btn-success">
-          <span class="fa fa-floppy-o"></span>
-          Guardar
-        </button>
-        <button data-dismiss="modal" id="CancelarEdicionCambio" title="Cancelar Edici&oacute;n" type="button" style="margin:5px;" class="btn  btn-danger">
-          <span class="fa fa-ban "></span>
-          Cancelar
-        </button>`;
-
-        var data = {
-            "Titulo"            :   "Editar Cambio Correctivo",
-            "EstatusDoc"        :   $('#EstatusCorrectivo').val(),
-            "Fila"              :   $(this).parent('tr').index(),
-            "Botones"           :   Botones,
-            "idPiezaDC"         :   fila.find('td:eq(1)').text().trim(),
-            "nomPiezaDC"        :   fila.find('td:eq(2)').text().trim(),
-            "idBienPiezaCC"     :   fila.find('td:eq(3)').text().trim(),
-            "idPiezaCC"         :   fila.find('td:eq(4)').text().trim(),
-            "nomPiezaCC"        :   fila.find('td:eq(5)').text().trim(),
-            "idUsuCambio"       :   fila.find('td:eq(6)').text().trim(),
-            "nomUsuCambio"      :   fila.find('td:eq(7)').text().trim(),
-            "idProC"            :   fila.find('td:eq(8)').text().trim(),
-            "nomProC"           :   fila.find('td:eq(9)').text().trim(),
-            "InicioCambio"      :   fila.find('td:eq(10)').text().trim(),
-            "FinCambio"         :   fila.find('td:eq(11)').text().trim(),
-            "ObservacionC"      :   fila.find('td:eq(12)').text().trim(),
-            "idFallaCambio"     :   fila.find('td:eq(14)').text().trim(),
-            "nomFallaCambio"    :   fila.find('td:eq(15)').text().trim(),
-        }
-
-        SetModalFuncionesCambios(data);
-
-        if($('#EstatusCorrectivo').val() != "Solicitado"){
-            setTimeout(function(){$('#ObservacionC').focus();}, 400);
-        }
-    });
-    
-    $('#TablaCambiosCorrectivos').on('click','.realizarCambio',function(){
-        $('.tr-activa-siama').removeClass('tr-activa-siama');
-        var fila = $(this).parent('tr');
-        fila.addClass('tr-activa-siama');
-
-        if($(this).find('span').hasClass('fa-square-o')){
-            $(this).find('span').removeClass('fa-square-o');
-            $(this).find('span').addClass('fa-check-square-o');
-            $(this).parent('tr').find('td:eq(13)').text('Realizado');
-        }else{
-            $(this).find('span').removeClass('fa-check-square-o');
-            $(this).find('span').addClass('fa-square-o');
-            $(this).parent('tr').find('td:eq(13)').text('');
-        }
-    });
-
-    $('#TablaCambiosCorrectivos tbody').on('click','tr',function(){
-        ActivarCeldaTabla(this)
-    });
 
     $('#SiamaModalFunciones').on('click','#CancelarEdicionCambio',function(){
         ClearModalFunction();
+    });
+
+    $('#SiamaModalFunciones').on('change','#FinCambio',function(){
+        if($(this).val() != "" && 
+        $('#InicioCambio').val() != "" 
+        && $(this).val() < $('#InicioCambio').val()){
+            $('#InicioCambio').val($(this).val());
+        }
+    })
+    
+    $('#SiamaModalFunciones').on('change','#InicioCambio',function(){
+        if($(this).val() != "" && 
+        $('#FinCambio').val() != "" 
+        && $(this).val() > $('#FinCambio').val()){
+            $('#FinCambio').val($(this).val());
+        }
+
     });
 
     $('#SiamaModalFunciones').on('click','#GuardarEdicionCambio',function(){
@@ -299,108 +246,75 @@ $(function(){
         }
     });
     
-    $('#SiamaModalFunciones').on('change','#InicioCambio',function(){
-        if($(this).val() != "" && 
-        $('#FinCambio').val() != "" 
-        && $(this).val() > $('#FinCambio').val()){
-            $('#FinCambio').val($(this).val());
+    $('#TablaCambiosCorrectivos').on('click','.editarCambio',function(){
+
+        //Se remueve la clase activa de la fila que esta activa
+        $('.tr-activa-siama').removeClass('tr-activa-siama');
+
+        var fila = $(this).parent('tr');
+        //Se agrega la clase activa a la fila actual, esto para evitar
+        //que se le quite la clase activa a una fila que esta activa
+        //y se quiera editar (o sea, no se quiere quitar la seleccion)
+        fila.addClass('tr-activa-siama');
+
+        //Se crea los botones que va a tener la ventana modal de edicion
+        Botones = `
+        <button type="submit" id ="GuardarEdicionCambio" title="Guardar Cambios" type="button" style="margin:5px;" class="btn  btn-success">
+          <span class="fa fa-floppy-o"></span>
+          Guardar
+        </button>
+        <button data-dismiss="modal" id="CancelarEdicionCambio" title="Cancelar Edici&oacute;n" type="button" style="margin:5px;" class="btn  btn-danger">
+          <span class="fa fa-ban "></span>
+          Cancelar
+        </button>`;
+
+        var data = {
+            "Titulo"            :   "Editar Cambio Correctivo",
+            "EstatusDoc"        :   $('#EstatusCorrectivo').val(),
+            "Fila"              :   $(this).parent('tr').index(),
+            "Botones"           :   Botones,
+            "idPiezaDC"         :   fila.find('td:eq(1)').text().trim(),
+            "nomPiezaDC"        :   fila.find('td:eq(2)').text().trim(),
+            "idBienPiezaCC"     :   fila.find('td:eq(3)').text().trim(),
+            "idPiezaCC"         :   fila.find('td:eq(4)').text().trim(),
+            "nomPiezaCC"        :   fila.find('td:eq(5)').text().trim(),
+            "idUsuCambio"       :   fila.find('td:eq(6)').text().trim(),
+            "nomUsuCambio"      :   fila.find('td:eq(7)').text().trim(),
+            "idProC"            :   fila.find('td:eq(8)').text().trim(),
+            "nomProC"           :   fila.find('td:eq(9)').text().trim(),
+            "InicioCambio"      :   fila.find('td:eq(10)').text().trim(),
+            "FinCambio"         :   fila.find('td:eq(11)').text().trim(),
+            "ObservacionC"      :   fila.find('td:eq(12)').text().trim(),
+            "idFallaCambio"     :   fila.find('td:eq(14)').text().trim(),
+            "nomFallaCambio"    :   fila.find('td:eq(15)').text().trim(),
         }
 
+        SetModalFuncionesCambios(data);
+
+        if($('#EstatusCorrectivo').val() != "Solicitado"){
+            setTimeout(function(){$('#ObservacionC').focus();}, 400);
+        }
+    });
+    
+    $('#TablaCambiosCorrectivos').on('click','.realizarCambio',function(){
+        $('.tr-activa-siama').removeClass('tr-activa-siama');
+        var fila = $(this).parent('tr');
+        fila.addClass('tr-activa-siama');
+
+        if($(this).find('span').hasClass('fa-square-o')){
+            $(this).find('span').removeClass('fa-square-o');
+            $(this).find('span').addClass('fa-check-square-o');
+            $(this).parent('tr').find('td:eq(13)').text('Realizado');
+        }else{
+            $(this).find('span').removeClass('fa-check-square-o');
+            $(this).find('span').addClass('fa-square-o');
+            $(this).parent('tr').find('td:eq(13)').text('');
+        }
     });
 
-    $('#SiamaModalFunciones').on('change','#FinCambio',function(){
-        if($(this).val() != "" && 
-        $('#InicioCambio').val() != "" 
-        && $(this).val() < $('#InicioCambio').val()){
-            $('#InicioCambio').val($(this).val());
-        }
-    })
-
-     window.ObtenerJsonCambios = function(){
-        var Cambios = [];
-        var estatuDoc = $('#EstatusCorrectivo').val().trim();
-        $("#TablaCambiosCorrectivos").find('> tbody > tr').each(function () {
-    
-            if( $(this).find('td:eq(1)').text().trim() != '' && 
-                (   estatuDoc == "Solicitado" || 
-                    (   estatuDoc != "Solicitado" && 
-                        $(this).find('td:eq(13)').text() == "Realizado"
-                    )
-                )
-            ){
-                Cambios.push({ 
-                    "Id"            : $(this).find('td:eq(0)').text(),
-                    "IdPiezaD"      : $(this).find('td:eq(1)').text(),
-                    "idBienPiezaC"  : $(this).find('td:eq(3)').text(),
-                    "IdPiezaC"      : $(this).find('td:eq(4)').text(),
-                    "IdUsu"         : $(this).find('td:eq(6)').text(),
-                    "IdPro"         : $(this).find('td:eq(8)').text(),
-                    "Inicio"        : $(this).find('td:eq(10)').text(),
-                    "Fin"           : $(this).find('td:eq(11)').text(),
-                    "Observacion"   : $(this).find('td:eq(12)').text(),
-                    "Estatus"       : $(this).find('td:eq(13)').text(),
-                    "FallaCambio"   : $(this).find('td:eq(14)').text()
-                });
-            }
-        });
-
-        return Cambios;
-    }
-
-    window.ExisteCambio = function(){
-        var Existe = false;
-
-        $("#TablaCambiosCorrectivos").find('> tbody > tr').each(function () {
-            if($(this).find('td:eq(1)').text().trim() != ''){
-                Existe = true;
-
-                //Salir del ciclo
-                return false;
-            }
-        });
-
-        return Existe;
-    }
-    
-    window.AgregarCambioCorrectivo = function(){
-        //Agregar registro a la tabla de listas desplegables al final
-        $('#TablaCambiosCorrectivos > tbody:last-child').append(`
-            <tr>
-                <td style="display:none;"></td>
-                <td style="display:none;"></td>
-                <td></td>
-                <td style="display:none;"></td>
-                <td style="display:none;"></td>
-                <td></td>
-                <td style="display:none;"></td>
-                <td></td>
-                <td style="display:none;"></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td style="display:none;"></td>
-                <td style="display:none;"></td>
-                <td style="display:none;"></td>
-                <td style="display:none;"></td>
-                <td colspan="2" class ="editarCambio" style="text-align: center;cursor: pointer;">
-                    <span class="fa fa-pencil fa-lg"></span>
-                </td>
-            </tr>
-        `);
-    }
-
-    window.ExistePiezaCambio = function(pieza){
-        Existe = false;
-        $("#TablaCambiosCorrectivos").find('> tbody > tr').each(function () {
-
-            if(pieza == $(this).find('td:eq(1)').text().trim()){
-                Existe = true;
-                return false;
-            }
-        });
-
-        return Existe;
-    }
+    $('#TablaCambiosCorrectivos tbody').on('click','tr',function(){
+        ActivarCeldaTabla(this)
+    });
 
     function SetModalFuncionesCambios(data){
         var pointer= "";
@@ -549,5 +463,91 @@ $(function(){
 
 
 
+    }
+    
+    window.AgregarCambioCorrectivo = function(){
+        //Agregar registro a la tabla de listas desplegables al final
+        $('#TablaCambiosCorrectivos > tbody:last-child').append(`
+            <tr>
+                <td style="display:none;"></td>
+                <td style="display:none;"></td>
+                <td></td>
+                <td style="display:none;"></td>
+                <td style="display:none;"></td>
+                <td></td>
+                <td style="display:none;"></td>
+                <td></td>
+                <td style="display:none;"></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td style="display:none;"></td>
+                <td style="display:none;"></td>
+                <td style="display:none;"></td>
+                <td style="display:none;"></td>
+                <td colspan="2" class ="editarCambio" style="text-align: center;cursor: pointer;">
+                    <span class="fa fa-pencil fa-lg"></span>
+                </td>
+            </tr>
+        `);
+    }
+
+    window.ExisteCambio = function(){
+        var Existe = false;
+
+        $("#TablaCambiosCorrectivos").find('> tbody > tr').each(function () {
+            if($(this).find('td:eq(1)').text().trim() != ''){
+                Existe = true;
+
+                //Salir del ciclo
+                return false;
+            }
+        });
+
+        return Existe;
+    }
+
+    window.ExistePiezaCambio = function(pieza){
+        Existe = false;
+        $("#TablaCambiosCorrectivos").find('> tbody > tr').each(function () {
+
+            if(pieza == $(this).find('td:eq(1)').text().trim()){
+                Existe = true;
+                return false;
+            }
+        });
+
+        return Existe;
+    }
+
+    window.ObtenerJsonCambios = function(){
+        var Cambios = [];
+        var estatuDoc = $('#EstatusCorrectivo').val().trim();
+        $("#TablaCambiosCorrectivos").find('> tbody > tr').each(function () {
+    
+            if( $(this).find('td:eq(1)').text().trim() != '' && 
+                (   estatuDoc == "Solicitado" || 
+                    (   estatuDoc != "Solicitado" && 
+                        $(this).find('td:eq(13)').text() == "Realizado"
+                    )
+                )
+            ){
+                Cambios.push({ 
+                    "Id"            : $(this).find('td:eq(0)').text(),
+                    "IdPiezaD"      : $(this).find('td:eq(1)').text(),
+                    "idBienPiezaC"  : $(this).find('td:eq(3)').text(),
+                    "IdPiezaC"      : $(this).find('td:eq(4)').text(),
+                    "IdUsu"         : $(this).find('td:eq(6)').text(),
+                    "IdPro"         : $(this).find('td:eq(8)').text(),
+                    "Inicio"        : $(this).find('td:eq(10)').text(),
+                    "Fin"           : $(this).find('td:eq(11)').text(),
+                    "Observacion"   : $(this).find('td:eq(12)').text(),
+                    "Estatus"       : $(this).find('td:eq(13)').text(),
+                    "FallaCambio"   : $(this).find('td:eq(14)').text()
+                });
+            }
+        });
+
+        return Cambios;
     }
 });

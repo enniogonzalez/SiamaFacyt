@@ -16,6 +16,10 @@ $(function(){
 
     EstablecerBuscador()
     
+    /************************************/
+    /*      Inicio Buscadores           */
+    /************************************/
+
     $('#ParPad').on('click',function(){
         BuscarPadre();
     });
@@ -29,12 +33,48 @@ $(function(){
         $('#ParPad').val('');
     });
 
+    /************************************/
+    /*          Fin Buscadores          */
+    /************************************/
+
     $('#CancelarModalBuscar').on('click',function(){
         if(GetSearchType() == "Padre"){
             $('#ParPad').val(PadreActual)
             $('#idPad').text(idPadreActual)
         }
     })
+
+    $('.botoneraFormulario').on('click','#AgregarRegistro',function(){
+        GuardarEstadoActualFormulario();
+        ClearForm();
+        HabilitarFormulario()
+        $('#codigoPartida').focus();
+    })
+
+    $('.botoneraFormulario').on('click','#CancelarRegistro',function(){
+        ClearForm();
+        RestablecerEstadoAnteriorFormulario();
+        DeshabilitarFormulario();
+    })
+
+    $('.botoneraFormulario').on('click','#BuscarRegistro',function(){
+        SetSearchType('Formulario');
+        SetSearchTitle('Busqueda Partidas');
+        PrimeraVezBusqueda = true;
+        DeshabilitarBotonera();
+        SetUrlBusqueda($('#ControladorActual').text().trim()+"/busqueda");
+        Busqueda(1);
+        
+        setTimeout(function(){
+            HabilitarBotonera();
+        }, 900);
+    })
+
+    $('.botoneraFormulario').on('click','#EditarRegistro',function(){
+        GuardarEstadoActualFormulario();
+        HabilitarFormulario()
+        $('#NombrePartida').focus();
+    });
 
     $('.botoneraFormulario').on('click','#EliminarRegistro',function(){
         Botones = `
@@ -55,46 +95,6 @@ $(function(){
         }
 
         ModalAdvertencia(parametros);
-    })
-
-    $('.botoneraFormulario').on('click','#BuscarRegistro',function(){
-        SetSearchType('Formulario');
-        SetSearchTitle('Busqueda Partidas');
-        PrimeraVezBusqueda = true;
-        DeshabilitarBotonera();
-        SetUrlBusqueda($('#ControladorActual').text().trim()+"/busqueda");
-        Busqueda(1);
-        
-        setTimeout(function(){
-            HabilitarBotonera();
-        }, 900);
-    })
-
-    $('#SiamaModalAdvertencias').on('click','#ConfirmarEliminacion',function(){
-        var parametros = {
-            "id": $('#IdForm').text().trim(),
-            "Url":$('#ControladorActual').text().trim()+"/eliminar"
-        }
-        Eliminar(parametros)
-    });
-
-    $('.botoneraFormulario').on('click','#EditarRegistro',function(){
-        GuardarEstadoActualFormulario();
-        HabilitarFormulario()
-        $('#NombrePartida').focus();
-    });
-
-    $('.botoneraFormulario').on('click','#AgregarRegistro',function(){
-        GuardarEstadoActualFormulario();
-        ClearForm();
-        HabilitarFormulario()
-        $('#codigoPartida').focus();
-    })
-
-    $('.botoneraFormulario').on('click','#CancelarRegistro',function(){
-        ClearForm();
-        RestablecerEstadoAnteriorFormulario();
-        DeshabilitarFormulario();
     })
 
     $('.botoneraFormulario').on('click','#GuardarRegistro',function(){
@@ -130,19 +130,13 @@ $(function(){
         
     });
 
-    function BuscarPadre(){
-        idPadreActual = $('#idPad').text().trim();
-        PadreActual = $('#ParPad').val().trim();
-        SetSearchType('Padre');
-        SetSearchTitle('Busqueda Partidas Padres');
-        PrimeraVezBusqueda = true;
-        SetUrlBusqueda($('#ControladorActual').text().trim()+"/busqueda");
-        Busqueda(1);
-    }
-
-    function EstablecerBuscador(){
-        SetSearchThead(thPartidas);
-    }
+    $('#SiamaModalAdvertencias').on('click','#ConfirmarEliminacion',function(){
+        var parametros = {
+            "id": $('#IdForm').text().trim(),
+            "Url":$('#ControladorActual').text().trim()+"/eliminar"
+        }
+        Eliminar(parametros)
+    });
 
     function ClearForm(){
         
@@ -160,6 +154,20 @@ $(function(){
                 $(this).val('0.00')
         })
     }
+
+    function BuscarPadre(){
+        idPadreActual = $('#idPad').text().trim();
+        PadreActual = $('#ParPad').val().trim();
+        SetSearchType('Padre');
+        SetSearchTitle('Busqueda Partidas Padres');
+        PrimeraVezBusqueda = true;
+        SetUrlBusqueda($('#ControladorActual').text().trim()+"/busqueda");
+        Busqueda(1);
+    }
+
+    function EstablecerBuscador(){
+        SetSearchThead(thPartidas);
+    }
     
     function GuardarEstadoActualFormulario(){
         dataInputs = [];
@@ -168,6 +176,15 @@ $(function(){
         $('.formulario-siama form .form-control').each(function(){
             dataInputs.push($(this).val().trim());
         })
+    }
+    
+    function LlenarFormulario(data){
+        $('#IdForm').text(data['id']); 
+        $('#NombrePartida').val(data['Nombre']);
+        $('#codigoPartida').val(data['codigo']);
+        $('#Observacion').val(data['Observacion']);
+        $('#idPad').text(data['idPad'] == "-1" ? "": data['idPad']);
+        $('#ParPad').val(data['ParPad']);
     }
 
     function RestablecerEstadoAnteriorFormulario(){
@@ -180,33 +197,6 @@ $(function(){
             "idPad":idPadreActual.trim(),
         }
         LlenarFormulario(parametros);
-    }
-    
-    function LlenarFormulario(data){
-        $('#IdForm').text(data['id']); 
-        $('#NombrePartida').val(data['Nombre']);
-        $('#codigoPartida').val(data['codigo']);
-        $('#Observacion').val(data['Observacion']);
-        $('#idPad').text(data['idPad'] == "-1" ? "": data['idPad']);
-        $('#ParPad').val(data['ParPad']);
-    }
-
-    window.InterfazElegirBuscador = function(fila){
-        if(GetSearchType() == "Formulario"){
-            var parametros = {
-                "id": fila.find('td:eq(0)').text().trim(),
-                "idPad":fila.find('td:eq(1)').text().trim(),
-                "ParPad": fila.find('td:eq(2)').text().trim(),
-                "codigo": fila.find('td:eq(3)').text().trim(),
-                "Nombre": fila.find('td:eq(4)').text().trim(),
-                "Observacion": fila.find('td:eq(5)').text()
-            }
-            LlenarFormulario(parametros);
-        }else if(GetSearchType() == "Padre"){
-            $('#ParPad').val(fila.find('td:eq(4)').text().trim())
-            $('#idPad').text(fila.find('td:eq(0)').text().trim())
-        }
-        $('#SiamaModalBusqueda').modal('hide');
     }
 
     window.AccionEliminarFormulario = function(data){
@@ -225,5 +215,23 @@ $(function(){
     
             LlenarFormulario(parametros);
         }
+    }
+
+    window.InterfazElegirBuscador = function(fila){
+        if(GetSearchType() == "Formulario"){
+            var parametros = {
+                "id": fila.find('td:eq(0)').text().trim(),
+                "idPad":fila.find('td:eq(1)').text().trim(),
+                "ParPad": fila.find('td:eq(2)').text().trim(),
+                "codigo": fila.find('td:eq(3)').text().trim(),
+                "Nombre": fila.find('td:eq(4)').text().trim(),
+                "Observacion": fila.find('td:eq(5)').text()
+            }
+            LlenarFormulario(parametros);
+        }else if(GetSearchType() == "Padre"){
+            $('#ParPad').val(fila.find('td:eq(4)').text().trim())
+            $('#idPad').text(fila.find('td:eq(0)').text().trim())
+        }
+        $('#SiamaModalBusqueda').modal('hide');
     }
 });
