@@ -47,6 +47,7 @@
                     <label style="display:none;" id = "etqContador"></label>
                     <label style="display:none;" id = "OpcionBusqueda"></label>
                     <div style="display:none;" id = "ParametrosBuscador"></div>
+                    <div style="display:none;" id = "OrigenBuscador"></div>
                 </div>
                 <div style="width: 100%;padding:5px 20px;display:none;" class="body-siama contenedorAlertaModalBusqueda">
                     <div style="margin:0;" id="alertaModal" class="alert alert-danger text-center">

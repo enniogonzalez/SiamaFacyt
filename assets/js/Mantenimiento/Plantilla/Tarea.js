@@ -36,25 +36,25 @@ $(function(){
 
     $('#agregarTarea').on('click',function(){
 
-        // if($('#idBiePlantilla').text().trim() == ""){
+        if($('#idBiePlantilla').text().trim() == ""){
 
-        //     Botones = `
-        //     <button data-dismiss="modal" title="Cerrar" type="button" style="margin:5px;" class="btn btn-primary-siama">
-        //     <span class="fa fa-times-circle"></span>
-        //     Cerrar
-        //     </button>`;
+            Botones = `
+            <button data-dismiss="modal" title="Cerrar" type="button" style="margin:5px;" class="btn btn-primary-siama">
+            <span class="fa fa-times-circle"></span>
+            Cerrar
+            </button>`;
     
-        //     Cuerpo = "No se puede agregar una <strong>Tarea</strong> debido a que no se ha seleccionado un <strong>Bien</strong>.";
+            Cuerpo = "No se puede agregar una <strong>Tarea</strong> debido a que no se ha seleccionado un <strong>Bien</strong>.";
     
     
-        //     var parametros = {
-        //         "Titulo":"Advetencia",
-        //         "Cuerpo": Cuerpo,
-        //         "Botones":Botones
-        //     }
+            var parametros = {
+                "Titulo":"Advetencia",
+                "Cuerpo": Cuerpo,
+                "Botones":Botones
+            }
 
-        //     ModalAdvertencia(parametros);
-        // }else
+            ModalAdvertencia(parametros);
+        }else
             agregarTareaPlantilla();
     });
 
@@ -106,9 +106,9 @@ $(function(){
             "EstatusDoc"    :   $('#EstatusPlantilla').val(),
             "Fila"          :   $(this).parent('tr').index(),
             "Botones"       :   Botones,
-            "idTPTarea"  :   fila.find('td:eq(1)').text().trim(),
-            "nomTPTarea" :   fila.find('td:eq(2)').text().trim(),
-            "TituloCambio"  :   fila.find('td:eq(3)').text().trim(),
+            "idTPTarea"     :   fila.find('td:eq(1)').text().trim(),
+            "nomTPTarea"    :   fila.find('td:eq(2)').text().trim(),
+            "TituloPlantilla"  :   fila.find('td:eq(3)').text().trim(),
             "MinutosEst"    :   fila.find('td:eq(4)').text().trim(),
             "HerramientasT" :   trHerramienta,
             "DescripcionT"  :   fila.find('td:eq(6)').text().trim(),
@@ -179,13 +179,21 @@ $(function(){
             document.getElementsByClassName("contenedorAlertaModal")[0].scrollIntoView();
         }
 
+        if(Valido && !ValidoTipoTitulo()){
+            Valido = false;
+            $('#alertaModal').text('No puede haber mas de una tarea con el mismo tipo de pieza y mismo título.');
+            $('.contenedorAlertaModal').show();
+            
+            document.getElementsByClassName("contenedorAlertaModal")[0].scrollIntoView();
+        }
+
         if(Valido){
 
             var row = parseInt($('#mhOptionR').text());
             var fila = $('#TablaTareasPlantilla tbody tr').eq(row);
             fila.find('td:eq(1)').text($('#idTPTarea').text().trim());
             fila.find('td:eq(2)').text($('#nomTPTarea').val().trim());
-            fila.find('td:eq(3)').text($('#TituloCambio').val().trim());
+            fila.find('td:eq(3)').text($('#TituloPlantilla').val().trim());
             fila.find('td:eq(4)').text($('#MinutosEst').val().trim());
             fila.find('td:eq(5)').text(JSON.stringify(ObtenerJsonHerramienta()));
             fila.find('td:eq(6)').text($('#DescripcionT').val().trim());
@@ -279,10 +287,10 @@ $(function(){
             </div>
 
             <div class="form-group row">
-                <label for="TituloCambio" class="col-lg-3 col-form-label">Titulo:</label>
+                <label for="TituloPlantilla" class="col-lg-3 col-form-label">T&iacute;tulo:</label>
                 <div class="col-lg-9">
                     <input type="text" maxlenght="20"
-                    class="form-control obligatorio Tarea"  id="TituloCambio" value="${data['TituloCambio']}">
+                    class="form-control obligatorio Tarea"  id="TituloPlantilla" value="${data['TituloPlantilla']}">
                     <div class="invalid-feedback">Campo Obligatorio</div>
                 </div>
             </div>
@@ -351,6 +359,28 @@ $(function(){
 
 
 
+    }
+
+    function ValidoTipoTitulo(){
+    
+        TipoPiezaAct = $('#idTPTarea').text().trim();
+        TituloAct = $('#TituloPlantilla').val().trim().toLowerCase();
+        fila = $('#mhOptionR').text().trim();
+
+        Valido = true;
+
+        $("#TablaTareasPlantilla").find('> tbody > tr').each(function () {
+
+            if( fila != $(this).index() && 
+                $(this).find('td:eq(1)').text().trim() == TipoPiezaAct &&
+                $(this).find('td:eq(3)').text().trim().toLowerCase() == TituloAct
+            ){
+                Valido = false;
+                return false;
+            }
+        });
+
+        return Valido;
     }
 
     window.agregarTareaPlantilla = function(){

@@ -167,6 +167,32 @@
             echo json_encode(array("isValid"=>true,"Datos"=>$respuesta));
         }
 
+        public function busquedaBien(){
+
+            if(!$this->session->userdata("nombre") || $this->input->post("Pagina") == ""){
+                redirect(site_url(''));
+            }
+            $this->ValidarPermiso();
+
+            $busqueda = $this->input->post("Busqueda") ;
+            $pagina = (int) $this->input->post("Pagina") ;
+            $regXpag = (int) $this->input->post("RegistrosPorPagina") ;
+            $ordenamiento = $this->input->post("Orden") ;
+            
+            $inicio = 1+$regXpag*($pagina-1);
+            $fin = $regXpag*$pagina;
+
+            $Condiciones = $this->input->post("Condiciones");
+            $disponibles = false;
+            if(isset($Condiciones)){
+                $disponibles = $Condiciones['Disponibles'] == "true" ? true:false;
+            }
+
+            $respuesta = $this->FormatearBusqueda($this->plantilla_model->Busqueda($busqueda,$ordenamiento,$inicio,$fin,$disponibles));
+
+            echo json_encode(array("isValid"=>true,"Datos"=>$respuesta));
+        }
+
         public function eliminar(){
             
             if(!$this->session->userdata("nombre") || $this->input->post("id") == ""){

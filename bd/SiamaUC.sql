@@ -271,6 +271,7 @@ CREATE TABLE PlantillaMantenimientoTarea(
 	Usu_Mod			INT				NOT NULL,--Usuario Modificador
 	Fec_Mod			TIMESTAMP		NOT NULL DEFAULT(NOW()), 
 	Observaciones	TEXT,
+	UNIQUE(PLM_ID,Titulo,TPI_ID),
 	FOREIGN KEY (PLM_ID) References PlantillaMantenimiento  ON DELETE CASCADE,
 	FOREIGN KEY (TPI_ID) References TipoPieza,
 	FOREIGN KEY (Usu_Cre) References Usuarios,

@@ -1,3 +1,5 @@
+var origenFuncion = "Funciones"
+
 $(function(){
 
     var BusquedaActiva = "";
@@ -134,7 +136,11 @@ $(function(){
         OrdenamientoActivo = 0;
         TipoOrdenamientoActivo = 0;
         
-        SetModalEtqContador("")
+        SetModalEtqContador("");
+        
+        if(GetOrigenBuscador() == origenFuncion){
+            $('#SiamaModalFunciones').show();
+        }
     })
 
     $('#ElegirModalBuscar').on('click',function(){
@@ -464,12 +470,20 @@ $(function(){
         });
     }
 
+    window.GetOrigenBuscador = function(origen){
+        return $('#OrigenBuscador').text();
+    }
+
     window.GetSearchType = function(){
         return $('#OpcionBusqueda').text();
     }
 
     window.SetModalEtqContador = function(etiqueta){
         $('#etqContador').text(etiqueta);
+    }
+
+    window.SetOrigenBuscador = function(origen){
+        $('#OrigenBuscador').text(origen);
     }
 
     window.SetSearchCOB = function (COB){

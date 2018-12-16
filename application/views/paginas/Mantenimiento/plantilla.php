@@ -66,7 +66,7 @@
             </div>
 
             <div class="form-group row">
-                <label for="UltimoMantenimiento" class="col-lg-3 col-form-label">Ultimo Mantenimiento:</label>
+                <label for="UltimoMantenimiento" class="col-lg-3 col-form-label">&Uacute;ltimo Mantenimiento:</label>
                 <div class="col-lg-9">
                     <input maxlength="100" readonly disabled type="date" 
                     class="form-control obligatorio fecha" id="UltimoMantenimiento" value="<?=$fec_ult?>">
@@ -90,7 +90,7 @@
                     <thead class="head-table-siama" style="font-size:11px;">
                         <tr>
                             <th style="width:35%;">Tipo de Pieza</th>
-                            <th style="width:40%;">Titulo</th>
+                            <th style="width:40%;">T&iacute;tulo</th>
                             <th style="width:15%;">Minutos Estimados</th>
                             <th style="width:5%;">
                                 <span id ="agregarTarea" style="color:#28a745;cursor: pointer;" class="fa fa-plus-circle fa-lg"></span>

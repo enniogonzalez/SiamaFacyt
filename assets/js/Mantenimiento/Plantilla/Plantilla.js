@@ -638,7 +638,7 @@ $(function(){
         
         switch(data['Tipo']){
             case TipoPieza:
-                controlador = "Tipo de Piezas";
+                controlador = "Tipo de Piezas Disponibles";
             break;
             case Herramienta:
                 controlador = "Herramientas";
@@ -679,6 +679,7 @@ $(function(){
 
     window.BuscarHerramienta = function(tipo){
 
+        SetOrigenBuscador(origenFuncion);
         SetSearchThead(thHerramientas);
 
         parametros = {
@@ -691,7 +692,14 @@ $(function(){
 
     window.BuscarTipoPieza = function(tipo){
 
+        SetOrigenBuscador(origenFuncion);
         SetSearchThead(thTipoPieza);
+
+        condiciones = {
+            "Bien"      : $('#idBiePlantilla').text().trim(),
+            "delBien"   : true,
+        }
+
         parametros = {
             "Lista": $('#listaBusquedaTipoPieza').html().trim(),
             "Tipo": tipo,
@@ -700,7 +708,7 @@ $(function(){
         idBuscadorActual = $('#idTPTarea').text().trim();
         nombreBuscadorActual = $('#nomTPTarea').val().trim();
 
-        SetSearchModal(parametros,true);
+        SetSearchModal(parametros,true,condiciones);
     }
 
     window.InterfazElegirBuscador = function(fila){
