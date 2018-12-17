@@ -146,22 +146,25 @@ $(function(){
     $('#ElegirModalBuscar').on('click',function(){
         if($('#TablaBusquedaFormulario .tr-activa-siama').length == 0){
             
-        Botones = `
-        <button data-dismiss="modal" title="Cerrar" type="button" style="margin:5px;" class="btn  btn-danger">
-          <span class="fa fa-times "></span>
-          Cerrar
-        </button>`;
+            Botones = `
+            <button data-dismiss="modal" title="Cerrar" type="button" style="margin:5px;" class="btn  btn-danger">
+            <span class="fa fa-times "></span>
+            Cerrar
+            </button>`;
 
-        var parametros = {
-            "Titulo":"Atención",
-            "Cuerpo": "Debe seleccionar una fila a elegir",
-            "Botones":Botones
-        }
+            var parametros = {
+                "Titulo":"Atención",
+                "Cuerpo": "Debe seleccionar una fila a elegir",
+                "Botones":Botones
+            }
 
-        ModalAdvertencia(parametros);
+            ModalAdvertencia(parametros);
         }else{
             InterfazElegirBuscador($('#TablaBusquedaFormulario .tr-activa-siama'));
             
+            if(GetOrigenBuscador() == origenFuncion){
+                $('#SiamaModalFunciones').show();
+            }
             SetModalEtqContador("")
         }
     })

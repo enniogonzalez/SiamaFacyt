@@ -6,6 +6,7 @@ INSERT INTO permisosusuarios ("usu_id", "menu") VALUES ('1', 'Sistema');
 INSERT INTO permisosusuarios ("usu_id", "menu") VALUES ('1', 'Localizacion');
 INSERT INTO permisosusuarios ("usu_id", "menu") VALUES ('1', 'Mantenimiento');
 INSERT INTO permisosusuarios ("usu_id", "menu") VALUES ('1', 'Marcas');
+INSERT INTO permisosusuarios ("usu_id", "menu") VALUES ('1', 'Obreros');
 INSERT INTO permisosusuarios ("usu_id", "menu") VALUES ('1', 'Partidas');
 INSERT INTO permisosusuarios ("usu_id", "menu") VALUES ('1', 'Patrimonio');
 INSERT INTO permisosusuarios ("usu_id", "menu") VALUES ('1', 'Proveedores');

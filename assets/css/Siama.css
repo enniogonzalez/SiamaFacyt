@@ -92,6 +92,11 @@
     background-color: #95a5a6 !important;
 }
 
+.tr-error-siama{
+    background-color: #dc3545!important;
+    color: #FFF;
+}
+
 .tabla-siama{
     border: solid #2C3E50;
 }
@@ -187,6 +192,7 @@
     margin-bottom: 10px;
     font-weight: bold;
 }
+
 .estatusTransaccion{
     z-index: 99999 !important;
     max-width: 400px;

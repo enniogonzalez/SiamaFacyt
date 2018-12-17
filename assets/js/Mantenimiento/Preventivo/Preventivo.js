@@ -32,9 +32,9 @@ $(function(){
                 $('#idPro').text(idBuscadorActual.trim());
                 $('#nomPro').val(nombreBuscadorActual.trim());
             break;
-            case Usuario:
-                $('#idUsu').text(idBuscadorActual.trim());
-                $('#nomUsu').val(nombreBuscadorActual.trim());
+            case Obrero:
+                $('#idObr').text(idBuscadorActual.trim());
+                $('#nomObr').val(nombreBuscadorActual.trim());
             break;
             case Bienes:
                 $('#idBiePreventivo').text(idBuscadorActual.trim());
@@ -195,7 +195,12 @@ $(function(){
 
         if(Valido && !PoseenEjecutor()){
             Valido = false
-            SetAlertaFormulario("No se puede guardar Mantenimiento Preventivo debido a que existen tareas que no poseen Usuario o Proveedor que las ejecuten.");
+            SetAlertaFormulario("No se puede guardar Mantenimiento Preventivo debido a que existen tareas que no poseen Obrero o Proveedor que las ejecuten.");
+        }
+
+        if(Valido && $('#EstatusPreventivo').val().trim() != "Solicitado" && !ValidarHorasHombre()){
+            Valido = false
+            SetAlertaFormulario("No se puede guardar Mantenimiento Preventivo debido a que existen tareas que no se le han asignado horas hombre.");
         }
 
         if(Valido){
@@ -234,10 +239,40 @@ $(function(){
     $('#SiamaModalAdvertencias').on('click','#ConfirmarEliminacion',function(){
         var parametros = {
             "id": $('#IdForm').text().trim(),
-            "Url": $('#ControladorActual').text().trim()+"/eliminar"
+            "Caso":"Eliminar",
+            "Url": $('#ControladorActual').text().trim()+"/obtener"
         }
-        Eliminar(parametros)
+        Obtener(parametros);
     });
+
+    function AccionEliminar(){
+
+        if($('#EstatusPreventivo').val().trim() != "Solicitado"){
+            
+            Botones = `
+            <button data-dismiss="modal" title="Cerrar" type="button" style="margin:5px;" class="btn  btn-danger">
+            <span class="fa fa-times "></span>
+            Cerrar
+            </button>`;
+
+            Cuerpo = `No se puede eliminar <strong>Mantenimiento Preventido</strong> debido a que el estatus ha cambiado a 
+            <strong>${$('#EstatusPreventivo').val().trim()}</strong>.`;
+
+            var parametros = {
+                "Titulo"    : "Advetencia",
+                "Cuerpo"    : Cuerpo,
+                "Botones"   : Botones
+            }
+
+            ModalAdvertencia(parametros,true);
+        }else{
+            var parametros = {
+                "id": $('#IdForm').text().trim(),
+                "Url": $('#ControladorActual').text().trim()+"/eliminar"
+            }
+            Eliminar(parametros)
+        }
+    }
 
     function ActivarTareas(){
         $('#eliminarTarea').show();
@@ -467,8 +502,8 @@ $(function(){
             case Proveedor:
                 controlador = "proveedores";
             break;
-            case Usuario:
-                controlador = "usuarios";
+            case Obrero:
+                controlador = "obreros";
             break;
             case Plantilla:
                 controlador = "plantilla";
@@ -554,6 +589,8 @@ $(function(){
 
                 if(data['Caso'] == "Editar"){
                     Editar();
+                }else if(data['Caso'] == "Eliminar"){
+                    AccionEliminar();
                 }
             }
         }).fail(function(data){
@@ -673,17 +710,17 @@ $(function(){
                 }
                 ObtenerPlantilla(parametros);
             break;
-            case Usuario:
-                $('#idUsu').text(fila.find("td:eq(0)").text().trim());
-                $('#nomUsu').val(fila.find("td:eq(3)").text().trim());
+            case Obrero:
+                $('#idObr').text(fila.find("td:eq(0)").text().trim());
+                $('#nomObr').val(fila.find("td:eq(5)").text().trim());
                 $('#idPro').text('');
                 $('#nomPro').val('');
             break;
             case Proveedor:
                 $('#idPro').text(fila.find("td:eq(0)").text().trim());
                 $('#nomPro').val(fila.find("td:eq(6)").text().trim());
-                $('#idUsu').text('');
-                $('#nomUsu').val('');
+                $('#idObr').text('');
+                $('#nomObr').val('');
             break;
             case Pieza:
                 $('#idPiezaTarea').text(fila.find("td:eq(0)").text().trim());
@@ -697,10 +734,6 @@ $(function(){
 
         if(GetSearchType() != "Formulario" && GetSearchType() != Plantilla){
             $('#SiamaModalBusqueda').modal('hide');
-
-            //Prevenir solapamientos de modales
-            if(GetSearchType() != Bienes )
-                setTimeout(function(){ $('#SiamaModalFunciones').modal('show');}, 400);
         }
     }
 
@@ -731,6 +764,7 @@ $(function(){
 
     window.BuscarProveedor = function(tipo){
 
+        SetOrigenBuscador(origenFuncion);
         SetSearchThead(thProveedores);
 
         parametros = {
@@ -745,15 +779,17 @@ $(function(){
 
     }
 
-    window.BuscarUsuario = function(tipo){
-        SetSearchThead(thUsuarios);
+    window.BuscarObrero = function(tipo){
+        
+        SetOrigenBuscador(origenFuncion);
+        SetSearchThead(thObreros);
         parametros = {
-            "Lista": $('#listaBusquedaUsuario').html().trim(),
+            "Lista": $('#listaBusquedaObrero').html().trim(),
             "Tipo": tipo,
         }
 
-        idBuscadorActual = $('#idUsu').text().trim();
-        nombreBuscadorActual = $('#nomUsu').val().trim();
+        idBuscadorActual = $('#idObr').text().trim();
+        nombreBuscadorActual = $('#nomObr').val().trim();
 
         SetSearchModal(parametros)
     }

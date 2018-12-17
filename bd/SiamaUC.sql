@@ -398,8 +398,8 @@ CREATE TABLE MantenimientoTarea(
 	MAN_ID			INT				NOT NULL,
 	PIE_ID			INT				NOT NULL,
 	Titulo			VARCHAR(250)	NOT NULL,--Titulo tarea
-	ESTATUS			VARCHAR(100)	NOT NULL,--Solicitado, Aprobado, Realizado
-	USU_ID			INT				NULL,
+	ESTATUS			VARCHAR(100)	NOT NULL,--Solicitado, Aprobado, Realizado,Eliminado
+	OBR_ID			INT				NULL,
 	PRO_ID			INT				NULL,
 	Min_Asi			INT				NOT NULL,--Minutos Asignados
 	Min_Eje			INT				NOT NULL,--Minutos Ejecutados
@@ -412,11 +412,14 @@ CREATE TABLE MantenimientoTarea(
 	Usu_Mod			INT				NOT NULL, --Usuario Modificador
 	Fec_Mod			TIMESTAMP		NOT NULL DEFAULT(NOW()), --fecha Modificacion
 	Observaciones	TEXT,
-	CONSTRAINT CHK_EJECUTOR_MTA CHECK ((USU_ID is null and PRO_ID is not null) OR 
-									(USU_ID is not null and PRO_ID is null) ),
+	UNIQUE(MAN_ID,PIE_ID,Titulo),
+	CONSTRAINT CHK_EJECUTOR_MTA CHECK ((OBR_ID is null and PRO_ID is not null) OR 
+									(OBR_ID is not null and PRO_ID is null) OR 
+									(OBR_ID is null and PRO_ID is null)
+									),
 	FOREIGN KEY (MAN_ID) References Mantenimiento ON DELETE CASCADE,
 	FOREIGN KEY (PIE_ID) References Piezas,
-	FOREIGN KEY (USU_ID) References Usuarios,
+	FOREIGN KEY (OBR_ID) References Obreros,
 	FOREIGN KEY (Usu_Cre) References Usuarios,
 	FOREIGN KEY (Usu_Mod) References Usuarios,
 	FOREIGN KEY (PRO_ID) References Proveedores

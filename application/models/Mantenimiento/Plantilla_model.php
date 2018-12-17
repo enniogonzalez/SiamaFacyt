@@ -817,13 +817,13 @@
             $query ="   SELECT  PMT.PMT_ID,			
                                 PMT.PLM_ID,			
                                 PMT.tpi_id,	
-                                PIE.Nombre PIE_NOM,		
+                                TPI.Nombre TPI_NOM,		
                                 PMT.Titulo,	
                                 PMT.Minutos,	
                                 PMT.Descripcion,
                                 COALESCE(PMT.Observaciones,'') Observaciones
                         FROM PlantillaMantenimientoTarea PMT
-                            JOIN Piezas PIE ON PIE.tpi_id = PMT.tpi_id
+                            JOIN TipoPieza TPI ON TPI.tpi_id = PMT.tpi_id
                         WHERE PMT.PLM_ID = " . $plantilla;
 
 
@@ -842,7 +842,7 @@
                     . "<tr>"
                     . "    <td style=\"display:none;\">" . $line['pmt_id'] . "</td>"
                     . "    <td style=\"display:none;\">" . $line['tpi_id'] . "</td>"
-                    . "    <td>" . $line['pie_nom'] . "</td>"
+                    . "    <td>" . $line['tpi_nom'] . "</td>"
                     . "    <td>" . $line['titulo'] . "</td>"
                     . "    <td>" . $line['minutos'] . "</td>"
                     . "    <td style=\"display:none;\">" . json_encode($line['Herramientas']) . "</td>"
@@ -879,7 +879,7 @@
             //Query para buscar usuario
             $query ="   SELECT  PMT.PMT_ID,			
                                 PMT.PLM_ID,			
-                                PMT.tpi_id,	
+                                PIE.pie_id,	
                                 PIE.Nombre PIE_NOM,		
                                 PMT.Titulo,	
                                 PMT.Minutos,	
@@ -887,26 +887,30 @@
                                 COALESCE(PMT.Observaciones,'') Observaciones
                         FROM PlantillaMantenimientoTarea PMT
                             JOIN Piezas PIE ON PIE.tpi_id = PMT.tpi_id
-                        WHERE PMT.PLM_ID = " . $plantilla;
+                        WHERE PMT.PLM_ID = " . $plantilla . "
+                        ORDER BY PIE.pie_id ASC, PMT.titulo ASC;";
 
 
             //Ejecutar Query
             $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
 
+
             $html = "";
             //Si existe registro, se guarda. Sino se guarda false
             while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)){
-                    $html = $html
+
+                $herramientas = json_encode($this->ObtenerHerramientaJson( $line['pmt_id']));
+                $html = $html
                     . "<tr>"
                     . "    <td style=\"display:none;\"></td>"
-                    . "    <td style=\"display:none;\">" . $line['tpi_id'] . "</td>"
+                    . "    <td style=\"display:none;\">" . $line['pie_id'] . "</td>"
                     . "    <td>" . $line['pie_nom'] . "</td>"
                     . "    <td>" . $line['titulo'] . "</td>"
                     . "    <td style=\"display:none;\"></td>"
                     . "    <td></td>"
                     . "    <td style=\"display:none;\"></td>"
                     . "    <td></td>"
-                    . "    <td style=\"display:none;\">"  . "</td>"
+                    . "    <td style=\"display:none;\">" . $herramientas . "</td>"
                     . "    <td style=\"display:none;\">" . $line['descripcion'] . "</td>"
                     . "    <td style=\"display:none;\"></td>"
                     . "    <td style=\"display:none;\"></td>"
@@ -918,7 +922,7 @@
                     . "        <span class=\"fa fa-pencil fa-lg\"></span>"
                     . "    </td>"
                     . "</tr>";
-
+                
             }
 
             //Liberar memoria

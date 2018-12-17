@@ -31,7 +31,7 @@
                 <label for="DocumentoPreventivo" class="col-lg-3 col-form-label">Documento:</label>
                 <div class="col-lg-9">
                     <input readonly disabled type="text" maxlength="10"
-                        class="form-control texto" id="DocumentoPreventivo" value="<?=$documento?>">
+                        class="form-control texto documento" id="DocumentoPreventivo" value="<?=$documento?>">
                 </div>
             </div>
 
@@ -88,7 +88,7 @@
                         <tr>
                             <th style="width:20%;">Pieza</th>
                             <th style="width:30%;">Titulo</th>
-                            <th style="width:20%;">Usuario</th>
+                            <th style="width:20%;">Obrero</th>
                             <th style="width:20%;">Proveedor</th>
                             <th style="width:10%;text-align: center;" colspan="2">
                                 <span id ="eliminarTarea" style="color:#dc3545;cursor: pointer;" class="fa fa-minus-circle fa-lg"></span>
@@ -112,8 +112,8 @@
             <select readonly disabled  id="listaBusquedaProveedor">
                 <?=$listaBusquedaProveedor?>
             </select> 
-            <select readonly disabled  id="listaBusquedaUsuario">
-                <?=$listaBusquedaUsuario?>
+            <select readonly disabled  id="listaBusquedaObrero">
+                <?=$listaBusquedaObrero?>
             </select> 
             <select readonly disabled  id="listaBusquedaPlantilla">
                 <?=$listaBusquedaPlantilla?>

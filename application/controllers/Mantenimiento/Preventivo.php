@@ -8,6 +8,61 @@
             $this->load->library('liblistasdesplegables','liblistasdesplegables');
         }
 
+        private function FormatearBusqueda($datos){
+            
+            $data = array(
+                "Listas"     =>"",
+                "Registros" => ""
+            );
+
+
+            if($datos){
+
+                $htmlListas = "";
+                $registros = 0;
+                foreach ($datos as $elemento) {
+                    $registros = $elemento['registros'];
+                    $htmlListas = $htmlListas
+                        ."<tr>"
+                        .   "<td style='display:none;'>" . $elemento['man_id'] . "</td>"
+                        .   "<td>" . $elemento['documento'] . "</td>"
+                        .   "<td>" . $elemento['nombre'] . "</td>"
+                        .   "<td>" . $elemento['estatus'] . "</td>"
+                        .   "<td>" . $elemento['fec_ini'] . "</td>"
+                        .   "<td>" . $elemento['fec_fin'] . "</td>"
+                        ."</tr>";
+                }
+                
+                $data['Listas'] = $htmlListas;
+                $data['Registros'] = $registros;
+            }
+
+            return $data;
+        }
+
+        private function FormatearImpresion($respuesta){
+
+            $data = array(
+                "documento"     =>"",
+                "bie_nom"       =>"",
+                "inv_uc"        =>"",
+                "estatus"       =>"",
+                "solicitante"   =>"",
+                "aprobador"     =>"",
+                "fec_cre"       =>"",
+                "fec_apr"       =>"",
+                "fec_ini"       =>"",
+                "fec_fin"       =>"",
+                "Tareas"        =>[],
+                "observaciones" => ""
+            );
+
+            if($respuesta)
+                $data = $respuesta;
+
+            return $data;
+        }
+
         private function FormatearRequest($respuesta){
 
             $data = array(
@@ -28,65 +83,75 @@
             return $data;
         }
 
-        private function ValidarPermiso(){
-            if(!$this->session->userdata("Permisos")['Mantenimiento']){
-                show_404();
-            }
-        } 
-        
-        public function view(){
+        public function aprobar(){
             
-            if(!$this->session->userdata("nombre")){
-                redirect(site_url(''));
-            }
-            $this->ValidarPermiso();
-            
-            $data = $this->FormatearRequest($this->preventivo_model->Obtener());
-
-            $JsFile =   "<script src=\"". base_url() . "assets/js/Mantenimiento/Preventivo/Preventivo.js\"></script>"
-                    .   "<script src=\"". base_url() . "assets/js/Mantenimiento/Preventivo/TareaPreventiva.js\"></script>";
-
-            $datafile['JsFile'] = $JsFile ;
-
-            $this->load->model('Sistema/listasdesplegables_model' , 'listasdesplegables_model');
-            $ld = $this->listasdesplegables_model->Obtener('','COB-PREVEN');
-
-            $listaBusquedaPlantilla = $this->listasdesplegables_model->Obtener('','COB-PLANTI');
-            $listaBusquedaBien   = $this->listasdesplegables_model->Obtener('','COB-BIENES');
-            $listaBusquedaPieza= $this->listasdesplegables_model->Obtener('','COB-PIEZAS');
-            $listaBusquedaProveedor = $this->listasdesplegables_model->Obtener('','COB-PROVEE');
-            $listaBusquedaUsuario= $this->listasdesplegables_model->Obtener('','COB-USUARI');
-
-            
-            $dataLD['OrdenarBusqueda'] = $this->liblistasdesplegables->FormatearListaDesplegable($ld);
-            $data['listaBusquedaProveedor'] = $this->liblistasdesplegables->FormatearListaDesplegable($listaBusquedaProveedor);
-            $data['listaBusquedaFormulario'] = $dataLD['OrdenarBusqueda'];
-            $data['listaBusquedaPlantilla'] = $this->liblistasdesplegables->FormatearListaDesplegable($listaBusquedaPlantilla);
-            $data['listaBusquedaBien'] = $this->liblistasdesplegables->FormatearListaDesplegable($listaBusquedaBien);
-            $data['listaBusquedaPieza'] = $this->liblistasdesplegables->FormatearListaDesplegable($listaBusquedaPieza);
-            $data['listaBusquedaUsuario'] = $this->liblistasdesplegables->FormatearListaDesplegable($listaBusquedaUsuario);
-
-            $dataAlerta['cantAlertas'] = $this->alertas_model->CantidadAlertas();
-
-            $this->load->view('plantillas/1-header', $datafile);
-            $this->load->view('plantillas/2-barranavegacion',$dataAlerta);
-            $this->load->view('plantillas/2-modales',$dataLD);
-            $this->load->view('plantillas/3-iniciomain');
-            $this->load->view('plantillas/4-barramenu');
-            $this->load->view('plantillas/5-iniciopagina');
-            $this->load->view('paginas/Mantenimiento/preventivo',$data);
-            $this->load->view('plantillas/7-footer');
-
-        }
-
-        public function obtener(){
-
             if(!$this->session->userdata("nombre") || $this->input->post("id") == ""){
                 redirect(site_url(''));
             }
             $this->ValidarPermiso();
-            $data = $this->FormatearRequest($this->preventivo_model->Obtener($this->input->post("id")));
-            echo json_encode(array("isValid"=>true,"Datos"=>$data,"Caso" =>  $this->input->post("Caso") ));
+
+            if($this->preventivo_model->PuedeAprobar($this->input->post("id"))){
+                $aprobar = $this->preventivo_model->AprobarMantenimiento($this->input->post("id"));
+            
+                $Datos = $this->preventivo_model->Obtener($this->input->post("id"));
+                echo json_encode(array("isValid"=>true,
+                    "Mensaje"=>"Se ha aprobado correctamente el mantenimiento correctivo",
+                    "Tipo" => $this->input->post("Tipo"),
+                    "Datos"=>$Datos
+                ));
+            }else{
+                
+                $usuarios = $this->preventivo_model->ObtenerUsuarios($this->input->post("id"));
+                $html = "<strong>Usuario Solicitante:</strong> " . $usuarios['cre_nom'];
+                echo json_encode(array("isValid"=>false,
+                    "Mensaje"=>"El Documento actual no puede ser aprobado por la misma persona que lo ha solicitado.<br><br>" . $html
+                ));
+
+            }
+
+        }
+
+        public function busqueda(){
+
+            if(!$this->session->userdata("nombre") || $this->input->post("Pagina") == ""){
+                redirect(site_url(''));
+            }
+            $this->ValidarPermiso();
+
+            $busqueda = $this->input->post("Busqueda") ;
+            $pagina = (int) $this->input->post("Pagina") ;
+            $regXpag = (int) $this->input->post("RegistrosPorPagina") ;
+            $ordenamiento = $this->input->post("Orden") ;
+            $fec_ini = $this->input->post("Fec_Ini");
+            $fec_fin = $this->input->post("Fec_Fin");
+            $inicio = 1+$regXpag*($pagina-1);
+            $fin = $regXpag*$pagina;
+
+            $respuesta = $this->FormatearBusqueda($this->preventivo_model->Busqueda($busqueda,$ordenamiento,$inicio,$fin,$fec_ini,$fec_fin));
+
+            echo json_encode(array("isValid"=>true,"Datos"=>$respuesta));
+
+        }
+
+        public function eliminar(){
+            
+            if(!$this->session->userdata("nombre") || $this->input->post("id") == ""){
+                redirect(site_url(''));
+            }
+            $this->ValidarPermiso();
+
+            if($this->preventivo_model->PuedeEliminar($this->input->post("id"))){
+                $eliminar = $this->preventivo_model->Eliminar($this->input->post("id"));
+                $data = $this->FormatearRequest($this->preventivo_model->Obtener());
+                echo json_encode(array("isValid"=>true,"Datos"=>$data));
+            }else{
+                $usuarios = $this->preventivo_model->ObtenerUsuarios($this->input->post("id"));
+                $html = "<strong>Usuario Solicitante:</strong> " . $usuarios['cre_nom'];
+                echo json_encode(array("isValid"=>false,
+                    "Mensaje"=>"El Documento actual solo puede ser eliminado por la persona que lo ha solicitado.<br/><br/>" .$html
+                ));
+            }
+
         }
 
         public function guardar(){
@@ -159,75 +224,23 @@
 
         }
 
-        public function eliminar(){
-            
+        public function imprimir($id){
+            $this->ValidarPermiso();
+
+            $data['datos'] = $this->FormatearImpresion($this->preventivo_model->ObtenerInfoPDF($id));
+
+            $this->load->library('tcpdf/Pdf');
+            $this->load->view('Reportes/repManPre',$data);
+        }
+
+        public function obtener(){
+
             if(!$this->session->userdata("nombre") || $this->input->post("id") == ""){
                 redirect(site_url(''));
             }
             $this->ValidarPermiso();
-
-            if($this->preventivo_model->PuedeEliminar($this->input->post("id"))){
-                $eliminar = $this->preventivo_model->Eliminar($this->input->post("id"));
-                $data = $this->FormatearRequest($this->preventivo_model->Obtener());
-                echo json_encode(array("isValid"=>true,"Datos"=>$data));
-            }else{
-                $usuarios = $this->preventivo_model->ObtenerUsuarios($this->input->post("id"));
-                $html = "<strong>Usuario Solicitante:</strong> " . $usuarios['cre_nom'];
-                echo json_encode(array("isValid"=>false,
-                    "Mensaje"=>"El Documento actual solo puede ser eliminado por la persona que lo ha solicitado.<br/><br/>" .$html
-                ));
-            }
-
-        }
-
-        public function busqueda(){
-
-            if(!$this->session->userdata("nombre") || $this->input->post("Pagina") == ""){
-                redirect(site_url(''));
-            }
-            $this->ValidarPermiso();
-
-            $busqueda = $this->input->post("Busqueda") ;
-            $pagina = (int) $this->input->post("Pagina") ;
-            $regXpag = (int) $this->input->post("RegistrosPorPagina") ;
-            $ordenamiento = $this->input->post("Orden") ;
-            $fec_ini = $this->input->post("Fec_Ini");
-            $fec_fin = $this->input->post("Fec_Fin");
-            $inicio = 1+$regXpag*($pagina-1);
-            $fin = $regXpag*$pagina;
-
-            $respuesta = $this->FormatearBusqueda($this->preventivo_model->Busqueda($busqueda,$ordenamiento,$inicio,$fin,$fec_ini,$fec_fin));
-
-            echo json_encode(array("isValid"=>true,"Datos"=>$respuesta));
-
-        }
-
-        public function aprobar(){
-            
-            if(!$this->session->userdata("nombre") || $this->input->post("id") == ""){
-                redirect(site_url(''));
-            }
-            $this->ValidarPermiso();
-
-            if($this->preventivo_model->PuedeAprobar($this->input->post("id"))){
-                $aprobar = $this->preventivo_model->AprobarMantenimiento($this->input->post("id"));
-            
-                $Datos = $this->preventivo_model->Obtener($this->input->post("id"));
-                echo json_encode(array("isValid"=>true,
-                    "Mensaje"=>"Se ha aprobado correctamente el mantenimiento correctivo",
-                    "Tipo" => $this->input->post("Tipo"),
-                    "Datos"=>$Datos
-                ));
-            }else{
-                
-                $usuarios = $this->preventivo_model->ObtenerUsuarios($this->input->post("id"));
-                $html = "<strong>Usuario Solicitante:</strong> " . $usuarios['cre_nom'];
-                echo json_encode(array("isValid"=>false,
-                    "Mensaje"=>"El Documento actual no puede ser aprobado por la misma persona que lo ha solicitado.<br><br>" . $html
-                ));
-
-            }
-
+            $data = $this->FormatearRequest($this->preventivo_model->Obtener($this->input->post("id")));
+            echo json_encode(array("isValid"=>true,"Datos"=>$data,"Caso" =>  $this->input->post("Caso") ));
         }
 
         public function reversar(){
@@ -257,67 +270,55 @@
 
         }
 
-        public function imprimir($id){
-            $this->ValidarPermiso();
-
-            $data['datos'] = $this->FormatearImpresion($this->preventivo_model->ObtenerInfoPDF($id));
-
-            $this->load->library('tcpdf/Pdf');
-            $this->load->view('Reportes/repManPre',$data);
-        }
-
-        private function FormatearImpresion($respuesta){
-
-            $data = array(
-                "documento"     =>"",
-                "bie_nom"       =>"",
-                "inv_uc"        =>"",
-                "estatus"       =>"",
-                "solicitante"   =>"",
-                "aprobador"     =>"",
-                "fec_cre"       =>"",
-                "fec_apr"       =>"",
-                "fec_ini"       =>"",
-                "fec_fin"       =>"",
-                "Tareas"        =>[],
-                "observaciones" => ""
-            );
-
-            if($respuesta)
-                $data = $respuesta;
-
-            return $data;
-        }
-        private function FormatearBusqueda($datos){
-            
-            $data = array(
-                "Listas"     =>"",
-                "Registros" => ""
-            );
-
-
-            if($datos){
-
-                $htmlListas = "";
-                $registros = 0;
-                foreach ($datos as $elemento) {
-                    $registros = $elemento['registros'];
-                    $htmlListas = $htmlListas
-                        ."<tr>"
-                        .   "<td style='display:none;'>" . $elemento['man_id'] . "</td>"
-                        .   "<td>" . $elemento['documento'] . "</td>"
-                        .   "<td>" . $elemento['nombre'] . "</td>"
-                        .   "<td>" . $elemento['estatus'] . "</td>"
-                        .   "<td>" . $elemento['fec_ini'] . "</td>"
-                        .   "<td>" . $elemento['fec_fin'] . "</td>"
-                        ."</tr>";
-                }
-                
-                $data['Listas'] = $htmlListas;
-                $data['Registros'] = $registros;
+        private function ValidarPermiso(){
+            if(!$this->session->userdata("Permisos")['Mantenimiento']){
+                show_404();
             }
+        } 
+        
+        public function view(){
+            
+            if(!$this->session->userdata("nombre")){
+                redirect(site_url(''));
+            }
+            $this->ValidarPermiso();
+            
+            $data = $this->FormatearRequest($this->preventivo_model->Obtener());
 
-            return $data;
+            $JsFile =   "<script src=\"". base_url() . "assets/js/Mantenimiento/Preventivo/Preventivo.js\"></script>"
+                    .   "<script src=\"". base_url() . "assets/js/Mantenimiento/Preventivo/TareaPreventiva.js\"></script>";
+
+            $datafile['JsFile'] = $JsFile ;
+
+            $this->load->model('Sistema/listasdesplegables_model' , 'listasdesplegables_model');
+            $ld = $this->listasdesplegables_model->Obtener('','COB-PREVEN');
+
+            $listaBusquedaPlantilla = $this->listasdesplegables_model->Obtener('','COB-PLANTI');
+            $listaBusquedaBien   = $this->listasdesplegables_model->Obtener('','COB-BIENES');
+            $listaBusquedaPieza= $this->listasdesplegables_model->Obtener('','COB-PIEZAS');
+            $listaBusquedaProveedor = $this->listasdesplegables_model->Obtener('','COB-PROVEE');
+            $listaBusquedaObrero= $this->listasdesplegables_model->Obtener('','COB-OBRERO');
+
+            
+            $dataLD['OrdenarBusqueda'] = $this->liblistasdesplegables->FormatearListaDesplegable($ld);
+            $data['listaBusquedaProveedor'] = $this->liblistasdesplegables->FormatearListaDesplegable($listaBusquedaProveedor);
+            $data['listaBusquedaFormulario'] = $dataLD['OrdenarBusqueda'];
+            $data['listaBusquedaPlantilla'] = $this->liblistasdesplegables->FormatearListaDesplegable($listaBusquedaPlantilla);
+            $data['listaBusquedaBien'] = $this->liblistasdesplegables->FormatearListaDesplegable($listaBusquedaBien);
+            $data['listaBusquedaPieza'] = $this->liblistasdesplegables->FormatearListaDesplegable($listaBusquedaPieza);
+            $data['listaBusquedaObrero'] = $this->liblistasdesplegables->FormatearListaDesplegable($listaBusquedaObrero);
+
+            $dataAlerta['cantAlertas'] = $this->alertas_model->CantidadAlertas();
+
+            $this->load->view('plantillas/1-header', $datafile);
+            $this->load->view('plantillas/2-barranavegacion',$dataAlerta);
+            $this->load->view('plantillas/2-modales',$dataLD);
+            $this->load->view('plantillas/3-iniciomain');
+            $this->load->view('plantillas/4-barramenu');
+            $this->load->view('plantillas/5-iniciopagina');
+            $this->load->view('paginas/Mantenimiento/preventivo',$data);
+            $this->load->view('plantillas/7-footer');
+
         }
     }
 

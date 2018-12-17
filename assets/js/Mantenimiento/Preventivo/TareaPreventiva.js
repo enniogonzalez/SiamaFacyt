@@ -1,6 +1,6 @@
 
 const Pieza = "Pieza";
-const Usuario = "Usuario";
+const Obrero = "Obrero";
 const Proveedor = "Proveedor";
 
 $(function(){
@@ -31,20 +31,20 @@ $(function(){
     });
 
     /************************************/
-    /*      Manejo Usuarios             */
+    /*      Manejo Obreros             */
     /************************************/
     
-    $('#SiamaModalFunciones').on('click','#nomUsu',function(){
-        BuscarUsuario(Usuario);
+    $('#SiamaModalFunciones').on('click','#nomObr',function(){
+        BuscarObrero(Obrero);
     });
 
-    $('#SiamaModalFunciones').on('click','.BuscarUsuario',function(){
-        BuscarUsuario(Usuario);
+    $('#SiamaModalFunciones').on('click','.BuscarObrero',function(){
+        BuscarObrero(Obrero);
     });
 
-    $('#SiamaModalFunciones').on('click','.BorrarUsuario',function(){
-        $('#idUsu').text('');
-        $('#nomUsu').val('');
+    $('#SiamaModalFunciones').on('click','.BorrarObrero',function(){
+        $('#idObr').text('');
+        $('#nomObr').val('');
     });
     /************************************/
     /*          Fin Buscadores          */
@@ -81,17 +81,17 @@ $(function(){
             }
         })
 
-        //Validar que exista un usuario o un proveedor asignado
-        if(Valido && $('#nomUsu').val() == "" && $('#nomPro').val() == ""){
+        //Validar que exista un obrero o un proveedor asignado
+        if(Valido && $('#nomObr').val() == "" && $('#nomPro').val() == ""){
             Valido = false;
             $('#alertaModal').focus(); 
-            $('#alertaModal').text('La tarea del Mantenimiento Preventivo debe contar con un Usuario o un Proveedor para realizar el mismo.');
+            $('#alertaModal').text('La tarea del Mantenimiento Preventivo debe contar con un Obrero o un Proveedor para realizar el mismo.');
             $('.contenedorAlertaModal').show();
             
             document.getElementsByClassName("contenedorAlertaModal")[0].scrollIntoView();
         }
 
-        if(Valido && $('#EstatusPreventivo').val() != "Solicitado" && $('#MinutosRea').val() < 0){
+        if(Valido && $('#EstatusPreventivo').val() != "Solicitado" && $('#MinutosRea').val() <= 0){
             Valido = false;
             $('#alertaModal').text('Los minutos realizados tienen que ser un numero mayor a 0.');
             $('.contenedorAlertaModal').show();
@@ -106,11 +106,10 @@ $(function(){
             fila.find('td:eq(1)').text($('#idPiezaTarea').text().trim());
             fila.find('td:eq(2)').text($('#nomPiezaTarea').val().trim());
             fila.find('td:eq(3)').text($('#TituloCambio').val().trim());
-            fila.find('td:eq(4)').text($('#idUsu').text().trim());
-            fila.find('td:eq(5)').text($('#nomUsu').val().trim());
+            fila.find('td:eq(4)').text($('#idObr').text().trim());
+            fila.find('td:eq(5)').text($('#nomObr').val().trim());
             fila.find('td:eq(6)').text($('#idPro').text().trim());
             fila.find('td:eq(7)').text($('#nomPro').val().trim());
-            fila.find('td:eq(8)').text($('#HerramientasT').val().trim());
             fila.find('td:eq(9)').text($('#DescripcionT').val().trim());
             fila.find('td:eq(10)').text($('#InicioTarea').val().trim());
             fila.find('td:eq(11)').text($('#FinTarea').val().trim());
@@ -152,6 +151,20 @@ $(function(){
           Cancelar
         </button>`;
 
+        trHerramienta = '';
+        if(fila.find('td:eq(8)').text().trim() != ""){
+            arrayHerramienta = JSON.parse(fila.find('td:eq(8)').text().trim());
+
+            for(her in arrayHerramienta){
+                trHerramienta += `
+                    <tr>
+                        <td style="display:none;">${arrayHerramienta[her].Id}</td>
+                        <td>${arrayHerramienta[her].Herramienta}</td>
+                    </tr>
+                `;                
+            }
+        }
+
         var data = {
             "Titulo"        :   "Editar Tarea",
             "EstatusDoc"    :   $('#EstatusPreventivo').val(),
@@ -160,11 +173,11 @@ $(function(){
             "idPiezaTarea"  :   fila.find('td:eq(1)').text().trim(),
             "nomPiezaTarea" :   fila.find('td:eq(2)').text().trim(),
             "TituloCambio"  :   fila.find('td:eq(3)').text().trim(),
-            "idUsu"         :   fila.find('td:eq(4)').text().trim(),
-            "nomUsu"        :   fila.find('td:eq(5)').text().trim(),
+            "idObr"         :   fila.find('td:eq(4)').text().trim(),
+            "nomObr"        :   fila.find('td:eq(5)').text().trim(),
             "idPro"         :   fila.find('td:eq(6)').text().trim(),
             "nomPro"        :   fila.find('td:eq(7)').text().trim(),
-            "HerramientasT" :   fila.find('td:eq(8)').text().trim(),
+            "HerramientasT" :   trHerramienta,
             "DescripcionT"  :   fila.find('td:eq(9)').text().trim(),
             "InicioTarea"   :   fila.find('td:eq(10)').text().trim(),
             "FinTarea"      :   fila.find('td:eq(11)').text().trim(),
@@ -197,6 +210,7 @@ $(function(){
     });
 
     $('#TablaTareas tbody').on('click','tr',function(){
+        $(this).removeClass('tr-error-siama');
         ActivarCeldaTabla(this)
     });
     
@@ -219,27 +233,18 @@ $(function(){
                 <label class="col-lg-3 col-form-label">Pieza:</label>
                 <div class="col-lg-9">
                     <div style="display:none;" id="idPiezaTarea">${data['idPiezaTarea']}</div>
-                    <input type="text" title="Pieza"  readonly disabled
-                        class="form-control texto obligatorio buscador Tarea" id="nomPiezaTarea" value="${data['nomPiezaTarea']}">
+                    <input type="text" title="${data['nomPiezaTarea']}"  readonly disabled
+                        class="form-control texto obligatorio Tarea" id="nomPiezaTarea" value="${data['nomPiezaTarea']}">
                     <div class="invalid-feedback">Campo Obligatorio</div>
                 </div>
             </div>
 
             
             <div class="form-group row">
-                <label for="TituloCambio" class="col-lg-3 col-form-label">Titulo:</label>
+                <label for="TituloCambio" class="col-lg-3 col-form-label">T&iacute;tulo:</label>
                 <div class="col-lg-9">
-                    <input type="text" maxlenght="20" readonly disabled
+                    <input type="text" maxlenght="20" readonly disabled title="${data['TituloCambio']}"
                     class="form-control obligatorio Tarea"  id="TituloCambio" value="${data['TituloCambio']}">
-                    <div class="invalid-feedback">Campo Obligatorio</div>
-                </div>
-            </div>
-
-            <div class="form-group row">
-                <label for="HerramientasT" class="col-lg-3 col-form-label">Herramientas:</label>
-                <div class="col-lg-9">
-                    <textarea  class="form-control texto obligatorio Tarea" rows="3" readonly
-                    style = "resize:vertical;" id="HerramientasT">${data['HerramientasT']}</textarea>
                     <div class="invalid-feedback">Campo Obligatorio</div>
                 </div>
             </div>
@@ -254,18 +259,18 @@ $(function(){
             </div>
 
             <div class="form-group row">
-                <label class="col-lg-3 col-form-label">Usuario:</label>
+                <label class="col-lg-3 col-form-label">Obrero:</label>
                 <div class="col-lg-9">
                     <div style="width:80%;float:left;">
-                        <div style="display:none;" id="idUsu">${data['idUsu']}</div>
-                        <input type="text" title="Usuario que realiza tarea"
-                            class="form-control texto  buscador Tarea" id="nomUsu" value="${data['nomUsu']}">
+                        <div style="display:none;" id="idObr">${data['idObr']}</div>
+                        <input type="text" title="Obrero que realiza tarea" readonly
+                            class="form-control texto  buscador Tarea" id="nomObr" value="${data['nomObr']}">
                         <div class="invalid-feedback">Campo Obligatorio</div>
                     </div>
                     <div style="width:20%;float:right;padding:10px;">
-                        <span title="Buscar Usuario" class="fa fa-search BuscarUsuario" 
+                        <span title="Buscar Obrero" class="fa fa-search BuscarObrero" 
                             style="cursor: pointer;float:left;"></span>
-                        <span title="Borrar Usuario" class="fa fa-trash-o BorrarUsuario" 
+                        <span title="Borrar Obrero" class="fa fa-trash-o BorrarObrero" 
                             style="cursor: pointer;float:right;"></span>
                     </div>
                 </div>
@@ -276,7 +281,7 @@ $(function(){
                 <div class="col-lg-9">
                     <div style="width:80%;float:left;">
                         <div style="display:none;" id="idPro">${data['idPro']}</div>
-                        <input type="text" title="Proveedor que realiza tarea" 
+                        <input type="text" title="Proveedor que realiza tarea" readonly
                             class="form-control texto  buscador Tarea" id="nomPro" value="${data['nomPro']}">
                         <div class="invalid-feedback">Campo Obligatorio</div>
                     </div>
@@ -323,6 +328,22 @@ $(function(){
                     style = "resize:vertical;" id="ObservacionT">${data['ObservacionT']}</textarea>
                 </div>
             </div>
+
+            <h3>
+                Herramientas
+            </h3>
+            <div class="table-responsive">
+                <table id="TablaTareasHerramientas" class="table table-hover tabla-siama">
+                    <thead class="head-table-siama">
+                        <tr>
+                            <th style="width:100%;">Herramienta</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${data['HerramientasT']}
+                    </tbody>
+                </table>
+            </div>
         </form>`;
         
 
@@ -358,7 +379,7 @@ $(function(){
                     "Id"            : $(this).find('td:eq(0)').text(),
                     "IdPieza"       : $(this).find('td:eq(1)').text(),
                     "Titulo"        : $(this).find('td:eq(3)').text(),
-                    "idUsuario"     : $(this).find('td:eq(4)').text(),
+                    "idObrero"      : $(this).find('td:eq(4)').text(),
                     "idProveedor"   : $(this).find('td:eq(6)').text(),
                     "Herramientas"  : $(this).find('td:eq(8)').text(),
                     "Descripcion"   : $(this).find('td:eq(9)').text(),
@@ -387,5 +408,23 @@ $(function(){
         });
 
         return Poseen;
+    }
+
+    window.ValidarHorasHombre = function(){
+        var Valido = true;
+
+        $("#TablaTareas").find('> tbody > tr').each(function () {
+
+            if( $(this).find('td:eq(1)').text().trim() != '' && 
+                $(this).find('td:eq(15)').text() == "Realizado" &&
+                $(this).find('td:eq(12)').text() <= 0
+            ){
+                Valido = false;
+                $(this).addClass('tr-error-siama');
+            }
+        });
+
+        return Valido;
+        
     }
 });

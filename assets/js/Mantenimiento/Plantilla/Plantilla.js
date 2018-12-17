@@ -737,10 +737,6 @@ $(function(){
 
         if(GetSearchType() != "Formulario"  ){
             $('#SiamaModalBusqueda').modal('hide');
-
-            if(GetSearchType() != Bienes){
-                $('#SiamaModalFunciones').show();
-            }
         }
     }
 
