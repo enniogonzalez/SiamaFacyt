@@ -210,6 +210,27 @@
             echo json_encode(array("isValid"=>true,"Datos"=>$respuesta));
         }
 
+        public function busquedaRealizado(){
+
+            if(!$this->session->userdata("nombre") || $this->input->post("Pagina") == ""){
+                redirect(site_url(''));
+            }
+
+            $this->ValidarPermiso();
+
+            $busqueda = $this->input->post("Busqueda") ;
+            $pagina = (int) $this->input->post("Pagina") ;
+            $regXpag = (int) $this->input->post("RegistrosPorPagina") ;
+            $ordenamiento = $this->input->post("Orden") ;
+            
+            $inicio = 1+$regXpag*($pagina-1);
+            $fin = $regXpag*$pagina;
+
+            $respuesta = $this->FormatearBusqueda($this->correctivo_model->BusquedaRealizado($busqueda,$ordenamiento,$inicio,$fin));
+
+            echo json_encode(array("isValid"=>true,"Datos"=>$respuesta));
+        }
+
         public function aprobar(){
             
             if(!$this->session->userdata("nombre") || $this->input->post("id") == ""){

@@ -28,26 +28,63 @@
             </li>
             <li class="submenu submenu<?=$posMenu?>">
                 <a href='<?=base_url()?>correctivo'>
-                    <span class="fa fa-briefcase" style="width:20px;" ></span>
-                    <label>Correctivo</label>
+                    <div class="divContenedorSubmenu">
+                        <div class="divSpanSubmenu">
+                            <span class="fa fa-briefcase" style="width:20px;" ></span>
+                        </div>
+                        <div class="divNombreSubmenu">
+                            <label>Correctivo</label>
+                        </div>
+                    </div>
+                </a>
+            </li>
+            <li class="submenu submenu<?=$posMenu?>">
+                <a href='<?=base_url()?>correctivoplanificado'>
+                    <div class="divContenedorSubmenu">
+                        <div class="divSpanSubmenu">
+                            <span class="fa fa-calendar" style="width:20px;" ></span>
+                        </div>
+                        <div class="divNombreSubmenu">
+                            <label>Correctivo Planificado</label>
+                        
+                        </div>
+                    </div>
                 </a>
             </li>
             <li class="submenu submenu<?=$posMenu?>">
                 <a href='<?=base_url()?>fallas'>
-                    <span class="fa fa-exclamation-triangle" style="width:20px;" ></span>
-                    <label>Fallas</label>
+                    <div class="divContenedorSubmenu">
+                        <div class="divSpanSubmenu">
+                            <span class="fa fa-exclamation-triangle" style="width:20px;" ></span>
+                        </div>
+                        <div class="divNombreSubmenu">
+                            <label>Fallas</label>
+                        </div>
+                    </div>
                 </a>
             </li>
             <li class="submenu submenu<?=$posMenu?>">
                 <a href='<?=base_url()?>plantilla'>
-                    <span class="fa fa-sticky-note" style="width:20px;" ></span>
-                    <label>Plantilla</label>
+                    <div class="divContenedorSubmenu">
+                        <div class="divSpanSubmenu">
+                            <span class="fa fa-sticky-note" style="width:20px;" ></span>
+                        </div>
+                        <div class="divNombreSubmenu">
+                            <label>Plantilla</label>
+                        </div>
+                    </div>
                 </a>
             </li>
             <li class="submenu submenu<?=$posMenu?>">
                 <a href='<?=base_url()?>preventivo'>
-                    <span class="fa fa-bullseye" style="width:20px;" ></span>
-                    <label>Preventivo</label>
+                    <div class="divContenedorSubmenu">
+                        <div class="divSpanSubmenu">
+                            <span class="fa fa-bullseye" style="width:20px;" ></span>
+                        </div>
+                        <div class="divNombreSubmenu">
+                            <label>Preventivo</label>
+                        </div>
+                    </div>
                 </a>
             </li>
             <?php
@@ -102,44 +139,86 @@
             </li>
             <li class="submenu submenu<?=$posMenu?>">
                 <a href='<?=base_url()?>ajustes'>
-                    <span class="fa fa-wrench" style="width:20px;" ></span>
-                    <label>Ajustes</label>
+                    <div class="divContenedorSubmenu">
+                        <div class="divSpanSubmenu">
+                            <span class="fa fa-wrench" style="width:20px;" ></span>
+                        </div>
+                        <div class="divNombreSubmenu">
+                            <label>Ajustes</label>
+                        </div>
+                    </div>
                 </a>
             </li>
             <li class="submenu submenu<?=$posMenu?>">
                 <a href='<?=base_url()?>bienes'>
-                    <span class="fa fa-cube" style="width:20px;" ></span>
-                    <label>Bienes</label>
+                    <div class="divContenedorSubmenu">
+                        <div class="divSpanSubmenu">
+                            <span class="fa fa-cube" style="width:20px;" ></span>
+                        </div>
+                        <div class="divNombreSubmenu">
+                            <label>Bienes</label>
+                        </div>
+                    </div>
                 </a>
             </li>
             <li class="submenu submenu<?=$posMenu?>">
                 <a href='<?=base_url()?>cambiosestatus'>
-                    <span class="fa fa-certificate" style="width:20px;" ></span>
-                    <label>Cambio de Estatus</label>
+                    <div class="divContenedorSubmenu">
+                        <div class="divSpanSubmenu">
+                            <span class="fa fa-certificate" style="width:20px;" ></span>
+                        </div>
+                        <div class="divNombreSubmenu">
+                            <label>Cambio de Estatus</label>
+                        </div>
+                    </div>
                 </a>
             </li>
             <li class="submenu submenu<?=$posMenu?>">
                 <a href='<?=base_url()?>compatibilidad'>
-                    <span class="fa fa-object-group" style="width:20px;" ></span>
-                    <label>Compatibilidad</label>
+                    <div class="divContenedorSubmenu">
+                        <div class="divSpanSubmenu">
+                            <span class="fa fa-object-group" style="width:20px;" ></span>
+                        </div>
+                        <div class="divNombreSubmenu">
+                            <label>Compatibilidad</label>
+                        </div>
+                    </div>
                 </a>
             </li>
             <li class="submenu submenu<?=$posMenu?>">
                 <a href='<?=base_url()?>herramientas'>
-                    <span class="fa fa-compass " style="width:20px;" ></span>
-                    <label>Herramientas</label>
+                    <div class="divContenedorSubmenu">
+                        <div class="divSpanSubmenu">
+                            <span class="fa fa-compass " style="width:20px;" ></span>
+                        </div>
+                        <div class="divNombreSubmenu">
+                            <label>Herramientas</label>
+                        </div>
+                    </div>
                 </a>
             </li>
             <li class="submenu submenu<?=$posMenu?>">
                 <a href='<?=base_url()?>piezas'>
-                    <span class="fa fa-cubes " style="width:20px;" ></span>
-                    <label>Piezas</label>
+                    <div class="divContenedorSubmenu">
+                        <div class="divSpanSubmenu">
+                            <span class="fa fa-cubes " style="width:20px;" ></span>
+                        </div>
+                        <div class="divNombreSubmenu">
+                            <label>Piezas</label>
+                        </div>
+                    </div>
                 </a>
             </li>
             <li class="submenu submenu<?=$posMenu?>">
                 <a href='<?=base_url()?>tipopieza'>
-                    <span class="fa fa-bandcamp " style="width:20px;" ></span>
-                    <label>Tipo de Pieza</label>
+                    <div class="divContenedorSubmenu">
+                        <div class="divSpanSubmenu">
+                            <span class="fa fa-bandcamp " style="width:20px;" ></span>
+                        </div>
+                        <div class="divNombreSubmenu">
+                            <label>Tipo de Pieza</label>
+                        </div>
+                    </div>
                 </a>
             </li>
             <?php
@@ -208,14 +287,26 @@
             </li>
             <li class="submenu submenu<?=$posMenu?>">
                 <a href='<?=base_url()?>listasdesplegables'>
-                    <span class="fa fa-list " style="width:20px;" ></span>
-                    <label>Listas Desplegables</label>
+                    <div class="divContenedorSubmenu">
+                        <div class="divSpanSubmenu">
+                            <span class="fa fa-list " style="width:20px;" ></span>
+                        </div>
+                        <div class="divNombreSubmenu">
+                            <label>Listas Desplegables</label>
+                        </div>
+                    </div>
                 </a>
             </li>
             <li class="submenu submenu<?=$posMenu?>">
                 <a href='<?=base_url()?>usuarios'>
-                    <span class="fa fa-users " style="width:20px;" ></span>
-                    <label>Usuarios</label>
+                    <div class="divContenedorSubmenu">
+                        <div class="divSpanSubmenu">
+                            <span class="fa fa-users " style="width:20px;" ></span>
+                        </div>
+                        <div class="divNombreSubmenu">
+                            <label>Usuarios</label>
+                        </div>
+                    </div>
                 </a>
             </li>
             <?php

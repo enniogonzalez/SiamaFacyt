@@ -554,7 +554,7 @@ $(function(){
     
     window.BuscarPieza = function(tipo){
 
-
+        SetOrigenBuscador(origenFuncion);
         SetSearchThead(thPiezas);
 
         parametros = {

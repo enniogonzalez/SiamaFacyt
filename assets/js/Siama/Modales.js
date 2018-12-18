@@ -131,6 +131,10 @@ $(function(){
     /*              Manejo Modal Busqueda                       */
     /************************************************************/
     
+    $('.botoneraFormulario').on('click','#BuscarRegistro',function(){
+        BusquedaActiva = "";
+    })
+
     $('#CancelarModalBuscar').on('click',function(){
         BusquedaActiva = "";
         OrdenamientoActivo = 0;

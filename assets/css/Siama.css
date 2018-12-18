@@ -32,6 +32,13 @@
 .botoneraDeshabilitada{
     pointer-events: none;
 }
+.formulario-desactivado .buscador[readonly]{
+    background-color: #e9ecef ;
+}
+
+.buscador[readonly]{
+    background-color: #fff ; 
+}
 /****************************************************/
 /*              Pagina de Informacion               */
 /****************************************************/

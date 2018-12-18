@@ -214,6 +214,7 @@
                                 nombre,
                                 fec_ini,
                                 fec_fin,
+                                bie_id,
                                 Documento,
                                 Estatus,
                                 Registros
@@ -221,6 +222,78 @@
                             SELECT  MAN.MAN_ID,
                                     MAN.Documento,
                                     MAN.Estatus,
+                                    B.bie_id,
+                                    to_char(MAN.Fec_Ini,'DD/MM/YYYY') Fec_Ini,
+                                    to_char(MAN.Fec_Fin,'DD/MM/YYYY') Fec_Fin,
+                                    B.nombre,
+                                    COUNT(*) OVER() AS Registros,
+                                    ROW_NUMBER() OVER(ORDER BY " . $orden .") Fila
+                            FROM Mantenimiento MAN
+                                JOIN Bienes B ON B.Bie_Id = MAN.Bie_Id
+                            " . $condicion . "
+
+                        ) LD
+                        WHERE Fila BETWEEN ". $inicio . " AND " . $fin . "
+                        ORDER BY Fila ASC;";
+
+            //Ejecutar Query
+            $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
+            
+            //Si existe registro, se guarda. Sino se guarda false
+            if ($result){
+                $retorno = [];
+                while($line = pg_fetch_array($result, null, PGSQL_ASSOC))
+                    array_push($retorno,$line);
+
+            } else
+                $retorno = false;
+
+            //Liberar memoria
+            pg_free_result($result);
+
+            //liberar conexion
+            $this->bd_model->CerrarConexion($conexion);
+
+            return $retorno;
+        }
+
+        public function BusquedaRealizado($busqueda,$orden,$inicio,$fin,$fec_ini,$fec_fin){
+            
+            //Abrir conexion
+            $conexion = $this->bd_model->ObtenerConexion();
+            $condicion ="";
+
+            if( $fec_ini != "" && $fec_fin != ""){
+                $condicion = " AND ((MAN.fec_ini BETWEEN '" . $fec_ini ."' AND '" . $fec_fin ."')
+                            OR (MAN.fec_fin BETWEEN '" . $fec_ini ."' AND '" . $fec_fin ."'))";
+            }
+
+            if($busqueda != ""){
+                $condicion = ($condicion == "" ? "": $condicion . " AND ")
+                            . " (LOWER(B.nombre) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
+                            . "%' OR LOWER(MAN.documento) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
+                            . "%' OR LOWER(MAN.estatus) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
+                            . "%') ";
+            }
+
+            if($condicion != ""){
+                $condicion =  " WHERE MAN.estatus = 'Realizado' " . $condicion;
+            }
+            
+            //Query para buscar usuario
+            $query ="   SELECT  MAN_ID,
+                                nombre,
+                                fec_ini,
+                                fec_fin,
+                                bie_id,
+                                Documento,
+                                Estatus,
+                                Registros
+                        FROM (
+                            SELECT  MAN.MAN_ID,
+                                    MAN.Documento,
+                                    MAN.Estatus,
+                                    B.bie_id,
                                     to_char(MAN.Fec_Ini,'DD/MM/YYYY') Fec_Ini,
                                     to_char(MAN.Fec_Fin,'DD/MM/YYYY') Fec_Fin,
                                     B.nombre,

@@ -755,6 +755,7 @@ $(function(){
 
 
         SetSearchThead(thPiezas);
+        SetOrigenBuscador(origenFuncion);
         parametros = {
             "Lista": $('#listaBusquedaPieza').html().trim(),
             "Tipo": tipo,
@@ -788,6 +789,7 @@ $(function(){
     window.BuscarProveedor = function(tipo){
 
         SetSearchThead(thProveedores);
+        SetOrigenBuscador(origenFuncion);
 
         parametros = {
             "Lista": $('#listaBusquedaProveedor').html().trim(),
@@ -811,6 +813,7 @@ $(function(){
 
     window.BuscarUsuario = function(tipo){
 
+        SetOrigenBuscador(origenFuncion);
         SetSearchThead(thUsuarios);
         parametros = {
             "Lista": $('#listaBusquedaUsuario').html().trim(),

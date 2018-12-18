@@ -47,7 +47,7 @@ CREATE TABLE Usuarios(
 
 CREATE TABLE TipoPieza(
 	TPI_ID			SERIAL			PRIMARY KEY,
-	Nombre			VARCHAR(255)	NOT NULL,
+	Nombre			VARCHAR(255)	NOT NULL UNIQUE,
 	Usu_Cre			INT				NOT NULL,--Usuario Creador
 	Fec_Cre			TIMESTAMP		NOT NULL DEFAULT(NOW()), --fecha Creacion
 	Usu_Mod			INT				NULL,--Usuario Creador
@@ -75,7 +75,7 @@ CREATE TABLE Listas_Desplegables(
 
 CREATE TABLE Localizaciones(
 	LOC_ID			SERIAL				PRIMARY KEY,
-	Nombre			VARCHAR(100)		NOT NULL,
+	Nombre			VARCHAR(100)		NOT NULL UNIQUE,
 	Ubicacion		TEXT				NOT NULL,
 	Tipo			VARCHAR(100)		NOT NULL,
 	Secuencia		TEXT				NOT NULL DEFAULT '',
@@ -425,6 +425,42 @@ CREATE TABLE MantenimientoTarea(
 	FOREIGN KEY (PRO_ID) References Proveedores
 );
 
+--Mantenimiento Correctivo Planificado
+CREATE TABLE CorrectivoPlanificado(
+	CPL_ID			SERIAL			PRIMARY KEY,
+	Documento		VARCHAR(10)		NOT NULL UNIQUE,
+	Origen			VARCHAR(100)	NOT NULL,
+	MAN_ID			INT 			NULL,
+	MCO_ID			INT 			NULL,
+	FEC_EJE			DATE			NOT NULL,
+	Usu_Cre			INT				NOT NULL, --Usuario Creador
+	Fec_Cre			TIMESTAMP		NOT NULL DEFAULT(NOW()), --fecha Creacion
+	Usu_Mod			INT				NOT NULL, --Usuario Modificador
+	Fec_Mod			TIMESTAMP		NOT NULL DEFAULT(NOW()), --fecha Modificacion
+	Usu_Apr			INT				NULL, --Usuario Aprobador
+	Fec_Apr			TIMESTAMP		NULL, --fecha aprobacion
+	Observaciones	TEXT,
+	CONSTRAINT CHK_ORIGEN_CPL CHECK ((MAN_ID is null and MCO_ID is not null) OR 
+									(MAN_ID is not null and MCO_ID is null) ),
+	FOREIGN KEY (MAN_ID) References Mantenimiento,
+	FOREIGN KEY (MCO_ID) References MantenimientoCorrectivo,
+	FOREIGN KEY (Usu_Cre) References Usuarios,
+	FOREIGN KEY (Usu_Apr) References Usuarios,
+	FOREIGN KEY (Usu_Mod) References Usuarios
+);
+
+CREATE TABLE CorrectivoPlanificadoPieza(
+	CPP_ID	SERIAL	PRIMARY KEY,
+	CPL_ID	INT 	NOT NULL,
+	PIE_ID	INT 	NOT NULL,
+	FAL_ID	INT		NOT NULL,
+	UNIQUE(CPL_ID,PIE_ID),
+	FOREIGN KEY (CPL_ID) References CorrectivoPlanificado,
+	FOREIGN KEY (fal_id) References Fallas,
+	FOREIGN KEY (PIE_ID) References Piezas
+);
+
+-- ALTER TABLE CorrectivoPlanificado ADD FOREIGN KEY (MCO_ID)
 --Ajustes
 CREATE TABLE Ajustes(
 	AJU_ID			SERIAL			PRIMARY KEY,
@@ -454,6 +490,7 @@ CREATE TABLE AjustesAccion(
 	Usu_Mod			INT				NOT NULL, --Usuario Modificador
 	Fec_Mod			TIMESTAMP		NOT NULL DEFAULT(NOW()), --fecha Modificacion
 	Observaciones	TEXT,
+	UNIQUE(AJU_ID,PIE_ID),
 	CONSTRAINT CHK_AAC_TIPO CHECK (Tipo IN ('Agregar','Quitar')),
 	FOREIGN KEY (PIE_ID) References Piezas,
 	FOREIGN KEY (AJU_ID) References Ajustes ON DELETE CASCADE,
@@ -537,6 +574,7 @@ CREATE TABLE CambioEstatusPieza(
 	Usu_Mod			INT				NOT NULL, --Usuario Modificador
 	Fec_Mod			TIMESTAMP		NOT NULL DEFAULT(NOW()), --fecha Modificacion
 	Observaciones	TEXT			NOT NULL,
+	UNIQUE(CAM_ID,PIE_ID),
 	FOREIGN KEY (PIE_ID) References Piezas,
 	FOREIGN KEY (CAM_ID) References CambiosEstatus ON DELETE CASCADE,
 	FOREIGN KEY (Usu_Cre) References Usuarios,
@@ -591,7 +629,7 @@ CREATE TABLE CompatibilidadAccion(
 	Usu_Mod			INT				NOT NULL, --Usuario Modificador
 	Fec_Mod			TIMESTAMP		NOT NULL DEFAULT(NOW()), --fecha Modificacion
 	Observaciones	TEXT,
-	CONSTRAINT UQ_CAC_COM_TPI UNIQUE (COM_ID,TPI_ID),
+	UNIQUE (COM_ID,TPI_ID),
 	CONSTRAINT CHK_CAC_TIPO CHECK (Tipo IN ('Agregar','Quitar')),
 	FOREIGN KEY (TPI_ID) References TipoPieza,
 	FOREIGN KEY (COM_ID) References Compatibilidad ON DELETE CASCADE,

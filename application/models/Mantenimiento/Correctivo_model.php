@@ -585,6 +585,68 @@
             return $retorno;
         }
 
+        public function BusquedaRealizado($busqueda,$orden,$inicio,$fin){
+            
+            //Abrir conexion
+            $conexion = $this->bd_model->ObtenerConexion();
+            $condicion ="";
+
+
+            if($busqueda != ""){
+                $condicion = "AND (LOWER(B.nombre) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
+                            . "%' OR LOWER(MCO.documento) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
+                            . "%' OR LOWER(MCO.estatus) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
+                            . "%')";
+            }
+            
+            $condicion = "WHERE MCO.estatus = 'Realizado' " . $condicion;
+
+            //Query para buscar usuario
+            $query ="   SELECT  MCO_Id,
+                                nombre,
+                                Documento,
+                                Estatus,
+                                Fec_Ini,
+                                Fec_Fin,
+                                Registros
+                        FROM (
+                            SELECT  MCO.MCO_Id,
+                                    MCO.Documento,
+                                    MCO.Estatus,
+                                    to_char(MCO.Fec_Ini,'DD/MM/YYYY') Fec_Ini,
+                                    to_char(MCO.Fec_Fin,'DD/MM/YYYY') Fec_Fin,
+                                    B.nombre,
+                                    COUNT(*) OVER() AS Registros,
+                                    ROW_NUMBER() OVER(ORDER BY " . $orden .") Fila
+                            FROM MantenimientoCorrectivo MCO
+                                JOIN Bienes B ON B.Bie_Id = MCO.Bie_Id
+                            " . $condicion . "
+
+                        ) LD
+                        WHERE Fila BETWEEN ". $inicio . " AND " . $fin . "
+                        ORDER BY Fila ASC;";
+
+            //Ejecutar Query
+            $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
+            
+            //Si existe registro, se guarda. Sino se guarda false
+            if ($result){
+                $retorno = [];
+                while($line = pg_fetch_array($result, null, PGSQL_ASSOC))
+                    array_push($retorno,$line);
+
+            } else
+                $retorno = false;
+
+            //Liberar memoria
+            pg_free_result($result);
+
+            //liberar conexion
+            $this->bd_model->CerrarConexion($conexion);
+
+            return $retorno;
+        }
+
         public function ObtenerUsuarios($id){
             //Abrir conexion
             $conexion = $this->bd_model->ObtenerConexion();

@@ -95,3 +95,20 @@
   background: #bdb9b9;
   border-left: 3px solid #a9aaac;
 }
+
+.divContenedorSubmenu{
+  width:100%;
+  display:inline-block;
+}
+
+.divSpanSubmenu{
+  width:30px;
+  float:left;
+}
+
+.divNombreSubmenu{
+  width: -moz-calc(100% - (35px));
+  width: -webkit-calc(100% - (35px));
+  width: calc(100% - (35px));
+  float:right;
+}

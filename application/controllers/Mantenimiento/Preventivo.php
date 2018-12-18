@@ -26,6 +26,7 @@
                         ."<tr>"
                         .   "<td style='display:none;'>" . $elemento['man_id'] . "</td>"
                         .   "<td>" . $elemento['documento'] . "</td>"
+                        .   "<td style='display:none;'>" . $elemento['bie_id'] . "</td>"
                         .   "<td>" . $elemento['nombre'] . "</td>"
                         .   "<td>" . $elemento['estatus'] . "</td>"
                         .   "<td>" . $elemento['fec_ini'] . "</td>"
@@ -128,6 +129,28 @@
             $fin = $regXpag*$pagina;
 
             $respuesta = $this->FormatearBusqueda($this->preventivo_model->Busqueda($busqueda,$ordenamiento,$inicio,$fin,$fec_ini,$fec_fin));
+
+            echo json_encode(array("isValid"=>true,"Datos"=>$respuesta));
+
+        }
+
+        public function busquedaRealizado(){
+
+            if(!$this->session->userdata("nombre") || $this->input->post("Pagina") == ""){
+                redirect(site_url(''));
+            }
+            $this->ValidarPermiso();
+
+            $busqueda = $this->input->post("Busqueda") ;
+            $pagina = (int) $this->input->post("Pagina") ;
+            $regXpag = (int) $this->input->post("RegistrosPorPagina") ;
+            $ordenamiento = $this->input->post("Orden") ;
+            $fec_ini = $this->input->post("Fec_Ini");
+            $fec_fin = $this->input->post("Fec_Fin");
+            $inicio = 1+$regXpag*($pagina-1);
+            $fin = $regXpag*$pagina;
+
+            $respuesta = $this->FormatearBusqueda($this->preventivo_model->BusquedaRealizado($busqueda,$ordenamiento,$inicio,$fin,$fec_ini,$fec_fin));
 
             echo json_encode(array("isValid"=>true,"Datos"=>$respuesta));
 

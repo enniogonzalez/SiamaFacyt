@@ -20,8 +20,6 @@ $(function(){
     var idBiePreventivo = "";
     var Tareas = "";
 
-
-
     $('#CancelarModalBuscar').on('click',function(){
         switch(GetSearchType()){
             case Pieza:
@@ -41,13 +39,7 @@ $(function(){
                 $('#nomBiePreventivo').val(nombreBuscadorActual.trim());
             break;
         }
-        if(GetSearchType() != "Formulario" && GetSearchType() != Bienes && GetSearchType() != Plantilla){
-            
-            //Prevenir solapamientos de modales
-            setTimeout(function(){ 
-                $('#SiamaModalFunciones').modal('show');}, 400);
-        }
-    })
+    });
 
     $('#InicioPreventivo').on('change',function(){
         if($(this).val() != "" && 
@@ -66,7 +58,6 @@ $(function(){
         }
 
     });
-
 
     $('.botoneraFormulario').on('click','#AgregarRegistro',function(){
         BuscarPlantilla();
@@ -735,31 +726,6 @@ $(function(){
         if(GetSearchType() != "Formulario" && GetSearchType() != Plantilla){
             $('#SiamaModalBusqueda').modal('hide');
         }
-    }
-
-    window.BuscarPieza = function(tipo){
-
-
-        SetSearchThead(thPiezas);
-        parametros = {
-            "Lista": $('#listaBusquedaPieza').html().trim(),
-            "Tipo": tipo,
-        }
-
-        condiciones = {
-            "Bien"          : $('#idBiePreventivo').text().trim(),
-            "PiezasBien"    : false
-        }
-
-        switch(tipo){
-            case Pieza:
-                idBuscadorActual = $('#idPiezaTarea').text().trim();
-                nombreBuscadorActual = $('#nomPiezaTarea').val().trim();
-                condiciones['PiezasBien'] = true;
-            break;
-        }
-
-        SetSearchModal(parametros,true,condiciones);
     }
 
     window.BuscarProveedor = function(tipo){

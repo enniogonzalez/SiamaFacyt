@@ -607,6 +607,7 @@ $(function(){
     
     window.BuscarPieza = function(tipo){
 
+        SetOrigenBuscador(origenFuncion);
         SetSearchThead(thPiezas);
         parametros = {
             "Lista": $('#listaBusquedaPieza').html().trim(),

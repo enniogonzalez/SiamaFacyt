@@ -92,10 +92,19 @@ $route['correctivo/aprobar'] = 'Mantenimiento/correctivo/aprobar';
 $route['correctivo/reversar'] = 'Mantenimiento/correctivo/reversar';
 $route['correctivo/obtener'] = 'Mantenimiento/correctivo/obtener';
 $route['correctivo/busqueda'] = 'Mantenimiento/correctivo/busqueda';
+$route['correctivo/busquedaRealizado'] = 'Mantenimiento/correctivo/busquedaRealizado';
 $route['correctivo/eliminar'] = 'Mantenimiento/correctivo/eliminar';
 $route['correctivo/guardar'] = 'Mantenimiento/correctivo/guardar';
 $route['correctivo/imprimir/(:any)'] = 'Mantenimiento/correctivo/imprimir/$1';
 $route['correctivo'] = 'Mantenimiento/correctivo/view/';
+
+$route['correctivoplanificado/aprobar'] = 'Mantenimiento/correctivoplanificado/aprobar';
+$route['correctivoplanificado/obtener'] = 'Mantenimiento/correctivoplanificado/obtener';
+$route['correctivoplanificado/busqueda'] = 'Mantenimiento/correctivoplanificado/busqueda';
+$route['correctivoplanificado/eliminar'] = 'Mantenimiento/correctivoplanificado/eliminar';
+$route['correctivoplanificado/guardar'] = 'Mantenimiento/correctivoplanificado/guardar';
+$route['correctivoplanificado/imprimir/(:any)'] = 'Mantenimiento/correctivoplanificado/imprimir/$1';
+$route['correctivoplanificado'] = 'Mantenimiento/correctivoplanificado/view/';
 
 $route['fallas/busqueda'] = 'Mantenimiento/fallas/busqueda';
 $route['fallas/eliminar'] = 'Mantenimiento/fallas/eliminar';
@@ -180,6 +189,7 @@ $route['preventivo/aprobar'] = 'Mantenimiento/preventivo/aprobar';
 $route['preventivo/reversar'] = 'Mantenimiento/preventivo/reversar';
 $route['preventivo/obtener'] = 'Mantenimiento/preventivo/obtener';
 $route['preventivo/busqueda'] = 'Mantenimiento/preventivo/busqueda';
+$route['preventivo/busquedaRealizado'] = 'Mantenimiento/preventivo/busquedaRealizado';
 $route['preventivo/eliminar'] = 'Mantenimiento/preventivo/eliminar';
 $route['preventivo/guardar'] = 'Mantenimiento/preventivo/guardar';
 $route['preventivo/imprimir/(:any)'] = 'Mantenimiento/preventivo/imprimir/$1';
