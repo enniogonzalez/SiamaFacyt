@@ -429,7 +429,7 @@ CREATE TABLE MantenimientoTarea(
 CREATE TABLE CorrectivoPlanificado(
 	CPL_ID			SERIAL			PRIMARY KEY,
 	Documento		VARCHAR(10)		NOT NULL UNIQUE,
-	Origen			VARCHAR(100)	NOT NULL,
+	Estatus			VARCHAR(100)	NOT NULL,--Solicitado, Aprobado
 	MAN_ID			INT 			NULL,
 	MCO_ID			INT 			NULL,
 	FEC_EJE			DATE			NOT NULL,
@@ -450,14 +450,21 @@ CREATE TABLE CorrectivoPlanificado(
 );
 
 CREATE TABLE CorrectivoPlanificadoPieza(
-	CPP_ID	SERIAL	PRIMARY KEY,
-	CPL_ID	INT 	NOT NULL,
-	PIE_ID	INT 	NOT NULL,
-	FAL_ID	INT		NOT NULL,
+	CPP_ID			SERIAL		PRIMARY KEY,
+	CPL_ID			INT 		NOT NULL,
+	PIE_ID			INT 		NOT NULL,
+	FAL_ID			INT			NOT NULL,
+	Usu_Cre			INT			NOT NULL, --Usuario Creador
+	Fec_Cre			TIMESTAMP	NOT NULL DEFAULT(NOW()), --fecha Creacion
+	Usu_Mod			INT			NOT NULL, --Usuario Modificador
+	Fec_Mod			TIMESTAMP	NOT NULL DEFAULT(NOW()), --fecha Modificacion
+	Observaciones	TEXT 		NOT NULL,
 	UNIQUE(CPL_ID,PIE_ID),
-	FOREIGN KEY (CPL_ID) References CorrectivoPlanificado,
+	FOREIGN KEY (CPL_ID) References CorrectivoPlanificado ON DELETE CASCADE,
 	FOREIGN KEY (fal_id) References Fallas,
-	FOREIGN KEY (PIE_ID) References Piezas
+	FOREIGN KEY (PIE_ID) References Piezas,
+	FOREIGN KEY (Usu_Cre) References Usuarios,
+	FOREIGN KEY (Usu_Mod) References Usuarios
 );
 
 -- ALTER TABLE CorrectivoPlanificado ADD FOREIGN KEY (MCO_ID)

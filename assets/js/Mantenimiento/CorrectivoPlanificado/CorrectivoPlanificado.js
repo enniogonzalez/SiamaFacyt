@@ -7,8 +7,7 @@ var PrimeraVezBusqueda = true;
 var Guardando = false;
 
 $(function(){
-    
-    const Cambios = "Cambios";
+    const CorrectivoPlanificado = "Correctivo Planificado";
     const Correctivo = "Correctivo";
     const Preventivo = "Preventivo";
 
@@ -17,7 +16,7 @@ $(function(){
     var idBuscadorActual = "";
     var nombreBuscadorActual = "";
     var idCorrectivo = "";
-    var PiezasCambiosE = "";
+    var PiezasDanadas = "";
 
     EstablecerBuscador();
 
@@ -25,9 +24,9 @@ $(function(){
 
     $('#CancelarModalBuscar').on('click',function(){
         switch(GetSearchType()){
-            case PiezaCE:
+            case PiezaDA:
                 $('#idPieza').text(idBuscadorActual.trim());
-                $('#nomPiezaCE').val(nombreBuscadorActual.trim());
+                $('#nomPiezaDA').val(nombreBuscadorActual.trim());
             break;
             case Correctivo:
                 $('#idCorrectivo').text(idBuscadorActual.trim());
@@ -52,14 +51,14 @@ $(function(){
     
     $('#ManCorrectivo').on('click',function(){
 
-        if(ExistePiezaCE())
+        if(ExistePiezaDA())
             AdvertenciaCambiarBien("cambiar");
         else
             BuscarCorrectivo();
     });
 
     $('.BuscarCorrectivo').on('click',function(){
-        if(ExistePiezaCE())
+        if(ExistePiezaDA())
             AdvertenciaCambiarBien("cambiar");
         else
             BuscarCorrectivo();
@@ -67,7 +66,7 @@ $(function(){
 
     $('.BorrarCorrectivo').on('click',function(){
         
-        if(ExistePiezaCE())
+        if(ExistePiezaDA())
             AdvertenciaCambiarBien("eliminar");
         else{
             BorrarMantenimientos()
@@ -80,14 +79,14 @@ $(function(){
     
     $('#ManPreventivo').on('click',function(){
 
-        if(ExistePiezaCE())
+        if(ExistePiezaDA())
             AdvertenciaCambiarBien("cambiar");
         else
             BuscarPreventivo();
     });
 
     $('.BuscarPreventivo').on('click',function(){
-        if(ExistePiezaCE())
+        if(ExistePiezaDA())
             AdvertenciaCambiarBien("cambiar");
         else
             BuscarPreventivo();
@@ -95,7 +94,7 @@ $(function(){
 
     $('.BorrarPreventivo').on('click',function(){
         
-        if(ExistePiezaCE())
+        if(ExistePiezaDA())
             AdvertenciaCambiarBien("eliminar");
         else{
             BorrarMantenimientos()
@@ -110,7 +109,7 @@ $(function(){
         GuardarEstadoActualFormulario();
         ClearForm();
         HabilitarFormulario();
-        
+        EsconderMantenimientos();
         $('#EstatusPlanificado').val("Solicitado");
         $('#nomBien').attr("disabled", "disabled");
         $('#nomBien').attr("readonly", "readonly");
@@ -134,11 +133,11 @@ $(function(){
 
     $('.botoneraFormulario').on('click','#BuscarRegistro',function(){
         SetSearchType('Formulario');
-        SetSearchTitle('Busqueda Cambios');
+        SetSearchTitle('Busqueda Mantenimiento Correctivo Planificado');
         PrimeraVezBusqueda = true;
         DeshabilitarBotonera();
         SetUrlBusqueda($('#ControladorActual').text().trim()+"/busqueda");
-        Busqueda(1);
+        Busqueda(1,true);
         
         setTimeout(function(){
             HabilitarBotonera();
@@ -151,11 +150,11 @@ $(function(){
         EstablecerBuscador();
         DeshabilitarFormulario();
 
-        AgregarBotoneraCambios($('#EstatusPlanificado').val().trim());
+        AgregarBotoneraPlanificado($('#EstatusPlanificado').val().trim());
 
         parametros = {
             "Lista": $('#listaBusquedaFormulario').html().trim(),
-            "Tipo": Cambios
+            "Tipo": CorrectivoPlanificado
         }
 
         SetSearchModal(parametros,false)
@@ -187,7 +186,7 @@ $(function(){
 
         var parametros = {
             "Titulo":"Advertencia",
-            "Cuerpo": "<h4>¿Est&aacute; usted seguro de querer eliminar el Cambio de Estatus?</h4>",
+            "Cuerpo": "<h4>¿Est&aacute; usted seguro de querer eliminar el Mantenimiento Correctivo Planificado?</h4>",
             "Botones":Botones
         }
 
@@ -197,7 +196,7 @@ $(function(){
     $('.botoneraFormulario').on('click','#GuardarRegistro',function(){
         var Valido = true;
         var Agregados = [];
-        var PiezaCEs = [];
+        var PiezaDAs = [];
 
         $('.formulario-siama form .form-control').removeClass('is-invalid');
         $('.formulario-siama form .form-control').each(function(){
@@ -223,60 +222,86 @@ $(function(){
         }
 
 
+        if(Valido && !ExistePiezaDA()){
+            Valido = false;
+            SetAlertaFormulario("No se puede guardar Mantenimiento Correctivo Planificado, debido a que debe existir al menos una pieza dañada.");
+        }
+
         if(Valido){
             var data = {
                 "Lista": $('#listaBusquedaFormulario').html().trim(),
-                "Tipo": Cambios
+                "Tipo": CorrectivoPlanificado
             }
     
             SetSearchModal(data,false)
             SetModalEtqContador("")
             SetSearchType("Formulario");
-            PiezaCEs = ObtenerJsonPiezasCE();
+            PiezaDAs = ObtenerJsonPiezasDA();
             var parametros = {
                 "id"            : $('#IdForm').text().trim(),
-                "Bie_estatus"   : $('#estatusBien').val().trim(),
-                "Documento"     : $('#DocumentoCambios').val().trim(),
-                "Bien"          : $('#idCorrectivo').text().trim(),
-                "PiezaCEs"      : PiezaCEs,
-                "Observacion"   : $('#ObservacionCambios').val().trim(),
+                "Documento"     : $('#DocumentoPlanificado').val().trim(),
+                "Correctivo"    : $('#idCorrectivo').text().trim(),
+                "Preventivo"    : $('#idPreventivo').text().trim(),
+                "fec_eje"       : $('#FechaEjecucion').val().trim(),
+                "PiezaDAs"      : PiezaDAs,
+                "Observacion"   : $('#ObservacionCP').val().trim(),
                 "Url"           : $('#FormularioActual').attr("action")
             }
 
+            console.log(parametros);
             if(!Guardando){
                 EstablecerBuscador();
                 Guardando = true;
-                //GuardarFormulario(parametros);
+                GuardarFormulario(parametros);
             }
         }
         
     });
 
     $('#OrigenPlanificado').on('change',function(){
-        $('#divCorrectivo').hide();
-        $('#divPreventivo').hide();
-        $('#divBien').hide();
+        EsconderMantenimientos();
         
-        BorrarMantenimientos()
-        valor = $('#OrigenPlanificado').val().trim();
-
-        if( valor!= ""){
-            $('#divBien').show();
-            
-            if(valor == "Mantenimiento Correctivo")
-                $('#divCorrectivo').show();
-            else
-                $('#divPreventivo').show();
-        }
+        BorrarMantenimientos();
+        mostrarMantenimientos();
     });
 
     $('#SiamaModalAdvertencias').on('click','#ConfirmarEliminacion',function(){
         var parametros = {
             "id": $('#IdForm').text().trim(),
-            "Url": $('#ControladorActual').text().trim()+"/eliminar"
+            "Caso":"Eliminar",
+            "Url": $('#ControladorActual').text().trim()+"/obtener"
         }
-        Eliminar(parametros)
+        Obtener(parametros);
     });
+
+    function AccionEliminar(){
+
+        if($('#EstatusPlanificado').val().trim() == "Aprobado"){
+            
+            Botones = `
+            <button data-dismiss="modal" title="Cerrar" type="button" style="margin:5px;" class="btn  btn-danger">
+            <span class="fa fa-times "></span>
+            Cerrar
+            </button>`;
+
+            Cuerpo = `No se puede eliminar <strong>Mantenimiento Correctivo Planificado</strong> debido a que el estatus ha cambiado a 
+            <strong>Aprobado</strong>.`;
+
+            var parametros = {
+                "Titulo"    : "Advetencia",
+                "Cuerpo"    : Cuerpo,
+                "Botones"   : Botones
+            }
+
+            ModalAdvertencia(parametros,true);
+        }else{
+            var parametros = {
+                "id": $('#IdForm').text().trim(),
+                "Url": $('#ControladorActual').text().trim()+"/eliminar"
+            }
+            Eliminar(parametros)
+        }
+    }
 
     function AdvertenciaCambiarBien(opcion){
 
@@ -298,7 +323,7 @@ $(function(){
         ModalAdvertencia(parametros);
     }
 
-    function AgregarBotoneraCambios(Tipo){
+    function AgregarBotoneraPlanificado(Tipo){
         
         btnAgregar = `
             <button type="button"  class="btn btn-primary-siama" id="AgregarRegistro">
@@ -442,10 +467,10 @@ $(function(){
     function ClearForm(){
         
         $('#IdForm').text(''); 
-        $('#idCorrectivo').text('');
+        BorrarMantenimientos()
         $('#alertaFormularioActual').hide();
         $('#TablaAgregarPiezas > tbody').children().remove();
-        $('#TablaPiezasEstatus > tbody').children().remove();
+        $('#TablaPiezasDañadas > tbody').children().remove();
 
         $('.formulario-siama form .form-control').each(function(){
             $(this).removeClass('is-invalid');
@@ -468,7 +493,7 @@ $(function(){
             Cerrar
             </button>`;
 
-            Cuerpo = `No se puede editar <strong>Cambio de Estatus</strong> debido a que el estatus ha cambiado a 
+            Cuerpo = `No se puede editar <strong>Mantenimiento Correctivo Planificado</strong> debido a que el estatus ha cambiado a 
             <strong>aprobado</strong>.`;
 
             var parametros = {
@@ -485,27 +510,39 @@ $(function(){
             $('#EstatusPlanificado').attr("disabled", "disabled");
             $('#EstatusPlanificado').attr("readonly", "readonly");
             
+            $('#OrigenPlanificado').attr("disabled", "disabled");
+            $('#OrigenPlanificado').attr("readonly", "readonly");
+
+            $('#nomBien').attr("disabled", "disabled");
+            $('#nomBien').attr("readonly", "readonly");
+
             $(window).scrollTop(0);
         }
     }
 
+    function EsconderMantenimientos(){
+        $('#divCorrectivo').hide();
+        $('#divPreventivo').hide();
+        $('#divBien').hide();
+    }
+
     function EstablecerBuscador(){
-        SetSearchThead(thCambioEstatus);
+        SetSearchThead(thCorrectivoPlanificado);
     }
 
     function GetUrlBusquedaOpcion(opcion){
         switch(opcion){
-            case PiezaCE:
+            case PiezaDA:
                 controlador = "piezas/busqueda";
-            break;
-            case Cambios:
-                controlador = "Cambios/busqueda";
             break;
             case Correctivo:
                 controlador = "correctivo/busquedaRealizado";
             break;
             case Preventivo:
                 controlador = "preventivo/busquedaRealizado";
+            break;
+            case Falla:
+                controlador = "fallas/busqueda";
             break;
         }
 
@@ -516,8 +553,10 @@ $(function(){
         dataInputs = [];
         idActual =$('#IdForm').text().trim();
         idCorrectivo = $('#idCorrectivo').text().trim();
+        idPreventivo = $('#idPreventivo').text().trim();
+        idBien = $('#idBien').text().trim();
 
-        PiezasCambiosE = $('#TablaPiezasEstatus > tbody').html();
+        PiezasDanadas = $('#TablaPiezasDañadas > tbody').html();
         
         $('.formulario-siama form .form-control').each(function(){
             dataInputs.push($(this).val().trim());
@@ -526,35 +565,64 @@ $(function(){
     
     function LlenarFormulario(data){
 
-        $('#TablaPiezasEstatus > tbody').children().remove();
-        AgregarBotoneraCambios(data['Doc_Estatus']);
+        $('#TablaPiezasDañadas > tbody').children().remove();
+        AgregarBotoneraPlanificado(data['Estatus']);
 
         $('#IdForm').text(data['id']);
-        $('#DocumentoCambios').val(data['Documento']);
-        $('#EstatusPlanificado').val(data['Doc_Estatus']);
-        $('#estatusBien').val(data['Bie_Estatus']);
-        $('#idCorrectivo').text(data['idBien']);
-        $('#ManCorrectivo').val(data['nomBien']);
-        $('#ObservacionCambios').val(data['Observaciones']);
-        $('#TablaPiezasEstatus > tbody:last-child').append(data['PiezasCambiosE']);
+        $('#DocumentoPlanificado').val(data['Documento']);
+        $('#EstatusPlanificado').val(data['Estatus']);
+        $('#idCorrectivo').text(data['idCorrectivo']);
+        $('#ManCorrectivo').val(data['mco_doc']);
+        $('#idPreventivo').text(data['idPreventivo']);
+        $('#ManPreventivo').val(data['man_doc']);
+        $('#OrigenPlanificado').val(data['Origen']);
+        $('#FechaEjecucion').val(data['Ejecucion']);
+        $('#idBien').val(data['idBien']);
+        $('#nomBien').val(data['nomBien']);
+        $('#ObservacionCP').val(data['Observaciones']);
+        $('#TablaPiezasDañadas > tbody:last-child').append(data['Piezas']);
 
+        if(data['Documento'] == "")
+            EsconderMantenimientos();
+        else
+            mostrarMantenimientos();
     }
 
     function LlenarFormularioRequest(data){
       
         var parametros = {
-            "id"                : data['cam_id'],
+            "id"                : data['cpl_id'],
             "Documento"         : data['documento'],
-            "idBien"            : data['bie_id'],
+            "idBien"            : data['idBien'],
             "nomBien"           : data['bie_nom'],
             "Observaciones"     : data['observaciones'],
-            "Doc_Estatus"       : data['doc_estatus'],   
-            "Bie_Estatus"       : data['bie_estatus'],   
-            "PiezasCambiosE"    : data['PiezaCEs']
+            "Estatus"           : data['estatus'],
+            "Origen"            : data['origen'],
+            "Ejecucion"         : data['fec_eje'],
+            "idCorrectivo"      : data['mco_id'],
+            "idPreventivo"      : data['man_id'],
+            "man_doc"           : data['man_doc'],
+            "mco_doc"           : data['mco_doc'],
+            "Piezas"            : data['Piezas']
         }
 
+        console.log(parametros)
         LlenarFormulario(parametros);
         
+    }
+
+    function mostrarMantenimientos(){
+        
+        valor = $('#OrigenPlanificado').val().trim();
+
+        if( valor!= ""){
+            $('#divBien').show();
+            
+            if(valor == "Mantenimiento Correctivo")
+                $('#divCorrectivo').show();
+            else
+                $('#divPreventivo').show();
+        }
     }
 
     function Obtener(parametros){
@@ -575,6 +643,8 @@ $(function(){
 
                 if(data['Caso'] == "Editar"){
                     Editar();
+                }else if(data['Caso'] == "Eliminar"){
+                    AccionEliminar();
                 }
             }
         }).fail(function(data){
@@ -585,17 +655,21 @@ $(function(){
     function RestablecerEstadoAnteriorFormulario(){
     
         var parametros = {
-            "id"                : idActual.trim(),
-            "idBien"            : idCorrectivo.trim(),     
-            "Documento"         : dataInputs[0].trim(),  
-            "Doc_Estatus"       : dataInputs[1].trim(),
-            "nomBien"           : dataInputs[2].trim(),
-            "Bie_Estatus"       : dataInputs[3].trim(),
-            "Observaciones"     : dataInputs[4].trim(),
-            "PiezasCambiosE"    : PiezasCambiosE
+            "id"            : idActual.trim(),
+            "idBien"        : idBien.trim(),
+            "idCorrectivo"  : idCorrectivo.trim(),
+            "idPreventivo"  : idPreventivo.trim(),
+            "Documento"     : dataInputs[0].trim(),  
+            "Estatus"       : dataInputs[1].trim(),
+            "Origen"        : dataInputs[2].trim(),
+            "mco_doc"       : dataInputs[3].trim(),
+            "man_doc"       : dataInputs[4].trim(),
+            "nomBien"       : dataInputs[5].trim(),
+            "Ejecucion"     : dataInputs[6].trim(),
+            "Observaciones" : dataInputs[7].trim(),
+            "Piezas"        : PiezasDanadas
         }
 
-        console.log(parametros);
         LlenarFormulario(parametros);
     }
 
@@ -603,17 +677,20 @@ $(function(){
         SetSearchType(data['Tipo']);
         
         switch(data['Tipo']){
-            case PiezaCE:
+            case PiezaDA:
                 controlador = "Piezas del Bien";
-            break;
-            case Cambios:
-                controlador = "Cambios";
             break;
             case Correctivo:
                 controlador = "Mantenimientos Correctivos Realizados";
             break;
             case Preventivo:
                 controlador = "Mantenimientos Preventivos Realizados";
+            break;
+            case Falla:
+                controlador = "Fallas";
+            break;
+            case CorrectivoPlanificado:
+                controlador = "Mantenimientos Correctivos Planificados";
             break;
         }
 
@@ -635,12 +712,28 @@ $(function(){
 
     window.AccionEliminarFormulario = function(data){
         
-        if(data['Datos']['cam_id'] == ""){
+        if(data['Datos']['cpl_id'] == ""){
             ClearForm();
             AgregarBotoneraPrimariaNULL();
         }else{
             LlenarFormularioRequest(data['Datos']);
         }
+    }
+    
+    window.BuscarFalla = function(tipo){
+
+        SetOrigenBuscador(origenFuncion);
+        SetSearchThead(thFallas);
+
+        parametros = {
+            "Lista": $('#listaBusquedaFalla').html().trim(),
+            "Tipo": tipo,
+        }
+
+        idBuscadorActual = $('#idFalla').text().trim();
+        nombreBuscadorActual = $('#nomFalla').val().trim();
+
+        SetSearchModal(parametros,true,false);
     }
     
     window.BuscarPieza = function(tipo){
@@ -659,7 +752,7 @@ $(function(){
         }
 
         idBuscadorActual = $('#idPieza').text().trim();
-        nombreBuscadorActual = $('#nomPiezaCE').val().trim();
+        nombreBuscadorActual = $('#nomPiezaDA').val().trim();
 
         SetSearchModal(parametros,true,false,condiciones);
     }
@@ -675,10 +768,14 @@ $(function(){
                 }
                 Obtener(parametros);
             break;
-            case PiezaCE:
+            case PiezaDA:
                 $('#idPieza').text(fila.find("td:eq(0)").text().trim());
                 $('#InvPieza').text(fila.find("td:eq(1)").text().trim());
-                $('#nomPiezaCE').val(fila.find("td:eq(2)").text().trim());
+                $('#nomPiezaDA').val(fila.find("td:eq(2)").text().trim());
+            break;
+            case Falla:
+                $('#idFalla').text(fila.find("td:eq(0)").text().trim());
+                $('#nomFalla').val(fila.find("td:eq(1)").text().trim());
             break;
             case Correctivo:
                 $('#idCorrectivo').text(fila.find("td:eq(0)").text().trim());

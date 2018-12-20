@@ -308,6 +308,16 @@ Values(
     null,
     '[{"Valor":"COM.Documento","Opcion":"Documento","Descripcion":""},{"Valor":"B.nombre","Opcion":"Bien","Descripcion":""},{"Valor":"COM.Estatus","Opcion":"Estatus","Descripcion":""}]'
 );
+
+
+INSERT INTO Listas_Desplegables( Codigo,Nombre,Descripcion,Opciones) 
+Values(
+    'COB-CORPLA',
+    'Campos para Ordenar Busqueda Mantenimiento Correctivo Planificado',
+    null,
+    '[{"Valor":"cpl.documento","Opcion":"Documento","Descripcion":""},{"Valor":"cpl.estatus","Opcion":"Estatus","Descripcion":""},{"Valor":"B.nombre","Opcion":"Bien","Descripcion":""},{"Valor":"cpl.fec_eje","Opcion":"Fecha Ejecucion","Descripcion":""}]'
+);
+
 /*
 INSERT INTO Listas_Desplegables( Codigo,Nombre,Descripcion,Opciones) 
 Values(

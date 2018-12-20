@@ -16,19 +16,19 @@
             </button>
         </div>
         
-        <form class ="formulario-desactivado" id="FormularioActual" method="POST" action = "<?=site_url('/cambiosestatus/guardar')?>">
+        <form class ="formulario-desactivado" id="FormularioActual" method="POST" action = "<?=site_url('/correctivoplanificado/guardar')?>">
 
             <div style="margin: 10px 15px;display:none;" id="alertaFormularioActual" class="alert alert-danger text-center">
             </div>
             <div style="display:none;" id = "IdForm">
-                <?=$cam_id?>
+                <?=$cpl_id?>
             </div>
          
             <div class="form-group row">
-                <label for="DocumentoCambios" class="col-lg-3 col-form-label">Documento:</label>
+                <label for="DocumentoPlanificado" class="col-lg-3 col-form-label">Documento:</label>
                 <div class="col-lg-9">
                     <input readonly disabled type="text" maxlength="10"
-                        class="form-control texto" id="DocumentoCambios" value="<?=$documento?>">
+                        class="form-control texto" id="DocumentoPlanificado" value="<?=$documento?>">
                 </div>
             </div>
 
@@ -36,7 +36,7 @@
                 <label for="EstatusPlanificado" class="col-lg-3 col-form-label">Estatus:</label>
                 <div class="col-lg-9">
                     <input readonly disabled type="text" maxlength="100"
-                        class="form-control texto estatus" id="EstatusPlanificado" value="<?=$doc_estatus?>">
+                        class="form-control texto estatus" id="EstatusPlanificado" value="<?=$estatus?>">
                 </div>
             </div>
 
@@ -45,20 +45,20 @@
                 <div class="col-lg-9">
                     <select disabled readonly class="form-control obligatorio texto" id="OrigenPlanificado">
                         <option value=""></option>
-                        <option value="Mantenimiento Correctivo" <?=$bie_estatus == "Mantenimiento Correctivo" ? "selected": ""?>>Mantenimiento Correctivo</option>
-                        <option value="Mantenimiento Preventivo" <?=$bie_estatus == "Mantenimiento Preventivo" ? "selected": ""?>>Mantenimiento Preventivo</option>
+                        <option value="Mantenimiento Correctivo" <?=$origen == "Mantenimiento Correctivo" ? "selected": ""?>>Mantenimiento Correctivo</option>
+                        <option value="Mantenimiento Preventivo" <?=$origen == "Mantenimiento Preventivo" ? "selected": ""?>>Mantenimiento Preventivo</option>
                     </select>
                     <div class="invalid-feedback">Campo Obligatorio</div>
                 </div>
             </div>
 
-            <div class="form-group row" id="divCorrectivo" style="display:none;">
+            <div class="form-group row" id="divCorrectivo" <?=$origen == "Mantenimiento Correctivo" ? "": "style='display:none;'"?>>
                 <label for="ManCorrectivo" class="col-lg-3 col-form-label">Mantenimiento Correctivo:</label>
                 <div class="col-lg-9">
                     <div style="width:86%;float:left;">
-                        <div style="display:none;" id="idCorrectivo"><?=$bie_id?></div>
+                        <div style="display:none;" id="idCorrectivo"><?=$mco_doc?></div>
                         <input readonly disabled type="text"
-                            class="form-control texto buscador" id="ManCorrectivo" value="<?=$bie_nom?>">
+                            class="form-control texto buscador" id="ManCorrectivo" value="<?=$mco_doc?>">
                         <div class="invalid-feedback">Campo Obligatorio</div>
                     </div>
                     <div style="width:14%;float:right;padding:10px;">
@@ -69,13 +69,13 @@
             </div>
 
 
-            <div class="form-group row" id="divPreventivo" style="display:none;">
+            <div class="form-group row" id="divPreventivo" <?=$origen == "Mantenimiento Preventivo" ? "": "style='display:none;'"?>>
                 <label for="ManPreventivo" class="col-lg-3 col-form-label">Mantenimiento Preventivo:</label>
                 <div class="col-lg-9">
                     <div style="width:86%;float:left;">
-                        <div style="display:none;" id="idPreventivo"><?=$bie_id?></div>
+                        <div style="display:none;" id="idPreventivo"><?=$man_id?></div>
                         <input readonly disabled type="text"
-                            class="form-control texto buscador" id="ManPreventivo" value="<?=$bie_nom?>">
+                            class="form-control texto buscador" id="ManPreventivo" value="<?=$man_doc?>">
                         <div class="invalid-feedback">Campo Obligatorio</div>
                     </div>
                     <div style="width:14%;float:right;padding:10px;">
@@ -85,7 +85,7 @@
                 </div>
             </div>
 
-            <div class="form-group row" id="divBien" style="display:none;">
+            <div class="form-group row" id="divBien"  <?=$origen != "" ? "": "style='display:none;'"?>>
                 <label class="col-lg-3 col-form-label">Bien:</label>
                 <div class="col-lg-9">
                     <div style="display:none;" id="idBien"><?=$bie_id?></div>
@@ -95,33 +95,32 @@
             </div>
 
             <div class="form-group row">
-                <label for="InicioCorrectivo" class="col-lg-3 col-form-label">Inicio:</label>
+                <label for="FechaEjecucion" class="col-lg-3 col-form-label">Fecha Ejecuci&oacute;n:</label>
                 <div class="col-lg-9">
                     <input maxlength="100" readonly disabled type="date" 
-                    class="form-control obligatorio fecha" id="InicioCorrectivo" value="">
+                    class="form-control obligatorio fecha" id="FechaEjecucion" value="<?=$fec_eje?>">
                     <div class="invalid-feedback">Campo Obligatorio</div>
                 </div>
             </div>
 
             <div class="form-group row">
-                <label for="ObservacionCambios" class="col-lg-3 col-form-label">Observaci&oacute;n:</label>
+                <label for="ObservacionCP" class="col-lg-3 col-form-label">Observaci&oacute;n:</label>
                 <div class="col-lg-9">
                     <textarea  readonly disabled class="form-control texto" rows="3"
-                    style = "resize:vertical;" id="ObservacionCambios"><?=$observaciones?></textarea>
+                    style = "resize:vertical;" id="ObservacionCP"><?=$observaciones?></textarea>
                         <div class="invalid-feedback">Campo Obligatorio</div>
                 </div>
             </div>
 
             <h3>
-                Pieza
+                Piezas Dañadas
             </h3>
             <div class="table-responsive">
-                <table id="TablaPiezasEstatus" class="table table-hover tabla-siama tabla-siama-desactivada">
+                <table id="TablaPiezasDañadas" class="table table-hover tabla-siama tabla-siama-desactivada">
                     <thead class="head-table-siama" style="font-size:11px;">
                         <tr>
                             <th style="width:55%;">Pieza</th>
-                            <th style="width:25%;">Inventario UC</th>
-                            <th style="width:10%;">Estatus</th>
+                            <th style="width:35%;">Falla</th>
                             <th style="width:5%;">
                                 <span id ="agregarPieza" style="color:#28a745;cursor: pointer;" class="fa fa-plus-circle fa-lg"></span>
                             </th>
@@ -131,7 +130,7 @@
                         </tr>
                     </thead>
                     <tbody style="font-size:11px;">
-                        <?=$PiezaCEs?>
+                        <?=$Piezas?>
                     </tbody>
                 </table>
             </div>
@@ -149,8 +148,11 @@
             <select readonly disabled  id="listaBusquedaPreventivo">
                 <?=$listaBusquedaPreventivo?>
             </select> 
+            <select readonly disabled  id="listaBusquedaFalla">
+                <?=$listaBusquedaFalla?>
+            </select> 
         </div>
-        <div style="display:none;" id ="ControladorActual"><?=site_url('/cambiosestatus')?></div>
+        <div style="display:none;" id ="ControladorActual"><?=site_url('/correctivoplanificado')?></div>
         <div style="background-color: #95a5a6; padding: 10px;">
 
             <div class="form-group row botoneraFormulario" >
@@ -198,15 +200,15 @@
                         </button>
                     ";
 
-                    if($cam_id == "" ) {
+                    if($cpl_id == "" ) {
                         echo $btnAgregar;
-                    }elseif($doc_estatus == "Solicitado"){
+                    }elseif($estatus == "Solicitado"){
                         echo $btnBuscar;
                         echo $btnEditar;
                         echo $btnAgregar;
                         echo $btnAprobar;
                         echo $btnEliminar;
-                    }elseif($doc_estatus == "Aprobado"){
+                    }elseif($estatus == "Aprobado"){
                         echo $btnBuscar;
                         echo $btnAgregar;
                     }

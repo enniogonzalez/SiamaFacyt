@@ -43,6 +43,16 @@ const thCorrectivos = `
 </tr>
 `;
 
+const thCorrectivoPlanificado = `
+<tr>
+    <th style="width:13%;">Documento</th>
+    <th style="width:13%;">Estatus</th>
+    <th style="width:40%;">Origen</th>
+    <th style="width:41%;">Bien</th>
+    <th style="width:13%;">Fecha Ejecuci&oacute;n</th>
+</tr>
+`;
+
 const thFallas = `
     <tr>
         <th style="width:40%;">Nombre</th>

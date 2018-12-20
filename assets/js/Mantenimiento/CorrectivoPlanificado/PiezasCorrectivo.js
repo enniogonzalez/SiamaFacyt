@@ -1,28 +1,45 @@
 
-const PiezaCE = "PiezaCE";
+const PiezaDA = "PiezaDA";
+const Falla = "Falla";
 
 $(function(){
-
 
     /************************************/
     /*      Inicio Buscadores           */
     /************************************/
 
     /************************************/
-    /*      Manejo Pieza                */
+    /*          Manejo Pieza            */
     /************************************/
     
-    $('#SiamaModalFunciones').on('click','#nomPiezaCE',function(){
-        BuscarPieza(PiezaCE);
+    $('#SiamaModalFunciones').on('click','#nomPiezaDA',function(){
+        BuscarPieza(PiezaDA);
     });
 
-    $('#SiamaModalFunciones').on('click','.BuscarPiezaCE',function(){
-        BuscarPieza(PiezaCE);
+    $('#SiamaModalFunciones').on('click','.BuscarPiezaDA',function(){
+        BuscarPieza(PiezaDA);
     });
 
-    $('#SiamaModalFunciones').on('click','.BorrarPiezaCE',function(){
+    $('#SiamaModalFunciones').on('click','.BorrarPiezaDA',function(){
         $('#idPieza').text('');
-        $('#nomPiezaCE').val('');
+        $('#nomPiezaDA').val('');
+    });
+
+    /************************************/
+    /*          Manejo Falla            */
+    /************************************/
+    
+    $('#SiamaModalFunciones').on('click','#nomFalla',function(){
+        BuscarFalla(Falla);
+    });
+
+    $('#SiamaModalFunciones').on('click','.BuscarFalla',function(){
+        BuscarFalla(Falla);
+    });
+
+    $('#SiamaModalFunciones').on('click','.BorrarFalla',function(){
+        $('#idFalla').text('');
+        $('#nomFalla').val('');
     });
 
     /************************************/
@@ -66,59 +83,17 @@ $(function(){
     });
 
     $('#eliminarPieza').on('click',function(){
-        $('#TablaPiezasEstatus .tr-activa-siama').remove();
+        $('#TablaPiezasDañadas .tr-activa-siama').remove();
     });
 
-    $('#TablaPiezasEstatus').on('click','.editarPiezaCE',function(){
-
-        //Se remueve la clase activa de la fila que esta activa
-        $('.tr-activa-siama').removeClass('tr-activa-siama');
-
-        var fila = $(this).parent('tr');
-
-        //Se agrega la clase activa a la fila actual, esto para evitar
-        //que se le quite la clase activa a una fila que esta activa
-        //y se quiera editar (o sea, no se quiere quitar la seleccion)
-        fila.addClass('tr-activa-siama');
-
-        //Se crea los botones que va a tener la ventana modal de edicion
-        Botones = `
-        <button type="submit" id ="GuardarEdicionPiezaCE" title="Guardar Pieza" type="button" style="margin:5px;" class="btn  btn-success">
-          <span class="fa fa-floppy-o"></span>
-          Guardar
-        </button>
-        <button data-dismiss="modal" id="CancelarEdicionPiezaCE" title="Cancelar Edici&oacute;n" type="button" style="margin:5px;" class="btn  btn-danger">
-          <span class="fa fa-ban "></span>
-          Cancelar
-        </button>`;
-
-        var data = {
-            "Titulo"            : "Pieza",
-            "EstatusDoc"        : $('#EstatusPlanificado').val(),
-            "Fila"              : $(this).parent('tr').index(),
-            "Botones"           : Botones,
-            "idPieza"           : fila.find('td:eq(1)').text().trim(),
-            "nomPiezaCE"    : fila.find('td:eq(2)').text().trim(),
-            "InvPieza"          : fila.find('td:eq(3)').text().trim(),
-            "ObservacionPieza"  : fila.find('td:eq(4)').text().trim(),
-            "estatusPieza"      : fila.find('td:eq(5)').text().trim(),
-        }
-        SetModalFuncionesPiezaCE(data);
-        
-    });
-
-    $('#TablaPiezasEstatus tbody').on('click','tr',function(){
-        ActivarCeldaTabla(this)
-    });
-
-    $('#SiamaModalFunciones').on('click','#CancelarEdicionPiezaCE',function(){
+    $('#SiamaModalFunciones').on('click','#CancelarEdicionPiezaDA',function(){
         ClearModalFunction();
     });
 
-    $('#SiamaModalFunciones').on('click','#GuardarEdicionPiezaCE',function(){
+    $('#SiamaModalFunciones').on('click','#GuardarEdicionPiezaDA',function(){
         var Valido = true;
 
-        $('#formEditarPiezaCE .PiezaCE').each(function(){
+        $('#formEditarPiezaDA .PiezaDA').each(function(){
             $(this).removeClass('is-invalid');
 
             if($(this).hasClass('obligatorio') && $(this).val().trim() == ""){
@@ -136,11 +111,11 @@ $(function(){
             
             ValorActual =$('#idPieza').text().trim();
             fila = $('#mhOptionR').text().trim();
-            $("#TablaPiezasEstatus").find('> tbody > tr').each(function () {
+            $("#TablaPiezasDañadas").find('> tbody > tr').each(function () {
 
                 if(fila != $(this).index() && ValorActual == $(this).find('td:eq(1)').text().trim()){
                     Valido = false;
-                    $('#nomPiezaCE').focus(); 
+                    $('#nomPiezaDA').focus(); 
                     $('#alertaModal').text('No se puede seleccionar la misma pieza dos veces');
                     $('.contenedorAlertaModal').show();
                     return false;
@@ -151,120 +126,105 @@ $(function(){
         if(Valido){
 
             var row = parseInt($('#mhOptionR').text());
-            var fila = $('#TablaPiezasEstatus tbody tr').eq(row);
-            fila.find('td:eq(1)').text($('#idPieza').text().trim());
-            fila.find('td:eq(2)').text($('#nomPiezaCE').val().trim());
-            fila.find('td:eq(3)').text($('#InvPieza').text().trim());
+            var fila = $('#TablaPiezasDañadas tbody tr').eq(row);
+            fila.find('td:eq(0)').text($('#idPieza').text().trim());
+            fila.find('td:eq(1)').text($('#nomPiezaDA').val().trim());
+            fila.find('td:eq(2)').text($('#idFalla').text().trim());
+            fila.find('td:eq(3)').text($('#nomFalla').val().trim());
             fila.find('td:eq(4)').text($('#ObservacionPieza').val().trim());
-            fila.find('td:eq(5)').text($('#estatusPieza').val().trim());
     
             CerrarFunciones();
         }
     });
 
-    window.ObtenerJsonPiezasCE = function(){
-        var PiezaCEs = [];
-        $("#TablaPiezasEstatus").find('> tbody > tr').each(function () {
-            if( $(this).find('td:eq(1)').text().trim() != ''){
-                PiezaCEs.push({ 
-                    "Id"            : $(this).find('td:eq(0)').text(),
-                    "IdPieza"       : $(this).find('td:eq(1)').text(),
-                    "Observacion"   : $(this).find('td:eq(4)').text(),
-                    "Estatus"       : $(this).find('td:eq(5)').text(),
-                });
-            }
-        });
+    $('#TablaPiezasDañadas tbody').on('click','tr',function(){
+        ActivarCeldaTabla(this)
+    });
 
-        return PiezaCEs;
-    }
+    $('#TablaPiezasDañadas').on('click','.editarPiezaDA',function(){
 
-    window.ExistePiezaCE = function(){
-        var Existe = false;
+        //Se remueve la clase activa de la fila que esta activa
+        $('.tr-activa-siama').removeClass('tr-activa-siama');
 
-        $("#TablaPiezasEstatus").find('> tbody > tr').each(function () {
-            if($(this).find('td:eq(1)').text().trim() != ''){
-                Existe = true;
+        var fila = $(this).parent('tr');
 
-                //Salir del ciclo
-                return false;
-            }
-        });
+        //Se agrega la clase activa a la fila actual, esto para evitar
+        //que se le quite la clase activa a una fila que esta activa
+        //y se quiera editar (o sea, no se quiere quitar la seleccion)
+        fila.addClass('tr-activa-siama');
 
-        return Existe;
-    }
+        //Se crea los botones que va a tener la ventana modal de edicion
+        Botones = `
+        <button type="submit" id ="GuardarEdicionPiezaDA" title="Guardar Pieza" type="button" style="margin:5px;" class="btn  btn-success">
+          <span class="fa fa-floppy-o"></span>
+          Guardar
+        </button>
+        <button data-dismiss="modal" id="CancelarEdicionPiezaDA" title="Cancelar Edici&oacute;n" type="button" style="margin:5px;" class="btn  btn-danger">
+          <span class="fa fa-ban "></span>
+          Cancelar
+        </button>`;
 
-    window.ExistePiezaQuitada = function(pieza){
-        Existe = false;
-        $("#TablaPiezasEstatus").find('> tbody > tr').each(function () {
+        var data = {
+            "Titulo"            : "Pieza",
+            "EstatusDoc"        : $('#EstatusPlanificado').val(),
+            "Fila"              : $(this).parent('tr').index(),
+            "Botones"           : Botones,
+            "idPieza"           : fila.find('td:eq(0)').text().trim(),
+            "nomPiezaDA"        : fila.find('td:eq(1)').text().trim(),
+            "idFalla"           : fila.find('td:eq(2)').text().trim(),
+            "nomFalla"          : fila.find('td:eq(3)').text().trim(),
+            "ObservacionPieza"  : fila.find('td:eq(4)').text().trim(),
+        }
+        SetModalFuncionesPiezaDA(data);
+        
+    });
 
-            if(pieza == $(this).find('td:eq(1)').text().trim()){
-                Existe = true;
-                return false;
-            }
-        });
-
-        return Existe;
-    }
-
-    window.AgregarPieza = function(){
-
-        //Agregar registro a la tabla de listas desplegables al final
-        $('#TablaPiezasEstatus > tbody:last-child').append(`
-            <tr>
-                <td style="display:none;"></td>
-                <td style="display:none;"></td>
-                <td></td>
-                <td></td>
-                <td style="display:none;"></td>
-                <td ></td>
-                <td colspan="2" class ="editarPiezaCE" style="text-align: center;cursor: pointer;">
-                    <span class="fa fa-pencil fa-lg"></span>
-                </td>
-            </tr>
-        `);
-    }
-
-    function SetModalFuncionesPiezaCE(data){
+    function SetModalFuncionesPiezaDA(data){
 
         //Se crea cuerpo html que va a tener la ventana modal de edicion
         var html = `
-        <form class="form-horizontal" id="formEditarPiezaCE">
+        <form class="form-horizontal" id="formEditarPiezaDA">
 
             <div class="form-group row">
-                <label class="col-lg-3 col-form-label">Pieza :</label>
+                <label class="col-lg-3 col-form-label">Pieza:</label>
                 <div class="col-lg-9">
                     <div style="width:80%;float:left;">
                         <div style="display:none;" id="idPieza">${data['idPieza']}</div>
-                        <div style="display:none;" id="InvPieza">${data['InvPieza']}</div>
                         <input type="text" title="Pieza" 
-                            class="form-control texto obligatorio buscador PiezaCE" id="nomPiezaCE" value="${data['nomPiezaCE']}">
+                            class="form-control texto obligatorio buscador PiezaDA" id="nomPiezaDA" value="${data['nomPiezaDA']}">
                         <div class="invalid-feedback">Campo Obligatorio</div>
                     </div>
                     <div style="width:20%;float:right;padding:10px;">
-                        <span title="Buscar Pieza Dañada" class="fa fa-search BuscarPiezaCE" 
+                        <span title="Buscar Pieza Dañada" class="fa fa-search BuscarPiezaDA" 
                             style="cursor: pointer;float:left;"></span>
-                        <span title="Borrar Pieza Dañada" class="fa fa-trash-o BorrarPiezaCE" 
+                        <span title="Borrar Pieza Dañada" class="fa fa-trash-o BorrarPiezaDA" 
                             style="cursor: pointer;float:right;"></span>
                     </div>
                 </div>
             </div>
 
             <div class="form-group row">
-                <label for="estatusPieza" class="col-lg-3 col-form-label">Estatus:</label>
+                <label class="col-lg-3 col-form-label">Falla:</label>
                 <div class="col-lg-9">
-                    <select class="form-control obligatorio texto PiezaCE" id="estatusPieza">
-                        <option value=""></option>
-                        <option value="Activo" ${data['estatusPieza'] == "Activo" ? "selected": ""}>Activo</option>
-                        <option value="Inactivo" ${data['estatusPieza'] == "Inactivo" ? "selected": ""}>Inactivo</option>
-                    </select>
-                    <div class="invalid-feedback">Campo Obligatorio</div>
+                    <div style="width:80%;float:left;">
+                        <div style="display:none;" id="idFalla">${data['idFalla']}</div>
+                        <input type="text" title="Falla" 
+                            class="form-control texto obligatorio buscador PiezaDA" id="nomFalla" value="${data['nomFalla']}">
+                        <div class="invalid-feedback">Campo Obligatorio</div>
+                    </div>
+                    <div style="width:20%;float:right;padding:10px;">
+                        <span title="Buscar Falla" class="fa fa-search BuscarFalla" 
+                            style="cursor: pointer;float:left;"></span>
+                        <span title="Borrar Falla" class="fa fa-trash-o BorrarFalla" 
+                            style="cursor: pointer;float:right;"></span>
+                    </div>
                 </div>
             </div>
 
             <div class="form-group row">
                 <label for="ObservacionPieza" class="col-lg-3 col-form-label">Observaci&oacute;n:</label>
                 <div class="col-lg-9">
-                    <textarea  class="form-control texto obligatorio PiezaCE" rows="3"
+                    <textarea  class="form-control texto obligatorio PiezaDA" rows="3"
                     style = "resize:vertical;" id="ObservacionPieza">${data['ObservacionPieza']}</textarea>
                     <div class="invalid-feedback">Campo Obligatorio</div>
                 </div>
@@ -284,4 +244,50 @@ $(function(){
         //Llamar funcion que establece ventana modal segun parametros
         ModalEditarFuncion(parametros);
     }
+
+    window.AgregarPieza = function(){
+        $('#TablaPiezasDañadas > tbody:last-child').append(`
+            <tr>
+                <td style="display:none;"></td>
+                <td></td>
+                <td style="display:none;"></td>
+                <td></td>
+                <td style="display:none;"></td>
+                <td colspan="2" class ="editarPiezaDA" style="text-align: center;cursor: pointer;">
+                    <span class="fa fa-pencil fa-lg"></span>
+                </td>
+            </tr>
+        `);
+    }
+
+    window.ExistePiezaDA = function(){
+        var Existe = false;
+
+        $("#TablaPiezasDañadas").find('> tbody > tr').each(function () {
+            if($(this).find('td:eq(1)').text().trim() != ''){
+                Existe = true;
+
+                //Salir del ciclo
+                return false;
+            }
+        });
+
+        return Existe;
+    }
+
+    window.ObtenerJsonPiezasDA = function(){
+        var PiezaDAs = [];
+        $("#TablaPiezasDañadas").find('> tbody > tr').each(function () {
+            if( $(this).find('td:eq(1)').text().trim() != ''){
+                PiezaDAs.push({ 
+                    "pie_id"        : $(this).find('td:eq(0)').text(),
+                    "fal_id"        : $(this).find('td:eq(2)').text(),
+                    "Observacion"   : $(this).find('td:eq(4)').text(),
+                });
+            }
+        });
+
+        return PiezaDAs;
+    }
+
 });

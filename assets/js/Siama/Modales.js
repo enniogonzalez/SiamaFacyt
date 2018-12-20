@@ -180,6 +180,8 @@ $(function(){
             $('#fFinBusqueda').val($(this).val());
         }else if($(this).val() != "" && $('#fFinBusqueda').val() == ""){
             $('#fFinBusqueda').val($(this).val());
+        }else if($(this).val() == ""){
+            $('#fFinBusqueda').val("");
         }
 
     });
@@ -193,6 +195,8 @@ $(function(){
 
         }else if($(this).val() != "" && $('#fInicioBusqueda').val() == ""){
             $('#fInicioBusqueda').val($(this).val());
+        }else if($(this).val() == ""){
+            $('#fInicioBusqueda').val("");
         }
 
     });
@@ -435,7 +439,7 @@ $(function(){
             "Fec_Fin"               : $("#fFinBusqueda").val().trim(),
             "Condiciones"           : paramsRequest,
             "Orden"                 : $("#CampoOrden").val().trim() + " " + $("#TipoOrden").val().trim(),
-            "Busqueda"              : BusquedaActiva.trim(),
+            "Busqueda"              : BusquedaActiva.replace(" ","%").trim(),
             "Pagina"                : paginaActual,
             "RegistrosPorPagina"    : RegistrosPorPagina
         }
