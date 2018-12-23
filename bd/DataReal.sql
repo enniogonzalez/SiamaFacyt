@@ -1,17 +1,63 @@
 
-INSERT INTO Usuarios(Username,Nombre,Clave,Cargo)
-VALUES ('admin','Administrador','e11170b8cbd2d74102651cb967fa28e5','');
 
-INSERT INTO permisosusuarios ("usu_id", "menu") VALUES ('1', 'Sistema');
-INSERT INTO permisosusuarios ("usu_id", "menu") VALUES ('1', 'Localizacion');
-INSERT INTO permisosusuarios ("usu_id", "menu") VALUES ('1', 'Mantenimiento');
-INSERT INTO permisosusuarios ("usu_id", "menu") VALUES ('1', 'Marcas');
-INSERT INTO permisosusuarios ("usu_id", "menu") VALUES ('1', 'Obreros');
-INSERT INTO permisosusuarios ("usu_id", "menu") VALUES ('1', 'Partidas');
-INSERT INTO permisosusuarios ("usu_id", "menu") VALUES ('1', 'Patrimonio');
-INSERT INTO permisosusuarios ("usu_id", "menu") VALUES ('1', 'Proveedores');
-INSERT INTO permisosusuarios ("usu_id", "menu") VALUES ('1', 'Reportes');
+INSERT INTO permisos (Observaciones,Opcion) VALUES ('Permisos para el menu de Sistema', 'Sistema');
+INSERT INTO permisos (Observaciones,Opcion) VALUES ('Permisos para el menu de Localizacion', 'Localizacion');
+INSERT INTO permisos (Observaciones,Opcion) VALUES ('Permisos para el menu de Mantenimiento', 'Mantenimiento');
+INSERT INTO permisos (Observaciones,Opcion) VALUES ('Permisos para el menu de Marcas', 'Marcas');
+INSERT INTO permisos (Observaciones,Opcion) VALUES ('Permisos para el menu de Obreros', 'Obreros');
+INSERT INTO permisos (Observaciones,Opcion) VALUES ('Permisos para el menu de Partidas', 'Partidas');
+INSERT INTO permisos (Observaciones,Opcion) VALUES ('Permisos para el menu de Patrimonio', 'Patrimonio');
+INSERT INTO permisos (Observaciones,Opcion) VALUES ('Permisos para el menu de Proveedores', 'Proveedores');
+INSERT INTO permisos (Observaciones,Opcion) VALUES ('Permisos para el menu de Reportes', 'Reportes');
 
+INSERT INTO permisos (Observaciones,Opcion) VALUES ('Permisos para los reportes del menu de Sistema', 'RepSistema');
+INSERT INTO permisos (Observaciones,Opcion) VALUES ('Permisos para los reportes del menu de Localizacion', 'RepLocalizacion');
+INSERT INTO permisos (Observaciones,Opcion) VALUES ('Permisos para los reportes del menu de Mantenimiento', 'RepMantenimiento');
+INSERT INTO permisos (Observaciones,Opcion) VALUES ('Permisos para los reportes del menu de Marcas', 'RepMarcas');
+INSERT INTO permisos (Observaciones,Opcion) VALUES ('Permisos para los reportes del menu de Obreros', 'RepObreros');
+INSERT INTO permisos (Observaciones,Opcion) VALUES ('Permisos para los reportes del menu de Partidas', 'RepPartidas');
+INSERT INTO permisos (Observaciones,Opcion) VALUES ('Permisos para los reportes del menu de Patrimonio', 'RepPatrimonio');
+INSERT INTO permisos (Observaciones,Opcion) VALUES ('Permisos para los reportes del menu de Proveedores', 'RepProveedores');
+
+INSERT INTO Roles (Observaciones,Nombre) VALUES ('Rol de Decano', 'Decano');
+INSERT INTO Roles (Observaciones,Nombre) VALUES ('Rol del Jefe de Mantenimiento', 'Jefe de Mantenimiento');
+INSERT INTO Roles (Observaciones,Nombre) VALUES ('Rol del director de dependencia', 'Director de Dependencia');
+
+INSERT INTO RolPermisos(rol_id,per_id) VALUES (1,1);
+INSERT INTO RolPermisos(rol_id,per_id) VALUES (1,2);
+INSERT INTO RolPermisos(rol_id,per_id) VALUES (1,3);
+INSERT INTO RolPermisos(rol_id,per_id) VALUES (1,4);
+INSERT INTO RolPermisos(rol_id,per_id) VALUES (1,5);
+INSERT INTO RolPermisos(rol_id,per_id) VALUES (1,6);
+INSERT INTO RolPermisos(rol_id,per_id) VALUES (1,7);
+INSERT INTO RolPermisos(rol_id,per_id) VALUES (1,8);
+INSERT INTO RolPermisos(rol_id,per_id) VALUES (1,9);
+INSERT INTO RolPermisos(rol_id,per_id) VALUES (1,10);
+INSERT INTO RolPermisos(rol_id,per_id) VALUES (1,11);
+INSERT INTO RolPermisos(rol_id,per_id) VALUES (1,12);
+INSERT INTO RolPermisos(rol_id,per_id) VALUES (1,13);
+INSERT INTO RolPermisos(rol_id,per_id) VALUES (1,14);
+INSERT INTO RolPermisos(rol_id,per_id) VALUES (1,15);
+INSERT INTO RolPermisos(rol_id,per_id) VALUES (1,16);
+INSERT INTO RolPermisos(rol_id,per_id) VALUES (1,17);
+
+
+INSERT INTO RolPermisos(rol_id,per_id) VALUES (2,3);
+INSERT INTO RolPermisos(rol_id,per_id) VALUES (2,5);
+INSERT INTO RolPermisos(rol_id,per_id) VALUES (2,7);
+INSERT INTO RolPermisos(rol_id,per_id) VALUES (2,9);
+INSERT INTO RolPermisos(rol_id,per_id) VALUES (2,11);
+INSERT INTO RolPermisos(rol_id,per_id) VALUES (2,12);
+INSERT INTO RolPermisos(rol_id,per_id) VALUES (2,14);
+INSERT INTO RolPermisos(rol_id,per_id) VALUES (2,16);
+
+INSERT INTO RolPermisos(rol_id,per_id) VALUES (3,9);
+INSERT INTO RolPermisos(rol_id,per_id) VALUES (3,11);
+INSERT INTO RolPermisos(rol_id,per_id) VALUES (3,12);
+INSERT INTO RolPermisos(rol_id,per_id) VALUES (3,16);
+
+INSERT INTO Usuarios(Username,Nombre,Clave,rol_id)
+VALUES ('admin','Administrador','e11170b8cbd2d74102651cb967fa28e5','1');
 
 INSERT INTO Listas_Desplegables( Codigo,Nombre,Descripcion,Opciones) 
 VALUES(

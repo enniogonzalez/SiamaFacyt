@@ -23,7 +23,6 @@
                 <?=$usu_id?>
             </div>
 
-
             <div class="form-group row">
                 <label for="Usuario" class="col-md-3 col-form-label">Usuario:</label>
                 <div class="col-md-9">
@@ -43,10 +42,18 @@
             </div>
 
             <div class="form-group row">
-                <label for="Cargo" class="col-md-3 col-form-label">Cargo:</label>
+                <label for="rol" class="col-md-3 col-form-label">Rol:</label>
                 <div class="col-md-9">
-                    <select readonly disabled class="form-control obligatorio lista" id="Cargo">
-                        <?=$cargo?>
+                    <select readonly disabled class="form-control obligatorio lista" id="rol">
+                        <option value =''></option>
+                        <?php
+                            foreach($rolesApp as $rol){
+                                $opcion = "<option value ='" . $rol['rol_id'] . "' "
+                                    . ($rol['rol_id'] == $rol_id ? "selected":"")
+                                    . ">" .$rol['nombre'] . "</option>";
+                                echo($opcion);
+                            }
+                        ?>
                     </select> 
                     <div class="invalid-feedback">Campo Obligatorio</div>
                 </div>
@@ -69,69 +76,6 @@
                 </div>
             </div>
 
-            <h3>
-                Permisos
-            </h3>
-            <div class="table-responsive">
-                <table id="TablaPermisos" class="table table-hover tabla-siama tabla-siama-desactivada">
-                    <thead class="head-table-siama" style="font-size:13px;">
-                        <tr>
-                            <th style="width:60%;">Modulo</th>
-                            <th style="width:40%;">Acceso</th>
-                        </tr>
-                    </thead>
-                    <tbody >
-                        <tr>
-                            <td style="font-size:13px;">Localizacion</td>
-                            <td class = "seleccionarPermiso" id="perLoc" style="text-align: center;">
-                                <span class="fa <?=($Permisos['Localizacion'] ? "fa-check-square-o":"fa-square-o")?>  fa-lg"></span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style="font-size:13px;">Mantenimiento</td>
-                            <td class = "seleccionarPermiso" id="perMan" style="text-align: center;">
-                                <span class="fa <?=($Permisos['Mantenimiento'] ? "fa-check-square-o":"fa-square-o")?> fa-lg"></span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style="font-size:13px;">Marcas</td>
-                            <td class = "seleccionarPermiso" id="perMar" style="text-align: center;">
-                                <span class="fa <?=($Permisos['Marcas'] ? "fa-check-square-o":"fa-square-o")?> fa-lg"></span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style="font-size:13px;">Partidas</td>
-                            <td class = "seleccionarPermiso" id="perPar" style="text-align: center;">
-                                <span class="fa <?=($Permisos['Partidas'] ? "fa-check-square-o":"fa-square-o")?> fa-lg"></span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style="font-size:13px;">Patrimonio</td>
-                            <td class = "seleccionarPermiso" id="perPat" style="text-align: center;">
-                                <span class="fa <?=($Permisos['Patrimonio'] ? "fa-check-square-o":"fa-square-o")?> fa-lg"></span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style="font-size:13px;">Proveedores</td>
-                            <td class = "seleccionarPermiso" id="perPro" style="text-align: center;">
-                                <span class="fa <?=($Permisos['Proveedores'] ? "fa-check-square-o":"fa-square-o")?> fa-lg"></span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style="font-size:13px;">Reportes</td>
-                            <td class = "seleccionarPermiso" id="perRep" style="text-align: center;">
-                                <span class="fa <?=($Permisos['Reportes'] ? "fa-check-square-o":"fa-square-o")?> fa-lg"></span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style="font-size:13px;">Sistema</td>
-                            <td class = "seleccionarPermiso" id="perSis" style="text-align: center;">
-                                <span class="fa <?=($Permisos['Sistema'] ? "fa-check-square-o":"fa-square-o")?> fa-lg"></span>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
         </form>
         <div style="display:none;" id ="ControladorActual"><?=site_url('/usuarios')?></div>
         <div style="background-color: #95a5a6; padding: 10px;">

@@ -52,7 +52,7 @@ class Login extends CI_Controller{
                 "username"      => $resp['username'],
                 "nombre"        => $resp['nombre'],
                 "correo"        => $resp['correo'],
-                "cargo"         => $resp['cargo'],
+                "rol_id"        => $resp['rol_id'],
                 "observaciones" => $resp['observaciones'],
                 "Permisos"      => $resp['Permisos'],
             ];

@@ -42,8 +42,9 @@
 
             $query ="   SELECT  COUNT(*) cantidad
                         FROM Alertas
-                            JOIN PermisosUsuarios PU ON PU.menu = Alertas.menu
-                        WHERE PU.usu_id = '" . $this->session->userdata("usu_id") . "'";
+                            JOIN Permisos P ON P.opcion = Alertas.menu
+                            JOIN RolPermisos RP ON RP.per_id = P.per_id
+                        WHERE RP.rol_id = '" . $this->session->userdata("rol_id") . "'";
 
             //Ejecutar Query
             $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());

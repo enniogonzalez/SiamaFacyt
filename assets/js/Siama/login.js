@@ -27,6 +27,7 @@ $(function(){
                 "inputUsuario"  : $('#inputUsuario').val()
             }
 
+            
             $.ajax({
                 url: $('#loginform').attr("action"),
                 type: $('#loginform').attr("method"),
@@ -41,6 +42,7 @@ $(function(){
                     $('#inputPassword').val("");
                 }
             }).fail(function(data){
+                console.log(data);
             });
         }
     });

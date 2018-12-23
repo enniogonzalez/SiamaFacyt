@@ -3,6 +3,26 @@ ENCODING 'UTF8' owner "adminsiama";
 
 \c siamafacyt
 
+CREATE TABLE Roles(
+	ROL_ID			SERIAL			PRIMARY KEY,
+	Nombre			VARCHAR(100)	NOT NULL UNIQUE,
+	Observaciones	TEXT
+);
+
+CREATE TABLE Permisos(
+	Per_ID			SERIAL			PRIMARY KEY,
+	Opcion			VARCHAR(100)	NOT NULL UNIQUE,
+	Observaciones	TEXT
+);
+
+CREATE TABLE RolPermisos(
+	ROL_ID 	INT NOT NULL,
+	PER_ID	INT NOT NULL,
+	PRIMARY KEY(ROL_ID,PER_ID),
+	FOREIGN KEY (ROL_ID) References Roles ON DELETE CASCADE,
+	FOREIGN KEY (PER_ID) References Permisos ON DELETE CASCADE
+);
+
 /*Tablas de Primer Nivel*/
 CREATE TABLE Partidas(
 	PAR_ID			SERIAL PRIMARY KEY,
@@ -31,9 +51,9 @@ CREATE TABLE Marcas(
 CREATE TABLE Usuarios(
 	USU_ID			SERIAL				PRIMARY KEY,
 	Username		VARCHAR(25)			NOT NULL UNIQUE,
+	ROL_ID			INT					NOT NULL,
 	Nombre			VARCHAR(100)		NOT NULL,
 	Clave			VARCHAR(100)		NOT NULL,
-	Cargo			VARCHAR(100)		NOT NULL,
 	Correo			VARCHAR(100),
 	Usu_Cre			INT, --Usuario Creador
 	Fec_Cre			TIMESTAMP			NOT NULL DEFAULT(NOW()), --fecha Creacion
@@ -41,6 +61,7 @@ CREATE TABLE Usuarios(
 	Fec_Mod			TIMESTAMP			NOT NULL DEFAULT(NOW()), --fecha Modificacion
 	Observaciones	TEXT,
 	
+	FOREIGN KEY (ROL_ID) References roles,
 	FOREIGN KEY (Usu_Cre) References Usuarios,
 	FOREIGN KEY (Usu_Mod) References Usuarios
 );
@@ -55,14 +76,6 @@ CREATE TABLE TipoPieza(
 	Observaciones	TEXT			NULL,
 	FOREIGN KEY (Usu_Cre) References Usuarios,
 	FOREIGN KEY (Usu_Mod) References Usuarios
-);
-
-CREATE TABLE PermisosUsuarios(
-	USU_ID	INT				NOT NULL,
-	Menu	VARCHAR(100)	NOT NULL,
-	PRIMARY KEY (usu_id, Menu),
-	
-	FOREIGN KEY (USU_ID) References Usuarios ON DELETE CASCADE
 );
 
 CREATE TABLE Listas_Desplegables(
@@ -652,6 +665,7 @@ CREATE TABLE CompatibilidadBien(
 	FOREIGN KEY (BIE_ID) References Bienes ON DELETE CASCADE
 );
 
+
 GRANT CONNECT ON DATABASE siamafacyt TO userapp;
 
 -- Grant usage the schema
@@ -662,6 +676,7 @@ GRANT USAGE ON SCHEMA public TO userapp ;
 
 GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO userapp;
 GRANT USAGE, SELECT,  UPDATE ON ALL SEQUENCES IN SCHEMA public TO userapp;
+
 
 \i DataReal.sql
 \i insertar.sql
