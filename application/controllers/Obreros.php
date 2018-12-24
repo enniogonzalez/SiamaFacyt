@@ -8,6 +8,36 @@
             $this->load->library('liblistasdesplegables','liblistasdesplegables');
         }
 
+        private function FormatearBusqueda($datos){
+            
+            $data = array(
+                "Listas"     =>"",
+                "Registros" => ""
+            );
+
+            if($datos){
+                $htmlListas = "";
+                $registros = 0;
+                foreach ($datos as $elemento) {
+                    $registros = $elemento['registros'];
+                    $htmlListas = $htmlListas
+                        ."<tr>"
+                        .   "<td style='display:none;'>" . $elemento['obr_id'] . "</td>"
+                        .   "<td style='display:none;'>" . $elemento['telefonos'] . "</td>"
+                        .   "<td style='display:none;'>" . $elemento['correo'] . "</td>"
+                        .   "<td style='display:none;'>" . $elemento['observaciones'] . "</td>"
+                        .   "<td>" . $elemento['cedula'] . "</td>"
+                        .   "<td>" . $elemento['nombre'] . "</td>"
+                        ."</tr>";
+                }
+                
+                $data['Listas'] = $htmlListas;
+                $data['Registros'] = $registros;
+            }
+
+            return $data;
+        }
+
         private function FormatearRequest($respuesta){
 
             $data = array(
@@ -30,36 +60,35 @@
             }
         }
 
-        public function view(){
+        public function busqueda(){
+
+            if(!$this->session->userdata("nombre") || $this->input->post("Pagina") == ""){
+                redirect(site_url(''));
+            }
+
+            $busqueda = $this->input->post("Busqueda") ;
+            $pagina = (int) $this->input->post("Pagina") ;
+            $regXpag = (int) $this->input->post("RegistrosPorPagina") ;
+            $ordenamiento = $this->input->post("Orden") ;
             
-            if(!$this->session->userdata("nombre")){
+            $inicio = 1+$regXpag*($pagina-1);
+            $fin = $regXpag*$pagina;
+
+            $respuesta = $this->FormatearBusqueda($this->obreros_model->Busqueda($busqueda,$ordenamiento,$inicio,$fin));
+
+            echo json_encode(array("isValid"=>true,"Datos"=>$respuesta));
+        }
+
+        public function eliminar(){
+            
+            if(!$this->session->userdata("nombre") || $this->input->post("id") == ""){
                 redirect(site_url(''));
             }
             $this->ValidarPermiso();
+
+            $eliminar = $this->obreros_model->Eliminar($this->input->post("id"));
             $data = $this->FormatearRequest($this->obreros_model->Obtener());
-
-            $JsFile = "<script src=\"". base_url() . "assets/js/Obreros.js\"></script>";
-            
-            $datafile['JsFile'] = $JsFile ;
-
-            
-            $this->load->model('Sistema/listasdesplegables_model' , 'listasdesplegables_model');
-            $ld = $this->listasdesplegables_model->Obtener('','COB-OBRERO');
-
-            $dataLD['OrdenarBusqueda'] = $this->liblistasdesplegables->FormatearListaDesplegable($ld);
-
-            $dataAlerta['cantAlertas'] = $this->alertas_model->CantidadAlertas();
-
-            $this->load->view('plantillas/1-header', $datafile);
-            $this->load->view('plantillas/2-barranavegacion',$dataAlerta);
-            $this->load->view('plantillas/2-modales',$dataLD);
-            $this->load->view('plantillas/3-iniciomain');
-            $this->load->view('plantillas/4-barramenu');
-            $this->load->view('plantillas/5-iniciopagina');
-            $this->load->view('paginas/obreros',$data);
-            $this->load->view('plantillas/7-footer');
-
-
+            echo json_encode(array("isValid"=>true,"Datos"=>$data));
         }
 
         public function guardar(){
@@ -108,37 +137,6 @@
             }
         }
 
-        public function eliminar(){
-            
-            if(!$this->session->userdata("nombre") || $this->input->post("id") == ""){
-                redirect(site_url(''));
-            }
-            $this->ValidarPermiso();
-
-            $eliminar = $this->obreros_model->Eliminar($this->input->post("id"));
-            $data = $this->FormatearRequest($this->obreros_model->Obtener());
-            echo json_encode(array("isValid"=>true,"Datos"=>$data));
-        }
-
-        public function busqueda(){
-
-            if(!$this->session->userdata("nombre") || $this->input->post("Pagina") == ""){
-                redirect(site_url(''));
-            }
-
-            $busqueda = $this->input->post("Busqueda") ;
-            $pagina = (int) $this->input->post("Pagina") ;
-            $regXpag = (int) $this->input->post("RegistrosPorPagina") ;
-            $ordenamiento = $this->input->post("Orden") ;
-            
-            $inicio = 1+$regXpag*($pagina-1);
-            $fin = $regXpag*$pagina;
-
-            $respuesta = $this->FormatearBusqueda($this->obreros_model->Busqueda($busqueda,$ordenamiento,$inicio,$fin));
-
-            echo json_encode(array("isValid"=>true,"Datos"=>$respuesta));
-        }
-
         public function imprimir($id){
             $this->ValidarPermiso();
             $data['datos'] = $this->FormatearRequest($this->obreros_model->Obtener($id));
@@ -146,36 +144,37 @@
             $this->load->view('Formatos/formatoObrero',$data);
         }
 
-        private function FormatearBusqueda($datos){
+        public function view(){
             
-            $data = array(
-                "Listas"     =>"",
-                "Registros" => ""
-            );
-
-            if($datos){
-                $htmlListas = "";
-                $registros = 0;
-                foreach ($datos as $elemento) {
-                    $registros = $elemento['registros'];
-                    $htmlListas = $htmlListas
-                        ."<tr>"
-                        .   "<td style='display:none;'>" . $elemento['obr_id'] . "</td>"
-                        .   "<td style='display:none;'>" . $elemento['telefonos'] . "</td>"
-                        .   "<td style='display:none;'>" . $elemento['correo'] . "</td>"
-                        .   "<td style='display:none;'>" . $elemento['observaciones'] . "</td>"
-                        .   "<td>" . $elemento['cedula'] . "</td>"
-                        .   "<td>" . $elemento['nombre'] . "</td>"
-                        ."</tr>";
-                }
-                
-                $data['Listas'] = $htmlListas;
-                $data['Registros'] = $registros;
+            if(!$this->session->userdata("nombre")){
+                redirect(site_url(''));
             }
+            $this->ValidarPermiso();
+            $data = $this->FormatearRequest($this->obreros_model->Obtener());
 
-            return $data;
+            $JsFile = "<script src=\"". base_url() . "assets/js/Obreros.js\"></script>";
+            
+            $datafile['JsFile'] = $JsFile ;
+
+            
+            $this->load->model('Sistema/listasdesplegables_model' , 'listasdesplegables_model');
+            $ld = $this->listasdesplegables_model->Obtener('','COB-OBRERO');
+
+            $dataLD['OrdenarBusqueda'] = $this->liblistasdesplegables->FormatearListaDesplegable($ld);
+
+            $dataAlerta['cantAlertas'] = $this->alertas_model->CantidadAlertas();
+
+            $this->load->view('plantillas/1-header', $datafile);
+            $this->load->view('plantillas/2-barranavegacion',$dataAlerta);
+            $this->load->view('plantillas/2-modales',$dataLD);
+            $this->load->view('plantillas/3-iniciomain');
+            $this->load->view('plantillas/4-barramenu');
+            $this->load->view('plantillas/5-iniciopagina');
+            $this->load->view('paginas/obreros',$data);
+            $this->load->view('plantillas/7-footer');
+
+
         }
-
 
     }
 

@@ -1,59 +1,6 @@
 
 <?php
     class Obreros_model extends CI_Model{
-        
-        public function Insertar($data){
-            //Abrir conexion
-            $conexion = $this->bd_model->ObtenerConexion();
-
-            //Abrir Transaccion
-            pg_query("BEGIN") or die("Could not start transaction");
-
-            //Insertar Obreros
-            $query = " INSERT INTO Obreros(Cedula,Nombre,usu_cre,Telefonos,Correo,Observaciones) VALUES('"
-            . str_replace("'", "''",$data['Cedula']) . "','"
-            . str_replace("'", "''",$data['Nombre']) . "',"
-            . $this->session->userdata("usu_id")    . ","
-            . (($data['Telefonos'] == "") ? "null" : ("'" .str_replace("'", "''", $data['Telefonos']) . "'"))
-            . ","
-            . (($data['Correo'] == "") ? "null" : ("'" .str_replace("'", "''", $data['Correo']) . "'"))
-            . ","
-            . (($data['Observaciones'] == "") ? "null" : ("'" .str_replace("'", "''", $data['Observaciones']) . "'"))
-            . ") RETURNING obr_id;";
-
-            //Ejecutar Query
-            $result = pg_query($query);
-            $new_id = "";
-
-            if($result){
-                $row = pg_fetch_row($result); 
-                $new_id = $row['0']; 
-            }
-
-            if($result){
-                $data['obr_id'] = $new_id;
-                $datos = array(
-                    'Opcion' => 'Insertar',
-                    'Tabla' => 'Obreros', 
-                    'Tab_id' => $new_id,
-                    'Datos' => json_encode($data)
-                );
-                
-                $result = $this->auditorias_model->Insertar($datos);
-            }
-
-            if(!$result){
-                $error = pg_last_error();
-                pg_query("ROLLBACK") or die("Transaction rollback failed");
-                die($error);
-            }else
-                pg_query("COMMIT") or die("Transaction commit failed");
-
-            //liberar conexion
-            $this->bd_model->CerrarConexion($conexion);
-            
-            return true;
-        }
 
         public function Actualizar($data){
             
@@ -103,44 +50,6 @@
             $this->bd_model->CerrarConexion($conexion);
 
             return true;
-        }
-
-        public function Obtener($id = ''){
-            
-            //Abrir conexion
-            $conexion = $this->bd_model->ObtenerConexion();
-            //Query para buscar usuario
-            $query ="   SELECT  obr_id,
-                                Cedula,
-                                Nombre,
-                                COALESCE(Telefonos,'') Telefonos,
-                                COALESCE(Correo,'') Correo,
-                                COALESCE(Observaciones,'') Observaciones
-                        FROM Obreros
-                    ";
-
-            if($id != ''){
-                $query = $query . " WHERE obr_id = '" . $id . "'";
-            }
-
-            $query = $query . " ORDER BY obr_id DESC LIMIT 1;";
-
-            //Ejecutar Query
-            $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
-            
-            //Si existe registro, se guarda. Sino se guarda false
-            if ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) 
-                $retorno = $line;
-            else
-                $retorno = false;
-
-            //Liberar memoria
-            pg_free_result($result);
-
-            //liberar conexion
-            $this->bd_model->CerrarConexion($conexion);
-
-            return $retorno;
         }
 
         public function Busqueda($busqueda,$orden,$inicio,$fin){
@@ -265,6 +174,97 @@
             //Si existe registro, se guarda. Sino se guarda false
             if (pg_num_rows($result) > 0) 
                 $retorno = true;
+            else
+                $retorno = false;
+
+            //Liberar memoria
+            pg_free_result($result);
+
+            //liberar conexion
+            $this->bd_model->CerrarConexion($conexion);
+
+            return $retorno;
+        }
+        
+        public function Insertar($data){
+            //Abrir conexion
+            $conexion = $this->bd_model->ObtenerConexion();
+
+            //Abrir Transaccion
+            pg_query("BEGIN") or die("Could not start transaction");
+
+            //Insertar Obreros
+            $query = " INSERT INTO Obreros(Cedula,Nombre,usu_cre,Telefonos,Correo,Observaciones) VALUES('"
+            . str_replace("'", "''",$data['Cedula']) . "','"
+            . str_replace("'", "''",$data['Nombre']) . "',"
+            . $this->session->userdata("usu_id")    . ","
+            . (($data['Telefonos'] == "") ? "null" : ("'" .str_replace("'", "''", $data['Telefonos']) . "'"))
+            . ","
+            . (($data['Correo'] == "") ? "null" : ("'" .str_replace("'", "''", $data['Correo']) . "'"))
+            . ","
+            . (($data['Observaciones'] == "") ? "null" : ("'" .str_replace("'", "''", $data['Observaciones']) . "'"))
+            . ") RETURNING obr_id;";
+
+            //Ejecutar Query
+            $result = pg_query($query);
+            $new_id = "";
+
+            if($result){
+                $row = pg_fetch_row($result); 
+                $new_id = $row['0']; 
+            }
+
+            if($result){
+                $data['obr_id'] = $new_id;
+                $datos = array(
+                    'Opcion' => 'Insertar',
+                    'Tabla' => 'Obreros', 
+                    'Tab_id' => $new_id,
+                    'Datos' => json_encode($data)
+                );
+                
+                $result = $this->auditorias_model->Insertar($datos);
+            }
+
+            if(!$result){
+                $error = pg_last_error();
+                pg_query("ROLLBACK") or die("Transaction rollback failed");
+                die($error);
+            }else
+                pg_query("COMMIT") or die("Transaction commit failed");
+
+            //liberar conexion
+            $this->bd_model->CerrarConexion($conexion);
+            
+            return true;
+        }
+
+        public function Obtener($id = ''){
+            
+            //Abrir conexion
+            $conexion = $this->bd_model->ObtenerConexion();
+            //Query para buscar usuario
+            $query ="   SELECT  obr_id,
+                                Cedula,
+                                Nombre,
+                                COALESCE(Telefonos,'') Telefonos,
+                                COALESCE(Correo,'') Correo,
+                                COALESCE(Observaciones,'') Observaciones
+                        FROM Obreros
+                    ";
+
+            if($id != ''){
+                $query = $query . " WHERE obr_id = '" . $id . "'";
+            }
+
+            $query = $query . " ORDER BY obr_id DESC LIMIT 1;";
+
+            //Ejecutar Query
+            $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
+            
+            //Si existe registro, se guarda. Sino se guarda false
+            if ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) 
+                $retorno = $line;
             else
                 $retorno = false;
 
