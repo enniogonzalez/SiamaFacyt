@@ -8,6 +8,54 @@
             $this->load->library('liblistasdesplegables','liblistasdesplegables');
         }
 
+        private function FormatearBusqueda($datos){
+            
+            $data = array(
+                "Listas"     =>"",
+                "Registros" => ""
+            );
+
+
+            if($datos){
+
+                $htmlListas = "";
+                $registros = 0;
+                foreach ($datos as $elemento) {
+                    $registros = $elemento['registros'];
+                    $htmlListas = $htmlListas
+                        ."<tr>"
+                        .   "<td style='display:none;'>" . $elemento['par_id'] . "</td>"
+                        .   "<td style='display:none;'>" . $elemento['idpad'] . "</td>"
+                        .   "<td style='display:none;'>" . $elemento['nombrepadre'] . "</td>"
+                        .   "<td>" . $elemento['codigo'] . "</td>"
+                        .   "<td>" . $elemento['nombre'] . "</td>"
+                        .   "<td>" . $elemento['observaciones'] . "</td>"
+                        ."</tr>";
+                }
+                
+                $data['Listas'] = $htmlListas;
+                $data['Registros'] = $registros;
+            }
+
+            return $data;
+        }
+
+        private function FormatearImpresion($respuesta){
+
+            $data = array(
+                "par_id"        =>"",
+                "codigo"        =>"",
+                "nombre"        =>"",
+                "nombrepadre"   =>"",
+                "observaciones" => ""
+            );
+
+            if($respuesta)
+                $data = $respuesta;
+
+            return $data;
+        }
+
         private function FormatearRequest($respuesta){
 
             $data = array(
@@ -28,6 +76,95 @@
             if(!$this->session->userdata("Permisos")['Partidas']){
                 show_404();
             }
+        }
+
+        public function busqueda(){
+
+            if(!$this->session->userdata("nombre") || $this->input->post("Pagina") == ""){
+                redirect(site_url(''));
+            }
+
+            $busqueda = $this->input->post("Busqueda") ;
+            $pagina = (int) $this->input->post("Pagina") ;
+            $regXpag = (int) $this->input->post("RegistrosPorPagina") ;
+            $ordenamiento = $this->input->post("Orden") ;
+            
+            $inicio = 1+$regXpag*($pagina-1);
+            $fin = $regXpag*$pagina;
+
+            if($this->input->post("Opcion") == "Padre")
+                $id = $this->input->post("IdActual");
+            else
+                $id = "";
+
+            $respuesta = $this->FormatearBusqueda($this->partidas_model->Busqueda($busqueda,$ordenamiento,$inicio,$fin,$id));
+
+            echo json_encode(array("isValid"=>true,"Datos"=>$respuesta));
+        }
+
+        public function eliminar(){
+            
+            if(!$this->session->userdata("nombre") || $this->input->post("id") == ""){
+                redirect(site_url(''));
+            }
+            $this->ValidarPermiso();
+
+            $eliminar = $this->partidas_model->Eliminar($this->input->post("id"));
+            $data = $this->FormatearRequest($this->partidas_model->Obtener());
+            echo json_encode(array("isValid"=>true,"Datos"=>$data));
+        }
+
+        public function guardar(){
+
+            if(!$this->session->userdata("nombre") || $this->input->post("Nombre") == ""){
+                redirect(site_url(''));
+            }
+            $this->ValidarPermiso();
+
+            $parametros = array(
+                "par_id" => $this->input->post("id"),
+                "idPad" =>$this->input->post("Padre"),
+                "Nombre" => $this->input->post("Nombre"),
+                "Codigo" => $this->input->post("Codigo"),
+                "Observaciones" => trim($this->input->post("Observacion"))
+            );
+            
+            if($this->input->post("id") == ""){
+                if($this->partidas_model->ExisteCodigo($parametros['Codigo'])){
+                    echo json_encode(array(
+                        "isValid"=>false,
+                        "Mensaje"=>"Ya existe una partida registrada con el mismo codigo.",
+                        "id"=>""));
+                }else{
+                    $respuesta = $this->partidas_model->Insertar($parametros);
+                    $insertado = $this->partidas_model->Obtener();
+                    echo json_encode(array(
+                        "isValid"=>true,
+                        "Mensaje"=>"Se ha insertado Localizacion exitosamente",
+                        "id"=>$insertado['par_id']));
+                }
+            }else{
+                if($this->partidas_model->ExisteCodigo($parametros['Codigo'],$parametros['par_id'])){
+                    echo json_encode(array(
+                        "isValid"=>false,
+                        "Mensaje"=>"Ya existe una partida registrada con el mismo codigo.",
+                        "id"=>$parametros['par_id']));
+                }else{
+                    $respuesta = $this->partidas_model->Actualizar($parametros);
+                    echo json_encode(array(
+                        "isValid"=>true,
+                        "Mensaje"=>"Se ha editado Localizacion exitosamente",
+                        "id"=>$this->input->post("id")));
+                }
+
+            }
+        }
+
+        public function imprimir($id){
+            $this->ValidarPermiso();
+            $data['datos'] = $this->FormatearImpresion($this->partidas_model->ObtenerInfoPDF($id));
+            $this->load->library('tcpdf/Pdf');
+            $this->load->view('Formatos/formatoPartida',$data);
         }
         
         public function view(){
@@ -62,144 +199,6 @@
 
 
         }
-
-        public function guardar(){
-
-            if(!$this->session->userdata("nombre") || $this->input->post("Nombre") == ""){
-                redirect(site_url(''));
-            }
-            $this->ValidarPermiso();
-
-            $parametros = array(
-                "idActual" => $this->input->post("id"),
-                "idPad" =>$this->input->post("Padre"),
-                "Nombre" => $this->input->post("Nombre"),
-                "Codigo" => $this->input->post("Codigo"),
-                "Observaciones" => trim($this->input->post("Observacion"))
-            );
-            
-            if($this->input->post("id") == ""){
-                if($this->partidas_model->ExisteCodigo($parametros['Codigo'])){
-                    echo json_encode(array(
-                        "isValid"=>false,
-                        "Mensaje"=>"Ya existe una partida registrada con el mismo codigo.",
-                        "id"=>""));
-                }else{
-                    $respuesta = $this->partidas_model->Insertar($parametros);
-                    $insertado = $this->partidas_model->Obtener();
-                    echo json_encode(array(
-                        "isValid"=>true,
-                        "Mensaje"=>"Se ha insertado Localizacion exitosamente",
-                        "id"=>$insertado['par_id']));
-                }
-            }else{
-                if($this->partidas_model->ExisteCodigo($parametros['Codigo'],$parametros['idActual'])){
-                    echo json_encode(array(
-                        "isValid"=>false,
-                        "Mensaje"=>"Ya existe una partida registrada con el mismo codigo.",
-                        "id"=>$parametros['idActual']));
-                }else{
-                    $respuesta = $this->partidas_model->Actualizar($parametros);
-                    echo json_encode(array(
-                        "isValid"=>true,
-                        "Mensaje"=>"Se ha editado Localizacion exitosamente",
-                        "id"=>$this->input->post("id")));
-                }
-
-            }
-        }
-
-        public function eliminar(){
-            
-            if(!$this->session->userdata("nombre") || $this->input->post("id") == ""){
-                redirect(site_url(''));
-            }
-            $this->ValidarPermiso();
-
-            $eliminar = $this->partidas_model->Eliminar($this->input->post("id"));
-            $data = $this->FormatearRequest($this->partidas_model->Obtener());
-            echo json_encode(array("isValid"=>true,"Datos"=>$data));
-        }
-
-        public function busqueda(){
-
-            if(!$this->session->userdata("nombre") || $this->input->post("Pagina") == ""){
-                redirect(site_url(''));
-            }
-
-            $busqueda = $this->input->post("Busqueda") ;
-            $pagina = (int) $this->input->post("Pagina") ;
-            $regXpag = (int) $this->input->post("RegistrosPorPagina") ;
-            $ordenamiento = $this->input->post("Orden") ;
-            
-            $inicio = 1+$regXpag*($pagina-1);
-            $fin = $regXpag*$pagina;
-
-            if($this->input->post("Opcion") == "Padre")
-                $id = $this->input->post("IdActual");
-            else
-                $id = "";
-
-            $respuesta = $this->FormatearBusqueda($this->partidas_model->Busqueda($busqueda,$ordenamiento,$inicio,$fin,$id));
-
-            echo json_encode(array("isValid"=>true,"Datos"=>$respuesta));
-        }
-
-        public function imprimir($id){
-            $this->ValidarPermiso();
-            $data['datos'] = $this->FormatearImpresion($this->partidas_model->ObtenerInfoPDF($id));
-            $this->load->library('tcpdf/Pdf');
-            $this->load->view('Formatos/formatoPartida',$data);
-        }
-
-        private function FormatearImpresion($respuesta){
-
-            $data = array(
-                "par_id"        =>"",
-                "codigo"        =>"",
-                "nombre"        =>"",
-                "nombrepadre"   =>"",
-                "observaciones" => ""
-            );
-
-            if($respuesta)
-                $data = $respuesta;
-
-            return $data;
-        }
-        
-        private function FormatearBusqueda($datos){
-            
-            $data = array(
-                "Listas"     =>"",
-                "Registros" => ""
-            );
-
-
-            if($datos){
-
-                $htmlListas = "";
-                $registros = 0;
-                foreach ($datos as $elemento) {
-                    $registros = $elemento['registros'];
-                    $htmlListas = $htmlListas
-                        ."<tr>"
-                        .   "<td style='display:none;'>" . $elemento['par_id'] . "</td>"
-                        .   "<td style='display:none;'>" . $elemento['idpad'] . "</td>"
-                        .   "<td style='display:none;'>" . $elemento['nombrepadre'] . "</td>"
-                        .   "<td>" . $elemento['codigo'] . "</td>"
-                        .   "<td>" . $elemento['nombre'] . "</td>"
-                        .   "<td>" . $elemento['observaciones'] . "</td>"
-                        ."</tr>";
-                }
-                
-                $data['Listas'] = $htmlListas;
-                $data['Registros'] = $registros;
-            }
-
-            return $data;
-        }
-
 
     }
 
