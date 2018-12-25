@@ -317,6 +317,9 @@
             //Abrir conexion
             $conexion = $this->bd_model->ObtenerConexion();
 
+            //Abrir Transaccion
+            pg_query("BEGIN") or die("Could not start transaction");
+            
             //Insertar Partida
             $query = " INSERT INTO Partidas(Codigo,Nombre,Observaciones) VALUES('"
             . str_replace("'", "''",$data['Codigo']) . "','"
