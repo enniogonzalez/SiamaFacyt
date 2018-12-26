@@ -230,6 +230,8 @@ $(function(){
             "id": $('#IdForm').text().trim(),
             "Url": $('#ControladorActual').text().trim()+"/eliminar"
         }
+
+        console.log(parametros)
         Eliminar(parametros)
     });
 
@@ -303,6 +305,7 @@ $(function(){
                 "Opciones": Opciones,
                 "Url":$('#FormularioActual').attr("action")
             }
+
             GuardarLD(parametros);
         }
         
@@ -316,7 +319,6 @@ $(function(){
 
     function GuardarLD(parametros){
 
-        
         if( idActual == $('#IdForm').text().trim() &&
             codigoActual == $('#CodigoLD').val().trim() &&
             nombreActual == $('#NombreLD').val().trim() &&

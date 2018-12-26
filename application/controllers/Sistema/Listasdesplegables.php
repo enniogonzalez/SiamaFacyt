@@ -95,14 +95,14 @@
             }
             
             $parametros = array(
-                "idActual" => $this->input->post("idActual"),
+                "ld_id" => $this->input->post("idActual"),
                 "Codigo" => $this->input->post("Codigo"),
                 "Nombre" => $this->input->post("Nombre"),
                 "Descripcion" => $this->input->post("Descripcion"),
                 "Opciones" => json_encode($this->input->post("Opciones"))
             );
             
-            if($parametros['idActual'] == ""){
+            if($parametros['ld_id'] == ""){
                 if($this->listasdesplegables_model->ExisteCodigo($parametros['Codigo'])){
                     echo json_encode(array(
                         "isValid"=>false,
@@ -110,7 +110,7 @@
                         "id"=>""));
                 }else{
                     $respuesta = $this->listasdesplegables_model->Insertar($parametros);
-                    $id = $this->listasdesplegables_model->ObtenerId($this->input->post("Codigo"));
+                    $id = $this->listasdesplegables_model->ObtenerId($parametros("Codigo"));
     
                     echo json_encode(array(
                         "isValid"=>true,
@@ -118,17 +118,17 @@
                         "id"=>$id['ld_id']));
                 }
             }else{
-                if($this->listasdesplegables_model->ExisteCodigo($parametros['Codigo'],$parametros['idActual'])){
+                if($this->listasdesplegables_model->ExisteCodigo($parametros['Codigo'],$parametros['ld_id'])){
                     echo json_encode(array(
                         "isValid"=>false,
                         "Mensaje"=>"Ya existe una lista desplegable registrada con el mismo codigo.",
-                        "id"=>$parametros['idActual']));
+                        "id"=>$parametros['ld_id']));
                 }else{
-                    $respuesta = $this->listasdesplegables_model->Editar($parametros);
+                    $respuesta = $this->listasdesplegables_model->Actualizar($parametros);
                     echo json_encode(array(
                         "isValid"=>true,
                         "Mensaje"=>"Se ha insertado Lista Desplegable exitosamente",
-                        "id"=>$this->input->post("idActual")));
+                        "id"=>$parametros['ld_id']));
                 }
             }
 

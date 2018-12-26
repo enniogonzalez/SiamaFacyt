@@ -257,7 +257,7 @@
             if($result){
                 $datos = array(
                     'Opcion' => 'Eliminar',
-                    'Tabla' => 'Marcas', 
+                    'Tabla' => 'Partidas', 
                     'Tab_id' => $id,
                     'Datos' => json_encode($datosActual)
                 );
