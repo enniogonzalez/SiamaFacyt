@@ -229,7 +229,7 @@ CREATE TABLE Piezas(
 	PRO_ID			INT					NOT NULL,--proveedor
 	PAR_ID			INT					NULL,--partida
 	MAR_ID			INT					NOT NULL,--Marca
-	TPI_ID			INT					NULL,--Tipo de pieza
+	TPI_ID			INT					NOT NULL,--Tipo de pieza
 
 	Fec_Fab			DATE				NOT NULL,--fecha de fabricacion
 	Fec_adq			DATE				NOT NULL,--fecha de adquisicion

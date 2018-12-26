@@ -867,20 +867,6 @@
                         );";
             
             array_push($transacciones,$query);
-
-            $query = "  DELETE FROM PlantillaMantenimientoTarea AS PMT
-                        WHERE EXISTS(
-                            SELECT 1
-                            FROM PlantillaMantenimiento PLM 
-                                JOIN Ajustes AJU ON AJU.BIE_ID = PLM.BIE_ID
-                                JOIN AjustesAccion AAC ON AAC.AJU_ID = AJU.AJU_Id
-                                    AND AAC.PIE_ID = PMT.PIE_ID
-                            WHERE PLM.PLM_ID = PMT.PLM_ID
-                                AND AJU.AJU_ID = " . $ajuste . "
-                                AND AAC.Tipo = 'Quitar'
-                        );";
-            
-            array_push($transacciones,$query);
             
             return $transacciones;
         }

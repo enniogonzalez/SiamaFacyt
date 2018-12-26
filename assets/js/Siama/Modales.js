@@ -7,6 +7,7 @@ $(function(){
     var TipoOrdenamientoActivo = 0;
     var UrlBusquedaActivo = "";
     var FechaActiva = false;
+    var Eligiendo = false;
 
     /************************************************************/
     /*              Manejo Modal Estatus                        */
@@ -141,35 +142,43 @@ $(function(){
         TipoOrdenamientoActivo = 0;
         
         SetModalEtqContador("");
-        
         if(GetOrigenBuscador() == origenFuncion){
             $('#SiamaModalFunciones').show();
         }
+        SetOrigenBuscador("");
     })
 
     $('#ElegirModalBuscar').on('click',function(){
-        if($('#TablaBusquedaFormulario .tr-activa-siama').length == 0){
-            
-            Botones = `
-            <button data-dismiss="modal" title="Cerrar" type="button" style="margin:5px;" class="btn  btn-danger">
-            <span class="fa fa-times "></span>
-            Cerrar
-            </button>`;
 
-            var parametros = {
-                "Titulo":"Atención",
-                "Cuerpo": "Debe seleccionar una fila a elegir",
-                "Botones":Botones
-            }
+        if(!Eligiendo){
+            Eligiendo = true;
 
-            ModalAdvertencia(parametros);
-        }else{
-            InterfazElegirBuscador($('#TablaBusquedaFormulario .tr-activa-siama'));
+            if($('#TablaBusquedaFormulario .tr-activa-siama').length == 0){
             
-            if(GetOrigenBuscador() == origenFuncion){
-                $('#SiamaModalFunciones').show();
+                Botones = `
+                <button data-dismiss="modal" title="Cerrar" type="button" style="margin:5px;" class="btn  btn-danger">
+                <span class="fa fa-times "></span>
+                Cerrar
+                </button>`;
+    
+                var parametros = {
+                    "Titulo":"Atención",
+                    "Cuerpo": "Debe seleccionar una fila a elegir",
+                    "Botones":Botones
+                }
+    
+                ModalAdvertencia(parametros);
+            }else{
+                InterfazElegirBuscador($('#TablaBusquedaFormulario .tr-activa-siama'));
+                
+                if(GetOrigenBuscador() == origenFuncion){
+                    $('#SiamaModalFunciones').show();
+                }
+                SetModalEtqContador("")
+                
+                SetOrigenBuscador("");
             }
-            SetModalEtqContador("")
+            Eligiendo = false;
         }
     })
     
@@ -417,6 +426,7 @@ $(function(){
     }
 
     window.Busqueda = function(paginaActual, verFecha = false,paramsRequest = {}){
+        Eligiendo = false;
         $('#ParametrosBuscador').text(JSON.stringify(paramsRequest));
         FechaActiva =verFecha;
         

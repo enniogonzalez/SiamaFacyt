@@ -206,6 +206,7 @@ $route['restablecer/guardar'] = 'resetpassword/guardar/';
 $route['restablecer/(:any)'] = 'resetpassword/view/$1';
 
 $route['tipopieza/busqueda'] = 'Patrimonio/tipopieza/busqueda';
+$route['tipopieza/busquedaDisponible'] = 'Patrimonio/tipopieza/busquedaDisponible';
 $route['tipopieza/eliminar'] = 'Patrimonio/tipopieza/eliminar';
 $route['tipopieza/guardar'] = 'Patrimonio/tipopieza/guardar';
 $route['tipopieza/imprimir/(:any)'] = 'Patrimonio/tipopieza/imprimir/$1';

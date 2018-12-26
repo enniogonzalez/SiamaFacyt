@@ -37,12 +37,6 @@ $(function(){
             break;
         }
 
-        if(GetSearchType() != "Formulario" && GetSearchType() != Bienes){
-            
-            //Prevenir solapamientos de modales
-            setTimeout(function(){ 
-                $('#SiamaModalFunciones').modal('show');}, 400);
-        }
     })
 
     /************************************/
@@ -666,10 +660,6 @@ $(function(){
 
         if(GetSearchType() != "Formulario"  ){
             $('#SiamaModalBusqueda').modal('hide');
-
-            //Prevenir solapamientos de modales
-            if(GetSearchType() != Bienes)
-                setTimeout(function(){ $('#SiamaModalFunciones').modal('show');}, 400);
         }
     }
 

@@ -237,6 +237,73 @@
 
             return $retorno;
         }
+
+        public function BusquedaDisponible($data){
+            
+            //Abrir conexion
+            $conexion = $this->bd_model->ObtenerConexion();
+            $condicion ="";
+
+            if($data['busqueda'] != ""){
+                $condicion = "AND (LOWER(Nombre) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
+                            . "%')";
+            }
+
+            //Query para buscar usuario
+            $query ="   SELECT  tpi_id,
+                                Nombre,
+                                Observaciones,
+                                Registros
+                        FROM (
+                            SELECT  tpi_id,
+                                    Nombre,
+                                    COALESCE(Observaciones,'') Observaciones,
+                                    COUNT(*) OVER() AS Registros,
+                                    ROW_NUMBER() OVER(ORDER BY " . $data['orden'] .") Fila
+                            FROM Tipopieza
+                            WHERE tpi_id IN (
+                                    SELECT CB.tpi_id
+                                    FROM CompatibilidadBien CB 
+                                    WHERE CB.bie_id = '" . $data['bien'] . "'
+                                        AND NOT EXISTS(
+                                                SELECT 1
+                                                FROM Piezas P
+                                                WHERE P.bie_id = CB.bie_id
+                                                    AND P.tpi_id = CB.tpi_id
+                                            )
+                                        AND NOT EXISTS(
+                                                SELECT 1
+                                                FROM PlantillaMantenimiento PLM
+                                                    JOIN PlantillaMantenimientoTarea PMT ON PMT.plm_id = PLM.plm_id
+                                                WHERE PLM.bie_id = CB.bie_id
+                                                    AND PMT.tpi_id = CB.tpi_id
+                                            )
+                                )
+
+                        ) LD
+                        WHERE Fila BETWEEN ". $data['inicio'] . " AND " . $data['fin'] . "
+                        ORDER BY Fila ASC;";
+
+            //Ejecutar Query
+            $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
+            
+            //Si existe registro, se guarda. Sino se guarda false
+            if ($result){
+                $retorno = [];
+                while($line = pg_fetch_array($result, null, PGSQL_ASSOC))
+                    array_push($retorno,$line);
+
+            } else
+                $retorno = false;
+
+            //Liberar memoria
+            pg_free_result($result);
+
+            //liberar conexion
+            $this->bd_model->CerrarConexion($conexion);
+
+            return $retorno;
+        }
         
         public function Eliminar($id){
 

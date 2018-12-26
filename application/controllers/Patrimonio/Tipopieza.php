@@ -153,6 +153,35 @@
             echo json_encode(array("isValid"=>true,"Datos"=>$respuesta));
         }
 
+        public function busquedaDisponible(){
+
+            if(!$this->session->userdata("nombre") || $this->input->post("Pagina") == ""){
+                redirect(site_url(''));
+            }
+
+            $busqueda = $this->input->post("Busqueda") ;
+            $pagina = (int) $this->input->post("Pagina") ;
+            $regXpag = (int) $this->input->post("RegistrosPorPagina") ;
+            $ordenamiento = $this->input->post("Orden") ;
+            $Condiciones = $this->input->post("Condiciones");
+            
+            $inicio = 1+$regXpag*($pagina-1);
+            $fin = $regXpag*$pagina;
+            $bien = $Condiciones['Bien'];
+
+            $data = array(
+                "busqueda"      => $busqueda,
+                "orden"         => $ordenamiento,
+                "inicio"        => $inicio,
+                "fin"           => $fin,
+                "bien"          => $bien
+            );
+
+            $respuesta = $this->FormatearBusqueda($this->tipopieza_model->BusquedaDisponible($data));
+
+            echo json_encode(array("isValid"=>true,"Datos"=>$respuesta));
+        }
+
         public function imprimir($id){
             $data['datos'] = $this->FormatearImpresion($this->tipopieza_model->ObtenerInfoPDF($id));
             $this->load->library('tcpdf/Pdf');

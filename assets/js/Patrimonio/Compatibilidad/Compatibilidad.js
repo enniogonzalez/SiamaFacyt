@@ -388,8 +388,10 @@ $(function(){
     function GetUrlBusquedaOpcion(opcion){
         switch(opcion){
             case TipoPiezaAgregar:
-            case TipoPiezaQuitar:
                 controlador = "tipopieza/busqueda";
+            break;
+            case TipoPiezaQuitar:
+                controlador = "tipopieza/busquedaDisponible";
             break;
             case Compatibilidad:
                 controlador = "Compatibilidad/busqueda";
