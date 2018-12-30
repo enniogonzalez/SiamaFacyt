@@ -890,7 +890,6 @@
                         WHERE PMT.PLM_ID = " . $plantilla . "
                         ORDER BY PIE.pie_id ASC, PMT.titulo ASC;";
 
-
             //Ejecutar Query
             $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
 

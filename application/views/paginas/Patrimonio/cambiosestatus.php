@@ -28,7 +28,7 @@
                 <label for="DocumentoCambios" class="col-lg-3 col-form-label">Documento:</label>
                 <div class="col-lg-9">
                     <input readonly disabled type="text" maxlength="10"
-                        class="form-control texto" id="DocumentoCambios" value="<?=$documento?>">
+                        class="form-control texto documento" id="DocumentoCambios" value="<?=$documento?>">
                 </div>
             </div>
 
@@ -59,11 +59,9 @@
             <div class="form-group row">
                 <label for="estatusBien" class="col-lg-3 col-form-label">Estatus Bien:</label>
                 <div class="col-lg-9">
-                    <select disabled readonly class="form-control obligatorio texto" id="estatusBien">
-                        <option value=""></option>
-                        <option value="Activo" <?=$bie_estatus == "Activo" ? "selected": ""?>>Activo</option>
-                        <option value="Inactivo" <?=$bie_estatus == "Inactivo" ? "selected": ""?>>Inactivo</option>
-                    </select>
+                
+                    <input readonly disabled type="text" maxlength="100"
+                        class="form-control texto estatus" id="estatusBien" value="<?=$bie_estatus?>">
                     <div class="invalid-feedback">Campo Obligatorio</div>
                 </div>
             </div>
@@ -110,6 +108,9 @@
             </select> 
             <select readonly disabled  id="listaBusquedaBien">
                 <?=$listaBusquedaBien?>
+            </select> 
+            <select readonly disabled  id="listaBusquedaFalla">
+                <?=$listaBusquedaFalla?>
             </select> 
         </div>
         <div style="display:none;" id ="ControladorActual"><?=site_url('/cambiosestatus')?></div>

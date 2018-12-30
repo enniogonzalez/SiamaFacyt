@@ -321,8 +321,8 @@
                     $htmlListas = $htmlListas
                         ."<tr>"
                         .   "<td style='display:none;'>" . $elemento['pie_id'] . "</td>"
-                        .   "<td>" . $elemento['estatus'] . "</td>"
                         .   "<td>" . $elemento['nombre'] . "</td>"
+                        .   "<td>" . $elemento['estatus'] . "</td>"
                         .   "<td>" . $elemento['inv_uc'] . "</td>"
                         .   "<td style='display:none;'>" . $elemento['tpi_id'] . "</td>"
                         .   "<td>" . $elemento['nomtpi'] . "</td>"

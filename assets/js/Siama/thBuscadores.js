@@ -1,18 +1,18 @@
 const thAjustes = `
     <tr>
         <th style="width:25%;">Documento</th>
-        <th style="width:50%;">Bien</th>
         <th style="width:25%;">Estatus</th>
+        <th style="width:50%;">Bien</th>
     </tr>
 `;
 
 const thBienes = `
 <tr>
     <th style="width:40%;">Nombre</th>
+    <th style="width:15%;">Estatus</th>
     <th style="width:15%;">Inventario UC</th>
     <th style="width:15%;">Localizaci&oacute;n</th>
     <th style="width:15%;">Marca</th>
-    <th style="width:15%;">Estatus</th>
 </tr>
 `;
 
@@ -28,16 +28,16 @@ const thCambioEstatus = `
 const thCompatibilidad = `
     <tr>
         <th style="width:25%;">Documento</th>
-        <th style="width:50%;">Bien</th>
         <th style="width:25%;">Estatus</th>
+        <th style="width:50%;">Bien</th>
     </tr>
 `;
 
 const thCorrectivos = `
 <tr>
     <th style="width:15%;">Documento</th>
-    <th style="width:40%;">Bien</th>
     <th style="width:15%;">Estatus</th>
+    <th style="width:40%;">Bien</th>
     <th style="width:15%;">Inicio</th>
     <th style="width:15%;">Fin</th>
 </tr>
@@ -98,8 +98,8 @@ const thPartidas = `
 
 const thPiezas = `
     <tr>
-        <th style="width:9%;">Estatus</th>
         <th style="width:35%;">Nombre</th>
+        <th style="width:9%;">Estatus</th>
         <th style="width:12%;">Inventario UC</th>
         <th style="width:12%;">Tipo</th>
         <th style="width:12%;">Marca</th>
@@ -110,16 +110,16 @@ const thPiezas = `
 const thPlantillas = `
     <tr>
         <th style="width:25%;">Documento</th>
-        <th style="width:50%;">Bien</th>
         <th style="width:25%;">Estatus</th>
+        <th style="width:50%;">Bien</th>
     </tr>
 `;
 
 const thPreventivos = `
     <tr>
         <th style="width:15%;">Documento</th>
-        <th style="width:40%;">Bien</th>
         <th style="width:15%;">Estatus</th>
+        <th style="width:40%;">Bien</th>
         <th style="width:15%;">Inicio</th>
         <th style="width:15%;">Fin</th>
     </tr>

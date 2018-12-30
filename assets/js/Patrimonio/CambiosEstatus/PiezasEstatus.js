@@ -1,5 +1,6 @@
 
 const PiezaCE = "PiezaCE";
+const Falla = "Falla";
 
 $(function(){
 
@@ -22,8 +23,30 @@ $(function(){
 
     $('#SiamaModalFunciones').on('click','.BorrarPiezaCE',function(){
         $('#idPieza').text('');
+        $('#InvPieza').text('');
         $('#nomPiezaCE').val('');
+        $('#idFalla').text('');
+        $('#nomFalla').val('');
+        $('#estatusPieza').val('');
+        $('.divFallaPieza').hide();
     });
+    /************************************/
+    /*      Manejo Fallas             */
+    /************************************/
+    
+    $('#SiamaModalFunciones').on('click','#nomFalla',function(){
+        BuscarFalla(Falla);
+    });
+
+    $('#SiamaModalFunciones').on('click','.BuscarFalla',function(){
+        BuscarFalla(Falla);
+    });
+
+    $('#SiamaModalFunciones').on('click','.BorrarFalla',function(){
+        $('#idFalla').text('');
+        $('#nomFalla').val('');
+    });
+
 
     /************************************/
     /*          Fin Buscadores          */
@@ -87,10 +110,12 @@ $(function(){
             "Fila"              : $(this).parent('tr').index(),
             "Botones"           : Botones,
             "idPieza"           : fila.find('td:eq(1)').text().trim(),
-            "nomPiezaCE"    : fila.find('td:eq(2)').text().trim(),
+            "nomPiezaCE"        : fila.find('td:eq(2)').text().trim(),
             "InvPieza"          : fila.find('td:eq(3)').text().trim(),
             "ObservacionPieza"  : fila.find('td:eq(4)').text().trim(),
             "estatusPieza"      : fila.find('td:eq(5)').text().trim(),
+            "idFalla"           : fila.find('td:eq(6)').text().trim(),
+            "nomFalla"          : fila.find('td:eq(7)').text().trim(),
         }
         SetModalFuncionesPiezaCE(data);
         
@@ -121,6 +146,11 @@ $(function(){
         })
 
 
+        if($('#estatusPieza').val().trim() == "Inactivo" && $('#idFalla').text().trim()==""){
+            Valido = false;
+            $('#nomFalla').addClass('is-invalid');
+        }
+
         if(Valido){
             
             ValorActual =$('#idPieza').text().trim();
@@ -136,6 +166,7 @@ $(function(){
                 }
             });
         }
+
 
         if(Valido){
 
@@ -206,6 +237,8 @@ $(function(){
                 <td></td>
                 <td style="display:none;"></td>
                 <td ></td>
+                <td style="display:none;"></td>
+                <td style="display:none;"></td>
                 <td colspan="2" class ="editarPiezaCE" style="text-align: center;cursor: pointer;">
                     <span class="fa fa-pencil fa-lg"></span>
                 </td>
@@ -215,17 +248,23 @@ $(function(){
 
     function SetModalFuncionesPiezaCE(data){
 
+        if(data['estatusPieza'] != "Activo"){
+            estiloFalla = "style = \"display:none;\"";
+        }else{
+            estiloFalla = "";
+        }
+
         //Se crea cuerpo html que va a tener la ventana modal de edicion
         var html = `
         <form class="form-horizontal" id="formEditarPiezaCE">
 
             <div class="form-group row">
-                <label class="col-lg-3 col-form-label">Pieza :</label>
+                <label class="col-lg-3 col-form-label">Pieza:</label>
                 <div class="col-lg-9">
                     <div style="width:80%;float:left;">
                         <div style="display:none;" id="idPieza">${data['idPieza']}</div>
                         <div style="display:none;" id="InvPieza">${data['InvPieza']}</div>
-                        <input type="text" title="Pieza" 
+                        <input type="text" title="Pieza" readonly
                             class="form-control texto obligatorio buscador PiezaCE" id="nomPiezaCE" value="${data['nomPiezaCE']}">
                         <div class="invalid-feedback">Campo Obligatorio</div>
                     </div>
@@ -238,14 +277,30 @@ $(function(){
                 </div>
             </div>
 
+            <div class="form-group row divFallaPieza" ${estiloFalla}>
+                <label class="col-lg-3 col-form-label">Falla:</label>
+                <div class="col-lg-9">
+                    <div style="width:80%;float:left;">
+                        <div style="display:none;" id="idFalla">${data['idFalla']}</div>
+                        <input type="text" title="Falla" readonly
+                            class="form-control texto buscador PiezaCE" id="nomFalla" value="${data['nomFalla']}">
+                        <div class="invalid-feedback">Campo Obligatorio</div>
+                    </div>
+                    <div style="width:20%;float:right;padding:10px;">
+                        <span title="Buscar Falla" class="fa fa-search BuscarFalla" 
+                            style="cursor: pointer;float:left;"></span>
+                        <span title="Borrar Falla" class="fa fa-trash-o BorrarFalla" 
+                            style="cursor: pointer;float:right;"></span>
+                    </div>
+                </div>
+            </div>
+
             <div class="form-group row">
                 <label for="estatusPieza" class="col-lg-3 col-form-label">Estatus:</label>
                 <div class="col-lg-9">
-                    <select class="form-control obligatorio texto PiezaCE" id="estatusPieza">
-                        <option value=""></option>
-                        <option value="Activo" ${data['estatusPieza'] == "Activo" ? "selected": ""}>Activo</option>
-                        <option value="Inactivo" ${data['estatusPieza'] == "Inactivo" ? "selected": ""}>Inactivo</option>
-                    </select>
+                
+                    <input readonly disabled type="text" maxlength="100"
+                    class="form-control texto estatus" id="estatusPieza" value="${data['estatusPieza']}">
                     <div class="invalid-feedback">Campo Obligatorio</div>
                 </div>
             </div>

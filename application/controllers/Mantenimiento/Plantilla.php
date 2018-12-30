@@ -30,8 +30,8 @@
                         ."<tr>"
                         .   "<td style='display:none;'>" . $elemento['plm_id'] . "</td>"
                         .   "<td>" . $elemento['documento'] . "</td>"
-                        .   "<td>" . $elemento['nombre'] . "</td>"
                         .   "<td>" . $elemento['estatus'] . "</td>"
+                        .   "<td>" . $elemento['nombre'] . "</td>"
                         ."</tr>";
                 }
                 

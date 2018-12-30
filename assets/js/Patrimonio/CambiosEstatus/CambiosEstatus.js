@@ -73,6 +73,7 @@ $(function(){
         else{
             $('#idBieCambios').text("");
             $('#nomBieCambios').val("");
+            $('#estatusBien').val("");
         }
     });
 
@@ -254,6 +255,20 @@ $(function(){
         }
     }
 
+    function ElegirEstatus(objeto,estatus){
+        switch(estatus){
+            case "Activo":
+                objeto.val("Inactivo");
+            break;
+            case "Inactivo":
+                objeto.val("Activo");
+            break;
+            default:
+                objeto.val("");
+            break;
+        }
+    }
+
     function AprobarAjuste(parametros){
 
         MostrarEstatus(6); 
@@ -352,6 +367,9 @@ $(function(){
             case Bienes:
                 controlador = "bienes/busqueda";
             break;
+            case Falla:
+                controlador = "fallas/busqueda";
+            break;
         }
 
         return $('#UrlBase').text() + "/" + controlador + ""
@@ -369,6 +387,9 @@ $(function(){
             break;
             case Bienes:
                 controlador = "Bienes Disponibles";
+            break;
+            case Falla:
+                controlador = "Fallas";
             break;
         }
 
@@ -551,6 +572,31 @@ $(function(){
     window.AccionGuardar = function(data){
         LlenarFormularioRequest(data['Datos']);
     }
+
+    window.AccionEliminarFormulario = function(data){
+        
+        if(data['Datos']['cam_id'] == ""){
+            ClearForm();
+            AgregarBotoneraPrimariaNULL();
+        }else{
+            LlenarFormularioRequest(data['Datos']);
+        }
+    }
+
+    window.BuscarFalla = function(tipo){
+        SetOrigenBuscador(origenFuncion);
+
+        SetSearchThead(thFallas);
+        parametros = {
+            "Lista": $('#listaBusquedaFalla').html().trim(),
+            "Tipo": tipo,
+        }
+
+        idBuscadorActual = $('#idFalla').text().trim();
+        nombreBuscadorActual = $('#nomFalla').val().trim();
+
+        SetSearchModal(parametros)
+    }
     
     window.BuscarPieza = function(tipo){
 
@@ -591,12 +637,26 @@ $(function(){
             break;
             case PiezaCE:
                 $('#idPieza').text(fila.find("td:eq(0)").text().trim());
-                $('#InvPieza').text(fila.find("td:eq(1)").text().trim());
-                $('#nomPiezaCE').val(fila.find("td:eq(2)").text().trim());
+                $('#nomPiezaCE').val(fila.find("td:eq(1)").text().trim());
+                ElegirEstatus($('#estatusPieza'),fila.find("td:eq(2)").text().trim());
+                $('#InvPieza').text(fila.find("td:eq(3)").text().trim());
+                $('#idFalla').text('');
+                $('#nomFalla').val('');
+
+                if($('#estatusPieza').val()=="Inactivo"){
+                    $('.divFallaPieza').show();
+                }else{
+                    $('.divFallaPieza').hide();
+                }
             break;
             case Bienes:
                 $('#idBieCambios').text(fila.find("td:eq(0)").text().trim());
                 $('#nomBieCambios').val(fila.find("td:eq(1)").text().trim());
+                ElegirEstatus($('#estatusBien'),fila.find("td:eq(2)").text().trim());
+            break;
+            case Falla:
+                $('#idFalla').text(fila.find("td:eq(0)").text().trim());
+                $('#nomFalla').val(fila.find("td:eq(1)").text().trim());
             break;
         }
 
@@ -609,13 +669,4 @@ $(function(){
         }
     }
 
-    window.AccionEliminarFormulario = function(data){
-        
-        if(data['Datos']['cam_id'] == ""){
-            ClearForm();
-            AgregarBotoneraPrimariaNULL();
-        }else{
-            LlenarFormularioRequest(data['Datos']);
-        }
-    }
 });

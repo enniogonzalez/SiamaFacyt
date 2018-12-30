@@ -323,9 +323,7 @@
                 "Registros" => ""
             );
 
-
             if($datos){
-
                 $htmlListas = "";
                 $registros = 0;
                 foreach ($datos as $elemento) {
@@ -334,10 +332,10 @@
                         ."<tr>"
                         .   "<td style='display:none;'>" . $elemento['bie_id'] . "</td>"
                         .   "<td>" . $elemento['nombre'] . "</td>"
+                        .   "<td>" . $elemento['estatus'] . "</td>"
                         .   "<td>" . $elemento['inv_uc'] . "</td>"
                         .   "<td>" . $elemento['nomloc'] . "</td>"
                         .   "<td>" . $elemento['nommar'] . "</td>"
-                        .   "<td>" . $elemento['estatus'] . "</td>"
                         ."</tr>";
                 }
                 

@@ -26,9 +26,9 @@
                         ."<tr>"
                         .   "<td style='display:none;'>" . $elemento['man_id'] . "</td>"
                         .   "<td>" . $elemento['documento'] . "</td>"
+                        .   "<td>" . $elemento['estatus'] . "</td>"
                         .   "<td style='display:none;'>" . $elemento['bie_id'] . "</td>"
                         .   "<td>" . $elemento['nombre'] . "</td>"
-                        .   "<td>" . $elemento['estatus'] . "</td>"
                         .   "<td>" . $elemento['fec_ini'] . "</td>"
                         .   "<td>" . $elemento['fec_fin'] . "</td>"
                         ."</tr>";

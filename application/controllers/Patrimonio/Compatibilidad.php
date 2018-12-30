@@ -263,8 +263,8 @@
                         ."<tr>"
                         .   "<td style='display:none;'>" . $elemento['com_id'] . "</td>"
                         .   "<td>" . $elemento['documento'] . "</td>"
-                        .   "<td>" . $elemento['nombre'] . "</td>"
                         .   "<td>" . $elemento['estatus'] . "</td>"
+                        .   "<td>" . $elemento['nombre'] . "</td>"
                         ."</tr>";
                 }
                 
