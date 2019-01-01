@@ -589,6 +589,7 @@ CREATE TABLE CambioEstatusPieza(
 	CAM_ID			INT				NOT NULL,
 	PIE_ID			INT				NOT NULL,
 	Estatus			VARCHAR(100)	NOT NULL,--Activo, Inactivo
+	FAL_ID			INT				NULL,
 	Usu_Cre			INT				NOT NULL, --Usuario Creador
 	Fec_Cre			TIMESTAMP		NOT NULL DEFAULT(NOW()), --fecha Creacion
 	Usu_Mod			INT				NOT NULL, --Usuario Modificador
@@ -596,6 +597,7 @@ CREATE TABLE CambioEstatusPieza(
 	Observaciones	TEXT			NOT NULL,
 	UNIQUE(CAM_ID,PIE_ID),
 	FOREIGN KEY (PIE_ID) References Piezas,
+	FOREIGN KEY (FAL_ID) References Fallas,
 	FOREIGN KEY (CAM_ID) References CambiosEstatus ON DELETE CASCADE,
 	FOREIGN KEY (Usu_Cre) References Usuarios,
 	FOREIGN KEY (Usu_Mod) References Usuarios

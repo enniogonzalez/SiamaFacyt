@@ -118,9 +118,10 @@ $(function(){
     $('#SiamaModalAdvertencias').on('click','#ConfirmarEliminacion',function(){
         var parametros = {
             "id": $('#IdForm').text().trim(),
-            "Url": $('#ControladorActual').text().trim()+"/eliminar"
+            "Caso":"Eliminar",
+            "Url": $('#ControladorActual').text().trim()+"/obtener"
         }
-        Eliminar(parametros)
+        Obtener(parametros);
     });
 
     $('.botoneraFormulario').on('click','#EditarRegistro',function(){
@@ -491,11 +492,42 @@ $(function(){
 
                 if(data['Caso'] == "Editar"){
                     Editar();
+                }else if(data['Caso'] == "Eliminar"){
+                    AccionEliminar();
                 }
             }
         }).fail(function(data){
             failAjaxRequest(data);
         });
+    }
+    
+    function AccionEliminar(){
+
+        if($('#EstatusCambios').val().trim() == "Aprobado"){
+            
+            Botones = `
+            <button data-dismiss="modal" title="Cerrar" type="button" style="margin:5px;" class="btn  btn-danger">
+            <span class="fa fa-times "></span>
+            Cerrar
+            </button>`;
+
+            Cuerpo = `No se puede eliminar <strong>Cambio de Estatus</strong> debido a que el estatus ha cambiado a 
+            <strong>Aprobado</strong>.`;
+
+            var parametros = {
+                "Titulo"    : "Advetencia",
+                "Cuerpo"    : Cuerpo,
+                "Botones"   : Botones
+            }
+
+            ModalAdvertencia(parametros,true);
+        }else{
+            var parametros = {
+                "id": $('#IdForm').text().trim(),
+                "Url": $('#ControladorActual').text().trim()+"/eliminar"
+            }
+            Eliminar(parametros)
+        }
     }
 
     function LlenarFormularioRequest(data){

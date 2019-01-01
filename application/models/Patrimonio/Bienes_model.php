@@ -340,6 +340,12 @@
                                                 UNION
 
                                                 SELECT BIE_ID
+                                                FROM CambiosEstatus
+                                                WHERE Estatus = 'Solicitado'
+
+                                                UNION
+
+                                                SELECT BIE_ID
                                                 FROM MantenimientoCorrectivo
                                                 WHERE Estatus <> 'Realizado'
 

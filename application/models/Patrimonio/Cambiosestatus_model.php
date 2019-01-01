@@ -17,22 +17,29 @@
             . str_replace("'", "''",$data['Bie_estatus'])    . "',"
             . $this->session->userdata("usu_id")    . ","
             . $this->session->userdata("usu_id")    . ",'"
-            . str_replace("'", "''", $data['Observaciones']) . "');";
+            . str_replace("'", "''", $data['Observaciones']) . "') RETURNING cam_id;";
 
             //Ejecutar Query
             $result = pg_query($query);
 
+            $new_id = "";
+            
+            if($result){
+                $row = pg_fetch_row($result); 
+                $new_id = $row['0']; 
+            }
+            
             if ($result){
-                $UltimoId = $this->ObtenerUltimoIdInsertado();
 
-                $result = pg_query("DELETE FROM CambioEstatusPieza WHERE CAM_ID = " . $UltimoId['cam_id']);
+                $result = pg_query("DELETE FROM CambioEstatusPieza WHERE CAM_ID = " . $new_id);
 
-                $TransAgregado = $this->ObtenerTransCEP($data['PiezaCEs'],$UltimoId['cam_id']);
+                $TransAgregado = $this->ObtenerTransCEP($data['PiezaCEs'],$new_id);
 
                 if($data['Documento'] == "")
-                    $result = pg_query($this->ObtenerTransaccionDocumento($UltimoId['cam_id']));
+                    $result = pg_query($this->ObtenerTransaccionDocumento($new_id));
 
                 for($i = 0; $result && $i < count($TransAgregado); $i++){
+                    // echo $TransAgregado[$i];
                     $result = pg_query($TransAgregado[$i]);
                 }
                     
@@ -47,7 +54,7 @@
                             JOIN Bienes BIE ON BIE.BIE_ID = CAM.BIE_ID
                             JOIN Usuarios USU ON USU.USU_ID = CAM.USU_CRE
                             JOIN Localizaciones LOC ON LOC.LOC_ID = BIE.LOC_ID
-                        WHERE CAM.CAM_ID = " . $UltimoId['cam_id'];
+                        WHERE CAM.CAM_ID = " . $new_id;
 
             $documento = "";
 
@@ -72,12 +79,12 @@
 
                     $query = "INSERT INTO Alertas(Titulo, Menu, Tabla, TAB_ID,Usu_Cre,Descripcion)
                         VALUES('" . $titulo . "','Patrimonio','CambiosEstatus',"
-                        . $UltimoId['cam_id'] . ","
+                        . $new_id . ","
                         .$this->session->userdata("usu_id") . ",'"
                         . str_replace("'", "''",$descripcion)  . "')";
                     
                     $correoMasivo = array(
-                        "id"        => $UltimoId['cam_id'],
+                        "id"        => $new_id,
                         "Opcion"    => "Cambio de Estatus",
                         "Tabla"     => "CambiosEstatus",
                         "Estatus"   => "Solicitado",
@@ -94,11 +101,11 @@
 
             if($result){
                 $data['Documento'] = $documento;
-                $data['idActual'] = $UltimoId['cam_id'];
+                $data['idActual'] = $new_id;
                 $datos = array(
                     'Opcion' => 'Insertar',
                     'Tabla' => 'CambiosEstatus', 
-                    'Tab_id' => $UltimoId['cam_id'],
+                    'Tab_id' => $new_id,
                     'Datos' => json_encode($data)
                 );
                 
@@ -115,9 +122,9 @@
             //liberar conexion
             $this->bd_model->CerrarConexion($conexion);
 
-            $this->alertas_model->EnviarCorreo($correoMasivo);
+            // $this->alertas_model->EnviarCorreo($correoMasivo);
 
-            return $UltimoId['cam_id'];
+            return $new_id;
         }
 
         public function Actualizar($data){
@@ -623,11 +630,12 @@
             if(isset($ceps)){
                 foreach ($ceps as $data) {
 
-                    $query = "INSERT INTO CambioEstatusPieza( CAM_ID,PIE_ID,Estatus,
+                    $query = "INSERT INTO CambioEstatusPieza( CAM_ID,PIE_ID,Fal_id,Estatus,
                                                         Usu_Cre,Usu_Mod,Observaciones)"
                             . "VALUES('"
                             . str_replace("'", "''",$cambio)    . "','"
-                            . str_replace("'", "''",$data['IdPieza']) . "','"
+                            . str_replace("'", "''",$data['IdPieza']) . "',"
+                            . ($data['IdFalla'] == "" ? "null": ("'".str_replace("'", "''",$data['IdFalla'])."'")) . ",'"
                             . str_replace("'", "''",$data['Estatus']) . "',"
                             . $this->session->userdata("usu_id")    . ","
                             . $this->session->userdata("usu_id")    . ",'"
@@ -664,6 +672,8 @@
             $query ="   SELECT  CEP.CEP_ID,			
                                 CEP.CAM_ID,			
                                 CEP.PIE_ID,	
+                                COALESCE(CAST(FAL.fal_id as varchar(20)),'') fal_id,		
+                                COALESCE(FAL.nombre,'') fal_nom,		
                                 CEP.estatus,	
                                 PIE.Nombre PIE_NOM,
                                 COALESCE(PIE.Inv_UC,'') inv_uc,
@@ -674,6 +684,7 @@
                                 COALESCE(CEP.Observaciones,'') Observaciones
                         FROM CambioEstatusPieza CEP
                             JOIN Piezas PIE ON PIE.PIE_ID = CEP.PIE_ID
+                            LEFT JOIN Fallas FAL ON FAL.fal_id = CEP.FAL_ID
                         WHERE CEP.CAM_ID = " . $cambio . "
                         ORDER BY CEP.CEP_ID ASC;";
 
@@ -694,6 +705,8 @@
                     . "    <td>" . $line['inv_uc'] . "</td>"
                     . "    <td style=\"display:none;\">" . $line['observaciones']
                     . "    <td>" . $line['estatus'] . "</td>"
+                    . "    <td style=\"display:none;\">" . $line['fal_id'] . "</td>"
+                    . "    <td style=\"display:none;\">" . $line['fal_nom'] . "</td>"
                     . "    <td colspan=\"2\" class =\"editarPiezaCE\"  style=\"text-align: center;cursor: pointer;\">"
                     . "        <span class=\"fa fa-pencil fa-lg\"></span>"
                     . "    </td>"

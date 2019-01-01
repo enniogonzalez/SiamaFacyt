@@ -177,6 +177,8 @@ $(function(){
             fila.find('td:eq(3)').text($('#InvPieza').text().trim());
             fila.find('td:eq(4)').text($('#ObservacionPieza').val().trim());
             fila.find('td:eq(5)').text($('#estatusPieza').val().trim());
+            fila.find('td:eq(6)').text($('#idFalla').text().trim());
+            fila.find('td:eq(7)').text($('#nomFalla').val().trim());
     
             CerrarFunciones();
         }
@@ -189,6 +191,7 @@ $(function(){
                 PiezaCEs.push({ 
                     "Id"            : $(this).find('td:eq(0)').text(),
                     "IdPieza"       : $(this).find('td:eq(1)').text(),
+                    "IdFalla"       : $(this).find('td:eq(6)').text(),
                     "Observacion"   : $(this).find('td:eq(4)').text(),
                     "Estatus"       : $(this).find('td:eq(5)').text(),
                 });
@@ -248,7 +251,7 @@ $(function(){
 
     function SetModalFuncionesPiezaCE(data){
 
-        if(data['estatusPieza'] != "Activo"){
+        if(data['estatusPieza'] != "Inactivo"){
             estiloFalla = "style = \"display:none;\"";
         }else{
             estiloFalla = "";
