@@ -24,7 +24,7 @@
             . str_replace("'", "''",$data['usu_id']) . "');";
 
             //Ejecutar Query
-            $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
+            $result = pg_query($query);
 
             $link = site_url('/restablecer/') .$token;
             $Mensaje = "<p>Estimado/a " . $data['nombre'] . ",</p> <br><br><p>Por favor haga click <a href='". $link ."'>aqu&iacute;</a> para poder restablecer su contraseña</p>";
@@ -72,6 +72,24 @@
             if($error){
                 die("No se pudo enviar correo");
             }
+            return $token;
+        }
+
+        public function InsertarContraDefecto($id){
+            
+            //Abrir conexion
+            $conexion = $this->bd_model->ObtenerConexion();
+
+
+            $token = bin2hex(openssl_random_pseudo_bytes(128));
+            
+            $query = " INSERT INTO LogContra(token,usu_id) VALUES('"
+            . str_replace("'", "''",$token) . "','"
+            . str_replace("'", "''",$id) . "');";
+
+            //Ejecutar Query
+            $result = pg_query($query) or die("Could not start transaction");
+
             return $token;
         }
 

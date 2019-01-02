@@ -184,6 +184,36 @@
 
         }
 
+        public function EsClaveDefecto($id){
+
+
+            //Abrir conexion
+            $conexion = $this->bd_model->ObtenerConexion();
+    
+            //Query para buscar usuario
+            $query ="   SELECT 1 
+                        FROM Usuarios 
+                        WHERE clave ='e11170b8cbd2d74102651cb967fa28e5' 
+                            AND usu_id = '" . str_replace("'", "''",$id) . "' " ;
+    
+            //Ejecutar Query
+            $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
+            
+            //Si existe registro, se guarda. Sino se guarda false
+            if (pg_num_rows($result) > 0) 
+                $retorno = true;
+            else
+                $retorno = false;
+
+            //Liberar memoria
+            pg_free_result($result);
+
+            //liberar conexion
+            $this->bd_model->CerrarConexion($conexion);
+
+            return $retorno;
+        }
+
         public function ExisteCorreo($correo,$id=""){
 
             //Abrir conexion
