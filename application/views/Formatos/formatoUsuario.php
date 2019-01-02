@@ -91,14 +91,34 @@ $tbl = "
 			<td style=\"width:35%;\">" . $datos['username'] . "</td>
 			<td style=\"width:15%;\"><strong>Nombre:</strong></td>
 			<td style=\"width:35%;\">" . $datos['nombre'] . "</td>
-        </tr>
+		</tr>";
+
+if($datos['loc_nom'] != ""){
+	$tbl .= "
+	<tr >
+		<td style=\"width:15%;\"> <strong>Rol:</strong></td>
+		<td style=\"width:35%;\">" . $datos['rol_nom'] . "</td>
+		<td style=\"width:15%;\"><strong>Localización:</strong></td>
+		<td style=\"width:35%;\">" . $datos['loc_nom'] . "</td>
+	</tr>
+	<tr>
+		<td> <strong>Correo:</strong></td>
+		<td colspan='3'>" . $datos['correo'] . "</td>
+	</tr>";
+}else{
+	$tbl .= "
+	<tr >
+		<td style=\"width:15%;\"> <strong>Rol:</strong></td>
+		<td style=\"width:35%;\">" . $datos['rol_nom'] . "</td>
+		<td style=\"width:15%;\"><strong>Correo:</strong></td>
+		<td style=\"width:35%;\">" . $datos['correo'] . "</td>
+	</tr>";
+}
+		
+$tbl .= "
         <tr >
-            <td style=\"width:14%\"> <strong>Cargo:</strong></td>
-            <td style=\"width:86%\">" . $datos['cargo'] . "</td>
-        </tr>
-        <tr >
-            <td style=\"width:14%\"> <strong>Observaci&oacute;n:</strong></td>
-            <td style=\"width:86%\">" . $datos['observaciones'] . "</td>
+            <td> <strong>Observaci&oacute;n:</strong></td>
+            <td colspan='3'>" . $datos['observaciones'] . "</td>
         </tr>
 </table>
 ";

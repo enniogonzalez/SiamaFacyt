@@ -5,7 +5,7 @@ function validateEmail(email) {
 
 $(function(){
     $(window).scrollTop(0);
-    
+    $('input').attr('autocomplete','off');
     // var hash = CryptoJS.MD5("MessAge");
     // console.log(hash.toString())
 

@@ -15,8 +15,6 @@ $(function(){
 
     EstablecerBuscador();
     
-
-
     /************************************/
     /*      Inicio Buscadores           */
     /************************************/
@@ -211,7 +209,6 @@ $(function(){
         }
         LlenarFormulario(parametros);
     }
-
 
     window.AccionEliminarFormulario = function(data){
         

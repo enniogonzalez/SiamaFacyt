@@ -8,11 +8,50 @@ var Guardando = false;
 
 $(function(){
 
+    const Localizaciones = "Localizaciones";
+    const Usuarios = "Usuarios";
+
     var idActual ="";
     var dataInputs= [];
     var permisos = [];
 
     EstablecerBuscador()
+
+
+
+    /************************************/
+    /*      Inicio Buscadores           */
+    /************************************/
+
+    $('#nomLoc').on('click',function(){
+        BuscarLocalizacion();
+    });
+
+    $('.BorrarPadre').on('click',function(){
+        $('#idLoc').text('');
+        $('#nomLoc').val('');
+    });
+
+    $('.BuscarLocalizacion').on('click',function(){
+        BuscarLocalizacion();
+    });
+
+    /************************************/
+    /*          Fin Buscadores          */
+    /************************************/
+
+    $('#rol').on('change',function(){
+        CambioRol();
+    });
+
+    $('#CancelarModalBuscar').on('click',function(){
+        switch(GetSearchType()){
+            case Localizaciones:
+                $('#idLoc').text(idBuscadorActual.trim());
+                $('#nomLoc').val(nombreBuscadorActual.trim());
+            break;
+        }
+    })
 
     $('.botoneraFormulario').on('click','#AgregarRegistro',function(){
         GuardarEstadoActualFormulario();
@@ -38,6 +77,16 @@ $(function(){
         ClearForm();
         RestablecerEstadoAnteriorFormulario();
         DeshabilitarFormulario();
+        CambioRol();
+
+        var data = {
+            "Lista": $('#listaBusquedaFormulario').html().trim(),
+            "Tipo": Usuarios
+        }
+
+        SetSearchModal(data,false)
+        SetModalEtqContador("")
+        SetSearchType("Formulario");
     })
 
     $('.botoneraFormulario').on('click','#EditarRegistro',function(){
@@ -81,21 +130,36 @@ $(function(){
             }
         })
 
-        if(Valido && $('#correo').val().trim() != '' && !validateEmail($('#correo').val())){
+        if($('#rol>option:selected').text()=='Director de Dependencia' && $('#idLoc').text().trim()==""){
+            Valido = false;
+            $('#nomLoc').addClass('is-invalid');
+        }
+
+        if($('#correo').val().trim() != '' && !validateEmail($('#correo').val())){
             Valido = false;
             $('#correo').addClass('is-invalid');
         }
 
         if(Valido){
 
+            var data = {
+                "Lista": $('#listaBusquedaFormulario').html().trim(),
+                "Tipo": Usuarios
+            }
+    
+            SetSearchModal(data,false)
+            SetModalEtqContador("")
+            SetSearchType("Formulario");
+
             var parametros = {
-                "id"                : $('#IdForm').text().trim(),
-                "Username"          : $('#Usuario').val().trim(),
-                "Nombre"            : $('#nombreUsu').val().trim(),
-                "Rol"               : $('#rol').val().trim(),
-                "Correo"            : $('#correo').val().trim(),
-                "Observacion"       : $('#Observacion').val().trim(),
-                "Url"               : $('#FormularioActual').attr("action")
+                "id"            : $('#IdForm').text().trim(),
+                "Username"      : $('#Usuario').val().trim(),
+                "Nombre"        : $('#nombreUsu').val().trim(),
+                "Rol"           : $('#rol').val().trim(),
+                "IdLoc"         : $('#idLoc').text().trim(),
+                "Correo"        : $('#correo').val().trim(),
+                "Observacion"   : $('#Observacion').val().trim(),
+                "Url"           : $('#FormularioActual').attr("action")
             }
             
             if(!Guardando){
@@ -137,6 +201,57 @@ $(function(){
         $('#Usuario').val($('#Usuario').val().replace(/[^a-z\.\-0-9]/gi,""))
     })
 
+    function CambioRol(){
+
+        if($('#rol>option:selected').text()=='Director de Dependencia'){
+            $('#divLocalizaciones').show();
+        }else{
+            $('#divLocalizaciones').hide();
+            $('#idLoc').text('');
+            $('#nomLoc').val('');
+        }
+    }
+    
+    function BuscarLocalizacion(){
+
+        SetSearchThead(thLocalizaciones);
+
+        parametros = {
+            "Lista": $('#listaBusquedaLocalizacion').html().trim(),
+            "Tipo": Localizaciones
+        }
+
+        idBuscadorActual = $('#idLoc').text().trim();
+        nombreBuscadorActual = $('#nomLoc').val().trim();
+        SetSearchModal(parametros)
+
+    }
+
+    function SetSearchModal(data,buscar =true){
+        SetSearchCOB(data['Lista']);
+        SetSearchType(data['Tipo']);
+        SetModalEtqContador(data['Tipo'])
+        SetSearchTitle('Busqueda ' + data['Tipo']);
+        PrimeraVezBusqueda = true;
+        SetUrlBusqueda(GetUrlBusquedaOpcion(data['Tipo']));
+
+        if(buscar)
+            Busqueda(1);
+    }
+    
+    function GetUrlBusquedaOpcion(opcion){
+        switch(opcion){
+            case Localizaciones:
+                controlador = "localizaciones";
+            break;
+            case Usuarios:
+                controlador = "usuarios";
+            break;
+        }
+
+        return $('#UrlBase').text() + "/" + controlador + "/busqueda"
+    }
+
     function ClearForm(){
         
         $('#IdForm').text(''); 
@@ -171,6 +286,7 @@ $(function(){
         dataInputs = [];
         permisos = [];
         idActual =$('#IdForm').text().trim();
+        idLocalizacion = $('#idLoc').text().trim();
         $('.formulario-siama form .form-control').each(function(){
             dataInputs.push($(this).val().trim());
         });
@@ -179,20 +295,25 @@ $(function(){
     
     function LlenarFormulario(data){
         $('#IdForm').text(data['id']);
+        $('#idLoc').text(data['idLoc']);
         $('#Usuario').val(data['Username']);
         $('#nombreUsu').val(data['Nombre']);
+        $('#nomLoc').val(data['nomLoc']);
         $('#rol').val(data['Rol']);
         $('#correo').val(data['Correo']);
         $('#Observacion').val(data['Observacion']);
+        CambioRol();
     }
 
     function LlenarFormularioRequest(data){
 
         var parametros = {
             "id"            : data['usu_id'],
+            "idLoc"         : data['loc_id'],
             "Username"      : data['username'],
             "Nombre"        : data['nombre'],
             "Rol"           : data['rol_id'],
+            "nomLoc"        : data['loc_nom'],
             "Correo"        : data['correo'],
             "Observacion"   : data['observaciones'],
         }
@@ -225,11 +346,13 @@ $(function(){
     function RestablecerEstadoAnteriorFormulario(){
         var parametros = {
             "id"            : idActual.trim(),
+            "idLoc"         : idLocalizacion.trim(),
             "Username"      : dataInputs[0].trim(),
             "Nombre"        : dataInputs[1].trim(),
             "Rol"           : dataInputs[2].trim(),
-            "Correo"        : dataInputs[3].trim(),
-            "Observacion"   : dataInputs[4].trim(),
+            "nomLoc"        : dataInputs[3].trim(),
+            "Correo"        : dataInputs[4].trim(),
+            "Observacion"   : dataInputs[5].trim(),
         }
         LlenarFormulario(parametros);
     }
@@ -247,10 +370,22 @@ $(function(){
 
     window.InterfazElegirBuscador = function(fila){
         
-        var parametros = {
-            "id": fila.find("td:eq(0)").text().trim(),
-            "Url": $('#ControladorActual').text().trim()+"/obtener"
+        switch(GetSearchType()){
+            case "Formulario":
+
+                var parametros = {
+                    "id": fila.find("td:eq(0)").text().trim(),
+                    "Url": $('#ControladorActual').text().trim()+"/obtener"
+                }
+                Obtener(parametros);
+            break;
+            case Localizaciones:
+                $('#idLoc').text(fila.find("td:eq(0)").text().trim());
+                $('#nomLoc').val(fila.find("td:eq(3)").text().trim());
+            break;
         }
-        Obtener(parametros);
+        
+        if(GetSearchType() != "Formulario")
+            $('#SiamaModalBusqueda').modal('hide');
     }
 });

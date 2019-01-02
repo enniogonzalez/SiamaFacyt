@@ -1,6 +1,6 @@
 <div class="container">
     <div class="row">
-        <div class="col-lg-9" style="padding: 0px;">
+        <div class="col-md-9" style="padding: 0px;">
             <h2><span class="fa fa-users"></span> Usuarios</h2>  
         </div>
     </div>
@@ -47,7 +47,12 @@
                     <select readonly disabled class="form-control obligatorio lista" id="rol">
                         <option value =''></option>
                         <?php
+                            $RolActual="";
                             foreach($rolesApp as $rol){
+                                if($rol['rol_id'] == $rol_id ){
+                                    $RolActual = $rol['nombre']; 
+                                }
+
                                 $opcion = "<option value ='" . $rol['rol_id'] . "' "
                                     . ($rol['rol_id'] == $rol_id ? "selected":"")
                                     . ">" .$rol['nombre'] . "</option>";
@@ -56,6 +61,24 @@
                         ?>
                     </select> 
                     <div class="invalid-feedback">Campo Obligatorio</div>
+                </div>
+            </div>
+            
+            <div class="form-group row" id="divLocalizaciones" 
+                <?=$RolActual=="Director de Dependencia"?"":"style='display:none;'"?>
+            >
+                <label for="nomLoc" class="col-md-3 col-form-label">Localizaci&oacute;n:</label>
+                <div class="col-md-9">
+                    <div style="width:86%;float:left;">
+                        <div style="display:none;" id="idLoc"><?=$loc_id?></div>
+                        <input readonly disabled type="text"
+                            class="form-control texto buscador" id="nomLoc" value="<?=$loc_nom?>">
+                        <div class="invalid-feedback">Campo Obligatorio</div>
+                    </div>
+                    <div style="width:14%;float:right;padding:10px;">
+                        <span title="Buscar Localizacion" class="fa fa-search BuscarLocalizacion" style="cursor: pointer;float:left;"></span>
+                        <span title="Borrar Localizacion" class="fa fa-trash-o BorrarLocalizacion" style="cursor: pointer;float:right;"></span>
+                    </div>
                 </div>
             </div>
 
@@ -77,6 +100,14 @@
             </div>
 
         </form>
+        <div style="display:none;">
+            <select readonly disabled  id="listaBusquedaFormulario">
+                <?=$listaBusquedaFormulario?>
+            </select> 
+            <select readonly disabled  id="listaBusquedaLocalizacion">
+                <?=$listaBusquedaLocalizacion?>
+            </select> 
+        </div>
         <div style="display:none;" id ="ControladorActual"><?=site_url('/usuarios')?></div>
         <div style="background-color: #95a5a6; padding: 10px;">
 

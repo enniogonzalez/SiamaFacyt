@@ -53,6 +53,7 @@ CREATE TABLE Usuarios(
 	Username		VARCHAR(25)			NOT NULL UNIQUE,
 	ROL_ID			INT					NOT NULL,
 	Nombre			VARCHAR(100)		NOT NULL,
+	LOC_ID			INT					NULL,
 	Clave			VARCHAR(100)		NOT NULL,
 	Correo			VARCHAR(100),
 	Usu_Cre			INT, --Usuario Creador
@@ -102,6 +103,7 @@ CREATE TABLE Localizaciones(
 	FOREIGN KEY (Usu_Mod) References Usuarios
 );
 
+ALTER TABLE Usuarios ADD FOREIGN KEY (LOC_ID) REFERENCES Localizaciones(loc_id);
 /*Tablas de Segundo Nivel*/
 
 CREATE TABLE Obreros(

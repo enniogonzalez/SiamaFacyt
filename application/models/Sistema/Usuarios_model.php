@@ -22,6 +22,7 @@
                 . "', Nombre = '".str_replace("'", "''",$data['Nombre'])
                 . "', rol_id = '".str_replace("'", "''",$data['rol_id'])
                 . "', Correo = ". (($data['Correo'] == "") ? "null" : ("'" .str_replace("'", "''", $data['Correo']) . "'"))
+                . ", loc_id = ". (($data['loc_id'] == "") ? "null" : ("'" .str_replace("'", "''", $data['loc_id']) . "'"))
                 . ", Usu_Mod = " . $this->session->userdata("usu_id") 
                 . ", Fec_Mod = NOW()" 
                 . ", Observaciones = " 
@@ -64,9 +65,9 @@
 
             if($busqueda != ""){
                 $condicion = " WHERE " . ($id == "" ? "":("usu_id <> " . $id . " AND ")) 
-                            . " (LOWER(username) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
-                            . "%' OR LOWER(nombre) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
-                            . "%' OR LOWER(rol_id) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
+                            . " (LOWER(usu.username) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
+                            . "%' OR LOWER(usu.nombre) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
+                            . "%' OR LOWER(rol.nombre) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
                             . "%')";
             }elseif($id != ""){
                 $condicion = " WHERE usu_id <> " . $id;
@@ -76,18 +77,19 @@
             $query ="   SELECT  usu_id,
                                 Username,
                                 Nombre,
-                                rol_id,
+                                rol_nom,
                                 Observaciones,
                                 Registros
                         FROM (
-                            SELECT  usu_id,
-                                    Username,
-                                    Nombre,
-                                    rol_id,
-                                    COALESCE(Observaciones,'') Observaciones,
+                            SELECT  usu.usu_id,
+                                    usu.Username,
+                                    usu.Nombre,
+                                    rol.nombre rol_nom,
+                                    COALESCE(usu.Observaciones,'') Observaciones,
                                     COUNT(*) OVER() AS Registros,
                                     ROW_NUMBER() OVER(ORDER BY " . $orden .") Fila
-                            FROM Usuarios
+                            FROM Usuarios USU
+                                JOIN Roles ROL ON rol.rol_id = usu.rol_id
                             " . $condicion . "
 
                         ) LD
@@ -258,10 +260,11 @@
             pg_query("BEGIN") or die("Could not start transaction");
 
             //Insertar Proveedor
-            $query = " INSERT INTO Usuarios(Username,Nombre,Clave,rol_id,Correo,Usu_Cre,Usu_Mod,Observaciones) VALUES('"
+            $query = " INSERT INTO Usuarios(Username,Nombre,Clave,rol_id,loc_id,Correo,Usu_Cre,Usu_Mod,Observaciones) VALUES('"
             . str_replace("'", "''",$data['Username']) . "','"
             . str_replace("'", "''",$data['Nombre']) . "','e11170b8cbd2d74102651cb967fa28e5','"
             . str_replace("'", "''",$data['rol_id']) . "',"
+            . (($data['loc_id'] == "") ? "null" : ("'" .str_replace("'", "''", $data['loc_id']) . "'")). ","
             . (($data['Correo'] == "") ? "null" : ("'" .str_replace("'", "''", $data['Correo']) . "'")). ","
             . $this->session->userdata("usu_id")    . ","
             . $this->session->userdata("usu_id")    . ","
@@ -341,13 +344,18 @@
             //Abrir conexion
             $conexion = $this->bd_model->ObtenerConexion();
             //Query para buscar usuario
-            $query ="   SELECT  USU_ID,
-                                Username,
-                                Nombre,
-                                rol_id,
-                                COALESCE(Correo,'') Correo,
-                                COALESCE(Observaciones,'') Observaciones
-                        FROM Usuarios
+            $query ="   SELECT  USU.USU_ID,
+                                USU.Username,
+                                COALESCE(CAST(LOC.loc_id as varchar(20)),'') loc_id,		
+                                COALESCE(loc.nombre,'') loc_nom,		
+                                USU.Nombre,
+                                USU.rol_id,
+                                ROL.nombre rol_nom,
+                                COALESCE(USU.Correo,'') Correo,
+                                COALESCE(USU.Observaciones,'') Observaciones
+                        FROM Usuarios USU
+                            LEFT JOIN Localizaciones LOC ON LOC.loc_id = USU.loc_id
+                            JOIN Roles ROL ON rol.rol_id = usu.rol_id
                     ";
 
             if($id != ''){

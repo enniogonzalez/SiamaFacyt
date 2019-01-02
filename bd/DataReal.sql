@@ -248,7 +248,7 @@ Values(
     'COB-USUARI',
     'Campos para Ordenar Busqueda Usuarios',
     null,
-    '[{"Valor":"username","Opcion":"Usuario","Descripcion":""},{"Valor":"Nombre","Opcion":"Nombre","Descripcion":""},{"Valor":"Cargo","Opcion":"Cargo","Descripcion":""}]'
+    '[{"Valor":"usu.username","Opcion":"Usuario","Descripcion":""},{"Valor":"usu.Nombre","Opcion":"Nombre","Descripcion":""},{"Valor":"rol.nombre","Opcion":"Rol","Descripcion":""}]'
 );
 
 INSERT INTO Listas_Desplegables( Codigo,Nombre,Descripcion,Opciones) 

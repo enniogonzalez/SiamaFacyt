@@ -27,7 +27,7 @@
                         .   "<td style='display:none;'>" . $elemento['observaciones'] . "</td>"
                         .   "<td>" . $elemento['username'] . "</td>"
                         .   "<td>" . $elemento['nombre'] . "</td>"
-                        .   "<td>" . $elemento['rol_id'] . "</td>"
+                        .   "<td>" . $elemento['rol_nom'] . "</td>"
                         ."</tr>";
                 }
                 
@@ -42,9 +42,12 @@
 
             $data = array(
                 "usu_id"        => "",
+                "loc_id"        => "",
+                "loc_nom"       => "",
                 "username"      => "",
                 "nombre"        => "",
                 "rol_id"        => "",
+                "rol_nom"        => "",
                 "correo"        => "",
                 "observaciones" => "",
                 "Permisos"      => [],
@@ -53,6 +56,12 @@
             if($respuesta)
                 $data = $respuesta;
             return $data;
+        }
+
+        private function ValidarPermiso(){
+            if(!$this->session->userdata("Permisos")['Sistema']){
+                show_404();
+            }
         }
 
         public function busqueda(){
@@ -97,10 +106,11 @@
             }
 
             $parametros = array(
-                "usu_id"      => $this->input->post("id"),
+                "usu_id"        => $this->input->post("id"),
                 "Username"      => $this->input->post("Username"),
                 "Nombre"        => $this->input->post("Nombre"),
-                "rol_id"         => $this->input->post("Rol"),
+                "rol_id"        => $this->input->post("Rol"),
+                "loc_id"        => $this->input->post("IdLoc"),
                 "Correo"        => $this->input->post("Correo"),
                 "Observaciones" => trim($this->input->post("Observacion"))
             );
@@ -168,12 +178,6 @@
 
         }
 
-        private function ValidarPermiso(){
-            if(!$this->session->userdata("Permisos")['Sistema']){
-                show_404();
-            }
-        }
-
         public function view(){
             
             if(!$this->session->userdata("nombre")){
@@ -191,9 +195,12 @@
             $this->load->model('Sistema/listasdesplegables_model' , 'listasdesplegables_model');
             $ld = $this->listasdesplegables_model->Obtener('','COB-USUARI');
             $ldCargo =$this->listasdesplegables_model->Obtener('','USU-rol_id');
+            $listaBusquedaLocalizacion = $this->listasdesplegables_model->Obtener('','COB-LOCALI');
 
             $dataLD['OrdenarBusqueda'] = $this->liblistasdesplegables->FormatearListaDesplegable($ld);
+            $data['listaBusquedaFormulario'] = $dataLD['OrdenarBusqueda'];
             $data['rolesApp'] = $this->usuarios_model->ObtenerRolesApp();
+            $data['listaBusquedaLocalizacion'] = $this->liblistasdesplegables->FormatearListaDesplegable($listaBusquedaLocalizacion);
 
             $dataAlerta['cantAlertas'] = $this->alertas_model->CantidadAlertas();
 
