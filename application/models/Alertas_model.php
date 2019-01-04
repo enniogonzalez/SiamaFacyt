@@ -106,15 +106,15 @@
                 $descripcion = "<table style=\"width:100%\"><tr><td style=\"width:30%\"><strong>Documento:</strong></td><td style=\"width:70%\">" . $line['documento'] . "</td></tr>";
                 $descripcion .= "<td><strong>Bien:</strong> </td><td>" . $line['nombre'] . "</td></tr>";
                 $descripcion .= "<td><strong>Localizaci&oacute;n:</strong> </td><td>" . $line['loc_nom'] . "</td></tr>";
-                $descripcion .= "<td><strong>Frecuencia Man.:</strong> </td><td>" . $line['frecuencia'] . " meses</td></tr>";
+                $descripcion .= "<td><strong>Frecuencia de Mantenimiento:</strong> </td><td>" . $line['frecuencia'] . " meses</td></tr>";
                 $descripcion .= "<td><strong>&Uacute;ltimo Man.:</strong> </td><td>" . $line['fec_ult'] . "</td></tr></table>";
 
 
                 $MensajeCorreo = "<strong>Documento:</strong> " . $line['documento'] . "<br/>";
                 $MensajeCorreo .= "<strong>Bien:</strong> " . $line['nombre'] . "<br/>";
                 $MensajeCorreo .= "<strong>Localizaci&oacute;n:</strong> " . $line['loc_nom'] . "<br/>";
-                $MensajeCorreo .= "<strong>Frecuencia Man.:</strong> " . $line['frecuencia'] . " meses<br/>";
-                $MensajeCorreo .= "<strong>&Uacute;ltimo Man.:</strong> " . $line['fec_ult'];
+                $MensajeCorreo .= "<strong>Frecuencia de Mantenimiento:</strong> " . $line['frecuencia'] . " meses<br/>";
+                $MensajeCorreo .= "<strong>&Uacute;ltimo Mantenimiento.:</strong> " . $line['fec_ult'];
                 
                 $correoMasivo = array(
                     "id"        => $line['plm_id'],

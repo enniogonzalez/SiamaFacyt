@@ -28,7 +28,7 @@
                 <label for="DocumentoPlanificado" class="col-lg-3 col-form-label">Documento:</label>
                 <div class="col-lg-9">
                     <input readonly disabled type="text" maxlength="10"
-                        class="form-control texto" id="DocumentoPlanificado" value="<?=$documento?>">
+                        class="form-control texto documento" id="DocumentoPlanificado" value="<?=$documento?>">
                 </div>
             </div>
 

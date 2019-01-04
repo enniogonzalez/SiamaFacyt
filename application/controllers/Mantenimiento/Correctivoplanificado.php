@@ -28,6 +28,7 @@
                         .   "<td>" . $elemento['documento'] . "</td>"
                         .   "<td>" . $elemento['estatus'] . "</td>"
                         .   "<td>" . $elemento['origen'] . ": " . $elemento['ori_doc'] . "</td>"
+                        .   "<td style='display:none;'>" . $elemento['bie_id'] . "</td>"
                         .   "<td>" . $elemento['bie_nom'] . "</td>"
                         .   "<td>" . $elemento['fec_eje'] . "</td>"
                         ."</tr>";

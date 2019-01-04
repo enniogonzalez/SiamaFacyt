@@ -304,7 +304,8 @@ CREATE TABLE PlantillaTareaHerramienta(
 --Mantenimientos Correctivos
 CREATE TABLE MantenimientoCorrectivo(
 	MCO_ID			SERIAL	PRIMARY KEY,
-	BIE_ID			INT				NOT NULL,
+	BIE_ID			INT				NULL,
+	CPL_ID			INT				NULL,
 	Documento		VARCHAR(10)		NOT NULL UNIQUE,
 	Estatus			VARCHAR(100)	NOT NULL, --Solicitado, Afectado, Aprobado, Realizado
 	Fec_Ini			DATE			NOT NULL,
@@ -327,7 +328,7 @@ CREATE TABLE CambioCorrectivo(
 	CCO_ID			SERIAL	PRIMARY KEY,
 	MCO_ID			INT				NOT NULL,--Mantenimiento Correctivo
 	PDA_ID			INT				NOT NULL,--Pieza da�ada
-	USU_ID			INT				NULL,
+	OBR_ID			INT				NULL,
 	PRO_ID			INT				NULL,
 	BIE_ID			INT				NULL,--Bien del cual proviene la pieza cambiada
 	PCA_ID			INT				NOT NULL,--Pieza cambiada
@@ -344,13 +345,13 @@ CREATE TABLE CambioCorrectivo(
 	FOREIGN KEY (PDA_ID) References Piezas,
 	FOREIGN KEY (PCA_ID) References Piezas,
 	FOREIGN KEY (fal_id) References Fallas,
-	FOREIGN KEY (USU_ID) References Usuarios,
+	FOREIGN KEY (OBR_ID) References Obreros,
 	FOREIGN KEY (Usu_Cre) References Usuarios,
 	FOREIGN KEY (Usu_Mod) References Usuarios,
 	FOREIGN KEY (BIE_ID) References Bienes,
 	FOREIGN KEY (MCO_ID) References MantenimientoCorrectivo ON DELETE CASCADE,
-	CONSTRAINT CHK_EJECUTOR_CCO CHECK ((USU_ID is null and PRO_ID is not null) OR 
-									(USU_ID is not null and PRO_ID is null) ),
+	CONSTRAINT CHK_EJECUTOR_CCO CHECK ((OBR_ID is null and PRO_ID is not null) OR 
+									(OBR_ID is not null and PRO_ID is null) ),
 	CONSTRAINT CHK_Piezas_Diferentes CHECK (PDA_ID <> PCA_ID),
 	CONSTRAINT CHK_Fechas_CCO CHECK (Fec_Ini <= Fec_Fin),
 	CONSTRAINT UQ_CCO_MCO_PDA UNIQUE (MCO_ID,PDA_ID),
@@ -361,7 +362,7 @@ CREATE TABLE ReparacionCorrectiva(
 	RCO_ID			SERIAL	PRIMARY KEY,
 	MCO_ID			INT				NOT NULL,
 	PIE_ID			INT				NOT NULL,--Pieza da�ada
-	USU_ID			INT				NULL,--Usuario
+	OBR_ID			INT				NULL,--Obrero
 	PRO_ID			INT				NULL,--Proveedor
 	ESTATUS			VARCHAR(100)	NOT NULL,--Solicitado, Aprobado, Realizado
 	Fec_Ini			DATE			NOT NULL,
@@ -375,12 +376,12 @@ CREATE TABLE ReparacionCorrectiva(
 	FOREIGN KEY (PIE_ID) References Piezas,
 	FOREIGN KEY (fal_id) References Fallas,
 	FOREIGN KEY (MCO_ID) References MantenimientoCorrectivo ON DELETE CASCADE,
-	FOREIGN KEY (USU_ID) References Usuarios,
+	FOREIGN KEY (OBR_ID) References Usuarios,
 	FOREIGN KEY (Usu_Cre) References Usuarios,
 	FOREIGN KEY (Usu_Mod) References Usuarios,
 	FOREIGN KEY (PRO_ID) References Proveedores,
-	CONSTRAINT CHK_EJECUTOR_RCO CHECK ((USU_ID is null and PRO_ID is not null) OR 
-									(USU_ID is not null and PRO_ID is null)),
+	CONSTRAINT CHK_EJECUTOR_RCO CHECK ((OBR_ID is null and PRO_ID is not null) OR 
+									(OBR_ID is not null and PRO_ID is null)),
 	CONSTRAINT CHK_Fechas_RCO CHECK (Fec_Ini <= Fec_Fin),
 	CONSTRAINT UQ_RCO_MCO_PIE UNIQUE (MCO_ID,PIE_ID)
 );

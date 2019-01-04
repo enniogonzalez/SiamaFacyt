@@ -170,6 +170,7 @@ $route['piezas/busqueda'] = 'Patrimonio/piezas/busqueda';
 $route['piezas/busquedaDisponibles'] = 'Patrimonio/piezas/busquedaDisponibles';
 $route['piezas/busquedaAgregar'] = 'Patrimonio/piezas/busquedaAgregar';
 $route['piezas/busquedaQuitar'] = 'Patrimonio/piezas/busquedaQuitar';
+$route['piezas/busquedaCorrectivo'] = 'Patrimonio/piezas/busquedaCorrectivo';
 $route['piezas/eliminar'] = 'Patrimonio/piezas/eliminar';
 $route['piezas/guardar'] = 'Patrimonio/piezas/guardar';
 $route['piezas/imprimir/(:any)'] = 'Patrimonio/piezas/imprimir/$1';

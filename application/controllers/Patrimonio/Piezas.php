@@ -220,18 +220,25 @@
             $Condiciones = $this->input->post("Condiciones");
             $idBien = $Condiciones['Bien'];
             $PiewBie = true;
+            $tpi_id = true;
+
 
             if(isset($Condiciones) && isset($Condiciones['PiewBie'])){
                 $PiewBie = $Condiciones['PiewBie'] == "true" ? true:false;
             }
+            
+            if(isset($Condiciones) && isset($Condiciones['idTipo'])){
+                $tpi_id = $Condiciones['idTipo'];
+            }
 
             $data = array(
-                "busqueda"  =>$busqueda,
-                "orden"     =>$ordenamiento,
-                "inicio"    =>$inicio,
-                "fin"       =>$fin,
-                "id"        =>$idBien,
-                "PiewBie"   =>$PiewBie,
+                "busqueda"  => $busqueda,
+                "orden"     => $ordenamiento,
+                "inicio"    => $inicio,
+                "fin"       => $fin,
+                "id"        => $idBien,
+                "PiewBie"   => $PiewBie,
+                "tpi_id"    => $tpi_id,
             );
 
             $respuesta = $this->FormatearBusqueda($this->piezas_model->busquedaDisponibles($data));
@@ -264,6 +271,35 @@
             );
 
             $respuesta = $this->FormatearBusqueda($this->piezas_model->busquedaAgregar($data));
+
+            echo json_encode(array("isValid"=>true,"Datos"=>$respuesta));
+        }
+
+        public function busquedaCorrectivo(){
+
+            if(!$this->session->userdata("nombre") || $this->input->post("Pagina") == ""){
+                redirect(site_url(''));
+            }
+
+            $busqueda = $this->input->post("Busqueda") ;
+            $pagina = (int) $this->input->post("Pagina") ;
+            $regXpag = (int) $this->input->post("RegistrosPorPagina") ;
+            $ordenamiento = $this->input->post("Orden") ;
+            
+            $inicio = 1+$regXpag*($pagina-1);
+            $fin = $regXpag*$pagina;
+            $Condiciones = $this->input->post("Condiciones");
+            $idCorPla = $Condiciones['ManCorPla'];
+
+            $data = array(
+                "busqueda"  => $busqueda,
+                "orden"     => $ordenamiento,
+                "inicio"    => $inicio,
+                "fin"       => $fin,
+                "cpl_id"    => $idCorPla,
+            );
+
+            $respuesta = $this->FormatearBusquedaCorrectivo($this->piezas_model->busquedaCorrectivo($data));
 
             echo json_encode(array("isValid"=>true,"Datos"=>$respuesta));
         }
@@ -338,6 +374,44 @@
 
             return $data;
         }
+
+        private function FormatearBusquedaCorrectivo($datos){
+            
+            $data = array(
+                "Listas"     =>"",
+                "Registros" => ""
+            );
+
+
+            if($datos){
+
+                $htmlListas = "";
+                $registros = 0;
+                foreach ($datos as $elemento) {
+                    $registros = $elemento['registros'];
+                    $htmlListas = $htmlListas
+                        ."<tr>"
+                        .   "<td style='display:none;'>" . $elemento['pie_id'] . "</td>"
+                        .   "<td>" . $elemento['nombre'] . "</td>"
+                        .   "<td>" . $elemento['estatus'] . "</td>"
+                        .   "<td>" . $elemento['inv_uc'] . "</td>"
+                        .   "<td style='display:none;'>" . $elemento['tpi_id'] . "</td>"
+                        .   "<td>" . $elemento['nomtpi'] . "</td>"
+                        .   "<td>" . $elemento['nommar'] . "</td>"
+                        .   "<td>" . $elemento['nombie'] . "</td>"
+                        .   "<td style='display:none;'>" . ($elemento['bie_id'] == -1? "":$elemento['bie_id']) . "</td>"
+                        .   "<td style='display:none;'>" . $elemento['fal_id'] . "</td>"
+                        .   "<td style='display:none;'>" . $elemento['fal_nom'] . "</td>"
+                        ."</tr>";
+                }
+                
+                $data['Listas'] = $htmlListas;
+                $data['Registros'] = $registros;
+            }
+
+            return $data;
+        }
+        
     }
 
 

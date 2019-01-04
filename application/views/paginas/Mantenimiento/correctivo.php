@@ -28,7 +28,7 @@
                 <label for="DocumentoCorrectivo" class="col-lg-3 col-form-label">Documento:</label>
                 <div class="col-lg-9">
                     <input readonly disabled type="text" maxlength="10"
-                        class="form-control texto" id="DocumentoCorrectivo" value="<?=$documento?>">
+                        class="form-control texto documento" id="DocumentoCorrectivo" value="<?=$documento?>">
                 </div>
             </div>
 
@@ -41,12 +41,52 @@
             </div>
 
             <div class="form-group row">
+                <label for="OrigenCorrectivo" class="col-lg-3 col-form-label">Origen:</label>
+                <div class="col-lg-9">
+                    <select disabled readonly class="form-control obligatorio texto" id="OrigenCorrectivo">
+                        <option value=""></option>
+                        <option value="Bien" <?=(($cpl_id == "")?"selected":"")?>>Bien</option>
+                        <option value="Mantenimiento Correctivo Planificado" <?=(($bie_id == "")?"selected":"")?>>Mantenimiento Correctivo Planificado</option>
+                    </select>
+                    <div class="invalid-feedback">Campo Obligatorio</div>
+                </div>
+            </div>
+
+            <div id="divManCorPla" <?=(($cpl_id == "")?"style=\"display:none;\"":"")?>>
+                <div class="form-group row">
+                    <label for="manCorPla" class="col-lg-3 col-form-label">Mantenimiento Correctivo Planificado:</label>
+                    <div class="col-lg-9">
+                        <div style="width:86%;float:left;">
+                            <div style="display:none;" id="idManCorPla"><?=$cpl_id?></div>
+                            <input readonly disabled type="text"
+                                class="form-control texto buscador" id="manCorPla" value="<?=$doc_cpl?>">
+                            <div class="invalid-feedback">Campo Obligatorio</div>
+                        </div>
+                        <div style="width:14%;float:right;padding:10px;">
+                            <span title="Buscar Mantenimiento Correctivo Planificado" class="fa fa-search BuscarManCorPla" style="cursor: pointer;float:left;"></span>
+                            <span title="Borrar Mantenimiento Correctivo Planificado" class="fa fa-trash-o BorrarManCorPla" style="cursor: pointer;float:right;"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="BienManCorPla" class="col-lg-3 col-form-label">Bien:</label>
+                    <div class="col-lg-9">
+                        <div style="display:none;" id="idBienManCorPla"><?=$bie_id_2?></div>
+                        <input readonly disabled type="text" maxlength="100"
+                            class="form-control texto buscador" id="BienManCorPla" value="<?=$bie_nom_2?>">
+                        <div class="invalid-feedback">Campo Obligatorio</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group row" id="divBien" <?=(($bie_id == "")?"style=\"display:none;\"":"")?>>
                 <label for="nomBieCorrectivo" class="col-lg-3 col-form-label">Bien:</label>
                 <div class="col-lg-9">
                     <div style="width:86%;float:left;">
                         <div style="display:none;" id="idBieCorrectivo"><?=$bie_id?></div>
                         <input readonly disabled type="text"
-                            class="form-control obligatorio texto buscador" id="nomBieCorrectivo" value="<?=$bie_nom?>">
+                            class="form-control texto buscador" id="nomBieCorrectivo" value="<?=$bie_nom?>">
                         <div class="invalid-feedback">Campo Obligatorio</div>
                     </div>
                     <div style="width:14%;float:right;padding:10px;">
@@ -91,7 +131,7 @@
                         <tr>
                             <th style="width:20%;">P. Dañada</th>
                             <th style="width:20%;">P. Cambio</th>
-                            <th style="width:15%;">Usuario</th>
+                            <th style="width:15%;">Obrero</th>
                             <th style="width:15%;">Proveedor</th>
                             <th style="width:10%;">Inicio</th>
                             <th style="width:10%;">Fin</th>
@@ -117,7 +157,7 @@
                     <thead class="head-table-siama" style="font-size:11px;">
                         <tr>
                             <th style="width:22%;">P. Dañada</th>
-                            <th style="width:17%;">Usuario</th>
+                            <th style="width:17%;">Obrero</th>
                             <th style="width:17%;">Proveedor</th>
                             <th style="width:17%;">Inicio</th>
                             <th style="width:17%;">Fin</th>
@@ -142,11 +182,14 @@
             <select readonly disabled  id="listaBusquedaPieza">
                 <?=$listaBusquedaPieza?>
             </select> 
+            <select readonly disabled  id="listaBusquedaCorPla">
+                <?=$listaBusquedaCorPla?>
+            </select> 
             <select readonly disabled  id="listaBusquedaProveedor">
                 <?=$listaBusquedaProveedor?>
             </select> 
-            <select readonly disabled  id="listaBusquedaUsuario">
-                <?=$listaBusquedaUsuario?>
+            <select readonly disabled  id="listaBusquedaObreros">
+                <?=$listaBusquedaObreros?>
             </select> 
             <select readonly disabled  id="listaBusquedaBien">
                 <?=$listaBusquedaBien?>

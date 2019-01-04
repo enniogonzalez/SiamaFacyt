@@ -1,7 +1,7 @@
 
 const ProveedorC = "ProveedorC";
 const FallaC = "FallaC";
-const UsuarioC = "UsuariosC";
+const ObreroC = "ObrerosC";
 const PiezaDC = "PiezaDC";
 const PiezaCC = "PiezaCC";
 
@@ -28,17 +28,20 @@ $(function(){
         $('#nomProC').val('');
     });
     
-
     /************************************/
     /*      Manejo Fallas             */
     /************************************/
     
     $('#SiamaModalFunciones').on('click','#nomFallaCambio',function(){
-        BuscarFalla(FallaC);
+        if($('#OrigenCorrectivo').val().trim() == "Bien"){
+            BuscarFalla(FallaC);
+        }
     });
 
     $('#SiamaModalFunciones').on('click','.BuscarFallaCambio',function(){
-        BuscarFalla(FallaC);
+        if($('#OrigenCorrectivo').val().trim() == "Bien"){
+            BuscarFalla(FallaC);
+        }
     });
 
     $('#SiamaModalFunciones').on('click','.BorrarFallaCambio',function(){
@@ -47,20 +50,20 @@ $(function(){
     });
 
     /************************************/
-    /*      Manejo Usuarios             */
+    /*      Manejo Obreros             */
     /************************************/
     
-    $('#SiamaModalFunciones').on('click','#nomUsuCambio',function(){
-        BuscarUsuario(UsuarioC);
+    $('#SiamaModalFunciones').on('click','#nomObrCambio',function(){
+        BuscarObrero(ObreroC);
     });
 
-    $('#SiamaModalFunciones').on('click','.BuscarUsuarioC',function(){
-        BuscarUsuario(UsuarioC);
+    $('#SiamaModalFunciones').on('click','.BuscarObreroC',function(){
+        BuscarObrero(ObreroC);
     });
 
-    $('#SiamaModalFunciones').on('click','.BorrarUsuarioC',function(){
-        $('#idUsuCambio').text('');
-        $('#nomUsuCambio').val('');
+    $('#SiamaModalFunciones').on('click','.BorrarObreroC',function(){
+        $('#idObrCambio').text('');
+        $('#nomObrCambio').val('');
     });
 
     /************************************/
@@ -99,20 +102,28 @@ $(function(){
     /*          Fin Buscadores          */
     /************************************/
 
-
     $('#agregarCambio').on('click',function(){
 
-        if($('#idBieCorrectivo').text().trim() == ""){
-
-            Botones = `
+        var Botones = `
             <button data-dismiss="modal" title="Cerrar" type="button" style="margin:5px;" class="btn btn-primary-siama">
             <span class="fa fa-times-circle"></span>
             Cerrar
             </button>`;
-    
+        var alerta = false;
+        
+        if($('#OrigenCorrectivo').val().trim() == ""){
+            alerta = true;
+            Cuerpo = "No se puede agregar un <strong>Cambio Correctivo</strong> debido a que no se ha seleccionado un <strong>Origen</strong>.";
+        }else if($('#OrigenCorrectivo').val().trim() == "Mantenimiento Correctivo Planificado" && $('#idManCorPla').text().trim() == ""){
+            alerta = true;
+            Cuerpo = "No se puede agregar un <strong>Cambio Correctivo</strong> debido a que no se ha seleccionado un <strong>Mantenimiento Correctivo Planificado</strong>.";
+        }else if($('#OrigenCorrectivo').val().trim() == "Bien" && $('#idBieCorrectivo').text().trim() == ""){
+            alerta = true;
             Cuerpo = "No se puede agregar un <strong>Cambio Correctivo</strong> debido a que no se ha seleccionado un <strong>Bien</strong>.";
-    
-    
+        }else
+            AgregarCambioCorrectivo();
+
+        if(alerta){
             var parametros = {
                 "Titulo":"Advetencia",
                 "Cuerpo": Cuerpo,
@@ -120,8 +131,7 @@ $(function(){
             }
 
             ModalAdvertencia(parametros);
-        }else
-            AgregarCambioCorrectivo();
+        }
     });
 
     $('#eliminarCambio').on('click',function(){
@@ -164,11 +174,11 @@ $(function(){
             }
         })
 
-        //Validar que exista un usuario o un proveedor asignado
-        if(Valido && $('#nomUsuCambio').val() == "" && $('#nomProC').val() == ""){
+        //Validar que exista un Obrero o un proveedor asignado
+        if(Valido && $('#nomObrCambio').val() == "" && $('#nomProC').val() == ""){
             Valido = false;
             $('#alertaModal').focus(); 
-            $('#alertaModal').text('El Cambio Correctivo debe contar con un Usuario o un Proveedor para realizar el mismo.');
+            $('#alertaModal').text('El Cambio Correctivo debe contar con un Obrero o un Proveedor para realizar el mismo.');
             $('.contenedorAlertaModal').show();
             
             document.getElementsByClassName("contenedorAlertaModal")[0].scrollIntoView();
@@ -228,17 +238,18 @@ $(function(){
             var row = parseInt($('#mhOptionR').text());
             var fila = $('#TablaCambiosCorrectivos tbody tr').eq(row);
             fila.find('td:eq(1)').text($('#idPiezaDC').text().trim());
-            fila.find('td:eq(2)').text($('#nomPiezaDC').val().trim());
-            fila.find('td:eq(3)').text($('#idBienPiezaCC').text().trim());
-            fila.find('td:eq(4)').text($('#idPiezaCC').text().trim());
-            fila.find('td:eq(5)').text($('#nomPiezaCC').val().trim());
-            fila.find('td:eq(6)').text($('#idUsuCambio').text().trim());
-            fila.find('td:eq(7)').text($('#nomUsuCambio').val().trim());
-            fila.find('td:eq(8)').text($('#idProC').text().trim());
-            fila.find('td:eq(9)').text($('#nomProC').val().trim());
-            fila.find('td:eq(10)').text($('#InicioCambio').val().trim());
-            fila.find('td:eq(11)').text($('#FinCambio').val().trim());
-            fila.find('td:eq(12)').text($('#ObservacionC').val().trim());
+            fila.find('td:eq(2)').text($('#idTipoPieza').text().trim());
+            fila.find('td:eq(3)').text($('#nomPiezaDC').val().trim());
+            fila.find('td:eq(4)').text($('#idBienPiezaCC').text().trim());
+            fila.find('td:eq(5)').text($('#idPiezaCC').text().trim());
+            fila.find('td:eq(6)').text($('#nomPiezaCC').val().trim());
+            fila.find('td:eq(7)').text($('#idObrCambio').text().trim());
+            fila.find('td:eq(8)').text($('#nomObrCambio').val().trim());
+            fila.find('td:eq(9)').text($('#idProC').text().trim());
+            fila.find('td:eq(10)').text($('#nomProC').val().trim());
+            fila.find('td:eq(11)').text($('#InicioCambio').val().trim());
+            fila.find('td:eq(12)').text($('#FinCambio').val().trim());
+            fila.find('td:eq(13)').text($('#ObservacionC').val().trim());
             fila.find('td:eq(14)').text($('#idFallaCambio').text().trim());
             fila.find('td:eq(15)').text($('#nomFallaCambio').val().trim());
     
@@ -274,17 +285,18 @@ $(function(){
             "Fila"              :   $(this).parent('tr').index(),
             "Botones"           :   Botones,
             "idPiezaDC"         :   fila.find('td:eq(1)').text().trim(),
-            "nomPiezaDC"        :   fila.find('td:eq(2)').text().trim(),
-            "idBienPiezaCC"     :   fila.find('td:eq(3)').text().trim(),
-            "idPiezaCC"         :   fila.find('td:eq(4)').text().trim(),
-            "nomPiezaCC"        :   fila.find('td:eq(5)').text().trim(),
-            "idUsuCambio"       :   fila.find('td:eq(6)').text().trim(),
-            "nomUsuCambio"      :   fila.find('td:eq(7)').text().trim(),
-            "idProC"            :   fila.find('td:eq(8)').text().trim(),
-            "nomProC"           :   fila.find('td:eq(9)').text().trim(),
-            "InicioCambio"      :   fila.find('td:eq(10)').text().trim(),
-            "FinCambio"         :   fila.find('td:eq(11)').text().trim(),
-            "ObservacionC"      :   fila.find('td:eq(12)').text().trim(),
+            "idTipoPieza"       :   fila.find('td:eq(2)').text().trim(),
+            "nomPiezaDC"        :   fila.find('td:eq(3)').text().trim(),
+            "idBienPiezaCC"     :   fila.find('td:eq(4)').text().trim(),
+            "idPiezaCC"         :   fila.find('td:eq(5)').text().trim(),
+            "nomPiezaCC"        :   fila.find('td:eq(6)').text().trim(),
+            "idObrCambio"       :   fila.find('td:eq(7)').text().trim(),
+            "nomObrCambio"      :   fila.find('td:eq(8)').text().trim(),
+            "idProC"            :   fila.find('td:eq(9)').text().trim(),
+            "nomProC"           :   fila.find('td:eq(10)').text().trim(),
+            "InicioCambio"      :   fila.find('td:eq(11)').text().trim(),
+            "FinCambio"         :   fila.find('td:eq(12)').text().trim(),
+            "ObservacionC"      :   fila.find('td:eq(13)').text().trim(),
             "idFallaCambio"     :   fila.find('td:eq(14)').text().trim(),
             "nomFallaCambio"    :   fila.find('td:eq(15)').text().trim(),
         }
@@ -304,11 +316,11 @@ $(function(){
         if($(this).find('span').hasClass('fa-square-o')){
             $(this).find('span').removeClass('fa-square-o');
             $(this).find('span').addClass('fa-check-square-o');
-            $(this).parent('tr').find('td:eq(13)').text('Realizado');
+            $(this).parent('tr').find('td:eq(16)').text('Realizado');
         }else{
             $(this).find('span').removeClass('fa-check-square-o');
             $(this).find('span').addClass('fa-square-o');
-            $(this).parent('tr').find('td:eq(13)').text('');
+            $(this).parent('tr').find('td:eq(16)').text('');
         }
     });
 
@@ -334,6 +346,7 @@ $(function(){
                 <div class="col-lg-9">
                     <div style="width:80%;float:left;">
                         <div style="display:none;" id="idPiezaDC">${data['idPiezaDC']}</div>
+                        <div style="display:none;" id="idTipoPieza">${data['idTipoPieza']}</div>
                         <input type="text" title="Pieza Dañada" ${atributos} readonly
                             class="form-control texto obligatorio buscador Cambio" id="nomPiezaDC" value="${data['nomPiezaDC']}">
                         <div class="invalid-feedback">Campo Obligatorio</div>
@@ -367,18 +380,18 @@ $(function(){
             </div>
 
             <div class="form-group row">
-                <label class="col-lg-3 col-form-label">Usuario:</label>
+                <label class="col-lg-3 col-form-label">Obrero:</label>
                 <div class="col-lg-9">
                     <div style="width:80%;float:left;">
-                        <div style="display:none;" id="idUsuCambio">${data['idUsuCambio']}</div>
-                        <input type="text" title="Usuario que realiza cambio" ${atributos} readonly
-                            class="form-control texto  buscador Cambio" id="nomUsuCambio" value="${data['nomUsuCambio']}">
+                        <div style="display:none;" id="idObrCambio">${data['idObrCambio']}</div>
+                        <input type="text" title="Obrero que realiza cambio" ${atributos} readonly
+                            class="form-control texto  buscador Cambio" id="nomObrCambio" value="${data['nomObrCambio']}">
                         <div class="invalid-feedback">Campo Obligatorio</div>
                     </div>
                     <div style="width:20%;float:right;padding:10px;">
-                        <span title="Buscar Usuario" class="fa fa-search BuscarUsuarioC" 
+                        <span title="Buscar Obrero" class="fa fa-search BuscarObreroC" 
                             style="cursor: pointer;float:left;"></span>
-                        <span title="Borrar Usuario" class="fa fa-trash-o BorrarUsuarioC" 
+                        <span title="Borrar Obrero" class="fa fa-trash-o BorrarObreroC" 
                             style="cursor: pointer;float:right;"></span>
                     </div>
                 </div>
@@ -423,13 +436,13 @@ $(function(){
             <div class="form-group row">
                 <label class="col-lg-3 col-form-label">Falla:</label>
                 <div class="col-lg-9">
-                    <div style="width:80%;float:left;">
+                    <div style="width:${$('#OrigenCorrectivo').val().trim() == "Mantenimiento Correctivo Planificado" ? "100":"80"}%;float:left;">
                         <div style="display:none;" id="idFallaCambio">${data['idFallaCambio']}</div>
-                        <input type="text" title="Falla" ${atributos} readonly
+                        <input type="text" title="Falla" ${atributos} readonly 
                             class="form-control texto obligatorio buscador Cambio" id="nomFallaCambio" value="${data['nomFallaCambio']}">
                         <div class="invalid-feedback">Campo Obligatorio</div>
                     </div>
-                    <div style="width:20%;float:right;padding:10px;">
+                    <div style="width:20%;float:right;padding:10px;${$('#OrigenCorrectivo').val().trim() == "Mantenimiento Correctivo Planificado" ? "display:none;":""}">
                         <span title="Buscar Falla" class="fa fa-search BuscarFallaCambio" 
                             style="cursor: pointer;float:left;"></span>
                         <span title="Borrar Falla" class="fa fa-trash-o BorrarFallaCambio" 
@@ -469,6 +482,7 @@ $(function(){
         //Agregar registro a la tabla de listas desplegables al final
         $('#TablaCambiosCorrectivos > tbody:last-child').append(`
             <tr>
+                <td style="display:none;"></td>
                 <td style="display:none;"></td>
                 <td style="display:none;"></td>
                 <td></td>
@@ -528,22 +542,22 @@ $(function(){
             if( $(this).find('td:eq(1)').text().trim() != '' && 
                 (   estatuDoc == "Solicitado" || 
                     (   estatuDoc != "Solicitado" && 
-                        $(this).find('td:eq(13)').text() == "Realizado"
+                        $(this).find('td:eq(16)').text() == "Realizado"
                     )
                 )
             ){
                 Cambios.push({ 
                     "Id"            : $(this).find('td:eq(0)').text(),
                     "IdPiezaD"      : $(this).find('td:eq(1)').text(),
-                    "idBienPiezaC"  : $(this).find('td:eq(3)').text(),
-                    "IdPiezaC"      : $(this).find('td:eq(4)').text(),
-                    "IdUsu"         : $(this).find('td:eq(6)').text(),
-                    "IdPro"         : $(this).find('td:eq(8)').text(),
-                    "Inicio"        : $(this).find('td:eq(10)').text(),
-                    "Fin"           : $(this).find('td:eq(11)').text(),
-                    "Observacion"   : $(this).find('td:eq(12)').text(),
-                    "Estatus"       : $(this).find('td:eq(13)').text(),
-                    "FallaCambio"   : $(this).find('td:eq(14)').text()
+                    "idBienPiezaC"  : $(this).find('td:eq(4)').text(),
+                    "IdPiezaC"      : $(this).find('td:eq(5)').text(),
+                    "IdObr"         : $(this).find('td:eq(7)').text(),
+                    "IdPro"         : $(this).find('td:eq(9)').text(),
+                    "Inicio"        : $(this).find('td:eq(11)').text(),
+                    "Fin"           : $(this).find('td:eq(12)').text(),
+                    "Observacion"   : $(this).find('td:eq(13)').text(),
+                    "FallaCambio"   : $(this).find('td:eq(14)').text(),
+                    "Estatus"       : $(this).find('td:eq(16)').text(),
                 });
             }
         });

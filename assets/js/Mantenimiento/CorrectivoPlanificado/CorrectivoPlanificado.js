@@ -754,6 +754,7 @@ $(function(){
         idBuscadorActual = $('#idPieza').text().trim();
         nombreBuscadorActual = $('#nomPiezaDA').val().trim();
 
+        console.log(condiciones);
         SetSearchModal(parametros,true,false,condiciones);
     }
 
@@ -770,8 +771,8 @@ $(function(){
             break;
             case PiezaDA:
                 $('#idPieza').text(fila.find("td:eq(0)").text().trim());
-                $('#InvPieza').text(fila.find("td:eq(1)").text().trim());
-                $('#nomPiezaDA').val(fila.find("td:eq(2)").text().trim());
+                $('#InvPieza').text(fila.find("td:eq(3)").text().trim());
+                $('#nomPiezaDA').val(fila.find("td:eq(1)").text().trim());
             break;
             case Falla:
                 $('#idFalla').text(fila.find("td:eq(0)").text().trim());
@@ -780,16 +781,16 @@ $(function(){
             case Correctivo:
                 $('#idCorrectivo').text(fila.find("td:eq(0)").text().trim());
                 $('#ManCorrectivo').val(fila.find("td:eq(1)").text().trim());
-                $('#idBien').text(fila.find("td:eq(2)").text().trim());
-                $('#nomBien').val(fila.find("td:eq(3)").text().trim());
+                $('#idBien').text(fila.find("td:eq(3)").text().trim());
+                $('#nomBien').val(fila.find("td:eq(4)").text().trim());
                 $('#OrigenPlanificado').attr("disabled", "disabled");
                 $('#OrigenPlanificado').attr("readonly", "readonly");
             break;
             case Preventivo:
                 $('#idPreventivo').text(fila.find("td:eq(0)").text().trim());
                 $('#ManPreventivo').val(fila.find("td:eq(1)").text().trim());
-                $('#idBien').text(fila.find("td:eq(2)").text().trim());
-                $('#nomBien').val(fila.find("td:eq(3)").text().trim());
+                $('#idBien').text(fila.find("td:eq(3)").text().trim());
+                $('#nomBien').val(fila.find("td:eq(4)").text().trim());
                 $('#OrigenPlanificado').attr("disabled", "disabled");
                 $('#OrigenPlanificado').attr("readonly", "readonly");
             break;

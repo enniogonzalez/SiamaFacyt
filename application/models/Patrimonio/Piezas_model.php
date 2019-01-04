@@ -303,7 +303,77 @@
 
             return $retorno;
         }
-        
+          
+        public function busquedaCorrectivo($data){
+            
+            //Abrir conexion
+            $conexion = $this->bd_model->ObtenerConexion();
+
+            $condicion ="";
+
+            if($data['busqueda'] != ""){
+                $condicion = "(LOWER(P.Inv_UC) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
+                            . "%' OR LOWER(P.nombre) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
+                            . "%' OR LOWER(P.estatus) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
+                            . "%' OR LOWER(B.nombre) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
+                            . "%' OR LOWER(M.nombre) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
+                            . "%')";
+            }
+            
+            if($condicion != ""){
+                $condicion = "AND " . $condicion;
+            }
+
+            //Query para buscar usuario
+            $query ="   SELECT  *
+                        FROM (
+                            SELECT  P.Pie_Id,
+                                    P.nombre,
+                                    P.estatus,
+                                    COALESCE(P.Bie_Id,-1) Bie_Id,
+                                    P.Inv_UC,
+                                    COALESCE(B.nombre,'') nomBie,
+                                    M.nombre nomMar,
+                                    FAL.fal_id,
+                                    FAL.nombre fal_nom,
+                                    P.tpi_id,
+                                    TPI.nombre nomtpi,
+                                    COUNT(*) OVER() AS Registros,
+                                    ROW_NUMBER() OVER(ORDER BY " . $data['orden'] .") Fila
+                            FROM CorrectivoPlanificadoPieza CPP
+                                JOIN Piezas P ON P.pie_id = CPP.pie_id
+                                LEFT JOIN Bienes B ON B.bie_id = P.bie_id
+                                JOIN Marcas M ON M.mar_id = P.mar_id
+                                JOIN Tipopieza TPI ON TPI.tpi_id = P.tpi_id
+                                JOIN Fallas FAL ON FAL.fal_id = CPP.fal_id
+                            WHERE CPP.cpl_id = " . $data['cpl_id'] ."
+                            " . $condicion . "
+
+                        ) LD
+                        WHERE Fila BETWEEN ". $data['inicio'] . " AND " . $data['fin'] . "
+                        ORDER BY Fila ASC;";
+
+            //Ejecutar Query
+            $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
+            
+            //Si existe registro, se guarda. Sino se guarda false
+            if ($result){
+                $retorno = [];
+                while($line = pg_fetch_array($result, null, PGSQL_ASSOC))
+                    array_push($retorno,$line);
+
+            } else
+                $retorno = false;
+
+            //Liberar memoria
+            pg_free_result($result);
+
+            //liberar conexion
+            $this->bd_model->CerrarConexion($conexion);
+
+            return $retorno;
+        }
+
         public function busquedaDisponibles($data){
             
             //Abrir conexion
@@ -323,6 +393,11 @@
                             . "%' OR LOWER(B.nombre) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
                             . "%' OR LOWER(M.nombre) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
                             . "%')";
+            }
+            
+            if($data['tpi_id'] != ""){
+                $condicion = ($condicion == "" ? "": $condicion . " AND ") 
+                        . "P.tpi_id = " . $data['tpi_id'];
             }
             
             if($condicion != ""){
@@ -391,6 +466,7 @@
                         ) LD
                         WHERE Fila BETWEEN ". $data['inicio'] . " AND " . $data['fin'] . "
                         ORDER BY Fila ASC;";
+
 
             //Ejecutar Query
             $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());

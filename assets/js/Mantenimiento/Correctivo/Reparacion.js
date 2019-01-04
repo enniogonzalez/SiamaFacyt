@@ -1,7 +1,7 @@
 
 const ProveedorR = "ProveedorR";
 const FallaR = "FallaR";
-const UsuarioR = "UsuariosR";
+const ObreroR = "ObrerosR";
 const PiezaDR = "PiezaDR";
 
 $(function(){
@@ -46,20 +46,20 @@ $(function(){
     });
 
     /************************************/
-    /*      Manejo Usuarios             */
+    /*      Manejo Obreros             */
     /************************************/
 
-    $('#SiamaModalFunciones').on('click','#nomUsuReparacion',function(){
-        BuscarUsuario(UsuarioR);
+    $('#SiamaModalFunciones').on('click','#nomObrReparacion',function(){
+        BuscarObrero(ObreroR);
     });
 
-    $('#SiamaModalFunciones').on('click','.BuscarUsuarioR',function(){
-        BuscarUsuario(UsuarioR);
+    $('#SiamaModalFunciones').on('click','.BuscarObreroR',function(){
+        BuscarObrero(ObreroR);
     });
 
-    $('#SiamaModalFunciones').on('click','.BorrarUsuarioR',function(){
-        $('#idUsuReparacion').text('');
-        $('#nomUsuReparacion').val('');
+    $('#SiamaModalFunciones').on('click','.BorrarObreroR',function(){
+        $('#idObrReparacion').text('');
+        $('#nomObrReparacion').val('');
     });
 
     /************************************/
@@ -83,20 +83,28 @@ $(function(){
     /*          Fin Buscadores          */
     /************************************/
 
-
     $('#agregarReparacion').on('click',function(){
 
-        if($('#idBieCorrectivo').text().trim() == ""){
-
-            Botones = `
+        var Botones = `
             <button data-dismiss="modal" title="Cerrar" type="button" style="margin:5px;" class="btn btn-primary-siama">
             <span class="fa fa-times-circle"></span>
             Cerrar
             </button>`;
-    
+        var alerta = false;
+        
+        if($('#OrigenCorrectivo').val().trim() == ""){
+            alerta = true;
+            Cuerpo = "No se puede agregar un <strong>Reparaci&oacute;n Correctiva</strong> debido a que no se ha seleccionado un <strong>Origen</strong>.";
+        }else if($('#OrigenCorrectivo').val().trim() == "Mantenimiento Correctivo Planificado" && $('#idManCorPla').text().trim() == ""){
+            alerta = true;
+            Cuerpo = "No se puede agregar un <strong>Reparaci&oacute;n Correctiva</strong> debido a que no se ha seleccionado un <strong>Mantenimiento Correctivo Planificado</strong>.";
+        }else if($('#OrigenCorrectivo').val().trim() == "Bien" && $('#idBieCorrectivo').text().trim() == ""){
+            alerta = true;
             Cuerpo = "No se puede agregar un <strong>Reparaci&oacute;n Correctiva</strong> debido a que no se ha seleccionado un <strong>Bien</strong>.";
-    
-    
+        }else
+            AgregarReparacionCorrectiva();
+
+        if(alerta){
             var parametros = {
                 "Titulo":"Advetencia",
                 "Cuerpo": Cuerpo,
@@ -104,8 +112,7 @@ $(function(){
             }
 
             ModalAdvertencia(parametros);
-        }else
-            AgregarReparacionCorrectiva();
+        }
     });
 
     $('#eliminarReparacion').on('click',function(){
@@ -141,8 +148,8 @@ $(function(){
             "Botones"           :   Botones,
             "idPiezaDR"         :   fila.find('td:eq(1)').text().trim(),
             "nomPiezaDR"        :   fila.find('td:eq(2)').text().trim(),
-            "idUsuReparacion"   :   fila.find('td:eq(3)').text().trim(),
-            "nomUsuReparacion"  :   fila.find('td:eq(4)').text().trim(),
+            "idObrReparacion"   :   fila.find('td:eq(3)').text().trim(),
+            "nomObrReparacion"  :   fila.find('td:eq(4)').text().trim(),
             "idProR"            :   fila.find('td:eq(5)').text().trim(),
             "nomProR"           :   fila.find('td:eq(6)').text().trim(),
             "InicioReparacion"  :   fila.find('td:eq(7)').text().trim(),
@@ -198,11 +205,11 @@ $(function(){
             }
         })
 
-        //Validar que exista un usuario o un proveedor asignado
-        if(Valido && $('#nomUsuReparacion').val() == "" && $('#nomProR').val() == ""){
+        //Validar que exista un Obrero o un proveedor asignado
+        if(Valido && $('#nomObrReparacion').val() == "" && $('#nomProR').val() == ""){
             Valido = false;
             $('#alertaModal').focus(); 
-            $('#alertaModal').text('La Reparacion Correctiva debe contar con un Usuario o un Proveedor para realizar la misma.');
+            $('#alertaModal').text('La Reparacion Correctiva debe contar con un Obrero o un Proveedor para realizar la misma.');
             $('.contenedorAlertaModal').show();
             
             document.getElementsByClassName("contenedorAlertaModal")[0].scrollIntoView();
@@ -239,8 +246,8 @@ $(function(){
             var fila = $('#TablaReparacionesCorrectivas tbody tr').eq(row);
             fila.find('td:eq(1)').text($('#idPiezaDR').text().trim());
             fila.find('td:eq(2)').text($('#nomPiezaDR').val().trim());
-            fila.find('td:eq(3)').text($('#idUsuReparacion').text().trim());
-            fila.find('td:eq(4)').text($('#nomUsuReparacion').val().trim());
+            fila.find('td:eq(3)').text($('#idObrReparacion').text().trim());
+            fila.find('td:eq(4)').text($('#nomObrReparacion').val().trim());
             fila.find('td:eq(5)').text($('#idProR').text().trim());
             fila.find('td:eq(6)').text($('#nomProR').val().trim());
             fila.find('td:eq(7)').text($('#InicioReparacion').val().trim());
@@ -304,19 +311,19 @@ $(function(){
             </div>
 
             <div class="form-group row">
-                <label class="col-lg-3 col-form-label">Usuario:</label>
+                <label class="col-lg-3 col-form-label">Obrero:</label>
                 <div class="col-lg-9">
                     <div style="width:80%;float:left;">
-                        <div style="display:none;" id="idUsuReparacion">${data['idUsuReparacion']}</div>
-                        <input type="text" title="Usuario que realiza reparacion" ${atributos} readonly
-                            class="form-control texto  buscador Reparacion" id="nomUsuReparacion" 
-                            value="${data['nomUsuReparacion']}">
+                        <div style="display:none;" id="idObrReparacion">${data['idObrReparacion']}</div>
+                        <input type="text" title="Obrero que realiza reparacion" ${atributos} readonly
+                            class="form-control texto  buscador Reparacion" id="nomObrReparacion" 
+                            value="${data['nomObrReparacion']}">
                         <div class="invalid-feedback">Campo Obligatorio</div>
                     </div>
                     <div style="width:20%;float:right;padding:10px;">
-                        <span title="Buscar Usuario" class="fa fa-search BuscarUsuarioR" 
+                        <span title="Buscar Obrero" class="fa fa-search BuscarObreroR" 
                             style="cursor: pointer;float:left;"></span>
-                        <span title="Borrar Usuario" class="fa fa-trash-o BorrarUsuarioR" 
+                        <span title="Borrar Obrero" class="fa fa-trash-o BorrarObreroR" 
                             style="cursor: pointer;float:right;"></span>
                     </div>
                 </div>
@@ -467,7 +474,7 @@ $(function(){
                 Reparaciones.push({ 
                     "Id"                : $(this).find('td:eq(0)').text(),
                     "IdPiezaD"          : $(this).find('td:eq(1)').text(),
-                    "IdUsu"             : $(this).find('td:eq(3)').text(),
+                    "IdObr"             : $(this).find('td:eq(3)').text(),
                     "IdPro"             : $(this).find('td:eq(5)').text(),
                     "Inicio"            : $(this).find('td:eq(7)').text(),
                     "Fin"               : $(this).find('td:eq(8)').text(),
