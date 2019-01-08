@@ -11,6 +11,13 @@
     min-height: 15vh;
 }
 
+@media screen and (orientation:portrait) { 
+  
+    .header-siama{
+        min-height: 8vh;
+        padding-top: 2vh; 
+    }  
+}
 .body-siama{
     /* background-color: #e9ecef !important; */
     background-color: #d3d9df !important;
