@@ -93,7 +93,6 @@ CREATE TABLE Localizaciones(
 	Ubicacion		TEXT				NOT NULL,
 	Tipo			VARCHAR(100)		NOT NULL,
 	Secuencia		TEXT				NOT NULL DEFAULT '',
-	Cap_Amp			DECIMAL(10,4)		NOT NULL,
 	Usu_Cre			INT					NOT NULL,--Usuario Creador
 	Fec_Cre			TIMESTAMP			NOT NULL DEFAULT(NOW()), --fecha Creacion
 	Usu_Mod			INT					NULL,--Usuario Creador
@@ -279,7 +278,7 @@ CREATE TABLE PlantillaMantenimientoTarea(
 	PLM_ID			INT				NOT NULL,--Plantilla de mantenimiento
 	Titulo			VARCHAR(255)	NOT NULL,--Titulo tarea
 	TPI_ID			INT				NOT NULL,--Tipo de Pieza a la que se le hara haciendo mantenimiento
-	Minutos			INT				NOT NULL,--Tiempo Estimado en el que se realizara el mantenimiento
+	hor_hom			Decimal(10,2)	NOT NULL,--Tiempo Estimado en el que se realizara el mantenimiento
 	Descripcion		TEXT			NOT NULL,
 	Usu_Cre			INT				NOT NULL,--Usuario Creador
 	Fec_Cre			TIMESTAMP		NOT NULL DEFAULT(NOW()),--fecha Creacion
@@ -303,7 +302,7 @@ CREATE TABLE PlantillaTareaHerramienta(
 
 --Mantenimientos Correctivos
 CREATE TABLE MantenimientoCorrectivo(
-	MCO_ID			SERIAL	PRIMARY KEY,
+	MCO_ID			SERIAL			PRIMARY KEY,
 	BIE_ID			INT				NULL,
 	CPL_ID			INT				NULL,
 	Documento		VARCHAR(10)		NOT NULL UNIQUE,
@@ -325,7 +324,7 @@ CREATE TABLE MantenimientoCorrectivo(
 );
 
 CREATE TABLE CambioCorrectivo(
-	CCO_ID			SERIAL	PRIMARY KEY,
+	CCO_ID			SERIAL			PRIMARY KEY,
 	MCO_ID			INT				NOT NULL,--Mantenimiento Correctivo
 	PDA_ID			INT				NOT NULL,--Pieza da�ada
 	OBR_ID			INT				NULL,
@@ -359,7 +358,7 @@ CREATE TABLE CambioCorrectivo(
 );
 
 CREATE TABLE ReparacionCorrectiva(
-	RCO_ID			SERIAL	PRIMARY KEY,
+	RCO_ID			SERIAL			PRIMARY KEY,
 	MCO_ID			INT				NOT NULL,
 	PIE_ID			INT				NOT NULL,--Pieza da�ada
 	OBR_ID			INT				NULL,--Obrero
@@ -376,7 +375,7 @@ CREATE TABLE ReparacionCorrectiva(
 	FOREIGN KEY (PIE_ID) References Piezas,
 	FOREIGN KEY (fal_id) References Fallas,
 	FOREIGN KEY (MCO_ID) References MantenimientoCorrectivo ON DELETE CASCADE,
-	FOREIGN KEY (OBR_ID) References Usuarios,
+	FOREIGN KEY (OBR_ID) References Obreros,
 	FOREIGN KEY (Usu_Cre) References Usuarios,
 	FOREIGN KEY (Usu_Mod) References Usuarios,
 	FOREIGN KEY (PRO_ID) References Proveedores,
@@ -410,15 +409,15 @@ CREATE TABLE Mantenimiento(
 );
 
 CREATE TABLE MantenimientoTarea(
-	MTA_ID			SERIAL	PRIMARY KEY,
+	MTA_ID			SERIAL			PRIMARY KEY,
 	MAN_ID			INT				NOT NULL,
 	PIE_ID			INT				NOT NULL,
 	Titulo			VARCHAR(250)	NOT NULL,--Titulo tarea
 	ESTATUS			VARCHAR(100)	NOT NULL,--Solicitado, Aprobado, Realizado,Eliminado
 	OBR_ID			INT				NULL,
 	PRO_ID			INT				NULL,
-	Min_Asi			INT				NOT NULL,--Minutos Asignados
-	Min_Eje			INT				NOT NULL,--Minutos Ejecutados
+	Hor_Asi			DECIMAL(10,2)	NOT NULL,--Minutos Asignados
+	Hor_Eje			DECIMAL(10,2)	NOT NULL,--Minutos Ejecutados
 	Fec_Ini			DATE			NOT NULL,
 	Fec_Fin			DATE			NOT NULL,
 	Descripcion		TEXT			NOT NULL, 
@@ -482,6 +481,8 @@ CREATE TABLE CorrectivoPlanificadoPieza(
 	FOREIGN KEY (Usu_Cre) References Usuarios,
 	FOREIGN KEY (Usu_Mod) References Usuarios
 );
+
+ALTER TABLE MantenimientoCorrectivo ADD FOREIGN KEY (CPL_ID) REFERENCES CorrectivoPlanificado(CPL_ID);
 
 -- ALTER TABLE CorrectivoPlanificado ADD FOREIGN KEY (MCO_ID)
 --Ajustes
@@ -566,8 +567,8 @@ CREATE TABLE HistoricoCustodios(
 	FOREIGN KEY (BIE_ID) References Bienes ON DELETE CASCADE
 );
 
+-- Cambios de Estatus Patrimonio
 CREATE TABLE CambiosEstatus(
-
 	CAM_ID			SERIAL			PRIMARY KEY,
 	Documento		VARCHAR(10)		NOT NULL UNIQUE,
 	DOC_Estatus		VARCHAR(100)	NOT NULL,--Solicitado, Aprobado
@@ -626,6 +627,7 @@ CREATE TABLE AlertaCorreo(
 	UNIQUE(Tabla,TAB_ID,Estatus,Fecha)
 );
 
+--Compatibilidad de los bienes
 CREATE TABLE Compatibilidad(
 	COM_ID			SERIAL			PRIMARY KEY,
 	Documento		VARCHAR(10)		NOT NULL UNIQUE,

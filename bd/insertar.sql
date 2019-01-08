@@ -1,10 +1,10 @@
-INSERT INTO localizaciones(nombre,ubicacion,tipo,cap_amp,Secuencia,usu_cre)
-VALUES  ('Facyt','Facyt','Facultad',0.00,'-1-',1),
-        ('Computacion','Computacion','Departamento',0.00,'-2-',1),
-        ('Biologia','Biologia','Departamento',0.00,'-3-',1),
-        ('Fisica','Fisica','Departamento',0.00,'-4-',1),
-        ('Matematica','Matematica','Departamento',0.00,'-5-',1),
-        ('Quimica','Quimica','Departamento',0.00,'-6-',1);
+INSERT INTO localizaciones(nombre,ubicacion,tipo,Secuencia,usu_cre)
+VALUES  ('Facyt','Facyt','Facultad','-1-',1),
+        ('Computacion','Computacion','Departamento','-2-',1),
+        ('Biologia','Biologia','Departamento','-3-',1),
+        ('Fisica','Fisica','Departamento','-4-',1),
+        ('Matematica','Matematica','Departamento','-5-',1),
+        ('Quimica','Quimica','Departamento','-6-',1);
 
 
 
@@ -39,7 +39,6 @@ INSERT INTO "public"."bienes" VALUES ('2', 'Aire Acondicionado Split', '1321-EE-
 
 SELECT setval('bienes_bie_id_seq', 2, true);
 
-SELECT setval('piezas_pie_id_seq', 0, true);
 
 INSERT INTO "public"."piezas" VALUES ('1', '1', 'Amortiguador Izquierdo', '2342SFS5554', 'Platino', 'SD54233421A', '3', '2', '2',1, '2018-09-06', '2018-09-13', '2018-09-21', 'Compra', 'Activo', '1', '2018-09-06 21:24:27.310642', '1', '2018-09-06 21:24:27.310642', null);
 INSERT INTO "public"."piezas" VALUES ('2', null, 'Amortiguador Derecho', '2342SFS34323', 'Platino', 'SD54LSDF21A', '3', '2', '2',1, '2018-09-06', '2018-09-13', '2018-09-21', 'Compra', 'Activo', '1', '2018-09-07 01:43:00.882001', '1', '2018-11-25 18:02:17.024545', null);

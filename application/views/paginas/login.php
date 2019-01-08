@@ -2,8 +2,8 @@
 
         <header class="header-siama">
             <div class="container text-center">
-                    <img src="<?=base_url()?>assets/images/logoPagina.png" style="height: 50px;margin-top: -15px;">  
-                    <h1 style="display: inline-block;">Bienvenido a SiAMa FACYT</h1>
+                <img src="<?=base_url()?>assets/images/logoPagina.png" style="height: 50px;margin-top: -15px;">  
+                <h1 style="display: inline-block;">Bienvenido a SiAMa FACYT</h1>
             </div>
         </header>
         <div class="container container-login-siama">
