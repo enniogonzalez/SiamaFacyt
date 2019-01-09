@@ -381,7 +381,7 @@ $(function(){
             break;
             case Localizaciones:
                 $('#idLoc').text(fila.find("td:eq(0)").text().trim());
-                $('#nomLoc').val(fila.find("td:eq(3)").text().trim());
+                $('#nomLoc').val(fila.find("td:eq(2)").text().trim());
             break;
         }
         

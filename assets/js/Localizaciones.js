@@ -123,7 +123,6 @@ $(function(){
                 "Padre": ($('#idPad').text().trim() == '-1' ? "":$('#idPad').text().trim()),
                 "Ubicacion": $('#Ubicacion').val().trim(),
                 "Tipo": $('#Tipo').val().trim(),
-                "Amperaje": $('#Amperaje').val(),
                 "Observacion": $('#Observacion').val(),
                 "Url": $('#FormularioActual').attr("action")
             }
@@ -190,7 +189,6 @@ $(function(){
         $('#NombreLoc').val(data['Nombre']);
         $('#Ubicacion').val(data['Ubicacion']);
         $('#Tipo').val(data['Tipo']);
-        $('#Amperaje').val(data['Amperaje']);
         $('#Observacion').val(data['Observacion']);
         $('#idPad').text(data['idPad'] == "-1" ? "": data['idPad']);
         $('#LocPad').val(data['LocPad']);
@@ -202,9 +200,8 @@ $(function(){
             "Nombre": dataInputs[0].trim(),
             "Ubicacion": dataInputs[1].trim(),
             "Tipo": dataInputs[2].trim(),
-            "Amperaje": dataInputs[3],
-            "LocPad": dataInputs[4].trim(),
-            "Observacion":dataInputs[5].trim(),
+            "LocPad": dataInputs[3].trim(),
+            "Observacion":dataInputs[4].trim(),
             "idPad":idPadreActual.trim(),
         }
         LlenarFormulario(parametros);
@@ -220,7 +217,6 @@ $(function(){
             "Nombre":       data['Datos']['nombre'].trim(),
             "Ubicacion":    data['Datos']['ubicacion'].trim(),
             "Tipo":         data['Datos']['tipo'].trim(),
-            "Amperaje":     data['Datos']['cap_amp'],
             "Observacion":  data['Datos']['observaciones'].trim(),
             "LocPad":       data['Datos']['nombrepadre'].trim(),
             "idPad":        data['Datos']['idpad'].trim(),
@@ -233,17 +229,16 @@ $(function(){
         if(GetSearchType() == "Formulario"){
             var parametros = {
                 "id": fila.find('td:eq(0)').text().trim(),
-                "Nombre": fila.find('td:eq(3)').text().trim(),
-                "Ubicacion": fila.find('td:eq(4)').text().trim(),
-                "Tipo": fila.find('td:eq(5)').text().trim(),
-                "Amperaje": fila.find('td:eq(1)').text(),
-                "Observacion":fila.find('td:eq(2)').text().trim(),
-                "idPad":fila.find('td:eq(6)').text().trim(),
-                "LocPad":fila.find('td:eq(7)').text().trim()
+                "Nombre": fila.find('td:eq(2)').text().trim(),
+                "Ubicacion": fila.find('td:eq(3)').text().trim(),
+                "Tipo": fila.find('td:eq(4)').text().trim(),
+                "Observacion":fila.find('td:eq(1)').text().trim(),
+                "idPad":fila.find('td:eq(5)').text().trim(),
+                "LocPad":fila.find('td:eq(6)').text().trim()
             }
             LlenarFormulario(parametros);
         }else if(GetSearchType() == "Padre"){
-            $('#LocPad').val(fila.find('td:eq(3)').text().trim())
+            $('#LocPad').val(fila.find('td:eq(2)').text().trim())
             $('#idPad').text(fila.find('td:eq(0)').text().trim())
         }
         

@@ -25,7 +25,6 @@
                     $htmlListas = $htmlListas
                         ."<tr>"
                         .   "<td style='display:none;'>" . $elemento['loc_id'] . "</td>"
-                        .   "<td style='display:none;'>" . $elemento['cap_amp'] . "</td>"
                         .   "<td style='display:none;'>" . $elemento['observaciones'] . "</td>"
                         .   "<td>" . $elemento['nombre'] . "</td>"
                         .   "<td>" . $elemento['ubicacion'] . "</td>"
@@ -130,7 +129,6 @@
                 "Nombre" => $this->input->post("Nombre"),
                 "Ubicacion" => $this->input->post("Ubicacion"),
                 "Tipo" => $this->input->post("Tipo"),
-                "Cap_Amp" => $this->input->post("Amperaje"),
                 "Observaciones" => trim($this->input->post("Observacion"))
             );
             

@@ -52,16 +52,6 @@
                 </div>
             </div>
 
-
-            <div class="form-group row">
-                <label for="Amperaje" class="col-md-3 col-form-label">Capacidad Amperaje:</label>
-                <div class="col-md-9">
-                    <input readonly disabled required type="number" step=".01" 
-                        class="form-control obligatorio decimal" id="Amperaje" value="<?=$cap_amp?>">
-                    <div class="invalid-feedback">Campo Obligatorio</div>
-                </div>
-            </div>
-
             <div class="form-group row">
                 <label for="LocPad" class="col-md-3 col-form-label">Localizaci&oacute;n Padre:</label>
                 <div class="col-md-9">

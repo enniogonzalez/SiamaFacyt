@@ -95,8 +95,7 @@
                 . " SET Nombre ='". str_replace("'", "''",$data['Nombre']) 
                 . "', Ubicacion = '".str_replace("'", "''",$data['Ubicacion'])
                 . "', Tipo = '".str_replace("'", "''",$data['Tipo'])
-                . "', Cap_Amp = ".str_replace("'", "''",$data['Cap_Amp'])
-                . ", Usu_Mod = " . $this->session->userdata("usu_id") 
+                . "', Usu_Mod = " . $this->session->userdata("usu_id") 
                 . ", Fec_Mod = NOW()" 
                 . ", Observaciones = " 
                 .(($data['Observaciones'] == "") ? "null" : ("'" .str_replace("'", "''", $data['Observaciones']) . "'"))
@@ -205,7 +204,6 @@
                                 Nombre,
                                 Ubicacion,
                                 Tipo,
-                                Cap_Amp,
                                 Observaciones,
                                 idPad,
                                 NombrePadre,
@@ -215,7 +213,6 @@
                                     Hijo.Nombre,
                                     Hijo.Ubicacion,
                                     Hijo.Tipo,
-                                    Hijo.Cap_Amp,
                                     Hijo.Observaciones,
                                     COALESCE(P.lop_id,-1) AS idPad,
                                     COALESCE(Padre.Nombre,'') AS NombrePadre,
@@ -305,11 +302,10 @@
             pg_query("BEGIN") or die("Could not start transaction");
 
             //Insertar Localizacion
-            $query = " INSERT INTO Localizaciones( Nombre,Ubicacion,Tipo,Cap_Amp,usu_cre,usu_mod,Observaciones) VALUES('"
+            $query = " INSERT INTO Localizaciones( Nombre,Ubicacion,Tipo,usu_cre,usu_mod,Observaciones) VALUES('"
             . str_replace("'", "''",$data['Nombre']) . "','"
             . str_replace("'", "''",$data['Ubicacion']) . "','"
-            . str_replace("'", "''",$data['Tipo']) . "','"
-            . str_replace("'", "''",$data['Cap_Amp']) . "',"
+            . str_replace("'", "''",$data['Tipo']) . "',"
             . $this->session->userdata("usu_id")    . ","
             . $this->session->userdata("usu_id")    . ","
             . (($data['Observaciones'] == "") ? "null" : ("'" .str_replace("'", "''", $data['Observaciones']) . "'"))
@@ -384,7 +380,6 @@
                                 Hijo.Nombre,
                                 Hijo.Ubicacion,
                                 Hijo.Tipo,
-                                Hijo.Cap_Amp,
                                 COALESCE(Hijo.Observaciones,'') Observaciones,
                                 COALESCE(P.lop_id,-1) AS idPad,
                                 COALESCE(Padre.Nombre,'') AS NombrePadre
@@ -426,7 +421,6 @@
                                 Hijo.Nombre,
                                 Hijo.Ubicacion,
                                 Hijo.Tipo,
-                                Hijo.Cap_Amp,
                                 COALESCE(Hijo.Observaciones,'') Observaciones,
                                 COALESCE(Padre.Nombre,'') AS NombrePadre
                         FROM Localizaciones AS Hijo

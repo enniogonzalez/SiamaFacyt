@@ -14,8 +14,9 @@
 
             $query ="   SELECT  Titulo,Descripcion
                         FROM Alertas
-                            JOIN PermisosUsuarios PU ON PU.menu = Alertas.menu
-                        WHERE PU.usu_id = '" . $this->session->userdata("usu_id") . "'
+                            JOIN Permisos P ON P.opcion = Alertas.menu
+                            JOIN RolPermisos RP ON RP.per_id = P.per_id
+                        WHERE RP.rol_id = '" . $this->session->userdata("usu_id") . "'
                         ORDER BY fec_cre DESC
                     ";
 
