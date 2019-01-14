@@ -1,6 +1,6 @@
 $(function(){
     
-    $('#menu-siama ul li').on('click',function(){
+    $('#menu-sigma ul li').on('click',function(){
         if(!$(this).hasClass('submenu')){
                 
             if($(".oMenu").index($('li.menu-activo')) == $(".oMenu").index($(this))){

@@ -58,9 +58,9 @@
 
 
             if($busqueda != ""){
-                $condicion = " WHERE (LOWER(Rif) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
-                            . "%' OR LOWER(Raz_Soc) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
-                            . "%' OR LOWER(Direccion) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
+                $condicion = " WHERE (LOWER(Rif) like '%" . mb_strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
+                            . "%' OR LOWER(Raz_Soc) like '%" . mb_strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
+                            . "%' OR LOWER(Direccion) like '%" . mb_strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
                             . "%')";
             }
 
@@ -159,7 +159,7 @@
             $conexion = $this->bd_model->ObtenerConexion();
     
             //Query para buscar usuario
-            $query =" SELECT * FROM Proveedores WHERE LOWER(rif) ='" . strtolower(str_replace("'", "''",$rif)) . "' " ;
+            $query =" SELECT * FROM Proveedores WHERE LOWER(rif) ='" . mb_strtolower(str_replace("'", "''",$rif)) . "' " ;
 
             if($id != "")
                 $query = $query . " AND pro_id <>'" . str_replace("'", "''",$id) . "' " ;

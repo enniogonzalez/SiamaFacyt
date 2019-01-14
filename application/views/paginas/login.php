@@ -1,16 +1,16 @@
 
 
-        <header class="header-siama">
+        <header class="header-sigma">
             <div class="container text-center">
                 <a href='<?=site_url('')?>' style="color:#fff;">
                     <img src="<?=base_url()?>assets/images/logoPagina.png" style="height: 50px;margin-top: -15px;">  
-                    <h1 style="display: inline-block;">Bienvenido a SiAMa FACYT</h1>
+                    <h1 style="display: inline-block;">Bienvenido a SiGMa FACYT</h1>
                 </a>
             </div>
         </header>
-        <div class="container container-login-siama">
+        <div class="container container-login-sigma">
 
-            <form id="loginform" class="form-signin login-siama" method="POST" action = "<?=site_url('/login/validar')?>">
+            <form id="loginform" class="form-signin login-sigma" method="POST" action = "<?=site_url('/login/validar')?>">
                 <h2 class="font-weight-normal text-center">Iniciar Sesi&oacute;n</h2>
 
                 <div style="display:none;" id="alertaLogin" class="alert alert-danger text-center">
@@ -37,6 +37,6 @@
                 <div class="form-group" style="text-align: center">
                     <a href='<?=site_url('restablecer/usuario')?>'><span>¿Ha olvidado su contraseña?</span></a>
                 </div>
-                <button class="btn btn-lg btn-primary-siama btn-block" id="loginbutton" type="submit"><span class="fa fa-sign-in " style="margin-right:5px;"></span>Ingresar</button>
+                <button class="btn btn-lg btn-primary-sigma btn-block" id="loginbutton" type="submit"><span class="fa fa-sign-in " style="margin-right:5px;"></span>Ingresar</button>
             </form>
         </div>

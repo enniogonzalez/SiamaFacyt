@@ -12,7 +12,7 @@ class Resetpassword extends CI_Controller{
 
     public function view($page = ''){
 
-        $JsFile = "<script src=\"". base_url() . "assets/js/Siama/Restablecer.js\"></script>";
+        $JsFile = "<script src=\"". base_url() . "assets/js/Sigma/Restablecer.js\"></script>";
                 
         $datafile['JsFile'] = $JsFile ;
         $dataLD['OrdenarBusqueda'] = "";

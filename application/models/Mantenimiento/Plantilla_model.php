@@ -131,9 +131,9 @@
 
 
             if($busqueda != ""){
-                $condicion = "(LOWER(B.nombre) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
-                            . "%' OR LOWER(PLM.documento) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
-                            . "%' OR LOWER(PLM.estatus) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
+                $condicion = "(LOWER(B.nombre) like '%" . mb_strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
+                            . "%' OR LOWER(PLM.documento) like '%" . mb_strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
+                            . "%' OR LOWER(PLM.estatus) like '%" . mb_strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
                             . "%')";
             }
             
@@ -241,7 +241,7 @@
             $conexion = $this->bd_model->ObtenerConexion();
     
             //Query para buscar usuario
-            $query =" SELECT * FROM PlantillaMantenimiento WHERE LOWER(documento) ='" . strtolower(str_replace("'", "''",$documento)) . "' " ;
+            $query =" SELECT * FROM PlantillaMantenimiento WHERE LOWER(documento) ='" . mb_strtolower(str_replace("'", "''",$documento)) . "' " ;
 
             if($id != "")
                 $query = $query . " AND PLM_ID <>'" . str_replace("'", "''",$id) . "' " ;
@@ -774,13 +774,13 @@
             if(isset($tareas)){
                 foreach ($tareas as $data) {
 
-                    $query = "INSERT INTO PlantillaMantenimientoTarea( PLM_ID, tpi_id, Titulo, Minutos, Descripcion,
+                    $query = "INSERT INTO PlantillaMantenimientoTarea( PLM_ID, tpi_id, Titulo, hor_hom, Descripcion,
                                                                     Usu_Cre, Usu_Mod, Observaciones) "
                             . "VALUES('"
                             . str_replace("'", "''",$plantilla)    . "','"
                             . str_replace("'", "''",$data['IdPieza']) . "','"
                             . str_replace("'", "''",$data['Titulo']) . "',"
-                            . str_replace("'", "''",$data['Minutos']) . ",'"
+                            . str_replace("'", "''",$data['Horas']) . ",'"
                             . str_replace("'", "''",$data['Descripcion'])    . "',"
                             . $this->session->userdata("usu_id")    . ","
                             . $this->session->userdata("usu_id")    . ","
@@ -819,7 +819,7 @@
                                 PMT.tpi_id,	
                                 TPI.Nombre TPI_NOM,		
                                 PMT.Titulo,	
-                                PMT.Minutos,	
+                                PMT.hor_hom,	
                                 PMT.Descripcion,
                                 COALESCE(PMT.Observaciones,'') Observaciones
                         FROM PlantillaMantenimientoTarea PMT
@@ -844,7 +844,7 @@
                     . "    <td style=\"display:none;\">" . $line['tpi_id'] . "</td>"
                     . "    <td>" . $line['tpi_nom'] . "</td>"
                     . "    <td>" . $line['titulo'] . "</td>"
-                    . "    <td>" . $line['minutos'] . "</td>"
+                    . "    <td>" . $line['hor_hom'] . "</td>"
                     . "    <td style=\"display:none;\">" . json_encode($line['Herramientas']) . "</td>"
                     . "    <td style=\"display:none;\">" . $line['descripcion'] . "</td>"
                     . "    <td style=\"display:none;\">" . $line['observaciones'] . "</td>";
@@ -882,7 +882,7 @@
                                 PIE.pie_id,	
                                 PIE.Nombre PIE_NOM,		
                                 PMT.Titulo,	
-                                PMT.Minutos,	
+                                PMT.hor_hom,	
                                 PMT.Descripcion,
                                 COALESCE(PMT.Observaciones,'') Observaciones
                         FROM PlantillaMantenimientoTarea PMT
@@ -915,7 +915,7 @@
                     . "    <td style=\"display:none;\"></td>"
                     . "    <td style=\"display:none;\">0</td>"
                     . "    <td style=\"display:none;\"></td>"
-                    . "    <td style=\"display:none;\">" . $line['minutos'] . "</td>"
+                    . "    <td style=\"display:none;\">" . $line['hor_hom'] . "</td>"
                     . "    <td style=\"display:none;\">Solicitado</td>"
                     . "    <td colspan=\"2\" class =\"editarTarea\" title =\"Editar Tarea\" style=\"text-align: center;cursor: pointer;\">"
                     . "        <span class=\"fa fa-pencil fa-lg\"></span>"
@@ -940,15 +940,20 @@
             $conexion = $this->bd_model->ObtenerConexion();
             		
             //Query para buscar usuario
-            $query ="   SELECT  PIE.Nombre PIE_NOM,		
+            $query ="   SELECT  TPI.Nombre TPI_NOM,		
                                 PMT.Titulo,	
-                                PMT.Minutos,	
+                                PMT.hor_hom,	
                                 PMT.Descripcion,
+	                            array_to_string(
+                                    ARRAY(  SELECT her.nombre 
+                                            FROM herramientas her
+                                                JOIN plantillatareaherramienta pher ON pher.her_id = her.her_id
+                                            WHERE pher.pmt_id = PMT.pmt_id
+                                        ), '<br>') herramientas,
                                 COALESCE(PMT.Observaciones,'') Observaciones
                         FROM PlantillaMantenimientoTarea PMT
-                            JOIN Piezas PIE ON PIE.tpi_id = PMT.tpi_id
+                            JOIN TipoPieza TPI ON TPI.tpi_id = PMT.tpi_id
                         WHERE PMT.PLM_ID = " . $plantilla;
-
 
             //Ejecutar Query
             $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());

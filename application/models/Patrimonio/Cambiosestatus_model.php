@@ -309,10 +309,10 @@
 
 
             if($busqueda != ""){
-                $condicion = " WHERE  (LOWER(B.nombre) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
-                            . "%' OR LOWER(CAM.documento) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
-                            . "%' OR LOWER(CAM.doc_estatus) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
-                            . "%' OR LOWER(CAM.bie_estatus) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
+                $condicion = " WHERE  (LOWER(B.nombre) like '%" . mb_strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
+                            . "%' OR LOWER(CAM.documento) like '%" . mb_strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
+                            . "%' OR LOWER(CAM.doc_estatus) like '%" . mb_strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
+                            . "%' OR LOWER(CAM.bie_estatus) like '%" . mb_strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
                             . "%')";
             }
             
@@ -451,7 +451,7 @@
             $conexion = $this->bd_model->ObtenerConexion();
     
             //Query para buscar usuario
-            $query =" SELECT * FROM CambiosEstatus WHERE LOWER(documento) ='" . strtolower(str_replace("'", "''",$documento)) . "' " ;
+            $query =" SELECT * FROM CambiosEstatus WHERE LOWER(documento) ='" . mb_strtolower(str_replace("'", "''",$documento)) . "' " ;
 
             if($id != "")
                 $query = $query . " AND CAM_ID <>'" . str_replace("'", "''",$id) . "' " ;

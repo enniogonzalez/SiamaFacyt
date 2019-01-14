@@ -5,7 +5,7 @@ const Proveedor = "Proveedor";
 
 $(function(){
 
-    $('#SiamaModalFunciones').on('keypress','.buscador',function(){
+    $('#SigmaModalFunciones').on('keypress','.buscador',function(){
         return false;
     })
 
@@ -17,15 +17,15 @@ $(function(){
     /*      Manejo Proveedores          */
     /************************************/
     
-    $('#SiamaModalFunciones').on('click','#nomPro',function(){
+    $('#SigmaModalFunciones').on('click','#nomPro',function(){
         BuscarProveedor(Proveedor);
     });
 
-    $('#SiamaModalFunciones').on('click','.BuscarProveedor',function(){
+    $('#SigmaModalFunciones').on('click','.BuscarProveedor',function(){
         BuscarProveedor(Proveedor);
     });
 
-    $('#SiamaModalFunciones').on('click','.BorrarProveedor',function(){
+    $('#SigmaModalFunciones').on('click','.BorrarProveedor',function(){
         $('#idPro').text('');
         $('#nomPro').val('');
     });
@@ -34,15 +34,15 @@ $(function(){
     /*      Manejo Obreros             */
     /************************************/
     
-    $('#SiamaModalFunciones').on('click','#nomObr',function(){
+    $('#SigmaModalFunciones').on('click','#nomObr',function(){
         BuscarObrero(Obrero);
     });
 
-    $('#SiamaModalFunciones').on('click','.BuscarObrero',function(){
+    $('#SigmaModalFunciones').on('click','.BuscarObrero',function(){
         BuscarObrero(Obrero);
     });
 
-    $('#SiamaModalFunciones').on('click','.BorrarObrero',function(){
+    $('#SigmaModalFunciones').on('click','.BorrarObrero',function(){
         $('#idObr').text('');
         $('#nomObr').val('');
     });
@@ -51,14 +51,14 @@ $(function(){
     /************************************/
 
     $('#eliminarTarea').on('click',function(){
-        $('#TablaTareas .tr-activa-siama').remove();
+        $('#TablaTareas .tr-activa-sigma').remove();
     });
 
-    $('#SiamaModalFunciones').on('click','#CancelarEdicionTarea',function(){
+    $('#SigmaModalFunciones').on('click','#CancelarEdicionTarea',function(){
         ClearModalFunction();
     });
 
-    $('#SiamaModalFunciones').on('change','#FinTarea',function(){
+    $('#SigmaModalFunciones').on('change','#FinTarea',function(){
         if($(this).val() != "" && 
         $('#InicioTarea').val() != "" 
         && $(this).val() < $('#InicioTarea').val()){
@@ -66,7 +66,7 @@ $(function(){
         }
     })
 
-    $('#SiamaModalFunciones').on('click','#GuardarEdicionTarea',function(){
+    $('#SigmaModalFunciones').on('click','#GuardarEdicionTarea',function(){
         var Valido = true;
 
         $('#formEditarTarea .Tarea').each(function(){
@@ -91,9 +91,9 @@ $(function(){
             document.getElementsByClassName("contenedorAlertaModal")[0].scrollIntoView();
         }
 
-        if(Valido && $('#EstatusPreventivo').val() != "Solicitado" && $('#MinutosRea').val() <= 0){
+        if(Valido && $('#EstatusPreventivo').val() != "Solicitado" && $('#HorasRea').val() <= 0){
             Valido = false;
-            $('#alertaModal').text('Los minutos realizados tienen que ser un numero mayor a 0.');
+            $('#alertaModal').text('Las horas realizadas tienen que ser un numero mayor a 0.');
             $('.contenedorAlertaModal').show();
             
             document.getElementsByClassName("contenedorAlertaModal")[0].scrollIntoView();
@@ -113,14 +113,14 @@ $(function(){
             fila.find('td:eq(9)').text($('#DescripcionT').val().trim());
             fila.find('td:eq(10)').text($('#InicioTarea').val().trim());
             fila.find('td:eq(11)').text($('#FinTarea').val().trim());
-            fila.find('td:eq(12)').text($('#MinutosRea').val().trim());
+            fila.find('td:eq(12)').text($('#HorasRea').val().trim());
             fila.find('td:eq(13)').text($('#ObservacionT').val().trim());
     
             CerrarFunciones();
         }
     });
 
-    $('#SiamaModalFunciones').on('change','#InicioTarea',function(){
+    $('#SigmaModalFunciones').on('change','#InicioTarea',function(){
         if($(this).val() != "" && 
         $('#FinTarea').val() != "" 
         && $(this).val() > $('#FinTarea').val()){
@@ -132,13 +132,13 @@ $(function(){
     $('#TablaTareas').on('click','.editarTarea',function(){
 
         //Se remueve la clase activa de la fila que esta activa
-        $('.tr-activa-siama').removeClass('tr-activa-siama');
+        $('.tr-activa-sigma').removeClass('tr-activa-sigma');
 
         var fila = $(this).parent('tr');
         //Se agrega la clase activa a la fila actual, esto para evitar
         //que se le quite la clase activa a una fila que esta activa
         //y se quiera editar (o sea, no se quiere quitar la seleccion)
-        fila.addClass('tr-activa-siama');
+        fila.addClass('tr-activa-sigma');
 
         //Se crea los botones que va a tener la ventana modal de edicion
         Botones = `
@@ -181,7 +181,7 @@ $(function(){
             "DescripcionT"  :   fila.find('td:eq(9)').text().trim(),
             "InicioTarea"   :   fila.find('td:eq(10)').text().trim(),
             "FinTarea"      :   fila.find('td:eq(11)').text().trim(),
-            "MinutosRea"    :   fila.find('td:eq(12)').text().trim(),
+            "HorasRea"    :   fila.find('td:eq(12)').text().trim(),
             "ObservacionT"  :   fila.find('td:eq(13)').text().trim(),
         }
         
@@ -194,9 +194,9 @@ $(function(){
 
     $('#TablaTareas').on('click','.realizarTarea',function(){
 
-        $('.tr-activa-siama').removeClass('tr-activa-siama');
+        $('.tr-activa-sigma').removeClass('tr-activa-sigma');
         var fila = $(this).parent('tr');
-        fila.addClass('tr-activa-siama');
+        fila.addClass('tr-activa-sigma');
 
         if($(this).find('span').hasClass('fa-square-o')){
             $(this).find('span').removeClass('fa-square-o');
@@ -210,19 +210,19 @@ $(function(){
     });
 
     $('#TablaTareas tbody').on('click','tr',function(){
-        $(this).removeClass('tr-error-siama');
+        $(this).removeClass('tr-error-sigma');
         ActivarCeldaTabla(this)
     });
     
     function SetModalFuncionesCambios(data){
         var pointer= "";
         var atributos= "";
-        var displayMinutos = ""
+        var displayHoras = ""
         if(data['EstatusDoc'] != "Solicitado"){
             pointer= "pointer-events: none;";
             atributos= " readonly disabled ";
         }else{
-            displayMinutos = "style='display:none;'"
+            displayHoras = "style='display:none;'"
         }
 
         //Se crea cuerpo html que va a tener la ventana modal de edicion
@@ -312,11 +312,11 @@ $(function(){
                 </div>
             </div>
 
-            <div class="form-group row" ${displayMinutos} >
-                <label for="MinutosRea" class="col-lg-3 col-form-label">Minutos Estimados:</label>
+            <div class="form-group row" ${displayHoras} >
+                <label for="HorasRea" class="col-lg-3 col-form-label">Horas Estimados:</label>
                 <div class="col-lg-9">
                     <input type="number" step = "1" min = "1"
-                    class="form-control obligatorio Tarea"  id="MinutosRea" value="${data['MinutosRea']}">
+                    class="form-control obligatorio Tarea"  id="HorasRea" value="${data['HorasRea']}">
                     <div class="invalid-feedback">Campo Obligatorio</div>
                 </div>
             </div>
@@ -333,8 +333,8 @@ $(function(){
                 Herramientas
             </h3>
             <div class="table-responsive">
-                <table id="TablaTareasHerramientas" class="table table-hover tabla-siama">
-                    <thead class="head-table-siama">
+                <table id="TablaTareasHerramientas" class="table table-hover tabla-sigma">
+                    <thead class="head-table-sigma">
                         <tr>
                             <th style="width:100%;">Herramienta</th>
                         </tr>
@@ -385,9 +385,9 @@ $(function(){
                     "Descripcion"   : $(this).find('td:eq(9)').text(),
                     "Inicio"        : $(this).find('td:eq(10)').text(),
                     "Fin"           : $(this).find('td:eq(11)').text(),
-                    "Min_Eje"       : $(this).find('td:eq(12)').text(),
+                    "Hor_Eje"       : $(this).find('td:eq(12)').text(),
                     "Observacion"   : $(this).find('td:eq(13)').text(),
-                    "Min_Asi"       : $(this).find('td:eq(14)').text()
+                    "Hor_Asi"       : $(this).find('td:eq(14)').text()
                 });
             }
         });
@@ -420,7 +420,7 @@ $(function(){
                 $(this).find('td:eq(12)').text() <= 0
             ){
                 Valido = false;
-                $(this).addClass('tr-error-siama');
+                $(this).addClass('tr-error-sigma');
             }
         });
 

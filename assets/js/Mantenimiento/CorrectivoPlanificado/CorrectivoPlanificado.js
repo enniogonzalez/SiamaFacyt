@@ -198,8 +198,8 @@ $(function(){
         var Agregados = [];
         var PiezaDAs = [];
 
-        $('.formulario-siama form .form-control').removeClass('is-invalid');
-        $('.formulario-siama form .form-control').each(function(){
+        $('.formulario-sigma form .form-control').removeClass('is-invalid');
+        $('.formulario-sigma form .form-control').each(function(){
             if($(this).hasClass('obligatorio') && $(this).val().trim() == ""){
 
                 if(Valido)
@@ -265,7 +265,7 @@ $(function(){
         mostrarMantenimientos();
     });
 
-    $('#SiamaModalAdvertencias').on('click','#ConfirmarEliminacion',function(){
+    $('#SigmaModalAdvertencias').on('click','#ConfirmarEliminacion',function(){
         var parametros = {
             "id": $('#IdForm').text().trim(),
             "Caso":"Eliminar",
@@ -326,21 +326,21 @@ $(function(){
     function AgregarBotoneraPlanificado(Tipo){
         
         btnAgregar = `
-            <button type="button"  class="btn btn-primary-siama" id="AgregarRegistro">
+            <button type="button"  class="btn btn-primary-sigma" id="AgregarRegistro">
                 <span class="fa fa-plus"></span>
                 Agregar
             </button>
         `;
 
         btnBuscar =`
-            <button  type="button"  class="btn btn-primary-siama" id="BuscarRegistro">
+            <button  type="button"  class="btn btn-primary-sigma" id="BuscarRegistro">
                 <span class="fa fa-search"></span>
                 Buscar
             </button>
         `;
 
         btnEditar = `
-            <button type="button"  class="btn btn-primary-siama" id="EditarRegistro">
+            <button type="button"  class="btn btn-primary-sigma" id="EditarRegistro">
                 <span class="fa fa-pencil-square-o"></span>
                 Editar
             </button>
@@ -472,7 +472,7 @@ $(function(){
         $('#TablaAgregarPiezas > tbody').children().remove();
         $('#TablaPiezasDañadas > tbody').children().remove();
 
-        $('.formulario-siama form .form-control').each(function(){
+        $('.formulario-sigma form .form-control').each(function(){
             $(this).removeClass('is-invalid');
             if($(this).hasClass('texto') || $(this).hasClass('fecha'))
                 $(this).val('')
@@ -558,7 +558,7 @@ $(function(){
 
         PiezasDanadas = $('#TablaPiezasDañadas > tbody').html();
         
-        $('.formulario-siama form .form-control').each(function(){
+        $('.formulario-sigma form .form-control').each(function(){
             dataInputs.push($(this).val().trim());
         })
     }
@@ -639,7 +639,7 @@ $(function(){
             if(data['isValid']){
                 CerrarEstatus();
                 LlenarFormularioRequest(data['Datos']);
-                $('#SiamaModalBusqueda').modal('hide');
+                $('#SigmaModalBusqueda').modal('hide');
 
                 if(data['Caso'] == "Editar"){
                     Editar();
@@ -797,7 +797,7 @@ $(function(){
         }
 
         if(GetSearchType() != "Formulario"  ){
-            $('#SiamaModalBusqueda').modal('hide');
+            $('#SigmaModalBusqueda').modal('hide');
         }
     }
 });

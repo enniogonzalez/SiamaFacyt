@@ -12,11 +12,11 @@ class MYPDF extends TCPDF {
         
 		// Title
 		$this->SetY(13);
-        $this->Cell(210, 10, "Sistema Automático de Mantenimiento FACYT", 0, false, 'C', 0, '', 0, false, 'M', 'M');
+        $this->Cell(210, 10, "Sistema de Gestión de Mantenimiento FACYT", 0, false, 'C', 0, '', 0, false, 'M', 'M');
         
         $this->SetFont('helvetica', 'B', 15);
 		$this->SetY(23);
-        $this->Cell(200, 10, "Ajustes", 0, false, 'C', 0, '', 0, false, 'M', 'M');
+        $this->Cell(200, 10, "Formato de Mantenimiento Correctivo", 0, false, 'C', 0, '', 0, false, 'M', 'M');
 		$this->SetY(28);
         $this->SetFont('helvetica', 'B', 8);
         $this->Cell(320, 10, "Fecha Impresión: " . date("d/m/Y"), 0, false, 'C', 0, '', 0, false, 'M', 'M');
@@ -41,8 +41,8 @@ $pdf = new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8',
 // set document information
 $pdf->SetCreator(PDF_CREATOR);
 $pdf->SetAuthor('Ennio Gonzalez');
-$pdf->SetTitle('Ajustes');
-$pdf->SetSubject('Ajustes');
+$pdf->SetTitle('Formato de Mantenimiento Correctivo');
+$pdf->SetSubject('Formato de Mantenimiento Correctivo');
 $pdf->SetKeywords('TCPDF, PDF, example, test, guide');
 
 // set default header data
@@ -92,11 +92,36 @@ $tbl = "
             <td><strong>Estatus:</strong></td>
             <td>" . $datos['estatus'] . "</td>
         </tr>
+    ";
+
+if($datos['doc_ori'] == ""){
+    $tbl .= "
+    <tr >
+        <td> <strong>Origen:</strong></td>
+        <td colspan=\"3\">" . $datos['origen'] . "</td>
+    </tr>";
+}else{
+    $tbl .= "
+    <tr >
+        <td> <strong>Origen:</strong></td>
+        <td>" . $datos['origen'] . "</td>
+        <td><strong>Documento:</strong></td>
+        <td>" . $datos['doc_ori'] . "</td>
+    </tr>";
+
+}
+$tbl .= "
         <tr >
             <td> <strong>Bien:</strong></td>
             <td>" . $datos['bie_nom'] . "</td>
             <td><strong>Inv. Uc:</strong></td>
             <td>" . $datos['inv_uc'] . "</td>
+        </tr>
+        <tr >
+            <td> <strong>Inicio:</strong></td>
+            <td>" . $datos['fec_ini'] . "</td>
+            <td><strong>Fin:</strong></td>
+            <td>" . $datos['fec_fin'] . "</td>
         </tr>
         <tr >
             <td> <strong>Usuario Solicitante:</strong></td>
@@ -126,70 +151,83 @@ $tbl = $tbl . "
 $pdf->writeHTML($tbl, true, false, false, false, '');
 
 // -----------------------------------------------------------------------------
-//                          Piezas Agregadas
+//                          Cambios Correctivos
 // -----------------------------------------------------------------------------
 $pdf->SetFont('helvetica', '', 8);
 $tbl =" <br>
-        <h2>Piezas Agregadas</h2>
+        <h2>Cambios Correctivos</h2>
         <table>
             <thead>
                 <tr style=\"font-weight: bold; \">
-                    <th style=\"width:40%\">Pieza</th>
-                    <th style=\"width:20%\">Inventario UC</th>
-                    <th style=\"width:40%\">Observación</th>
+                    <th style=\"width:20%\">P. Dañada </th>
+                    <th style=\"width:20%\">P. Cambio</th>
+                    <th style=\"width:15%\">Obrero</th>
+                    <th style=\"width:15%\">Proveedor</th>
+                    <th style=\"width:10%\">Estatus</th>
+                    <th style=\"width:10%\">Inicio</th>
+                    <th style=\"width:10%\">Fin</th>
                 </tr>
             </thead>
         </table><hr>";
 
 
-foreach ($datos['Agregados'] as $elemento) {
+foreach ($datos['Cambios'] as $elemento) {
         $tbl .= "<table><tr>
-                        <td style=\"width:40%\">" . $elemento['pie_nom'] . "</td>
-                        <td style=\"width:20%\">" . $elemento['inv_uc'] . "</td>
-                        <td style=\"width:40%\">" . $elemento['observaciones'] . "</td>
+                        <td style=\"width:20%\">" . $elemento['pda_nom'] . "</td>
+                        <td style=\"width:20%\">" . $elemento['pca_nom'] . "</td>
+                        <td style=\"width:15%\">" . $elemento['obr_nom'] . "</td>
+                        <td style=\"width:15%\">" . $elemento['pro_nom'] . "</td>
+                        <td style=\"width:10%;\">" . $elemento['estatus'] . "</td>
+                        <td style=\"width:10%;\">" . $elemento['fec_ini'] . "</td>
+                        <td style=\"width:10%;\">" . $elemento['fec_fin'] . "</td>
                     </tr></table><hr>";
 }
 
-$tbl .= "<table><tr><td><strong>" . count($datos['Agregados']) . " Piezas Agregadas</strong></td></tr></table>";
+$tbl .= "<table><tr><td><strong>" . count($datos['Cambios']) . " Cambios Correctivos</strong></td></tr></table>";
 
 
 $pdf->writeHTML($tbl, true, false, false, false, '');
 
 
 // -----------------------------------------------------------------------------
-//                          Piezas Quitadas
+//                          Reparaciones Correctivas
 // -----------------------------------------------------------------------------
 $pdf->SetFont('helvetica', '', 8);
-$tbl =" <br>
-        <h2>Piezas Quitadas</h2>
+$tbl =" <br><br>
+        <h2>Reparaciones Correctivas</h2>
         <table>
             <thead>
                 <tr style=\"font-weight: bold; \">
-                    <th style=\"width:40%\">Pieza</th>
-                    <th style=\"width:20%\">Inventario UC</th>
-                    <th style=\"width:40%\">Observación</th>
+                    <th style=\"width:30%\">P. Dañada </th>
+                    <th style=\"width:20%\">Obrero</th>
+                    <th style=\"width:20%\">Proveedor</th>
+                    <th style=\"width:10%\">Estatus</th>
+                    <th style=\"width:10%\">Inicio</th>
+                    <th style=\"width:10%\">Fin</th>
                 </tr>
             </thead>
         </table><hr>";
 
 
-foreach ($datos['Quitados'] as $elemento) {
+foreach ($datos['Reparaciones'] as $elemento) {
         $tbl .= "<table><tr>
-                        <td style=\"width:40%\">" . $elemento['pie_nom'] . "</td>
-                        <td style=\"width:20%\">" . $elemento['inv_uc'] . "</td>
-                        <td style=\"width:40%\">" . $elemento['observaciones'] . "</td>
+                        <td style=\"width:30%\">" . $elemento['pie_nom'] . "</td>
+                        <td style=\"width:20%\">" . $elemento['obr_nom'] . "</td>
+                        <td style=\"width:20%\">" . $elemento['pro_nom'] . "</td>
+                        <td style=\"width:10%;\">" . $elemento['estatus'] . "</td>
+                        <td style=\"width:10%;\">" . $elemento['fec_ini'] . "</td>
+                        <td style=\"width:10%;\">" . $elemento['fec_fin'] . "</td>
                     </tr></table><hr>";
 }
 
-$tbl .= "<table><tr><td><strong>" . count($datos['Quitados']) . " Piezas Quitadas</strong></td></tr></table>";
+$tbl .= "<table><tr><td><strong>" . count($datos['Reparaciones']) . " Reparaciones Correctivas</strong></td></tr></table>";
 
 
 $pdf->writeHTML($tbl, true, false, false, false, '');
-
 
 
 
 // -----------------------------------------------------------------------------
 
 //Close and output PDF document
-$pdf->Output('Ajuste' . $datos['documento']  . '.pdf', 'I');
+$pdf->Output('MantenimientoCorrectivo' . $datos['documento']  . '.pdf', 'I');

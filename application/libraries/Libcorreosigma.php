@@ -1,6 +1,6 @@
 <?php
 
-class Libcorreosiama {
+class Libcorreosigma {
 
     public function EnviarCorreo($data){
         
@@ -25,7 +25,7 @@ class Libcorreosiama {
         //cargamos la configuración para enviar con gmail
         $CI->email->initialize($configGmail);
         
-        $CI->email->from('siamafacyt@gmail.com', "Departamento de Sistema SiamaFacyt");
+        $CI->email->from('siamafacyt@gmail.com', "Departamento de Sistema SigmaFacyt");
         $CI->email->to($data['Correo']);
         $CI->email->subject($data['Asunto']);
         $CI->email->message($data['Mensaje']);

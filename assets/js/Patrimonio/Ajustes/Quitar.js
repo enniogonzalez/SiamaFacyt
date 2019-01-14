@@ -12,15 +12,15 @@ $(function(){
     /*      Manejo Pieza                */
     /************************************/
     
-    $('#SiamaModalFunciones').on('click','#nomPiezaQuitar',function(){
+    $('#SigmaModalFunciones').on('click','#nomPiezaQuitar',function(){
         BuscarPieza(PiezaQuitar);
     });
 
-    $('#SiamaModalFunciones').on('click','.BuscarPiezaQuitar',function(){
+    $('#SigmaModalFunciones').on('click','.BuscarPiezaQuitar',function(){
         BuscarPieza(PiezaQuitar);
     });
 
-    $('#SiamaModalFunciones').on('click','.BorrarPiezaQuitar',function(){
+    $('#SigmaModalFunciones').on('click','.BorrarPiezaQuitar',function(){
         $('#idPiezaQuitar').text('');
         $('#nomPiezaQuitar').val('');
     });
@@ -35,7 +35,7 @@ $(function(){
         if($('#idBieAjustes').text().trim() == ""){
 
             Botones = `
-            <button data-dismiss="modal" title="Cerrar" type="button" style="margin:5px;" class="btn btn-primary-siama">
+            <button data-dismiss="modal" title="Cerrar" type="button" style="margin:5px;" class="btn btn-primary-sigma">
             <span class="fa fa-times-circle"></span>
             Cerrar
             </button>`;
@@ -55,19 +55,19 @@ $(function(){
     });
 
     $('#eliminarQP').on('click',function(){
-        $('#TablaQuitarPiezas .tr-activa-siama').remove();
+        $('#TablaQuitarPiezas .tr-activa-sigma').remove();
     });
 
     $('#TablaQuitarPiezas').on('click','.editarQuitado',function(){
 
         //Se remueve la clase activa de la fila que esta activa
-        $('.tr-activa-siama').removeClass('tr-activa-siama');
+        $('.tr-activa-sigma').removeClass('tr-activa-sigma');
 
         var fila = $(this).parent('tr');
         //Se agrega la clase activa a la fila actual, esto para evitar
         //que se le quite la clase activa a una fila que esta activa
         //y se quiera editar (o sea, no se quiere quitar la seleccion)
-        fila.addClass('tr-activa-siama');
+        fila.addClass('tr-activa-sigma');
 
         //Se crea los botones que va a tener la ventana modal de edicion
         Botones = `
@@ -98,11 +98,11 @@ $(function(){
         ActivarCeldaTabla(this)
     });
 
-    $('#SiamaModalFunciones').on('click','#CancelarEdicionQuitado',function(){
+    $('#SigmaModalFunciones').on('click','#CancelarEdicionQuitado',function(){
         ClearModalFunction();
     });
 
-    $('#SiamaModalFunciones').on('click','#GuardarEdicionQuitado',function(){
+    $('#SigmaModalFunciones').on('click','#GuardarEdicionQuitado',function(){
         var Valido = true;
 
         $('#formEditarQuitado .Quitado').each(function(){

@@ -222,9 +222,9 @@
 
 
             if($data['busqueda'] != ""){
-                $condicion = "(LOWER(B.nombre) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
-                            . "%' OR LOWER(MCO.documento) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
-                            . "%' OR LOWER(MCO.estatus) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
+                $condicion = "(LOWER(B.nombre) like '%" . mb_strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
+                            . "%' OR LOWER(MCO.documento) like '%" . mb_strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
+                            . "%' OR LOWER(MCO.estatus) like '%" . mb_strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
                             . "%')";
             }
             
@@ -238,13 +238,7 @@
                 $condicion = "WHERE " . $condicion;
             }
             
-            $query ="   SELECT  MCO_Id,
-                                nombre,
-                                Documento,
-                                Estatus,
-                                Fec_Ini,
-                                Fec_Fin,
-                                Registros
+            $query ="   SELECT  *
                         FROM (
                             SELECT  MCO.MCO_Id,
                                     MCO.Documento,
@@ -252,6 +246,7 @@
                                     to_char(MCO.Fec_Ini,'DD/MM/YYYY') Fec_Ini,
                                     to_char(MCO.Fec_Fin,'DD/MM/YYYY') Fec_Fin,
                                     B.nombre,
+                                    B.bie_id,
                                     COUNT(*) OVER() AS Registros,
                                     ROW_NUMBER() OVER(ORDER BY " . $data['orden'] .") Fila
                             FROM MantenimientoCorrectivo MCO
@@ -294,9 +289,9 @@
 
 
             if($data['busqueda'] != ""){
-                $condicion = "AND (LOWER(B.nombre) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
-                            . "%' OR LOWER(MCO.documento) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
-                            . "%' OR LOWER(MCO.estatus) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
+                $condicion = "AND (LOWER(B.nombre) like '%" . mb_strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
+                            . "%' OR LOWER(MCO.documento) like '%" . mb_strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
+                            . "%' OR LOWER(MCO.estatus) like '%" . mb_strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
                             . "%')";
             }
             
@@ -309,13 +304,7 @@
             $condicion = "WHERE MCO.estatus = 'Realizado' " . $condicion;
 
             //Query para buscar usuario
-            $query ="   SELECT  MCO_Id,
-                                nombre,
-                                Documento,
-                                Estatus,
-                                Fec_Ini,
-                                Fec_Fin,
-                                Registros
+            $query ="   SELECT  *
                         FROM (
                             SELECT  MCO.MCO_Id,
                                     MCO.Documento,
@@ -323,6 +312,7 @@
                                     to_char(MCO.Fec_Ini,'DD/MM/YYYY') Fec_Ini,
                                     to_char(MCO.Fec_Fin,'DD/MM/YYYY') Fec_Fin,
                                     B.nombre,
+                                    B.bie_id,
                                     COUNT(*) OVER() AS Registros,
                                     ROW_NUMBER() OVER(ORDER BY " . $data['orden'] .") Fila
                             FROM MantenimientoCorrectivo MCO
@@ -409,7 +399,7 @@
             $conexion = $this->bd_model->ObtenerConexion();
     
             //Query para buscar usuario
-            $query =" SELECT * FROM MantenimientoCorrectivo WHERE LOWER(documento) ='" . strtolower(str_replace("'", "''",$documento)) . "' " ;
+            $query =" SELECT * FROM MantenimientoCorrectivo WHERE LOWER(documento) ='" . mb_strtolower(str_replace("'", "''",$documento)) . "' " ;
 
             if($id != "")
                 $query = $query . " AND MCO_ID <>'" . str_replace("'", "''",$id) . "' " ;
@@ -653,6 +643,11 @@
                                 B.Inv_UC,		
                                 MCO.Estatus,
                                 CRE.Nombre Solicitante,
+                                CASE
+                                    WHEN MCO.cpl_id is not null then 'Mantenimiento Correctivo Planificado'
+                                    ELSE 'Bien'
+                                END origen,
+                                COALESCE(CPL.documento,'') doc_ori,
                                 COALESCE(APR.Nombre,'') Aprobador,
                                 to_char(MCO.Fec_Ini,'DD/MM/YYYY') Fec_ini,
                                 to_char(MCO.Fec_Fin,'DD/MM/YYYY') Fec_Fin,
@@ -660,10 +655,14 @@
                                 COALESCE(to_char(MCO.Fec_Apr,'DD/MM/YYYY'),'') Fec_Apr,
                                 COALESCE(MCO.Observaciones,'') Observaciones
                         FROM MantenimientoCorrectivo MCO
-                            JOIN Bienes B ON B.bie_id = MCO.bie_id
+                            LEFT JOIN CorrectivoPlanificado CPL ON CPL.cpl_id = MCO.cpl_id
+                            LEFT JOIN Mantenimiento MAN ON MAN.man_id = CPL.man_id
+                            LEFT JOIN MantenimientoCorrectivo MCO2 ON MCO2.mco_id = CPL.mco_id
+                            JOIN Bienes B ON B.bie_id = COALESCE(MAN.bie_id,MCO2.bie_id,MCO.bie_id) 
                             JOIN Usuarios CRE ON CRE.usu_id = MCO.usu_cre
                             LEFT JOIN Usuarios APR ON APR.usu_id = MCO.usu_apr
                         WHERE MCO.MCO_ID = '" . $id . "'";
+
 
             //Ejecutar Query
             $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());

@@ -24,18 +24,18 @@ $(function(){
     $('#TablaListasDesplegables tbody').on('click','tr',function(){
         
         //Se busca el indice de la fila que esta activa
-        var indexAnt = $('.tr-activa-siama').index();
+        var indexAnt = $('.tr-activa-sigma').index();
         //Se busca el indice de la fila que fue seleccionada
         var indexAct = $(this).index();
         //Se remueve la clase activa de la fila que esta activa
-        $('.tr-activa-siama').removeClass('tr-activa-siama');
+        $('.tr-activa-sigma').removeClass('tr-activa-sigma');
 
         //En caso de que los dos indices encontrado anteriormente
         //sean diferentes, de agrega la clase activa a la fila seleccionada
         //esto con la intension de que si se selecciona la misma fila
         //activa, la misma se desactive
         if(indexAnt != indexAct)
-            $(this).addClass('tr-activa-siama');
+            $(this).addClass('tr-activa-sigma');
 
     });
     
@@ -44,12 +44,12 @@ $(function(){
     $('#TablaListasDesplegables').on('click','.editarOpcionLD',function(){
 
         //Se remueve la clase activa de la fila que esta activa
-        $('.tr-activa-siama').removeClass('tr-activa-siama');
+        $('.tr-activa-sigma').removeClass('tr-activa-sigma');
 
         //Se agrega la clase activa a la fila actual, esto para evitar
         //que se le quite la clase activa a una fila que esta activa
         //y se quiera editar (o sea, no se quiere quitar la seleccion)
-        $(this).parent('tr').addClass('tr-activa-siama');
+        $(this).parent('tr').addClass('tr-activa-sigma');
 
         //Se crea cuerpo html que va a tener la ventana modal de edicion
         var html = `
@@ -174,7 +174,7 @@ $(function(){
     //Hacer click al boton de eliminar registro de la tabla de listas desplegables
     $('#eliminarOpcionLD').on('click',function(){
         //Buscar que fila esta activa para eliminar
-        var index = $('.tr-activa-siama').index();
+        var index = $('.tr-activa-sigma').index();
 
         //Si hay alguna fila activa, se elimina
         if(index >= 0)
@@ -225,7 +225,7 @@ $(function(){
         $('#CodigoLD').focus();
     })
     
-    $('#SiamaModalAdvertencias').on('click','#ConfirmarEliminacion',function(){
+    $('#SigmaModalAdvertencias').on('click','#ConfirmarEliminacion',function(){
         var parametros = {
             "id": $('#IdForm').text().trim(),
             "Url": $('#ControladorActual').text().trim()+"/eliminar"
@@ -436,7 +436,7 @@ $(function(){
         }
 
         LlenarFormulario(parametros);
-        $('#SiamaModalBusqueda').modal('hide');
+        $('#SigmaModalBusqueda').modal('hide');
 
     }
 

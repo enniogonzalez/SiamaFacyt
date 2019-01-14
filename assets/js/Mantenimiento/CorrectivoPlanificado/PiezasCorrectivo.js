@@ -12,15 +12,15 @@ $(function(){
     /*          Manejo Pieza            */
     /************************************/
     
-    $('#SiamaModalFunciones').on('click','#nomPiezaDA',function(){
+    $('#SigmaModalFunciones').on('click','#nomPiezaDA',function(){
         BuscarPieza(PiezaDA);
     });
 
-    $('#SiamaModalFunciones').on('click','.BuscarPiezaDA',function(){
+    $('#SigmaModalFunciones').on('click','.BuscarPiezaDA',function(){
         BuscarPieza(PiezaDA);
     });
 
-    $('#SiamaModalFunciones').on('click','.BorrarPiezaDA',function(){
+    $('#SigmaModalFunciones').on('click','.BorrarPiezaDA',function(){
         $('#idPieza').text('');
         $('#nomPiezaDA').val('');
     });
@@ -29,15 +29,15 @@ $(function(){
     /*          Manejo Falla            */
     /************************************/
     
-    $('#SiamaModalFunciones').on('click','#nomFalla',function(){
+    $('#SigmaModalFunciones').on('click','#nomFalla',function(){
         BuscarFalla(Falla);
     });
 
-    $('#SiamaModalFunciones').on('click','.BuscarFalla',function(){
+    $('#SigmaModalFunciones').on('click','.BuscarFalla',function(){
         BuscarFalla(Falla);
     });
 
-    $('#SiamaModalFunciones').on('click','.BorrarFalla',function(){
+    $('#SigmaModalFunciones').on('click','.BorrarFalla',function(){
         $('#idFalla').text('');
         $('#nomFalla').val('');
     });
@@ -52,7 +52,7 @@ $(function(){
         valor = $('#OrigenPlanificado').val().trim();
 
         Botones = `
-        <button data-dismiss="modal" title="Cerrar" type="button" style="margin:5px;" class="btn btn-primary-siama">
+        <button data-dismiss="modal" title="Cerrar" type="button" style="margin:5px;" class="btn btn-primary-sigma">
         <span class="fa fa-times-circle"></span>
         Cerrar
         </button>`;
@@ -83,14 +83,14 @@ $(function(){
     });
 
     $('#eliminarPieza').on('click',function(){
-        $('#TablaPiezasDañadas .tr-activa-siama').remove();
+        $('#TablaPiezasDañadas .tr-activa-sigma').remove();
     });
 
-    $('#SiamaModalFunciones').on('click','#CancelarEdicionPiezaDA',function(){
+    $('#SigmaModalFunciones').on('click','#CancelarEdicionPiezaDA',function(){
         ClearModalFunction();
     });
 
-    $('#SiamaModalFunciones').on('click','#GuardarEdicionPiezaDA',function(){
+    $('#SigmaModalFunciones').on('click','#GuardarEdicionPiezaDA',function(){
         var Valido = true;
 
         $('#formEditarPiezaDA .PiezaDA').each(function(){
@@ -144,14 +144,14 @@ $(function(){
     $('#TablaPiezasDañadas').on('click','.editarPiezaDA',function(){
 
         //Se remueve la clase activa de la fila que esta activa
-        $('.tr-activa-siama').removeClass('tr-activa-siama');
+        $('.tr-activa-sigma').removeClass('tr-activa-sigma');
 
         var fila = $(this).parent('tr');
 
         //Se agrega la clase activa a la fila actual, esto para evitar
         //que se le quite la clase activa a una fila que esta activa
         //y se quiera editar (o sea, no se quiere quitar la seleccion)
-        fila.addClass('tr-activa-siama');
+        fila.addClass('tr-activa-sigma');
 
         //Se crea los botones que va a tener la ventana modal de edicion
         Botones = `

@@ -181,9 +181,9 @@
 
             
             if($busqueda != ""){
-                $condicion = " WHERE (LOWER(Hijo.Nombre) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
-                            . "%' OR LOWER(Hijo.Ubicacion) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
-                            . "%' OR LOWER(Hijo.Tipo) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
+                $condicion = " WHERE (LOWER(Hijo.Nombre) like '%" . mb_strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
+                            . "%' OR LOWER(Hijo.Ubicacion) like '%" . mb_strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
+                            . "%' OR LOWER(Hijo.Tipo) like '%" . mb_strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
                             . "%')";
             }
             

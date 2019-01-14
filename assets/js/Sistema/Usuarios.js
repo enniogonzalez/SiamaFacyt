@@ -118,7 +118,7 @@ $(function(){
     $('.botoneraFormulario').on('click','#GuardarRegistro',function(){
         var Valido = true;
         
-        $('.formulario-siama form .form-control').each(function(){
+        $('.formulario-sigma form .form-control').each(function(){
             $(this).removeClass('is-invalid');
             if($(this).hasClass('obligatorio') && $(this).val().trim() == ""){
 
@@ -170,7 +170,7 @@ $(function(){
         
     });
 
-    $('#SiamaModalAdvertencias').on('click','#ConfirmarEliminacion',function(){
+    $('#SigmaModalAdvertencias').on('click','#ConfirmarEliminacion',function(){
         var parametros = {
             "id": $('#IdForm').text().trim(),
             "Url": $('#ControladorActual').text().trim()+"/eliminar"
@@ -179,9 +179,9 @@ $(function(){
     });
 
     $('#TablaPermisos').on('click','.seleccionarPermiso',function(){
-        $('.tr-activa-siama').removeClass('tr-activa-siama');
+        $('.tr-activa-sigma').removeClass('tr-activa-sigma');
         var fila = $(this).parent('tr');
-        fila.addClass('tr-activa-siama');
+        fila.addClass('tr-activa-sigma');
 
         if($(this).find('span').hasClass('fa-square-o')){
             $(this).find('span').removeClass('fa-square-o');
@@ -260,7 +260,7 @@ $(function(){
         $('.seleccionarPermiso').find('span').removeClass('fa-square-o');
         $('.seleccionarPermiso').find('span').addClass('fa-square-o');
 
-        $('.formulario-siama form .form-control').each(function(){
+        $('.formulario-sigma form .form-control').each(function(){
             $(this).removeClass('is-invalid');
             if($(this).hasClass('texto'))
                 $(this).val('')
@@ -287,7 +287,7 @@ $(function(){
         permisos = [];
         idActual =$('#IdForm').text().trim();
         idLocalizacion = $('#idLoc').text().trim();
-        $('.formulario-siama form .form-control').each(function(){
+        $('.formulario-sigma form .form-control').each(function(){
             dataInputs.push($(this).val().trim());
         });
 
@@ -336,7 +336,7 @@ $(function(){
             if(data['isValid']){
                 CerrarEstatus();
                 LlenarFormularioRequest(data['Datos']);
-                $('#SiamaModalBusqueda').modal('hide');
+                $('#SigmaModalBusqueda').modal('hide');
             }
         }).fail(function(data){
             failAjaxRequest(data);
@@ -386,6 +386,6 @@ $(function(){
         }
         
         if(GetSearchType() != "Formulario")
-            $('#SiamaModalBusqueda').modal('hide');
+            $('#SigmaModalBusqueda').modal('hide');
     }
 });

@@ -177,9 +177,9 @@
 
 
             if($busqueda != ""){
-                $condicion = " WHERE  (LOWER(B.nombre) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
-                            . "%' OR LOWER(AJU.documento) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
-                            . "%' OR LOWER(AJU.estatus) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
+                $condicion = " WHERE  (LOWER(B.nombre) like '%" . mb_strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
+                            . "%' OR LOWER(AJU.documento) like '%" . mb_strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
+                            . "%' OR LOWER(AJU.estatus) like '%" . mb_strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
                             . "%')";
             }
             
@@ -281,7 +281,7 @@
             $conexion = $this->bd_model->ObtenerConexion();
     
             //Query para buscar usuario
-            $query =" SELECT * FROM Ajustes WHERE LOWER(documento) ='" . strtolower(str_replace("'", "''",$documento)) . "' " ;
+            $query =" SELECT * FROM Ajustes WHERE LOWER(documento) ='" . mb_strtolower(str_replace("'", "''",$documento)) . "' " ;
 
             if($id != "")
                 $query = $query . " AND AJU_ID <>'" . str_replace("'", "''",$id) . "' " ;

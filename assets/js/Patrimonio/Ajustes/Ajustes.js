@@ -111,7 +111,7 @@ $(function(){
         }, 900);
     })
 
-    $('#SiamaModalAdvertencias').on('click','#ConfirmarEliminacion',function(){
+    $('#SigmaModalAdvertencias').on('click','#ConfirmarEliminacion',function(){
 
         var parametros = {
             "id": $('#IdForm').text().trim(),
@@ -180,7 +180,7 @@ $(function(){
         var Agregados = [];
         var Quitados = [];
 
-        $('.formulario-siama form .form-control').each(function(){
+        $('.formulario-sigma form .form-control').each(function(){
             $(this).removeClass('is-invalid');
             if($(this).hasClass('obligatorio') && $(this).val().trim() == ""){
 
@@ -411,7 +411,7 @@ $(function(){
         $('#TablaAgregarPiezas > tbody').children().remove();
         $('#TablaQuitarPiezas > tbody').children().remove();
 
-        $('.formulario-siama form .form-control').each(function(){
+        $('.formulario-sigma form .form-control').each(function(){
             $(this).removeClass('is-invalid');
             if($(this).hasClass('texto') || $(this).hasClass('fecha'))
                 $(this).val('')
@@ -429,7 +429,7 @@ $(function(){
 
         Agregados = $('#TablaAgregarPiezas > tbody').html();
         Quitados = $('#TablaQuitarPiezas > tbody').html();
-        $('.formulario-siama form .form-control').each(function(){
+        $('.formulario-sigma form .form-control').each(function(){
             dataInputs.push($(this).val().trim());
         })
     }
@@ -482,7 +482,7 @@ $(function(){
             if(data['isValid']){
                 CerrarEstatus();
                 LlenarFormularioRequest(data['Datos']);
-                $('#SiamaModalBusqueda').modal('hide');
+                $('#SigmaModalBusqueda').modal('hide');
 
                 if(data['Caso'] == "Editar"){
                     Editar();
@@ -544,21 +544,21 @@ $(function(){
     function AgregarBotoneraCorrectiva(Tipo){
         
         btnAgregar = `
-            <button type="button"  class="btn btn-primary-siama" id="AgregarRegistro">
+            <button type="button"  class="btn btn-primary-sigma" id="AgregarRegistro">
                 <span class="fa fa-plus"></span>
                 Agregar
             </button>
         `;
 
         btnBuscar =`
-            <button  type="button"  class="btn btn-primary-siama" id="BuscarRegistro">
+            <button  type="button"  class="btn btn-primary-sigma" id="BuscarRegistro">
                 <span class="fa fa-search"></span>
                 Buscar
             </button>
         `;
 
         btnEditar = `
-            <button type="button"  class="btn btn-primary-siama" id="EditarRegistro">
+            <button type="button"  class="btn btn-primary-sigma" id="EditarRegistro">
                 <span class="fa fa-pencil-square-o"></span>
                 Editar
             </button>
@@ -644,13 +644,13 @@ $(function(){
                 $('#idPiezaAgregar').text(fila.find("td:eq(0)").text().trim());
                 $('#InvAP').text(fila.find("td:eq(3)").text().trim());
                 $('#TipoAP').text(fila.find("td:eq(5)").text().trim());
-                $('#nomPiezaAgregar').val(fila.find("td:eq(2)").text().trim());
+                $('#nomPiezaAgregar').val(fila.find("td:eq(1)").text().trim());
             break;
             case PiezaQuitar:
                 $('#idPiezaQuitar').text(fila.find("td:eq(0)").text().trim());
                 $('#InvQP').text(fila.find("td:eq(3)").text().trim());
                 $('#TipoQP').text(fila.find("td:eq(5)").text().trim());
-                $('#nomPiezaQuitar').val(fila.find("td:eq(2)").text().trim());
+                $('#nomPiezaQuitar').val(fila.find("td:eq(1)").text().trim());
             break;
             case Bienes:
                 $('#idBieAjustes').text(fila.find("td:eq(0)").text().trim());
@@ -659,7 +659,7 @@ $(function(){
         }
 
         if(GetSearchType() != "Formulario"  ){
-            $('#SiamaModalBusqueda').modal('hide');
+            $('#SigmaModalBusqueda').modal('hide');
         }
     }
 

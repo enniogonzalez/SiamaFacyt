@@ -27,6 +27,7 @@
                         .   "<td style='display:none;'>" . $elemento['mco_id'] . "</td>"
                         .   "<td>" . $elemento['documento'] . "</td>"
                         .   "<td>" . $elemento['estatus'] . "</td>"
+                        .   "<td style='display:none;'>" . $elemento['bie_id'] . "</td>"
                         .   "<td>" . $elemento['nombre'] . "</td>"
                         .   "<td>" . $elemento['fec_ini'] . "</td>"
                         .   "<td>" . $elemento['fec_fin'] . "</td>"
@@ -47,6 +48,8 @@
                 "mco_id"        =>"",
                 "bie_nom"       =>"",
                 "inv_uc"        =>"",
+                "doc_ori"       =>"",
+                "origen"        =>"",
                 "estatus"       =>"",
                 "solicitante"   =>"",
                 "aprobador"     =>"",
@@ -288,8 +291,9 @@
         public function imprimir($id){
             $this->ValidarPermiso();
             $data['datos'] = $this->FormatearImpresion($this->correctivo_model->ObtenerInfoPDF($id));
+            // var_dump($data);
             $this->load->library('tcpdf/Pdf');
-            $this->load->view('Reportes/repManCor',$data);
+            $this->load->view('Formatos/formatoManCor',$data);
         }
 
         public function obtener(){

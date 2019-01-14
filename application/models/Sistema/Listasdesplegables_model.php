@@ -53,9 +53,9 @@
             $conexion = $this->bd_model->ObtenerConexion();
             $condicion ="";
             if($busqueda != ""){
-                $condicion = " WHERE (LOWER(codigo) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
-                            . "%') OR (LOWER(Nombre) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
-                            . "%') OR (LOWER(Descripcion) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
+                $condicion = " WHERE (LOWER(codigo) like '%" . mb_strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
+                            . "%') OR (LOWER(Nombre) like '%" . mb_strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
+                            . "%') OR (LOWER(Descripcion) like '%" . mb_strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
                             . "%')";
             }
             //Query para buscar usuario
@@ -149,7 +149,7 @@
             $conexion = $this->bd_model->ObtenerConexion();
     
             //Query para buscar usuario
-            $query =" SELECT 1 FROM Listas_Desplegables WHERE LOWER(codigo) ='" . strtolower(str_replace("'", "''",$codigo)) . "' " ;
+            $query =" SELECT 1 FROM Listas_Desplegables WHERE LOWER(codigo) ='" . mb_strtolower(str_replace("'", "''",$codigo)) . "' " ;
 
             if($id != "")
                 $query = $query . " AND LD_ID <>'" . str_replace("'", "''",$id) . "' " ;

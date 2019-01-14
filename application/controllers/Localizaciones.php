@@ -48,7 +48,6 @@
                 "nombre"        =>"",
                 "ubicacion"     =>"",
                 "tipo"          =>"",
-                "cap_amp"       =>"",
                 "nombrepadre"   =>"",
                 "observaciones" => ""
             );

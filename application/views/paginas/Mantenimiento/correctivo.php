@@ -7,10 +7,10 @@
 </div>
 
 <div class="container">
-    <div class="formulario-siama">
+    <div class="formulario-sigma">
 
         <div style="text-align:center;" id="SeccionImprimir">
-            <button type="button"  class="btn btn-primary-siama" id="Imprimir">
+            <button type="button"  class="btn btn-primary-sigma" id="Imprimir">
                 <span class="fa fa-print fa-lg"></span>
                 Imprimir
             </button>
@@ -45,8 +45,8 @@
                 <div class="col-lg-9">
                     <select disabled readonly class="form-control obligatorio texto" id="OrigenCorrectivo">
                         <option value=""></option>
-                        <option value="Bien" <?=(($cpl_id == "")?"selected":"")?>>Bien</option>
-                        <option value="Mantenimiento Correctivo Planificado" <?=(($bie_id == "")?"selected":"")?>>Mantenimiento Correctivo Planificado</option>
+                        <option value="Bien" <?=(($bie_id != "")?"selected":"")?>>Bien</option>
+                        <option value="Mantenimiento Correctivo Planificado" <?=(($cpl_id != "")?"selected":"")?>>Mantenimiento Correctivo Planificado</option>
                     </select>
                     <div class="invalid-feedback">Campo Obligatorio</div>
                 </div>
@@ -126,8 +126,8 @@
                 Cambios Correctivos
             </h3>
             <div class="table-responsive">
-                <table id="TablaCambiosCorrectivos" class="table table-hover tabla-siama tabla-siama-desactivada">
-                    <thead class="head-table-siama" style="font-size:11px;">
+                <table id="TablaCambiosCorrectivos" class="table table-hover tabla-sigma tabla-sigma-desactivada">
+                    <thead class="head-table-sigma" style="font-size:11px;">
                         <tr>
                             <th style="width:20%;">P. Dañada</th>
                             <th style="width:20%;">P. Cambio</th>
@@ -153,8 +153,8 @@
                 Reparaciones Correctivas
             </h3>
             <div class="table-responsive">
-                <table id="TablaReparacionesCorrectivas" class="table table-hover tabla-siama tabla-siama-desactivada">
-                    <thead class="head-table-siama" style="font-size:11px;">
+                <table id="TablaReparacionesCorrectivas" class="table table-hover tabla-sigma tabla-sigma-desactivada">
+                    <thead class="head-table-sigma" style="font-size:11px;">
                         <tr>
                             <th style="width:22%;">P. Dañada</th>
                             <th style="width:17%;">Obrero</th>
@@ -205,21 +205,21 @@
 
                 <?php 
                     $btnAgregar = "
-                        <button type=\"button\"  class=\"btn btn-primary-siama\" id=\"AgregarRegistro\">
+                        <button type=\"button\"  class=\"btn btn-primary-sigma\" id=\"AgregarRegistro\">
                             <span class=\"fa fa-plus\"></span>
                             Agregar
                         </button>
                     ";
 
                     $btnBuscar ="
-                        <button  type=\"button\"  class=\"btn btn-primary-siama\" id=\"BuscarRegistro\">
+                        <button  type=\"button\"  class=\"btn btn-primary-sigma\" id=\"BuscarRegistro\">
                             <span class=\"fa fa-search\"></span>
                             Buscar
                         </button>
                     ";
 
                     $btnEditar = "
-                        <button type=\"button\"  class=\"btn btn-primary-siama\" id=\"EditarRegistro\">
+                        <button type=\"button\"  class=\"btn btn-primary-sigma\" id=\"EditarRegistro\">
                             <span class=\"fa fa-pencil-square-o\"></span>
                             Editar
                         </button>

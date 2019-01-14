@@ -48,7 +48,7 @@ $(function(){
         }, 900);
     })
 
-    $('#SiamaModalAdvertencias').on('click','#ConfirmarEliminacion',function(){
+    $('#SigmaModalAdvertencias').on('click','#ConfirmarEliminacion',function(){
         var parametros = {
             "id": $('#IdForm').text().trim(),
             "Url": $('#ControladorActual').text().trim()+"/eliminar"
@@ -78,7 +78,7 @@ $(function(){
     $('.botoneraFormulario').on('click','#GuardarRegistro',function(){
         var Valido = true;
         
-        $('.formulario-siama form .form-control').each(function(){
+        $('.formulario-sigma form .form-control').each(function(){
             $(this).removeClass('is-invalid');
             if($(this).hasClass('obligatorio') && $(this).val().trim() == ""){
 
@@ -115,7 +115,7 @@ $(function(){
         $('#IdForm').text(''); 
         $('#alertaFormularioActual').hide();
 
-        $('.formulario-siama form .form-control').each(function(){
+        $('.formulario-sigma form .form-control').each(function(){
             $(this).removeClass('is-invalid');
             if($(this).hasClass('texto'))
                 $(this).val('')
@@ -129,7 +129,7 @@ $(function(){
     function GuardarEstadoActualFormulario(){
         dataInputs = [];
         idActual =$('#IdForm').text().trim();
-        $('.formulario-siama form .form-control').each(function(){
+        $('.formulario-sigma form .form-control').each(function(){
             dataInputs.push($(this).val().trim());
         })
     }
@@ -156,7 +156,7 @@ $(function(){
             "Observacion":  fila.find('td:eq(2)').text().trim()
         }
         LlenarFormulario(parametros);
-        $('#SiamaModalBusqueda').modal('hide');
+        $('#SigmaModalBusqueda').modal('hide');
     }
 
     window.AccionEliminarFormulario = function(data){

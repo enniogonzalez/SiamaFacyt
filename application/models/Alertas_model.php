@@ -4,7 +4,7 @@
         
         function __construct(){
             parent::__construct();
-            $this->load->library('libcorreosiama','libcorreosiama');
+            $this->load->library('libcorreosigma','libcorreosigma');
         }
 
         public function Obtener(){
@@ -162,7 +162,7 @@
                     "Mensaje" => $mensaje
                 );
                 
-                $estatusCorreo = $this->libcorreosiama->EnviarCorreo($Parametros);
+                $estatusCorreo = $this->libcorreosigma->EnviarCorreo($Parametros);
                 
 
                 if($estatusCorreo['enviado']){

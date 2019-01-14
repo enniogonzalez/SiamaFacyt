@@ -1,6 +1,6 @@
 
 <div class="col-md-3" style="background-color: #95a5a6; padding: 10px;">
-    <div id='menu-siama'>
+    <div id='menu-sigma'>
         <ul id="menu">
             <?php
             $posMenu = -1;

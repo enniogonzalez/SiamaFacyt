@@ -4,7 +4,7 @@
         
         private $host='localhost';
         private $port='5432';
-        private $dbname='siamafacyt'; 
+        private $dbname='sigmafacyt'; 
         private $user='userapp';
         private $password='userapp12293';
 

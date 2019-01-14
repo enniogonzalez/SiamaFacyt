@@ -7,10 +7,10 @@
 </div>
 
 <div class="container">
-    <div class="formulario-siama">
+    <div class="formulario-sigma">
         
         <div style="text-align:center;" id="SeccionImprimir">
-            <button type="button"  class="btn btn-primary-siama" id="Imprimir">
+            <button type="button"  class="btn btn-primary-sigma" id="Imprimir">
                 <span class="fa fa-print fa-lg"></span>
                 Imprimir
             </button>
@@ -48,8 +48,8 @@
             </div>
 
             <div class="table-responsive">
-                <table id="TablaListasDesplegables" class="table table-hover tabla-siama tabla-siama-desactivada">
-                    <thead class="head-table-siama">
+                <table id="TablaListasDesplegables" class="table table-hover tabla-sigma tabla-sigma-desactivada">
+                    <thead class="head-table-sigma">
                         <tr>
                             <th style="width:10%;">Valor</th>
                             <th style="width:40%;">Opci&oacute;n</th>
@@ -78,18 +78,18 @@
             <div class="form-group row botoneraFormulario" style="margin:0;">
 
                 <?php if($ld_id != ""){?>
-                <button  type="button" style="margin:5px;" class="btn btn-primary-siama" id="BuscarRegistro">
+                <button  type="button" style="margin:5px;" class="btn btn-primary-sigma" id="BuscarRegistro">
                     <span class="fa fa-search"></span>
                     Buscar
                 </button>
 
 
-                <button type="button" style="margin:5px;" class="btn btn-primary-siama" id="EditarRegistro">
+                <button type="button" style="margin:5px;" class="btn btn-primary-sigma" id="EditarRegistro">
                     <span class="fa fa-pencil-square-o"></span>
                     Editar
                 </button>
                 <?php }?>
-                <button type="button" style="margin:5px;" class="btn btn-primary-siama" id="AgregarRegistro">
+                <button type="button" style="margin:5px;" class="btn btn-primary-sigma" id="AgregarRegistro">
                     <span class="fa fa-plus"></span>
                     Agregar
                 </button>

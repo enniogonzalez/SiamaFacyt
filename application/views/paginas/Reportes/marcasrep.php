@@ -7,7 +7,7 @@
 </div>
 
 <div class="container">
-    <div class="formulario-siama">
+    <div class="formulario-sigma">
         <form class ="" id="FormularioActual" method="POST" action = "<?=site_url('/reportes/marcas/')?>">
 
             <div style="margin: 10px 15px;display:none;" id="alertaFormularioActual" class="alert alert-danger text-center">
@@ -56,7 +56,7 @@
 
             <div class="form-group row botoneraFormulario" >
 
-                <button type="button"  class="btn btn-primary-siama" id="ImprimirReporte">
+                <button type="button"  class="btn btn-primary-sigma" id="ImprimirReporte">
                     <span class="fa fa-print fa-lg"></span>
                     Imprimir
                 </button>

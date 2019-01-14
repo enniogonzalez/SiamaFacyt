@@ -38,7 +38,7 @@ $(function(){
             
             //Prevenir solapamientos de modales
             setTimeout(function(){ 
-                $('#SiamaModalFunciones').modal('show');}, 400);
+                $('#SigmaModalFunciones').modal('show');}, 400);
         }
     })
 
@@ -115,7 +115,7 @@ $(function(){
         }, 900);
     })
 
-    $('#SiamaModalAdvertencias').on('click','#ConfirmarEliminacion',function(){
+    $('#SigmaModalAdvertencias').on('click','#ConfirmarEliminacion',function(){
         var parametros = {
             "id": $('#IdForm').text().trim(),
             "Caso":"Eliminar",
@@ -183,7 +183,7 @@ $(function(){
         var Agregados = [];
         var PiezaCEs = [];
 
-        $('.formulario-siama form .form-control').each(function(){
+        $('.formulario-sigma form .form-control').each(function(){
             $(this).removeClass('is-invalid');
             if($(this).hasClass('obligatorio') && $(this).val().trim() == ""){
 
@@ -418,7 +418,7 @@ $(function(){
         $('#TablaAgregarPiezas > tbody').children().remove();
         $('#TablaPiezasEstatus > tbody').children().remove();
 
-        $('.formulario-siama form .form-control').each(function(){
+        $('.formulario-sigma form .form-control').each(function(){
             $(this).removeClass('is-invalid');
             if($(this).hasClass('texto') || $(this).hasClass('fecha'))
                 $(this).val('')
@@ -436,7 +436,7 @@ $(function(){
 
         PiezasCambiosE = $('#TablaPiezasEstatus > tbody').html();
         
-        $('.formulario-siama form .form-control').each(function(){
+        $('.formulario-sigma form .form-control').each(function(){
             dataInputs.push($(this).val().trim());
         })
     }
@@ -488,7 +488,7 @@ $(function(){
             if(data['isValid']){
                 CerrarEstatus();
                 LlenarFormularioRequest(data['Datos']);
-                $('#SiamaModalBusqueda').modal('hide');
+                $('#SigmaModalBusqueda').modal('hide');
 
                 if(data['Caso'] == "Editar"){
                     Editar();
@@ -550,21 +550,21 @@ $(function(){
     function AgregarBotoneraCambios(Tipo){
         
         btnAgregar = `
-            <button type="button"  class="btn btn-primary-siama" id="AgregarRegistro">
+            <button type="button"  class="btn btn-primary-sigma" id="AgregarRegistro">
                 <span class="fa fa-plus"></span>
                 Agregar
             </button>
         `;
 
         btnBuscar =`
-            <button  type="button"  class="btn btn-primary-siama" id="BuscarRegistro">
+            <button  type="button"  class="btn btn-primary-sigma" id="BuscarRegistro">
                 <span class="fa fa-search"></span>
                 Buscar
             </button>
         `;
 
         btnEditar = `
-            <button type="button"  class="btn btn-primary-siama" id="EditarRegistro">
+            <button type="button"  class="btn btn-primary-sigma" id="EditarRegistro">
                 <span class="fa fa-pencil-square-o"></span>
                 Editar
             </button>
@@ -693,11 +693,11 @@ $(function(){
         }
 
         if(GetSearchType() != "Formulario"  ){
-            $('#SiamaModalBusqueda').modal('hide');
+            $('#SigmaModalBusqueda').modal('hide');
 
             //Prevenir solapamientos de modales
             if(GetSearchType() != Bienes)
-                setTimeout(function(){ $('#SiamaModalFunciones').modal('show');}, 400);
+                setTimeout(function(){ $('#SigmaModalFunciones').modal('show');}, 400);
         }
     }
 

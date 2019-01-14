@@ -7,10 +7,10 @@
 </div>
 
 <div class="container">
-    <div class="formulario-siama">
+    <div class="formulario-sigma">
         
         <div style="text-align:center;" id="SeccionImprimir">
-            <button type="button"  class="btn btn-primary-siama" id="Imprimir">
+            <button type="button"  class="btn btn-primary-sigma" id="Imprimir">
                 <span class="fa fa-print fa-lg"></span>
                 Imprimir
             </button>
@@ -86,12 +86,12 @@
                 Tareas
             </h3>
             <div class="table-responsive">
-                <table id="TablaTareasPlantilla" class="table table-hover tabla-siama tabla-siama-desactivada">
-                    <thead class="head-table-siama" style="font-size:11px;">
+                <table id="TablaTareasPlantilla" class="table table-hover tabla-sigma tabla-sigma-desactivada">
+                    <thead class="head-table-sigma" style="font-size:11px;">
                         <tr>
                             <th style="width:35%;">Tipo de Pieza</th>
                             <th style="width:40%;">T&iacute;tulo</th>
-                            <th style="width:15%;">Minutos Estimados</th>
+                            <th style="width:15%;">Horas Estimadas</th>
                             <th style="width:5%;">
                                 <span id ="agregarTarea" style="color:#28a745;cursor: pointer;" class="fa fa-plus-circle fa-lg"></span>
                             </th>
@@ -128,21 +128,21 @@
 
                 <?php 
                     $btnAgregar = "
-                        <button type=\"button\"  class=\"btn btn-primary-siama\" id=\"AgregarRegistro\">
+                        <button type=\"button\"  class=\"btn btn-primary-sigma\" id=\"AgregarRegistro\">
                             <span class=\"fa fa-plus\"></span>
                             Agregar
                         </button>
                     ";
 
                     $btnBuscar ="
-                        <button  type=\"button\"  class=\"btn btn-primary-siama\" id=\"BuscarRegistro\">
+                        <button  type=\"button\"  class=\"btn btn-primary-sigma\" id=\"BuscarRegistro\">
                             <span class=\"fa fa-search\"></span>
                             Buscar
                         </button>
                     ";
 
                     $btnEditar = "
-                        <button type=\"button\"  class=\"btn btn-primary-siama\" id=\"EditarRegistro\">
+                        <button type=\"button\"  class=\"btn btn-primary-sigma\" id=\"EditarRegistro\">
                             <span class=\"fa fa-pencil-square-o\"></span>
                             Editar
                         </button>

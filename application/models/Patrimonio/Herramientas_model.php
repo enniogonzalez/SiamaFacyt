@@ -173,7 +173,7 @@
 
 
             if($busqueda != ""){
-                $condicion = " WHERE (LOWER(Nombre) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
+                $condicion = " WHERE (LOWER(Nombre) like '%" . mb_strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
                             . "%')";
             }
 
@@ -264,7 +264,7 @@
             $conexion = $this->bd_model->ObtenerConexion();
     
             //Query para buscar usuario
-            $query =" SELECT * FROM Herramientas WHERE LOWER(Nombre) ='" . strtolower(str_replace("'", "''",$Nombre)) . "' " ;
+            $query =" SELECT * FROM Herramientas WHERE LOWER(Nombre) ='" . mb_strtolower(str_replace("'", "''",$Nombre)) . "' " ;
 
             if($id != "")
                 $query = $query . " AND her_id <>'" . str_replace("'", "''",$id) . "' " ;

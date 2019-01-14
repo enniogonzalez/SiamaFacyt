@@ -100,8 +100,8 @@ $(function(){
 
     function ClaveCambiada(usuario){
 
-        $('.login-siama').children().remove();
-        $('.login-siama').append(`
+        $('.login-sigma').children().remove();
+        $('.login-sigma').append(`
             <h2 class="font-weight-normal text-center">Contraseña Restablecida</h2>
             <label style="margin-bottom:0px;font-size: 
                 small;text-align:center;width: 100%;">Usuario: ${usuario}
@@ -113,8 +113,8 @@ $(function(){
 
     function ErrorOcurrido(){
 
-        $('.login-siama').children().remove();
-        $('.login-siama').append(`
+        $('.login-sigma').children().remove();
+        $('.login-sigma').append(`
             <h2 class="font-weight-normal text-center">Ha ocurrido un error</h2>
             <hr>
             <p>Ha ocurrido un error al ejecutar petici&oacute;n, por favor comunicarse con el departamento de sistema.</p>

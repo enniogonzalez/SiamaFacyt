@@ -6,7 +6,7 @@
     </div>
 </div>
 <div class="container">
-    <div class="formulario-siama">
+    <div class="formulario-sigma">
         <form  id="FormularioActual" method="POST" action = "<?=site_url('/configurar/guardar')?>">
 
             <div style="margin: 10px 15px;display:none;" id="alertaFormularioActual" class="alert alert-danger text-center">

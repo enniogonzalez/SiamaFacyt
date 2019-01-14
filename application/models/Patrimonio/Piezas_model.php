@@ -237,11 +237,11 @@
 
             if($busqueda != ""){
                 $condicion = ($condicion == "" ? "": $condicion . " AND ") 
-                            . "(LOWER(P.Inv_UC) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
-                            . "%' OR LOWER(P.nombre) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
-                            . "%' OR LOWER(P.estatus) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
-                            . "%' OR LOWER(B.nombre) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
-                            . "%' OR LOWER(M.nombre) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
+                            . "(LOWER(P.Inv_UC) like '%" . mb_strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
+                            . "%' OR LOWER(P.nombre) like '%" . mb_strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
+                            . "%' OR LOWER(P.estatus) like '%" . mb_strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
+                            . "%' OR LOWER(B.nombre) like '%" . mb_strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
+                            . "%' OR LOWER(M.nombre) like '%" . mb_strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
                             . "%')";
 
             }
@@ -312,11 +312,11 @@
             $condicion ="";
 
             if($data['busqueda'] != ""){
-                $condicion = "(LOWER(P.Inv_UC) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
-                            . "%' OR LOWER(P.nombre) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
-                            . "%' OR LOWER(P.estatus) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
-                            . "%' OR LOWER(B.nombre) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
-                            . "%' OR LOWER(M.nombre) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
+                $condicion = "(LOWER(P.Inv_UC) like '%" . mb_strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
+                            . "%' OR LOWER(P.nombre) like '%" . mb_strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
+                            . "%' OR LOWER(P.estatus) like '%" . mb_strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
+                            . "%' OR LOWER(B.nombre) like '%" . mb_strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
+                            . "%' OR LOWER(M.nombre) like '%" . mb_strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
                             . "%')";
             }
             
@@ -387,11 +387,11 @@
 
             if($data['busqueda'] != ""){
                 $condicion = ($condicion == "" ? "": $condicion . " AND ") 
-                            . "(LOWER(P.Inv_UC) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
-                            . "%' OR LOWER(P.nombre) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
-                            . "%' OR LOWER(P.estatus) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
-                            . "%' OR LOWER(B.nombre) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
-                            . "%' OR LOWER(M.nombre) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
+                            . "(LOWER(P.Inv_UC) like '%" . mb_strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
+                            . "%' OR LOWER(P.nombre) like '%" . mb_strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
+                            . "%' OR LOWER(P.estatus) like '%" . mb_strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
+                            . "%' OR LOWER(B.nombre) like '%" . mb_strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
+                            . "%' OR LOWER(M.nombre) like '%" . mb_strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
                             . "%')";
             }
             
@@ -497,11 +497,11 @@
             $condicion ="";
 
             if($data['busqueda'] != ""){
-                $condicion = "(LOWER(P.Inv_UC) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
-                            . "%' OR LOWER(P.nombre) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
-                            . "%' OR LOWER(P.estatus) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
-                            . "%' OR LOWER(B.nombre) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
-                            . "%' OR LOWER(M.nombre) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
+                $condicion = "(LOWER(P.Inv_UC) like '%" . mb_strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
+                            . "%' OR LOWER(P.nombre) like '%" . mb_strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
+                            . "%' OR LOWER(P.estatus) like '%" . mb_strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
+                            . "%' OR LOWER(B.nombre) like '%" . mb_strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
+                            . "%' OR LOWER(M.nombre) like '%" . mb_strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
                             . "%')";
             }
             
@@ -583,11 +583,11 @@
             $condicion ="";
 
             if($data['busqueda'] != ""){
-                $condicion = "(LOWER(P.Inv_UC) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
-                            . "%' OR LOWER(P.nombre) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
-                            . "%' OR LOWER(P.estatus) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
-                            . "%' OR LOWER(B.nombre) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
-                            . "%' OR LOWER(M.nombre) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
+                $condicion = "(LOWER(P.Inv_UC) like '%" . mb_strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
+                            . "%' OR LOWER(P.nombre) like '%" . mb_strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
+                            . "%' OR LOWER(P.estatus) like '%" . mb_strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
+                            . "%' OR LOWER(B.nombre) like '%" . mb_strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
+                            . "%' OR LOWER(M.nombre) like '%" . mb_strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
                             . "%')";
             }
             
@@ -720,7 +720,7 @@
             $conexion = $this->bd_model->ObtenerConexion();
     
             //Query para buscar usuario
-            $query =" SELECT * FROM Piezas WHERE LOWER(Inv_UC) ='" . strtolower(str_replace("'", "''",$inventario)) . "' " ;
+            $query =" SELECT * FROM Piezas WHERE LOWER(Inv_UC) ='" . mb_strtolower(str_replace("'", "''",$inventario)) . "' " ;
 
             if($id != "")
                 $query = $query . " AND pie_id <>'" . str_replace("'", "''",$id) . "' " ;

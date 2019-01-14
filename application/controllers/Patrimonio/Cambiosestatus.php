@@ -219,7 +219,7 @@
             $this->ValidarPermiso();
             $data['datos'] = $this->FormatearImpresion($this->cambiosestatus_model->ObtenerInfoPDF($id));
             $this->load->library('tcpdf/Pdf');
-            $this->load->view('Reportes/repCambiosEstatus',$data);
+            $this->load->view('Formatos/formatoCambiosEstatus',$data);
         }
 
         private function FormatearImpresion($respuesta){

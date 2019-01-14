@@ -1,5 +1,5 @@
 \c postgres
 
-drop database siamafacyt;
+-- drop database sigmafacyt;
 
-\i SiamaUc.sql
+\i SigmaUc.sql

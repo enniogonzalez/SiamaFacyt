@@ -1,7 +1,7 @@
-CREATE DATABASE siamafacyt WITH 
-ENCODING 'UTF8' owner "adminsiama";
+CREATE DATABASE sigmafacyt WITH 
+ENCODING 'UTF8' owner "adminsigma";
 
-\c siamafacyt
+\c sigmafacyt
 
 CREATE TABLE Roles(
 	ROL_ID			SERIAL			PRIMARY KEY,
@@ -673,7 +673,7 @@ CREATE TABLE CompatibilidadBien(
 );
 
 
-GRANT CONNECT ON DATABASE siamafacyt TO userapp;
+GRANT CONNECT ON DATABASE sigmafacyt TO userapp;
 
 -- Grant usage the schema
 

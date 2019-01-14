@@ -363,11 +363,11 @@
 
             if($data['busqueda'] != ""){
                 $condicion = ($condicion == "" ? "": $condicion . " AND ") 
-                            . "(LOWER(B.Inv_UC) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
-                            . "%' OR LOWER(B.nombre) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
-                            . "%' OR LOWER(B.estatus) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
-                            . "%' OR LOWER(L.nombre) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
-                            . "%' OR LOWER(M.nombre) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
+                            . "(LOWER(B.Inv_UC) like '%" . mb_strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
+                            . "%' OR LOWER(B.nombre) like '%" . mb_strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
+                            . "%' OR LOWER(B.estatus) like '%" . mb_strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
+                            . "%' OR LOWER(L.nombre) like '%" . mb_strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
+                            . "%' OR LOWER(M.nombre) like '%" . mb_strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
                             . "%')";
             }
             
@@ -470,7 +470,7 @@
             $conexion = $this->bd_model->ObtenerConexion();
     
             //Query para buscar usuario
-            $query =" SELECT * FROM Bienes WHERE LOWER(Inv_UC) ='" . strtolower(str_replace("'", "''",$inventario)) . "' " ;
+            $query =" SELECT * FROM Bienes WHERE LOWER(Inv_UC) ='" . mb_strtolower(str_replace("'", "''",$inventario)) . "' " ;
 
             if($id != "")
                 $query = $query . " AND Bie_Id <>'" . str_replace("'", "''",$id) . "' " ;

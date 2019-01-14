@@ -65,9 +65,9 @@
 
             if($busqueda != ""){
                 $condicion = " WHERE " . ($id == "" ? "":("usu_id <> " . $id . " AND ")) 
-                            . " (LOWER(usu.username) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
-                            . "%' OR LOWER(usu.nombre) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
-                            . "%' OR LOWER(rol.nombre) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
+                            . " (LOWER(usu.username) like '%" . mb_strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
+                            . "%' OR LOWER(usu.nombre) like '%" . mb_strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
+                            . "%' OR LOWER(rol.nombre) like '%" . mb_strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
                             . "%')";
             }elseif($id != ""){
                 $condicion = " WHERE usu_id <> " . $id;
@@ -220,7 +220,7 @@
             $conexion = $this->bd_model->ObtenerConexion();
     
             //Query para buscar usuario
-            $query =" SELECT * FROM Usuarios WHERE LOWER(correo) ='" . strtolower(str_replace("'", "''",$correo)) . "' " ;
+            $query =" SELECT * FROM Usuarios WHERE LOWER(correo) ='" . mb_strtolower(str_replace("'", "''",$correo)) . "' " ;
 
             if($id != "")
                 $query = $query . " AND usu_id <>'" . str_replace("'", "''",$id) . "' " ;
@@ -254,7 +254,7 @@
             $conexion = $this->bd_model->ObtenerConexion();
     
             //Query para buscar usuario
-            $query =" SELECT * FROM Usuarios WHERE LOWER(username) ='" . strtolower(str_replace("'", "''",$username)) . "' " ;
+            $query =" SELECT * FROM Usuarios WHERE LOWER(username) ='" . mb_strtolower(str_replace("'", "''",$username)) . "' " ;
 
             if($id != "")
                 $query = $query . " AND usu_id <>'" . str_replace("'", "''",$id) . "' " ;
@@ -422,7 +422,7 @@
             $conexion = $this->bd_model->ObtenerConexion();
             
             $query ="   SELECT USU_ID,correo,nombre FROM Usuarios 
-                        WHERE LOWER(username) = '" . strtolower(str_replace("'", "''",$username)) . "';";
+                        WHERE LOWER(username) = '" . mb_strtolower(str_replace("'", "''",$username)) . "';";
 
             //Ejecutar Query
             $result = pg_query($query);

@@ -15,15 +15,15 @@ $(function(){
     /*      Manejo Proveedores          */
     /************************************/
     
-    $('#SiamaModalFunciones').on('click','#nomProR',function(){
+    $('#SigmaModalFunciones').on('click','#nomProR',function(){
         BuscarProveedor(ProveedorR);
     });
 
-    $('#SiamaModalFunciones').on('click','.BuscarProveedorR',function(){
+    $('#SigmaModalFunciones').on('click','.BuscarProveedorR',function(){
         BuscarProveedor(ProveedorR);
     });
 
-    $('#SiamaModalFunciones').on('click','.BorrarProveedorR',function(){
+    $('#SigmaModalFunciones').on('click','.BorrarProveedorR',function(){
         $('#idProR').text('');
         $('#nomProR').val('');
     });
@@ -32,15 +32,15 @@ $(function(){
     /*      Manejo Fallas             */
     /************************************/
     
-    $('#SiamaModalFunciones').on('click','#nomFallaReparacion',function(){
+    $('#SigmaModalFunciones').on('click','#nomFallaReparacion',function(){
         BuscarFalla(FallaR);
     });
 
-    $('#SiamaModalFunciones').on('click','.BuscarFallaReparacion',function(){
+    $('#SigmaModalFunciones').on('click','.BuscarFallaReparacion',function(){
         BuscarFalla(FallaR);
     });
 
-    $('#SiamaModalFunciones').on('click','.BorrarFallaReparacion',function(){
+    $('#SigmaModalFunciones').on('click','.BorrarFallaReparacion',function(){
         $('#idFallaReparacion').text('');
         $('#nomFallaReparacion').val('');
     });
@@ -49,15 +49,15 @@ $(function(){
     /*      Manejo Obreros             */
     /************************************/
 
-    $('#SiamaModalFunciones').on('click','#nomObrReparacion',function(){
+    $('#SigmaModalFunciones').on('click','#nomObrReparacion',function(){
         BuscarObrero(ObreroR);
     });
 
-    $('#SiamaModalFunciones').on('click','.BuscarObreroR',function(){
+    $('#SigmaModalFunciones').on('click','.BuscarObreroR',function(){
         BuscarObrero(ObreroR);
     });
 
-    $('#SiamaModalFunciones').on('click','.BorrarObreroR',function(){
+    $('#SigmaModalFunciones').on('click','.BorrarObreroR',function(){
         $('#idObrReparacion').text('');
         $('#nomObrReparacion').val('');
     });
@@ -66,15 +66,15 @@ $(function(){
     /*      Manejo Pieza                */
     /************************************/
     
-    $('#SiamaModalFunciones').on('click','#nomPiezaDR',function(){
+    $('#SigmaModalFunciones').on('click','#nomPiezaDR',function(){
         BuscarPieza(PiezaDR);
     });
 
-    $('#SiamaModalFunciones').on('click','.BuscarPiezaDR',function(){
+    $('#SigmaModalFunciones').on('click','.BuscarPiezaDR',function(){
         BuscarPieza(PiezaDR);
     });
 
-    $('#SiamaModalFunciones').on('click','.BorrarPiezaDR',function(){
+    $('#SigmaModalFunciones').on('click','.BorrarPiezaDR',function(){
         $('#idPiezaDR').text('');
         $('#nomPiezaDR').val('');
     });
@@ -86,7 +86,7 @@ $(function(){
     $('#agregarReparacion').on('click',function(){
 
         var Botones = `
-            <button data-dismiss="modal" title="Cerrar" type="button" style="margin:5px;" class="btn btn-primary-siama">
+            <button data-dismiss="modal" title="Cerrar" type="button" style="margin:5px;" class="btn btn-primary-sigma">
             <span class="fa fa-times-circle"></span>
             Cerrar
             </button>`;
@@ -116,19 +116,19 @@ $(function(){
     });
 
     $('#eliminarReparacion').on('click',function(){
-        $('#TablaReparacionesCorrectivas .tr-activa-siama').remove();
+        $('#TablaReparacionesCorrectivas .tr-activa-sigma').remove();
     });
 
     $('#TablaReparacionesCorrectivas').on('click','.editarReparacion',function(){
 
         //Se remueve la clase activa de la fila que esta activa
-        $('.tr-activa-siama').removeClass('tr-activa-siama');
+        $('.tr-activa-sigma').removeClass('tr-activa-sigma');
 
         var fila = $(this).parent('tr');
         //Se agrega la clase activa a la fila actual, esto para evitar
         //que se le quite la clase activa a una fila que esta activa
         //y se quiera editar (o sea, no se quiere quitar la seleccion)
-        fila.addClass('tr-activa-siama');
+        fila.addClass('tr-activa-sigma');
 
         //Se crea los botones que va a tener la ventana modal de edicion
         Botones = `
@@ -167,9 +167,9 @@ $(function(){
     });
 
     $('#TablaReparacionesCorrectivas').on('click','.realizarReparacion',function(){
-        $('.tr-activa-siama').removeClass('tr-activa-siama');
+        $('.tr-activa-sigma').removeClass('tr-activa-sigma');
         var fila = $(this).parent('tr');
-        fila.addClass('tr-activa-siama');
+        fila.addClass('tr-activa-sigma');
 
         if($(this).find('span').hasClass('fa-square-o')){
             $(this).find('span').removeClass('fa-square-o');
@@ -186,11 +186,11 @@ $(function(){
         ActivarCeldaTabla(this)
     });
 
-    $('#SiamaModalFunciones').on('click','#CancelarEdicionReparacion',function(){
+    $('#SigmaModalFunciones').on('click','#CancelarEdicionReparacion',function(){
         ClearModalFunction();
     });
 
-    $('#SiamaModalFunciones').on('click','#GuardarEdicionReparacion',function(){
+    $('#SigmaModalFunciones').on('click','#GuardarEdicionReparacion',function(){
         var Valido = true;
 
         $('#formEditarReparacion .Reparacion').each(function(){
@@ -260,7 +260,7 @@ $(function(){
         }
     });
 
-    $('#SiamaModalFunciones').on('change','#InicioReparacion',function(){
+    $('#SigmaModalFunciones').on('change','#InicioReparacion',function(){
         if($(this).val() != "" && 
         $('#FinReparacion').val() != "" 
         && $(this).val() > $('#FinReparacion').val()){
@@ -269,7 +269,7 @@ $(function(){
 
     });
 
-    $('#SiamaModalFunciones').on('change','#FinReparacion',function(){
+    $('#SigmaModalFunciones').on('change','#FinReparacion',function(){
         if($(this).val() != "" && 
         $('#InicioReparacion').val() != "" 
         && $(this).val() < $('#InicioReparacion').val()){

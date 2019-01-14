@@ -4,7 +4,7 @@ const Herramienta = "Herramienta";
 
 $(function(){
 
-    $('#SiamaModalFunciones').on('keypress','.buscador',function(){
+    $('#SigmaModalFunciones').on('keypress','.buscador',function(){
         return false;
     })
 
@@ -16,15 +16,15 @@ $(function(){
     /*      Manejo TipoPieza                */
     /************************************/
     
-    $('#SiamaModalFunciones').on('click','#nomTPTarea',function(){
+    $('#SigmaModalFunciones').on('click','#nomTPTarea',function(){
         BuscarTipoPieza(TipoPieza);
     });
 
-    $('#SiamaModalFunciones').on('click','.BuscarTPTarea',function(){
+    $('#SigmaModalFunciones').on('click','.BuscarTPTarea',function(){
         BuscarTipoPieza(TipoPieza);
     });
 
-    $('#SiamaModalFunciones').on('click','.BorrarTPTarea',function(){
+    $('#SigmaModalFunciones').on('click','.BorrarTPTarea',function(){
         $('#idTPTarea').text('');
         $('#nomTPTarea').val('');
     });
@@ -39,7 +39,7 @@ $(function(){
         if($('#idBiePlantilla').text().trim() == ""){
 
             Botones = `
-            <button data-dismiss="modal" title="Cerrar" type="button" style="margin:5px;" class="btn btn-primary-siama">
+            <button data-dismiss="modal" title="Cerrar" type="button" style="margin:5px;" class="btn btn-primary-sigma">
             <span class="fa fa-times-circle"></span>
             Cerrar
             </button>`;
@@ -59,19 +59,19 @@ $(function(){
     });
 
     $('#eliminarTarea').on('click',function(){
-        $('#TablaTareasPlantilla .tr-activa-siama').remove();
+        $('#TablaTareasPlantilla .tr-activa-sigma').remove();
     });
     
     $('#TablaTareasPlantilla').on('click','.editarTarea',function(){
 
         //Se remueve la clase activa de la fila que esta activa
-        $('.tr-activa-siama').removeClass('tr-activa-siama');
+        $('.tr-activa-sigma').removeClass('tr-activa-sigma');
 
         var fila = $(this).parent('tr');
         //Se agrega la clase activa a la fila actual, esto para evitar
         //que se le quite la clase activa a una fila que esta activa
         //y se quiera editar (o sea, no se quiere quitar la seleccion)
-        fila.addClass('tr-activa-siama');
+        fila.addClass('tr-activa-sigma');
 
         //Se crea los botones que va a tener la ventana modal de edicion
         Botones = `
@@ -109,7 +109,7 @@ $(function(){
             "idTPTarea"     :   fila.find('td:eq(1)').text().trim(),
             "nomTPTarea"    :   fila.find('td:eq(2)').text().trim(),
             "TituloPlantilla"  :   fila.find('td:eq(3)').text().trim(),
-            "MinutosEst"    :   fila.find('td:eq(4)').text().trim(),
+            "HorasEst"    :   fila.find('td:eq(4)').text().trim(),
             "HerramientasT" :   trHerramienta,
             "DescripcionT"  :   fila.find('td:eq(6)').text().trim(),
             "ObservacionT"  :   fila.find('td:eq(7)').text().trim()
@@ -126,7 +126,7 @@ $(function(){
         ActivarCeldaTabla(this)
     });
 
-    $('#SiamaModalFunciones').on('click','#agregarHerramienta',function(){
+    $('#SigmaModalFunciones').on('click','#agregarHerramienta',function(){
 
         $('#TablaTareasHerramientas > tbody:last-child').append(`
             <tr>
@@ -140,15 +140,15 @@ $(function(){
 
     });
 
-    $('#SiamaModalFunciones').on('click','#CancelarEdicionTarea',function(){
+    $('#SigmaModalFunciones').on('click','#CancelarEdicionTarea',function(){
         ClearModalFunction();
     });
 
-    $('#SiamaModalFunciones').on('click','#eliminarHerramienta',function(){
-        $('#TablaTareasHerramientas .tr-activa-siama').remove();
+    $('#SigmaModalFunciones').on('click','#eliminarHerramienta',function(){
+        $('#TablaTareasHerramientas .tr-activa-sigma').remove();
     });
 
-    $('#SiamaModalFunciones').on('click','#GuardarEdicionTarea',function(){
+    $('#SigmaModalFunciones').on('click','#GuardarEdicionTarea',function(){
         var Valido = true;
 
         $('#formEditarTarea .Tarea').each(function(){
@@ -163,7 +163,7 @@ $(function(){
             }
         })
 
-        if(Valido && $('#MinutosEst').val() <= 0){
+        if(Valido && $('#HorasEst').val() <= 0){
             Valido = false;
             $('#alertaModal').text('Los minutos estimados tienen que se un numero mayor a 0.');
             $('.contenedorAlertaModal').show();
@@ -194,7 +194,7 @@ $(function(){
             fila.find('td:eq(1)').text($('#idTPTarea').text().trim());
             fila.find('td:eq(2)').text($('#nomTPTarea').val().trim());
             fila.find('td:eq(3)').text($('#TituloPlantilla').val().trim());
-            fila.find('td:eq(4)').text($('#MinutosEst').val().trim());
+            fila.find('td:eq(4)').text($('#HorasEst').val().trim());
             fila.find('td:eq(5)').text(JSON.stringify(ObtenerJsonHerramienta()));
             fila.find('td:eq(6)').text($('#DescripcionT').val().trim());
             fila.find('td:eq(7)').text($('#ObservacionT').val().trim());
@@ -203,26 +203,26 @@ $(function(){
         }
     });
 
-    $('#SiamaModalFunciones').on('click','#TablaTareasHerramientas tbody td',function(){
+    $('#SigmaModalFunciones').on('click','#TablaTareasHerramientas tbody td',function(){
        
-        var indexAnt = $('#TablaTareasHerramientas .tr-activa-siama').index();
+        var indexAnt = $('#TablaTareasHerramientas .tr-activa-sigma').index();
         var fila = $(this).parent('tr');
         var indexAct = fila.index();
 
-        $('#TablaTareasHerramientas .tr-activa-siama').removeClass('tr-activa-siama');
+        $('#TablaTareasHerramientas .tr-activa-sigma').removeClass('tr-activa-sigma');
         $('#actHer').text(indexAct);
 
         if(indexAnt != indexAct)
-            fila.addClass('tr-activa-siama');
+            fila.addClass('tr-activa-sigma');
 
         var cell = $(this).index();
         
         if(cell == 2){
-            if(!fila.hasClass('tr-activa-siama'))
-                $(this).parent('tr').addClass('tr-activa-siama');
+            if(!fila.hasClass('tr-activa-sigma'))
+                $(this).parent('tr').addClass('tr-activa-sigma');
 
-            $('#TablaTareasHerramientas .tr-activa-siama').removeClass('tr-activa-siama');
-            $(this).parent('tr').addClass('tr-activa-siama');
+            $('#TablaTareasHerramientas .tr-activa-sigma').removeClass('tr-activa-sigma');
+            $(this).parent('tr').addClass('tr-activa-sigma');
             BuscarHerramienta(Herramienta);
         }
 
@@ -296,10 +296,10 @@ $(function(){
             </div>
 
             <div class="form-group row">
-                <label for="MinutosEst" class="col-lg-3 col-form-label">Minutos Estimados:</label>
+                <label for="HorasEst" class="col-lg-3 col-form-label">Horas Estimadas:</label>
                 <div class="col-lg-9">
-                    <input type="number" step = "1" min = "0"
-                    class="form-control obligatorio Tarea"  id="MinutosEst" value="${data['MinutosEst']}">
+                    <input type="number" step = "0.1" min = "0"
+                    class="form-control obligatorio Tarea"  id="HorasEst" value="${data['HorasEst']}">
                     <div class="invalid-feedback">Campo Obligatorio</div>
                 </div>
             </div>
@@ -325,8 +325,8 @@ $(function(){
                 Herramientas
             </h3>
             <div class="table-responsive">
-                <table id="TablaTareasHerramientas" class="table table-hover tabla-siama">
-                    <thead class="head-table-siama">
+                <table id="TablaTareasHerramientas" class="table table-hover tabla-sigma">
+                    <thead class="head-table-sigma">
                         <tr>
                             <th style="width:90%;">Herramienta</th>
                             <th style="width:5%;">
@@ -423,7 +423,7 @@ $(function(){
         }else{
             
             Botones = `
-            <button data-dismiss="modal" title="Cerrar" type="button" style="margin:5px;" class="btn btn-primary-siama">
+            <button data-dismiss="modal" title="Cerrar" type="button" style="margin:5px;" class="btn btn-primary-sigma">
             <span class="fa fa-times-circle"></span>
             Cerrar
             </button>`;
@@ -466,7 +466,7 @@ $(function(){
                     "Id"            : $(this).find('td:eq(0)').text(),
                     "IdPieza"       : $(this).find('td:eq(1)').text(),
                     "Titulo"        : $(this).find('td:eq(3)').text(),
-                    "Minutos"       : $(this).find('td:eq(4)').text(),
+                    "Horas"         : $(this).find('td:eq(4)').text(),
                     "Herramientas"  : JSON.parse($(this).find('td:eq(5)').text()),
                     "Descripcion"   : $(this).find('td:eq(6)').text(),
                     "Observacion"   : $(this).find('td:eq(7)').text()

@@ -188,7 +188,7 @@ $(function(){
         }, 900);
     })
 
-    $('#SiamaModalAdvertencias').on('click','#ConfirmarEliminacion',function(){
+    $('#SigmaModalAdvertencias').on('click','#ConfirmarEliminacion',function(){
         var parametros = {
             "id": $('#IdForm').text().trim(),
             "Url": $('#ControladorActual').text().trim()+"/eliminar"
@@ -233,7 +233,7 @@ $(function(){
     $('.botoneraFormulario').on('click','#GuardarRegistro',function(){
         var Valido = true;
 
-        $('.formulario-siama form .form-control').each(function(){
+        $('.formulario-sigma form .form-control').each(function(){
             $(this).removeClass('is-invalid');
             if($(this).hasClass('obligatorio') && $(this).val().trim() == ""){
 
@@ -436,7 +436,7 @@ $(function(){
         $('#alertaFormularioActual').hide();
 
         $('#TablaPiezas > tbody').children().remove();
-        $('.formulario-siama form .form-control').each(function(){
+        $('.formulario-sigma form .form-control').each(function(){
             $(this).removeClass('is-invalid');
             if($(this).hasClass('texto'))
                 $(this).val('')
@@ -461,7 +461,7 @@ $(function(){
         idPartidas      = $('#idPar').text().trim();
         idCustodio      = $('#idCus').text().trim();
 
-        $('.formulario-siama form .form-control').each(function(){
+        $('.formulario-sigma form .form-control').each(function(){
             dataInputs.push($(this).val().trim());
         })
     }
@@ -588,7 +588,7 @@ $(function(){
             if(data['isValid']){
                 CerrarEstatus();
                 LlenarFormularioRequest(data);
-                $('#SiamaModalBusqueda').modal('hide');
+                $('#SigmaModalBusqueda').modal('hide');
             }
         }).fail(function(data){
             failAjaxRequest(data);
@@ -683,7 +683,7 @@ $(function(){
         }
 
         if(GetSearchType() != "Formulario")
-            $('#SiamaModalBusqueda').modal('hide');
+            $('#SigmaModalBusqueda').modal('hide');
     }
 
     window.AccionEliminarFormulario = function(data){

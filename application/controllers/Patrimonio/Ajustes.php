@@ -219,7 +219,7 @@
             $this->ValidarPermiso();
             $data['datos'] = $this->FormatearImpresion($this->ajustes_model->ObtenerInfoPDF($id));
             $this->load->library('tcpdf/Pdf');
-            $this->load->view('Reportes/repAjustes',$data);
+            $this->load->view('Formatos/formatoAjustes',$data);
         }
 
         public function obtener(){

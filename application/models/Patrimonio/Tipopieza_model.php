@@ -172,7 +172,7 @@
             $condicion ="";
 
             if($data['busqueda'] != ""){
-                $condicion = "WHERE (LOWER(Nombre) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
+                $condicion = "WHERE (LOWER(Nombre) like '%" . mb_strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
                             . "%')";
             }
 
@@ -245,7 +245,7 @@
             $condicion ="";
 
             if($data['busqueda'] != ""){
-                $condicion = "AND (LOWER(Nombre) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
+                $condicion = "AND (LOWER(Nombre) like '%" . mb_strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
                             . "%')";
             }
 
@@ -352,7 +352,7 @@
             $conexion = $this->bd_model->ObtenerConexion();
     
             //Query para buscar usuario
-            $query =" SELECT * FROM Tipopieza WHERE LOWER(Nombre) ='" . strtolower(str_replace("'", "''",$Nombre)) . "' " ;
+            $query =" SELECT * FROM Tipopieza WHERE LOWER(Nombre) ='" . mb_strtolower(str_replace("'", "''",$Nombre)) . "' " ;
 
             if($id != "")
                 $query = $query . " AND tpi_id <>'" . str_replace("'", "''",$id) . "' " ;

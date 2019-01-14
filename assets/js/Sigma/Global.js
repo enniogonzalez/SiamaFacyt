@@ -28,18 +28,18 @@ $(function(){
     window.ActivarCeldaTabla = function(fila){
 
         //Se busca el indice de la fila que esta activa
-        var indexAnt = $('.tr-activa-siama').index();
+        var indexAnt = $('.tr-activa-sigma').index();
         //Se busca el indice de la fila que fue seleccionada
         var indexAct = $(fila).index();
         //Se remueve la clase activa de la fila que esta activa
-        $('.tr-activa-siama').removeClass('tr-activa-siama');
+        $('.tr-activa-sigma').removeClass('tr-activa-sigma');
 
         //En caso de que los dos indices encontrado anteriormente
         //sean diferentes, de agrega la clase activa a la fila seleccionada
         //esto con la intension de que si se selecciona la misma fila
         //activa, la misma se desactive
         if(indexAnt != indexAct)
-            $(fila).addClass('tr-activa-siama');
+            $(fila).addClass('tr-activa-sigma');
 
     }
 
@@ -49,24 +49,24 @@ $(function(){
         $('.botoneraFormulario').children().remove();
 
         $('#SeccionImprimir').append(`
-            <button type="button"  class="btn btn-primary-siama" id="Imprimir">
+            <button type="button"  class="btn btn-primary-sigma" id="Imprimir">
                 <span class="fa fa-print fa-lg"></span>
                 Imprimir
             </button>
         `);
 
         $('.botoneraFormulario').append(`
-            <button  title="Buscar" type="button"  class="btn btn-primary-siama" id="BuscarRegistro">
+            <button  title="Buscar" type="button"  class="btn btn-primary-sigma" id="BuscarRegistro">
                 <span class="fa fa-search"></span>
                 Buscar
             </button>
 
-            <button title="Editar" type="button"  class="btn btn-primary-siama" id="EditarRegistro">
+            <button title="Editar" type="button"  class="btn btn-primary-sigma" id="EditarRegistro">
                 <span class="fa fa-pencil-square-o"></span>
                 Editar
             </button>
 
-            <button title="Agregar" type="button"  class="btn btn-primary-siama" id="AgregarRegistro">
+            <button title="Agregar" type="button"  class="btn btn-primary-sigma" id="AgregarRegistro">
                 <span class="fa fa-plus"></span>
                 Agregar
             </button>
@@ -82,7 +82,7 @@ $(function(){
         $('#SeccionImprimir').children().remove();
         $('.botoneraFormulario').children().remove();
         $('.botoneraFormulario').append(`
-            <button title="Agregar" type="button"  class="btn btn-primary-siama" id="AgregarRegistro">
+            <button title="Agregar" type="button"  class="btn btn-primary-sigma" id="AgregarRegistro">
                 <span class="fa fa-plus"></span>
                 Agregar
             </button>
@@ -136,16 +136,16 @@ $(function(){
 
     window.DeshabilitarFormulario = function(cambiarBotonera = true){
 
-        $('.tr-activa-siama').removeClass('tr-activa-siama');
+        $('.tr-activa-sigma').removeClass('tr-activa-sigma');
         $('#FormularioActual').addClass('formulario-desactivado');
 
-        $('.formulario-siama form .form-control').each(function(){
+        $('.formulario-sigma form .form-control').each(function(){
             $(this).attr("disabled", "disabled");
             $(this).attr("readonly", "readonly");
         })
         
-        $('.formulario-siama table').each(function(){
-            $(this).addClass('tabla-siama-desactivada')
+        $('.formulario-sigma table').each(function(){
+            $(this).addClass('tabla-sigma-desactivada')
         })
         
         if(cambiarBotonera){
@@ -246,7 +246,7 @@ $(function(){
 
         $('#FormularioActual').removeClass('formulario-desactivado');
 
-        $('.formulario-siama form .form-control').each(function(){
+        $('.formulario-sigma form .form-control').each(function(){
             if(!$(this).hasClass('estatus')  &&  !$(this).hasClass('documento')){
                 $(this).removeAttr("disabled"); 
                 $(this).removeAttr("readonly");
@@ -257,8 +257,8 @@ $(function(){
             }
         })
 
-        $('.formulario-siama table').each(function(){
-            $(this).removeClass('tabla-siama-desactivada')
+        $('.formulario-sigma table').each(function(){
+            $(this).removeClass('tabla-sigma-desactivada')
         })
 
         if(cambiarBotonera)

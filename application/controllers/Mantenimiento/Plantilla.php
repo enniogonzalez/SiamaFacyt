@@ -276,8 +276,9 @@
         public function imprimir($id){
             $this->ValidarPermiso();
             $data['datos'] = $this->FormatearImpresion($this->plantilla_model->ObtenerInfoPDF($id));
+            // echo json_encode($data);
             $this->load->library('tcpdf/Pdf');
-            $this->load->view('Reportes/repPlaMan',$data);
+            $this->load->view('Formatos/formatoPlaMan',$data);
         }
 
         public function obtener(){

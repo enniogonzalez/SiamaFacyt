@@ -5,29 +5,29 @@
         <meta charset="UTF-8">
         <meta name="author" content="Ennio Gonzalez">
         <meta name="description" content="Sistema automatizado de mantenimiento">
-        <title>SiAMa FACYT</title>
+        <title>SiGMa FACYT</title>
 
         <link rel="stylesheet" type="text/css" href="<?=base_url()?>assets/css/bootstrap.css">
-        <link rel="stylesheet" type="text/css" href="<?=base_url()?>assets/css/Siama.css">
+        <link rel="stylesheet" type="text/css" href="<?=base_url()?>assets/css/Sigma.css">
         <link rel="stylesheet" type="text/css" href="<?=base_url()?>assets/css/font-awesome-4.7.0/css/font-awesome.css">
-        <script src="<?=base_url()?>assets/js/Siama/jquery-3.3.1.min.js"></script>
-        <script src="<?=base_url()?>assets/js/Siama/bootstrap.js"></script>
-        <script src="<?=base_url()?>assets/js/Siama/Restablecer.js"></script>
-        <script src="<?=base_url()?>assets/js/Siama/md5.js"></script>
+        <script src="<?=base_url()?>assets/js/Sigma/jquery-3.3.1.min.js"></script>
+        <script src="<?=base_url()?>assets/js/Sigma/bootstrap.js"></script>
+        <script src="<?=base_url()?>assets/js/Sigma/Restablecer.js"></script>
+        <script src="<?=base_url()?>assets/js/Sigma/md5.js"></script>
     </head>
-    <body class="body-siama">
+    <body class="body-sigma">
 
-        <header class="header-siama">
+        <header class="header-sigma">
             <div class="container text-center">
                 <a href='<?=site_url('')?>' style="color:#fff;">
                     <img src="<?=base_url()?>assets/images/logoPagina.png" style="height: 50px;margin-top: -15px;">  
-                    <h1 style="display: inline-block;">Bienvenido a SiAMa FACYT</h1>
+                    <h1 style="display: inline-block;">Bienvenido a SiGMa FACYT</h1>
                 </a>
             </div>
         </header>
-        <div class="container container-login-siama">
+        <div class="container container-login-sigma">
 
-            <form id="resetpassform" class="form-signin login-siama" method="POST" action = "<?=site_url('/restablecer/reset/')?>">
+            <form id="resetpassform" class="form-signin login-sigma" method="POST" action = "<?=site_url('/restablecer/reset/')?>">
                 
                 <input type="hidden" name="token" id="token" value="<?=$token?>">
                 <input type="hidden" name="usu" id="usu" value="<?=$username?>">
@@ -54,7 +54,7 @@
                     </div>
                 </div>
 
-                <button class="btn btn-lg btn-primary-siama btn-block" id="loginbutton" type="submit"><span class="fa fa-arrow-circle-right  " style="margin-right:5px;"></span>Restablecer</button>
+                <button class="btn btn-lg btn-primary-sigma btn-block" id="loginbutton" type="submit"><span class="fa fa-arrow-circle-right  " style="margin-right:5px;"></span>Restablecer</button>
             </form>
         </div>
     </body>

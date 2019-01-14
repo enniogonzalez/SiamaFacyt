@@ -182,9 +182,9 @@
             
             if($busqueda != ""){
                 $condicion = " WHERE " . ($id == "" ? "":("Hijo.par_id <> " . $id . " AND ")) 
-                            . " (LOWER(Hijo.Nombre) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
-                            . "%' OR LOWER(COALESCE(Hijo.Observaciones,'')) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
-                            . "%' OR LOWER(Hijo.codigo) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
+                            . " (LOWER(Hijo.Nombre) like '%" . mb_strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
+                            . "%' OR LOWER(COALESCE(Hijo.Observaciones,'')) like '%" . mb_strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
+                            . "%' OR LOWER(Hijo.codigo) like '%" . mb_strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
                             . "%')";
             }elseif($id != ""){
                 $condicion = " WHERE Hijo.par_id <> " . $id;
@@ -284,7 +284,7 @@
             $conexion = $this->bd_model->ObtenerConexion();
     
             //Query para buscar usuario
-            $query =" SELECT 1 FROM Partidas WHERE LOWER(codigo) ='" . strtolower(str_replace("'", "''",$codigo)) . "' " ;
+            $query =" SELECT 1 FROM Partidas WHERE LOWER(codigo) ='" . mb_strtolower(str_replace("'", "''",$codigo)) . "' " ;
 
             if($id != "")
                 $query = $query . " AND par_id <>'" . str_replace("'", "''",$id) . "' " ;

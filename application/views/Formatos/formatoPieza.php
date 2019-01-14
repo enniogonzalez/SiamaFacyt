@@ -12,7 +12,7 @@ class MYPDF extends TCPDF {
         
 		// Title
 		$this->SetY(13);
-        $this->Cell(210, 10, "Sistema Automático de Mantenimiento FACYT", 0, false, 'C', 0, '', 0, false, 'M', 'M');
+        $this->Cell(210, 10, "Sistema de Gestión de Mantenimiento FACYT", 0, false, 'C', 0, '', 0, false, 'M', 'M');
         
         $this->SetFont('helvetica', 'B', 15);
 		$this->SetY(23);

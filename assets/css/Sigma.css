@@ -3,7 +3,7 @@
 /*                  Principales                     */
 /****************************************************/
 
-.header-siama{
+.header-sigma{
     background-color:#2C3E50 !important;
     color:#fff;
     font-family: 'Open Sans Condensed', sans-serif;
@@ -13,12 +13,12 @@
 
 @media screen and (orientation:portrait) { 
   
-    .header-siama{
+    .header-sigma{
         min-height: 8vh;
         padding-top: 2vh; 
     }  
 }
-.body-siama{
+.body-sigma{
     /* background-color: #e9ecef !important; */
     background-color: #d3d9df !important;
 }
@@ -65,7 +65,7 @@
 /*                      Loggin                      */
 /****************************************************/
 
-.login-siama{
+.login-sigma{
     width: 60%;
     margin: auto;
     background-color:#fff;
@@ -74,20 +74,20 @@
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
-.container-login-siama{
+.container-login-sigma{
     margin-top: 5%;
     margin-bottom: 5%;
 }
 /****************************************************/
 /*                  Botones                         */
 /****************************************************/
-.btn-primary-siama{
+.btn-primary-sigma{
     color: #fff;
     background-color: #2C3E50;
     border-color: #2C3E50;
 }
 
-.btn-secundary-siama{
+.btn-secundary-sigma{
     color: #000;
     background-color: #95a5a6;
     border-color: #95a5a6;
@@ -96,42 +96,42 @@
 /*                  Tablas                          */
 /****************************************************/
 
-.head-table-siama{
+.head-table-sigma{
     color: #fff;
     background-color: #2C3E50;
     border-color:  #2C3E50;
     text-align: center;
 }
 
-.tr-activa-siama, .tr-activa-siama:hover{
+.tr-activa-sigma, .tr-activa-sigma:hover{
     background-color: #95a5a6 !important;
 }
 
-.tr-error-siama{
+.tr-error-sigma{
     background-color: #dc3545!important;
     color: #FFF;
 }
 
-.tabla-siama{
+.tabla-sigma{
     border: solid #2C3E50;
 }
-.tabla-siama td{
+.tabla-sigma td{
     border-top: 1px solid #2C3E50 ;
 }
-.tabla-siama thead th{
+.tabla-sigma thead th{
     border-bottom: 1px solid #2C3E50 ;
 }
 
-.tabla-siama tbody tr td{
+.tabla-sigma tbody tr td{
     /* border-right: 2px solid #dee2e6; */
     border-right: 2px solid #2C3E50;
 }
 
-.tabla-siama-desactivada{
+.tabla-sigma-desactivada{
     pointer-events: none;
 }
 
-.tabla-siama-desactivada tbody tr{
+.tabla-sigma-desactivada tbody tr{
     background-color: #e9ecef;
 }
 
@@ -160,13 +160,13 @@
 .botoneraFormulario{
     margin:0;
 }
-.formulario-siama{
+.formulario-sigma{
     background: #fff;
     padding-top: 5px;
     box-shadow: 0px 4px 8px 0 rgba(0, 0, 0, 0.2), 0px 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
-.formulario-siama form{
+.formulario-sigma form{
     padding: 5px 20px;
 }
 
@@ -228,10 +228,10 @@
     pointer-events: none;
 }
 
-#SiamaModalAdvertencias{
+#SigmaModalAdvertencias{
     z-index: 9999;
 }
-#SiamaModalBusqueda{
+#SigmaModalBusqueda{
     overflow: auto;
 }
 .ColorEspera{
@@ -261,7 +261,7 @@
 
 
 
-.page-item-siama:hover{
+.page-item-sigma:hover{
     background-color: #95a5a6;
     color: #000;
 }
@@ -271,7 +271,7 @@
     color: #fff;
 }
 
-.page-item-siama{
+.page-item-sigma{
     border-radius: 5px;
     margin-left:1px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);

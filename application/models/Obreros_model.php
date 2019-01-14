@@ -60,8 +60,8 @@
 
 
             if($busqueda != ""){
-                $condicion = " WHERE (LOWER(Cedula) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
-                            . "%' OR LOWER(Nombre) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
+                $condicion = " WHERE (LOWER(Cedula) like '%" . mb_strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
+                            . "%' OR LOWER(Nombre) like '%" . mb_strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
                             . "%')";
             }
 
@@ -158,7 +158,7 @@
             $conexion = $this->bd_model->ObtenerConexion();
     
             //Query para buscar usuario
-            $query =" SELECT * FROM Obreros WHERE LOWER(cedula) ='" . strtolower(str_replace("'", "''",$cedula)) . "' " ;
+            $query =" SELECT * FROM Obreros WHERE LOWER(cedula) ='" . mb_strtolower(str_replace("'", "''",$cedula)) . "' " ;
 
             if($id != "")
                 $query = $query . " AND obr_id <>'" . str_replace("'", "''",$id) . "' " ;

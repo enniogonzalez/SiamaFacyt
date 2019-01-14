@@ -124,7 +124,7 @@ $(function(){
             break;
         }
 
-        $('#SiamaModalBusqueda').modal('hide');
+        $('#SigmaModalBusqueda').modal('hide');
 
     }
 });

@@ -13,15 +13,15 @@ $(function(){
     /*      Manejo Pieza                */
     /************************************/
     
-    $('#SiamaModalFunciones').on('click','#nomPiezaCE',function(){
+    $('#SigmaModalFunciones').on('click','#nomPiezaCE',function(){
         BuscarPieza(PiezaCE);
     });
 
-    $('#SiamaModalFunciones').on('click','.BuscarPiezaCE',function(){
+    $('#SigmaModalFunciones').on('click','.BuscarPiezaCE',function(){
         BuscarPieza(PiezaCE);
     });
 
-    $('#SiamaModalFunciones').on('click','.BorrarPiezaCE',function(){
+    $('#SigmaModalFunciones').on('click','.BorrarPiezaCE',function(){
         $('#idPieza').text('');
         $('#InvPieza').text('');
         $('#nomPiezaCE').val('');
@@ -34,15 +34,15 @@ $(function(){
     /*      Manejo Fallas             */
     /************************************/
     
-    $('#SiamaModalFunciones').on('click','#nomFalla',function(){
+    $('#SigmaModalFunciones').on('click','#nomFalla',function(){
         BuscarFalla(Falla);
     });
 
-    $('#SiamaModalFunciones').on('click','.BuscarFalla',function(){
+    $('#SigmaModalFunciones').on('click','.BuscarFalla',function(){
         BuscarFalla(Falla);
     });
 
-    $('#SiamaModalFunciones').on('click','.BorrarFalla',function(){
+    $('#SigmaModalFunciones').on('click','.BorrarFalla',function(){
         $('#idFalla').text('');
         $('#nomFalla').val('');
     });
@@ -58,7 +58,7 @@ $(function(){
         if($('#idBieCambios').text().trim() == ""){
 
             Botones = `
-            <button data-dismiss="modal" title="Cerrar" type="button" style="margin:5px;" class="btn btn-primary-siama">
+            <button data-dismiss="modal" title="Cerrar" type="button" style="margin:5px;" class="btn btn-primary-sigma">
             <span class="fa fa-times-circle"></span>
             Cerrar
             </button>`;
@@ -78,20 +78,20 @@ $(function(){
     });
 
     $('#eliminarPieza').on('click',function(){
-        $('#TablaPiezasEstatus .tr-activa-siama').remove();
+        $('#TablaPiezasEstatus .tr-activa-sigma').remove();
     });
 
     $('#TablaPiezasEstatus').on('click','.editarPiezaCE',function(){
 
         //Se remueve la clase activa de la fila que esta activa
-        $('.tr-activa-siama').removeClass('tr-activa-siama');
+        $('.tr-activa-sigma').removeClass('tr-activa-sigma');
 
         var fila = $(this).parent('tr');
 
         //Se agrega la clase activa a la fila actual, esto para evitar
         //que se le quite la clase activa a una fila que esta activa
         //y se quiera editar (o sea, no se quiere quitar la seleccion)
-        fila.addClass('tr-activa-siama');
+        fila.addClass('tr-activa-sigma');
 
         //Se crea los botones que va a tener la ventana modal de edicion
         Botones = `
@@ -125,11 +125,11 @@ $(function(){
         ActivarCeldaTabla(this)
     });
 
-    $('#SiamaModalFunciones').on('click','#CancelarEdicionPiezaCE',function(){
+    $('#SigmaModalFunciones').on('click','#CancelarEdicionPiezaCE',function(){
         ClearModalFunction();
     });
 
-    $('#SiamaModalFunciones').on('click','#GuardarEdicionPiezaCE',function(){
+    $('#SigmaModalFunciones').on('click','#GuardarEdicionPiezaCE',function(){
         var Valido = true;
 
         $('#formEditarPiezaCE .PiezaCE').each(function(){

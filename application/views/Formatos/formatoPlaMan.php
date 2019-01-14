@@ -12,11 +12,11 @@ class MYPDF extends TCPDF {
         
 		// Title
 		$this->SetY(13);
-        $this->Cell(210, 10, "Sistema Automático de Mantenimiento FACYT", 0, false, 'C', 0, '', 0, false, 'M', 'M');
+        $this->Cell(210, 10, "Sistema de Gestión de Mantenimiento FACYT", 0, false, 'C', 0, '', 0, false, 'M', 'M');
         
         $this->SetFont('helvetica', 'B', 15);
 		$this->SetY(23);
-        $this->Cell(200, 10, "Plantilla de Mantenimiento", 0, false, 'C', 0, '', 0, false, 'M', 'M');
+        $this->Cell(200, 10, "Formato Plantilla de Mantenimiento", 0, false, 'C', 0, '', 0, false, 'M', 'M');
 		$this->SetY(28);
         $this->SetFont('helvetica', 'B', 8);
         $this->Cell(320, 10, "Fecha Impresión: " . date("d/m/Y"), 0, false, 'C', 0, '', 0, false, 'M', 'M');
@@ -41,8 +41,8 @@ $pdf = new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8',
 // set document information
 $pdf->SetCreator(PDF_CREATOR);
 $pdf->SetAuthor('Ennio Gonzalez');
-$pdf->SetTitle('Plantilla de Mantenimiento');
-$pdf->SetSubject('Plantilla de Mantenimiento');
+$pdf->SetTitle('Formato de Plantilla de Mantenimiento');
+$pdf->SetSubject('Formato de Plantilla de Mantenimiento');
 $pdf->SetKeywords('TCPDF, PDF, example, test, guide');
 
 // set default header data
@@ -134,11 +134,11 @@ $tbl =" <br>
         <table>
             <thead>
                 <tr style=\"font-weight: bold; \">
-                    <th style=\"width:23%\">Pieza </th>
+                    <th style=\"width:23%\">Tipo de Pieza</th>
                     <th style=\"width:20%\">Titulo</th>
-                    <th style=\"width:20%\">Herramientas</th>
+                    <th style=\"width:22%\">Herramientas</th>
                     <th style=\"width:20%\">Descripción</th>
-                    <th style=\"width:7%\">Minutos</th>
+                    <th style=\"width:5%\">Horas</th>
                 </tr>
             </thead>
         </table><hr>";
@@ -146,11 +146,11 @@ $tbl =" <br>
 
 foreach ($datos['Tareas'] as $elemento) {
         $tbl .= "<table><tr>
-                        <td style=\"width:23%\">" . $elemento['pie_nom'] . "</td>
+                        <td style=\"width:23%\">" . $elemento['tpi_nom'] . "</td>
                         <td style=\"width:20%\">" . $elemento['titulo'] . "</td>
-                        <td style=\"width:20%\">" . $elemento['herramientas'] . "</td>
+                        <td style=\"width:22%\">" . $elemento['herramientas'] . "</td>
                         <td style=\"width:20%\">" . $elemento['descripcion'] . "</td>
-                        <td style=\"width:7%;\">" . $elemento['minutos'] . "</td>
+                        <td style=\"width:5%;\">" . $elemento['hor_hom'] . "</td>
                     </tr></table><hr>";
 }
 

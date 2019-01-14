@@ -134,14 +134,14 @@
 
             if($data['busqueda'] != ""){
                 $condicion = ($condicion == "" ? "": $condicion . " AND ")
-                            . "(LOWER(cpl.documento) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
-                            . "%' OR LOWER(cpl.estatus) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
+                            . "(LOWER(cpl.documento) like '%" . mb_strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
+                            . "%' OR LOWER(cpl.estatus) like '%" . mb_strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
                             . "%' OR CONCAT((CASE
                                         WHEN CPL.man_id is not null THEN 'mantenimiento preventivo'
                                         WHEN CPL.mco_id is not null THEN 'mantenimiento correctivo'
-                                    END),': ',LOWER(COALESCE(man.documento,mco.documento,'')))  like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
-                            . "%' OR LOWER(B.nombre) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
-                            . "%' OR LOWER(CPL.estatus) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
+                                    END),': ',LOWER(COALESCE(man.documento,mco.documento,'')))  like '%" . mb_strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
+                            . "%' OR LOWER(B.nombre) like '%" . mb_strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
+                            . "%' OR LOWER(CPL.estatus) like '%" . mb_strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
                             . "%')";
             }
             
@@ -254,7 +254,7 @@
             $conexion = $this->bd_model->ObtenerConexion();
     
             //Query para buscar usuario
-            $query =" SELECT * FROM CorrectivoPlanificado WHERE LOWER(documento) ='" . strtolower(str_replace("'", "''",$documento)) . "' " ;
+            $query =" SELECT * FROM CorrectivoPlanificado WHERE LOWER(documento) ='" . mb_strtolower(str_replace("'", "''",$documento)) . "' " ;
 
             if($id != "")
                 $query = $query . " AND CPL_ID <>'" . str_replace("'", "''",$id) . "' " ;
@@ -433,10 +433,10 @@
                         ";
 
             if($id != ''){
-                $query = $query . " WHERE CPL_ID = '" . $id . "'";
+                $query = $query . " WHERE CPL.CPL_ID = '" . $id . "'";
             }
 
-            $query = $query . " ORDER BY CPL_ID DESC LIMIT 1;";
+            $query = $query . " ORDER BY CPL.CPL_ID DESC LIMIT 1;";
 
             //Ejecutar Query
             $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());

@@ -199,9 +199,9 @@
 
             if($busqueda != ""){
                 $condicion = ($condicion == "" ? "": $condicion . " AND ")
-                            . " (LOWER(B.nombre) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
-                            . "%' OR LOWER(MAN.documento) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
-                            . "%' OR LOWER(MAN.estatus) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
+                            . " (LOWER(B.nombre) like '%" . mb_strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
+                            . "%' OR LOWER(MAN.documento) like '%" . mb_strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
+                            . "%' OR LOWER(MAN.estatus) like '%" . mb_strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
                             . "%') ";
             }
 
@@ -270,9 +270,9 @@
 
             if($busqueda != ""){
                 $condicion = ($condicion == "" ? "": $condicion . " AND ")
-                            . " (LOWER(B.nombre) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
-                            . "%' OR LOWER(MAN.documento) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
-                            . "%' OR LOWER(MAN.estatus) like '%" . strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
+                            . " (LOWER(B.nombre) like '%" . mb_strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
+                            . "%' OR LOWER(MAN.documento) like '%" . mb_strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
+                            . "%' OR LOWER(MAN.estatus) like '%" . mb_strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
                             . "%') ";
             }
 
@@ -383,7 +383,7 @@
             $conexion = $this->bd_model->ObtenerConexion();
     
             //Query para buscar usuario
-            $query =" SELECT * FROM Mantenimiento WHERE LOWER(documento) ='" . strtolower(str_replace("'", "''",$documento)) . "' " ;
+            $query =" SELECT * FROM Mantenimiento WHERE LOWER(documento) ='" . mb_strtolower(str_replace("'", "''",$documento)) . "' " ;
 
             if($id != "")
                 $query = $query . " AND MAN_ID <>'" . str_replace("'", "''",$id) . "' " ;
@@ -1078,8 +1078,8 @@
                                 SET ESTATUS = 'Solicitado',
                                     OBR_ID = " . (($data['idObrero'] == "") ? "null" : ("'" .str_replace("'", "''", $data['idObrero']) . "'")) . ",
                                     PRO_ID = " . (($data['idProveedor'] == "") ? "null" : ("'" .str_replace("'", "''", $data['idProveedor']) . "'")). ",
-                                    Min_Asi = '" . str_replace("'", "''",$data['Min_Asi']) . "',
-                                    Min_Eje = '" . str_replace("'", "''",$data['Min_Eje']) . "',
+                                    Hor_Asi = '" . str_replace("'", "''",$data['Hor_Asi']) . "',
+                                    Hor_Eje = '" . str_replace("'", "''",$data['Hor_Eje']) . "',
                                     Fec_Ini = '" . str_replace("'", "''",$data['Inicio']) . "',
                                     Fec_Fin = '" . str_replace("'", "''",$data['Fin']) . "',
                                     Descripcion = '" . str_replace("'", "''",$data['Descripcion']) . "',
@@ -1097,7 +1097,7 @@
                     }
 
                     // $query = "INSERT INTO MantenimientoTarea(MAN_ID, PIE_ID, Titulo, ESTATUS, USU_ID, 
-                    //                                         PRO_ID, Min_Asi, Min_Eje, Fec_Ini, Fec_Fin, 
+                    //                                         PRO_ID, Hor_Asi, Hor_Eje, Fec_Ini, Fec_Fin, 
                     //                                         Descripcion, Herramientas, Usu_Cre, Usu_Mod, Observaciones) "
                     //         . "VALUES('"
                     //         . str_replace("'", "''",$mantenimiento)    . "','"
@@ -1105,8 +1105,8 @@
                     //         . str_replace("'", "''",$data['Titulo']) . "','Solicitado',"
                     //         . (($data['idObrero'] == "") ? "null" : ("'" .str_replace("'", "''", $data['idObrero']) . "'")) . ","
                     //         . (($data['idProveedor'] == "") ? "null" : ("'" .str_replace("'", "''", $data['idProveedor']) . "'")). ","
-                    //         . str_replace("'", "''",$data['Min_Asi']) . ","
-                    //         . str_replace("'", "''",$data['Min_Eje']) . ",'"
+                    //         . str_replace("'", "''",$data['Hor_Asi']) . ","
+                    //         . str_replace("'", "''",$data['Hor_Eje']) . ",'"
                     //         . str_replace("'", "''",$data['Inicio']) . "','"
                     //         . str_replace("'", "''",$data['Fin']) . "','"
                     //         . str_replace("'", "''",$data['Descripcion'])    . "','"
@@ -1128,7 +1128,7 @@
             $query ="   SELECT  PMT.pmt_id,
                                 PIE.pie_id,	
                                 PMT.Titulo,	
-                                PMT.Minutos,	
+                                PMT.hor_hom,	
                                 PMT.Descripcion
                         FROM PlantillaMantenimientoTarea PMT
                             JOIN Piezas PIE ON PIE.tpi_id = PMT.tpi_id
@@ -1143,13 +1143,13 @@
                 
                 $herramientas = json_encode($this->ObtenerHerramientaJson( $line['pmt_id']));
 
-                $query = "INSERT INTO MantenimientoTarea( man_id,PIE_ID, Titulo, ESTATUS, Min_Eje, Min_Asi,
+                $query = "INSERT INTO MantenimientoTarea( man_id,PIE_ID, Titulo, ESTATUS, Hor_Eje, Hor_Asi,
                                                             Fec_Ini, Fec_Fin, Descripcion, Herramientas,
                                                             Usu_Cre, usu_mod)
                 VALUES ('" . str_replace("'", "''",$mantenimiento)    . "','"
                         . str_replace("'", "''",$line['pie_id']) . "','"
                         . str_replace("'", "''",$line['titulo']) . "','Eliminado',0,"
-                        . str_replace("'", "''",$line['minutos']) . ",NOW(),NOW(),'"
+                        . str_replace("'", "''",$line['hor_hom']) . ",NOW(),NOW(),'"
                         . str_replace("'", "''",$line['descripcion']) . "','"
                         . str_replace("'", "''",$herramientas) . "',"
                         . $this->session->userdata("usu_id")    . ","
@@ -1198,8 +1198,8 @@
                                 MTA.PIE_ID,	
                                 PIE.Nombre PIE_NOM,		
                                 MTA.Titulo,	
-                                MTA.Min_Eje,
-                                MTA.Min_Asi,
+                                MTA.Hor_Eje,
+                                MTA.Hor_Asi,
                                 MTA.Fec_Ini,
                                 MTA.Fec_Fin,
                                 MTA.estatus,	
@@ -1241,9 +1241,9 @@
                     . "    <td style=\"display:none;\">" . $line['descripcion'] . "</td>"
                     . "    <td style=\"display:none;\">" . $line['fec_ini'] . "</td>"
                     . "    <td style=\"display:none;\">" . $line['fec_fin'] . "</td>"
-                    . "    <td style=\"display:none;\">" . $line['min_eje'] . "</td>"
+                    . "    <td style=\"display:none;\">" . $line['hor_eje'] . "</td>"
                     . "    <td style=\"display:none;\">" . $line['observaciones'] . "</td>"
-                    . "    <td style=\"display:none;\">" . $line['min_asi'] . "</td>"
+                    . "    <td style=\"display:none;\">" . $line['hor_asi'] . "</td>"
                     . "    <td style=\"display:none;\">" . $line['estatus'] . "</td>";
 
 
@@ -1286,8 +1286,8 @@
             		
             $query ="   SELECT  PIE.Nombre PIE_NOM,		
                                 MTA.Titulo,	
-                                MTA.Min_Eje,
-                                MTA.Min_Asi,
+                                MTA.Hor_Eje,
+                                MTA.Hor_Asi,
                                 to_char(MTA.Fec_Ini,'DD/MM/YYYY') Fec_Ini,
                                 to_char(MTA.Fec_Fin,'DD/MM/YYYY') Fec_Fin,
                                 MTA.estatus,	
@@ -1344,7 +1344,7 @@
                                 SET estatus = 'Realizado',
                                     Observaciones = "
                                     . (($data['Observacion'] == "") ? "null" : ("'" .str_replace("'", "''", $data['Observacion']) . "'")) . ",
-                                    min_eje  = '" . str_replace("'", "''", $data['Min_Eje']) . "',
+                                    hor_eje  = '" . str_replace("'", "''", $data['Hor_Eje']) . "',
                                     Usu_Mod = " . $this->session->userdata("usu_id") . ",
                                     Fec_Mod = NOW() 
                                 WHERE man_id = " . str_replace("'", "''",$correctivo) . "

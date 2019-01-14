@@ -6,7 +6,7 @@
     
         function __construct(){
             parent::__construct();
-            $this->load->library('libcorreosiama','libcorreosiama');
+            $this->load->library('libcorreosigma','libcorreosigma');
         }
 
         public function Insertar($data){
@@ -35,7 +35,7 @@
                 "Mensaje" => $Mensaje
             );
             
-            $estatusCorreo = $this->libcorreosiama->EnviarCorreo($correo);
+            $estatusCorreo = $this->libcorreosigma->EnviarCorreo($correo);
 
 
             if($estatusCorreo['enviado']){
