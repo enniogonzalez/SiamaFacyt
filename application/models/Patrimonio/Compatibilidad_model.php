@@ -1,4 +1,3 @@
-
 <?php
     class Compatibilidad_model extends CI_Model{
         

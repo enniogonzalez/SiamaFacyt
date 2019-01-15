@@ -1,4 +1,3 @@
-
 <?php
     class Partidas_model extends CI_Model{
         

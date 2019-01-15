@@ -1,4 +1,3 @@
-
 <?php
     class Resetpassword_model extends CI_Model{
         

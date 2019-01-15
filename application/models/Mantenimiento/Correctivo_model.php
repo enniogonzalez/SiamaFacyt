@@ -1,4 +1,3 @@
-
 <?php
     class Correctivo_model extends CI_Model{
         

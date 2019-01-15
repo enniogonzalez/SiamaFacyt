@@ -1,4 +1,3 @@
-
 <?php
     class Listasdesplegables_model extends CI_Model{
         

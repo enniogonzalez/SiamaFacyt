@@ -1,4 +1,3 @@
-
 <?php
     class Bd_model extends CI_Model{
         

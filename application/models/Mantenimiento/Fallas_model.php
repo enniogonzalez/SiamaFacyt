@@ -1,4 +1,3 @@
-
 <?php
     class Fallas_model extends CI_Model{
         

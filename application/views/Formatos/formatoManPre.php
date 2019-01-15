@@ -12,11 +12,11 @@ class MYPDF extends TCPDF {
         
 		// Title
 		$this->SetY(13);
-        $this->Cell(210, 10, "Sistema Automático de Mantenimiento FACYT", 0, false, 'C', 0, '', 0, false, 'M', 'M');
+        $this->Cell(210, 10, "Sistema de Gestión de Mantenimiento FACYT", 0, false, 'C', 0, '', 0, false, 'M', 'M');
         
         $this->SetFont('helvetica', 'B', 15);
 		$this->SetY(23);
-        $this->Cell(200, 10, "Mantenimiento Preventivo", 0, false, 'C', 0, '', 0, false, 'M', 'M');
+        $this->Cell(200, 10, "Formato de Mantenimiento Preventivo", 0, false, 'C', 0, '', 0, false, 'M', 'M');
 		$this->SetY(28);
         $this->SetFont('helvetica', 'B', 8);
         $this->Cell(320, 10, "Fecha Impresión: " . date("d/m/Y"), 0, false, 'C', 0, '', 0, false, 'M', 'M');
@@ -41,8 +41,8 @@ $pdf = new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8',
 // set document information
 $pdf->SetCreator(PDF_CREATOR);
 $pdf->SetAuthor('Ennio Gonzalez');
-$pdf->SetTitle('Mantenimiento Preventivo');
-$pdf->SetSubject('Mantenimiento Preventivo');
+$pdf->SetTitle('Formato de Mantenimiento Preventivo');
+$pdf->SetSubject('Formato de Mantenimiento Preventivo');
 $pdf->SetKeywords('TCPDF, PDF, example, test, guide');
 
 // set default header data
@@ -145,16 +145,16 @@ foreach ($datos['Tareas'] as $elemento) {
                         <td style=\"width:30%\">" . $elemento['titulo'] . "</td>
                         <td style=\"width:7%\"><strong>Estatus:</strong></td>
                         <td style=\"width:12%;text-align:left;\">" . $elemento['estatus'] . "</td>
-                        <td style=\"width:10%\"><strong>".($elemento['usu_nom'] != "" ? "Usuario":"Proveedor") .":</strong></td>
-                        <td style=\"width:29%\">" . ($elemento['usu_nom'] != "" ? $elemento['usu_nom']:$elemento['pro_nom']) ."</td>
+                        <td style=\"width:10%\"><strong>".($elemento['obr_nom'] != "" ? "Obrero":"Proveedor") .":</strong></td>
+                        <td style=\"width:29%\">" . ($elemento['obr_nom'] != "" ? $elemento['obr_nom']:$elemento['pro_nom']) ."</td>
                     </tr>
                     <tr >
                         <td style=\"width:12%\"> <strong>Inicio:</strong></td>
                         <td style=\"width:30%\">" . $elemento['fec_ini'] . "</td>
                         <td style=\"width:7%\"><strong>Fin:</strong></td>
                         <td style=\"width:12%;text-align:left;\">" . $elemento['fec_fin'] . "</td>
-                        <td style=\"width:10%\"><strong>Minutos:</strong></td>
-                        <td style=\"width:29%\">" . $elemento['min_eje']."</td>
+                        <td style=\"width:10%\"><strong>Horas:</strong></td>
+                        <td style=\"width:29%\">" . $elemento['hor_eje']."</td>
                     </tr>
                     <tr >
                         <td style=\"width:12%\"> <strong>Descripción:</strong></td>

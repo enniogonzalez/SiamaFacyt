@@ -1,4 +1,3 @@
-
 <?php
 
     class Localizacionesrep_model extends CI_Model{

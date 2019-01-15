@@ -1,4 +1,3 @@
-
 <?php
 
     class Marcasrep_model extends CI_Model{

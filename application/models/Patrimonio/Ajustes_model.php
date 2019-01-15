@@ -1,4 +1,3 @@
-
 <?php
     class Ajustes_model extends CI_Model{
         

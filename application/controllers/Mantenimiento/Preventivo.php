@@ -251,9 +251,8 @@
             $this->ValidarPermiso();
 
             $data['datos'] = $this->FormatearImpresion($this->preventivo_model->ObtenerInfoPDF($id));
-
             $this->load->library('tcpdf/Pdf');
-            $this->load->view('Reportes/repManPre',$data);
+            $this->load->view('Formatos/formatoManPre',$data);
         }
 
         public function obtener(){

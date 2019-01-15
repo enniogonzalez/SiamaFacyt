@@ -1,4 +1,3 @@
-
 <?php
     class Auditorias_model extends CI_Model{
         

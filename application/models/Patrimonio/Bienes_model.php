@@ -1,4 +1,3 @@
-
 <?php
     class Bienes_model extends CI_Model{
          

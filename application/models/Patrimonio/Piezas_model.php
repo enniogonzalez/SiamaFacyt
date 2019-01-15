@@ -1,4 +1,3 @@
-
 <?php
     class Piezas_model extends CI_Model{
         

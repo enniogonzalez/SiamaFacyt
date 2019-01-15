@@ -1,4 +1,3 @@
-
 <?php
     class Plantilla_model extends CI_Model{
         

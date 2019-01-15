@@ -1,4 +1,3 @@
-
 <?php
 
     class Proveedoresrep_model extends CI_Model{

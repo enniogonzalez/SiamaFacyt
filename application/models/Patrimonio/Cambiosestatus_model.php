@@ -1,4 +1,3 @@
-
 <?php
     class Cambiosestatus_model extends CI_Model{
         

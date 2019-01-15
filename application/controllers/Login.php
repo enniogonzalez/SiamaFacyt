@@ -1,4 +1,3 @@
-
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 header('Access-Control-Allow-Origin: *');
@@ -6,8 +5,11 @@ header("Access-Control-Allow-Methods: GET, OPTIONS");
 
 class Login extends CI_Controller{
 
-    public function view($page = 'login'){
+    public function __construct(){
+        parent::__construct();
+    }
 
+    public function view($page = 'login'){
 
         if(!file_exists(APPPATH.'views/paginas/login.php')){
             show_404();

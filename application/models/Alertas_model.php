@@ -1,4 +1,3 @@
-
 <?php
     class Alertas_model extends CI_Model{
         

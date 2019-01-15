@@ -604,7 +604,8 @@
             $conexion = $this->bd_model->ObtenerConexion();
 
             //Query para buscar usuario
-            $query ="   SELECT  MAN.MAN_ID,		
+            $query ="   SELECT  MAN.MAN_ID,	
+                                MAN.PLM_ID,	
                                 MAN.Documento,
                                 B.nombre Bie_Nom,
                                 B.Inv_UC,			
@@ -638,9 +639,8 @@
             $this->bd_model->CerrarConexion($conexion);
 
             if($retorno){
-                $retorno['Tareas'] = $this->ObtenerTareasPDF($retorno['man_id'],$retorno['estatus']);
+                $retorno['Tareas'] = $this->ObtenerTareasPDF($retorno['man_id'],$retorno['plm_id']);
             }
-
 
             return $retorno;
         }
@@ -1279,12 +1279,13 @@
             return array("Array"=> $retorno, "html" => $html);
         }
 
-        private function ObtenerTareasPDF($mantenimiento){
+        private function ObtenerTareasPDF($mantenimiento,$plantilla){
 
             //Abrir conexion
             $conexion = $this->bd_model->ObtenerConexion();
             		
-            $query ="   SELECT  PIE.Nombre PIE_NOM,		
+            $query ="   SELECT  PIE.Nombre PIE_NOM,	
+                                	
                                 MTA.Titulo,	
                                 MTA.Hor_Eje,
                                 MTA.Hor_Asi,
@@ -1294,13 +1295,22 @@
                                 MTA.Descripcion,		
                                 COALESCE(OBR.Nombre,'') obr_nom,	
                                 COALESCE(PRO.Raz_Soc,'') PRO_NOM,	
-                                MTA.Herramientas,	
+                                array_to_string(
+                                    ARRAY(  SELECT her.nombre 
+                                            FROM herramientas her
+                                                    JOIN plantillatareaherramienta pher ON pher.her_id = her.her_id
+                                            WHERE pher.pmt_id = PMT.pmt_id
+                                        ), ' | ') herramientas,
                                 COALESCE(MTA.Observaciones,'') Observaciones
                         FROM MantenimientoTarea MTA
                             JOIN Piezas PIE ON PIE.PIE_ID = MTA.PIE_ID
+                            JOIN PlantillaMantenimientoTarea PMT ON PMT.titulo = MTA.titulo
+                                AND PMT.tpi_id = PIE.tpi_id
+                                AND PMT.plm_id = " . $plantilla ."
                             LEFT JOIN Obreros OBR ON OBR.obr_id = MTA.obr_id
                             LEFT JOIN Proveedores PRO ON PRO.PRO_ID = MTA.PRO_ID
                         WHERE MTA.MAN_ID = " . $mantenimiento ."
+                            AND MTA.estatus <> 'Eliminado'
                         ORDER BY MTA.MTA_ID ASC";
 
 
