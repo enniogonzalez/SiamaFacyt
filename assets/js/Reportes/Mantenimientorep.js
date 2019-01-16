@@ -9,7 +9,7 @@ $(function(){
 
     const Bienes            = "Bienes";
     const Localizaciones    = "Localizaciones";
-    const Usuarios          = "Usuarios";
+    const Obreros          = "Obreros";
     const Proveedores       = "Proveedores";
 
     /************************************/
@@ -49,19 +49,19 @@ $(function(){
     });
 
     /************************************/
-    /*          Manejo Usuarios         */
+    /*          Manejo Obreros         */
     /************************************/
-    $('#nomUsu').on('click',function(){
-        BuscarUsuario();
+    $('#nomObr').on('click',function(){
+        BuscarObrero();
     });
 
-    $('.BuscarUsuario').on('click',function(){
-        BuscarUsuario();
+    $('.BuscarObrero').on('click',function(){
+        BuscarObrero();
     });
 
-    $('.BorrarUsuario').on('click',function(){
-        $('#idUsu').text("");
-        $('#nomUsu').val("");
+    $('.BorrarObrero').on('click',function(){
+        $('#idObr').text("");
+        $('#nomObr').val("");
     });
     
     /************************************/
@@ -88,7 +88,7 @@ $(function(){
         parametros ={
             "Inicio"        : $('#InicioPreventivo').val(),
             "Fin"           : $('#FinPreventivo').val(),
-            "Usuario"       : $('#idUsu').text(),
+            "Obrero"       : $('#idObr').text(),
             "Proveedor"     : $('#idPro').text(),
             "Bien"          : $('#idBie').text(),
             "Localizacion"  : $('#idLoc').text(),
@@ -137,16 +137,16 @@ $(function(){
 
     }
 
-    function BuscarUsuario(){
+    function BuscarObrero(){
 
-        SetSearchThead(thUsuarios);
+        SetSearchThead(thObreros);
         parametros = {
-            "Lista": $('#listaBusquedaUsuario').html().trim(),
-            "Tipo": Usuarios,
+            "Lista": $('#listaBusquedaObrero').html().trim(),
+            "Tipo": Obreros,
         }
 
-        idBuscadorActual = $('#idUsu').text().trim();
-        nombreBuscadorActual = $('#nomUsu').val().trim();
+        idBuscadorActual = $('#idObr').text().trim();
+        nombreBuscadorActual = $('#nomObr').val().trim();
         SetSearchModal(parametros)
 
     }
@@ -196,8 +196,8 @@ $(function(){
             case Localizaciones:
                 controlador = "Localizaciones";
             break;
-            case Usuarios:
-                controlador = "Usuarios";
+            case Obreros:
+                controlador = "Obreros";
             break;
             case Proveedores:
                 controlador = "Proveedores";
@@ -224,8 +224,8 @@ $(function(){
             case Localizaciones:
                 controlador = "localizaciones";
             break;
-            case Usuarios:
-                controlador = "usuarios";
+            case Obreros:
+                controlador = "obreros";
             break;
             case Proveedores:
                 controlador = "proveedores";
@@ -246,9 +246,9 @@ $(function(){
                 $('#idLoc').text(fila.find("td:eq(0)").text().trim());
                 $('#nomLoc').val(fila.find("td:eq(2)").text().trim());
             break;
-            case Usuarios:
-                $('#idUsu').text(fila.find("td:eq(0)").text().trim());
-                $('#nomUsu').val(fila.find("td:eq(3)").text().trim());
+            case Obreros:
+                $('#idObr').text(fila.find("td:eq(0)").text().trim());
+                $('#nomObr').val(fila.find("td:eq(5)").text().trim());
             break;
             case Proveedores:
                 $('#idPro').text(fila.find("td:eq(0)").text().trim());

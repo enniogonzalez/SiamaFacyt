@@ -84,8 +84,41 @@ $usuarioAnterior = "";
 $opcionAnterior = "";
 $tbl = "";
 
+$cantidad = count($parametros);
+
+if($cantidad > 0){
+
+    $i = true;
+    
+	$tbl = " <h2>Parámetros</h2>
+    <table cellspacing=\"0\" cellpadding=\"1\" style=\"border: 1px solid black;\">
+    ";
+
+    foreach($parametros as $p){
+        if($i){
+            $tbl .= "<tr>";
+        }
+        $tbl .= "<td> <strong>" . $p[0].":</strong></td>";
+        $tbl .= "<td>" . $p[1]."</td>";
+
+        if(!$i){
+            $tbl .= "</tr>";
+        }
+        $i = !$i;
+    }
+        
+    if(!$i){
+        $tbl .= "<td></td><td></td></tr>";
+    }
+    $tbl .= "</table>";
+    
+
+$pdf->writeHTML($tbl, true, false, false, false, '');
+} 
+
+$tbl = "";
 foreach ($datos as $elemento) {
-    if($usuarioAnterior != $elemento['usu_id']){
+    if($usuarioAnterior != $elemento['obr_id']){
         if($usuarioAnterior != ""){
             $tbl .= "<br/><br/>";
         }
@@ -93,7 +126,7 @@ foreach ($datos as $elemento) {
         $tbl .= "
         <table cellspacing=\"0\" cellpadding=\"1\" style=\"border: 1px solid black;font-size: 18pt;text-align: center;\">
             <tr >
-                <td> " . $elemento['usuario'] ."</td>
+                <td> " . $elemento['obrero'] ."</td>
             </tr>
         </table>
             
@@ -171,7 +204,7 @@ foreach ($datos as $elemento) {
     }
 
 
-    $usuarioAnterior = $elemento['usu_id'];
+    $usuarioAnterior = $elemento['obr_id'];
     $opcionAnterior = $elemento['opcion'];
 }
 

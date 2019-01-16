@@ -9,7 +9,7 @@
         }
 
         private function ValidarPermiso(){
-            if(!$this->session->userdata("Permisos")['Mantenimiento']){
+            if(!$this->session->userdata("Permisos")['Reportes'] || !$this->session->userdata("Permisos")['RepMantenimiento']){
                 show_404();
             }
         }
@@ -28,12 +28,12 @@
             
             $listaBusquedaLocalizacion  = $this->listasdesplegables_model->Obtener('','COB-LOCALI');
             $listaBusquedaBien          = $this->listasdesplegables_model->Obtener('','COB-BIENES');
-            $listaBusquedaUsuario       = $this->listasdesplegables_model->Obtener('','COB-USUARI');
+            $listaBusquedaObrero       = $this->listasdesplegables_model->Obtener('','COB-OBRERO');
             $listaBusquedaProveedor     = $this->listasdesplegables_model->Obtener('','COB-PROVEE');
 
             $data['listaBusquedaLocalizacion']  = $this->liblistasdesplegables->FormatearListaDesplegable($listaBusquedaLocalizacion);
             $data['listaBusquedaBien']          = $this->liblistasdesplegables->FormatearListaDesplegable($listaBusquedaBien);
-            $data['listaBusquedaUsuario']       = $this->liblistasdesplegables->FormatearListaDesplegable($listaBusquedaUsuario);
+            $data['listaBusquedaObrero']       = $this->liblistasdesplegables->FormatearListaDesplegable($listaBusquedaObrero);
             $data['listaBusquedaProveedor']     = $this->liblistasdesplegables->FormatearListaDesplegable($listaBusquedaProveedor);
 
             $dataLD['OrdenarBusqueda'] = "";
@@ -50,21 +50,23 @@
             $this->load->view('plantillas/7-footer');
         }
 
-        public function RepManUsu(){
+        public function RepManObr(){
             $this->ValidarPermiso();
 
             $parametros = array(
                 "Inicio"        => $this->input->post("Inicio"),
                 "Fin"           => $this->input->post("Fin"),
-                "Usuario"       => $this->input->post("Usuario"),
+                "Obrero"        => $this->input->post("Obrero"),
                 "Proveedor"     => $this->input->post("Proveedor"),
                 "Bien"          => $this->input->post("Bien"),
                 "Localizacion"  => $this->input->post("Localizacion"),
             );
 
-            $data['datos'] = $this->mantenimientorep_model->RepManUsu($parametros);
+            $data['datos'] = $this->mantenimientorep_model->RepManObr($parametros);
+            $data['parametros'] = $this->mantenimientorep_model->ObtenerParametros($parametros);
+
             $this->load->library('tcpdf/Pdf');
-            $this->load->view('Reportes/repManUsu',$data);
+            $this->load->view('Reportes/repManObr',$data);
         }
 
         public function RepManPro(){
@@ -73,13 +75,14 @@
             $parametros = array(
                 "Inicio"        => $this->input->post("Inicio"),
                 "Fin"           => $this->input->post("Fin"),
-                "Usuario"       => $this->input->post("Usuario"),
+                "Obrero"       => $this->input->post("Obrero"),
                 "Proveedor"     => $this->input->post("Proveedor"),
                 "Bien"          => $this->input->post("Bien"),
                 "Localizacion"  => $this->input->post("Localizacion"),
             );
 
             $data['datos'] = $this->mantenimientorep_model->RepManPro($parametros);
+            $data['parametros'] = $this->mantenimientorep_model->ObtenerParametros($parametros);
             $this->load->library('tcpdf/Pdf');
             $this->load->view('Reportes/repManPro',$data);
 
@@ -92,13 +95,15 @@
             $parametros = array(
                 "Inicio"        => $this->input->post("Inicio"),
                 "Fin"           => $this->input->post("Fin"),
-                "Usuario"       => $this->input->post("Usuario"),
+                "Obrero"       => $this->input->post("Obrero"),
                 "Proveedor"     => $this->input->post("Proveedor"),
                 "Bien"          => $this->input->post("Bien"),
                 "Localizacion"  => $this->input->post("Localizacion"),
             );
 
             $data['datos'] = $this->mantenimientorep_model->RepManBie($parametros);
+            
+            $data['parametros'] = $this->mantenimientorep_model->ObtenerParametros($parametros);
             $this->load->library('tcpdf/Pdf');
             $this->load->view('Reportes/repManBie',$data);
 
@@ -111,13 +116,14 @@
             $parametros = array(
                 "Inicio"        => $this->input->post("Inicio"),
                 "Fin"           => $this->input->post("Fin"),
-                "Usuario"       => $this->input->post("Usuario"),
+                "Obrero"       => $this->input->post("Obrero"),
                 "Proveedor"     => $this->input->post("Proveedor"),
                 "Bien"          => $this->input->post("Bien"),
                 "Localizacion"  => $this->input->post("Localizacion"),
             );
 
             $data['datos'] = $this->mantenimientorep_model->RepManLoc($parametros);
+            $data['parametros'] = $this->mantenimientorep_model->ObtenerParametros($parametros);
             $this->load->library('tcpdf/Pdf');
             $this->load->view('Reportes/repManLoc',$data);
 

@@ -23,7 +23,7 @@
                         <option value="RepManBie">Mantenimientos por Bien</option>
                         <option value="RepManLoc">Mantenimientos por Localizaci&oacute;n</option>
                         <option value="RepManPro">Mantenimientos por Proveedor</option>
-                        <option value="RepManUsu">Mantenimientos por Usuario</option>
+                        <option value="RepManObr">Mantenimientos por Obrero</option>
                     </select>
                 </div>
             </div>
@@ -44,17 +44,17 @@
             </div>
             
             <div class="form-group row">
-                <label for="nomUsu" class="col-lg-2 col-form-label">Usuario:</label>
+                <label for="nomObr" class="col-lg-2 col-form-label">Obrero:</label>
                 <div class="col-lg-4">
                     <div style="width:76%;float:left;">
-                        <div style="display:none;" id="idUsu"></div>
+                        <div style="display:none;" id="idObr"></div>
                         <input readonly  type="text"
-                            class="form-control texto  buscador" id="nomUsu" value="">
+                            class="form-control texto  buscador" id="nomObr" value="">
                     </div>
                     <div style="width:24%;float:right;padding:10px 5px;">
-                        <span title="Buscar Usuario" class="fa fa-search BuscarUsuario" style="cursor: pointer;float:left;"></span>
+                        <span title="Buscar Obrero" class="fa fa-search BuscarObrero" style="cursor: pointer;float:left;"></span>
                         <div style="width:6px;float:left;"></div>
-                        <span title="Borrar Usuario" class="fa fa-trash-o BorrarUsuario" style="cursor: pointer;float:left;"></span>
+                        <span title="Borrar Obrero" class="fa fa-trash-o BorrarObrero" style="cursor: pointer;float:left;"></span>
                     </div>
                 </div>
                 <label for="nomPro" class="col-lg-2 col-form-label">Proveedor:</label>
@@ -115,8 +115,8 @@
             <select readonly   id="listaBusquedaLocalizacion">
                 <?=$listaBusquedaLocalizacion?>
             </select> 
-            <select readonly   id="listaBusquedaUsuario">
-                <?=$listaBusquedaUsuario?>
+            <select readonly   id="listaBusquedaObrero">
+                <?=$listaBusquedaObrero?>
             </select> 
             <select readonly   id="listaBusquedaProveedor">
                 <?=$listaBusquedaProveedor?>

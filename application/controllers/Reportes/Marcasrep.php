@@ -10,7 +10,7 @@
 
         private function ValidarPermiso(){
 
-            if(!$this->session->userdata("Permisos")['Reportes'] || !$this->session->userdata("Permisos")['Marcas']){
+            if(!$this->session->userdata("Permisos")['Reportes'] || !$this->session->userdata("Permisos")['RepMarcas']){
                 show_404();
             }
             

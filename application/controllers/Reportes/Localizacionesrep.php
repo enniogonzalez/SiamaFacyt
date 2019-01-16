@@ -10,7 +10,7 @@
 
         private function ValidarPermiso(){
 
-            if(!$this->session->userdata("Permisos")['Reportes'] || !$this->session->userdata("Permisos")['Localizacion']){
+            if(!$this->session->userdata("Permisos")['Reportes'] || !$this->session->userdata("Permisos")['RepLocalizacion']){
                 show_404();
             }
             
@@ -55,6 +55,17 @@
             );
 
             $data['datos'] = $this->localizacionesrep_model->ObtenerLocalizaciones($parametros);
+
+            if($this->input->post("Localizacion") != ""){
+                $param = $this->localizacionesrep_model->ObtenerParametros($parametros);
+                if(count($param) > 0){
+                    $parametros = array(
+                        "Localizacion"  => $param[0]['nombre'],
+                    );
+                }
+            }
+
+            $data['parametros'] = $parametros;
             $this->load->library('tcpdf/Pdf');
             $this->load->view('Reportes/Listadolocalizaciones',$data);
         }
@@ -70,7 +81,16 @@
 
             $data['datos'] = $this->localizacionesrep_model->ObtenerLocalizaciones($parametros);
 
+            if($this->input->post("Localizacion") != ""){
+                $param = $this->localizacionesrep_model->ObtenerParametros($parametros);
+                if(count($param) > 0){
+                    $parametros = array(
+                        "Localizacion"  => $param[0]['nombre'],
+                    );
+                }
+            }
 
+            $data['parametros'] = $parametros;
             $this->load->library('tcpdf/Pdf');
             $this->load->view('Reportes/Arbollocalizaciones',$data);
         }

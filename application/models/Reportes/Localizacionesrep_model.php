@@ -17,12 +17,13 @@
             }
 
             if($filtros != ""){
-                $filtros = "WHERE " . $filtros;
+                $filtros = " AND " . $filtros;
             }
 
             $query ="
             SELECT 	nombre,ubicacion,tipo,secuencia
             FROM Localizaciones 
+            WHERE secuencia like '%" . $this->session->userdata("secuencia")  . "%'
             " . $filtros . "
             ORDER BY REPLACE(secuencia,'-','0') ASC";
 
@@ -39,6 +40,33 @@
             //liberar conexion
             $this->bd_model->CerrarConexion($conexion);
 
+
+            return $retorno;
+        }
+
+        public function ObtenerParametros($data){
+            
+            //Abrir conexion
+            $conexion = $this->bd_model->ObtenerConexion();
+
+            $query ="
+            SELECT 	nombre
+            FROM Localizaciones 
+            WHERE loc_id = " . $data['Localizacion'];
+
+            //Ejecutar Query
+            $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
+
+            $retorno = array();
+            while($line = pg_fetch_array($result, null, PGSQL_ASSOC)){
+                array_push($retorno,$line);
+            }
+
+            //Liberar memoria
+            pg_free_result($result);
+    
+            //liberar conexion
+            $this->bd_model->CerrarConexion($conexion);
 
             return $retorno;
         }

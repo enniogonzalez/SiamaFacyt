@@ -80,9 +80,24 @@ $pdf->AddPage();
 
 $pdf->SetFont('helvetica', '', 10);
 
+if($parametros['Localizacion'] != ""){
+
+	$tbl = " <h2>Parámetros</h2>
+    <table cellspacing=\"0\" cellpadding=\"1\" style=\"border: 1px solid black;\">
+			<tr >
+				<td> <strong>Localización:</strong></td>
+				<td>" . $parametros['Localizacion'] . "</td>
+			</tr>
+	</table>
+	<br/>
+	<br/>
+";
+$pdf->writeHTML($tbl, true, false, false, false, '');
+}
 
 $pdf->SetFont('helvetica', '', 10);
-$tbl =" 
+
+$tbl ="
         <table>
             <thead>
                 <tr style=\"font-weight: bold; \">

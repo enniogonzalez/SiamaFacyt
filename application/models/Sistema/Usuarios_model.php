@@ -340,8 +340,9 @@
             $conexion = $this->bd_model->ObtenerConexion();
     
             //Query para buscar usuario
-            $query =    " SELECT USU_ID,Username,Correo,Nombre,Rol_Id,COALESCE(Observaciones,'') Observaciones "
-                    .   " FROM Usuarios "
+            $query =    " SELECT Usu.USU_ID,COALESCE(loc.secuencia,'') secuencia,Usu.Username,Usu.Correo,Usu.Nombre,Usu.Rol_Id,COALESCE(Usu.Observaciones,'') Observaciones "
+                    .   " FROM Usuarios USU"
+                    .   "   LEFT JOIN Localizaciones LOC ON LOC.loc_id =  USU.loc_id"
                     .   " WHERE username = '" . $usuario . "'"
                     .   "   AND clave = '" . $clave . "';";
 

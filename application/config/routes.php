@@ -156,7 +156,7 @@ $route['reportes/localizaciones'] = 'Reportes/localizacionesrep/view';
 $route['reportes/mantenimiento/RepManLoc'] = 'Reportes/mantenimientorep/RepManLoc';
 $route['reportes/mantenimiento/RepManPro'] = 'Reportes/mantenimientorep/RepManPro';
 $route['reportes/mantenimiento/RepManBie'] = 'Reportes/mantenimientorep/RepManBie';
-$route['reportes/mantenimiento/RepManUsu'] = 'Reportes/mantenimientorep/RepManUsu';
+$route['reportes/mantenimiento/RepManObr'] = 'Reportes/mantenimientorep/RepManObr';
 $route['reportes/mantenimiento'] = 'Reportes/mantenimientorep/view';
 
 $route['partidas/busqueda'] = 'partidas/busqueda';

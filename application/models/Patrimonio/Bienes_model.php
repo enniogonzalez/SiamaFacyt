@@ -361,7 +361,7 @@
             }
 
             if($data['busqueda'] != ""){
-                $condicion = ($condicion == "" ? "": $condicion . " AND ") 
+                $condicion = " AND "
                             . "(LOWER(B.Inv_UC) like '%" . mb_strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
                             . "%' OR LOWER(B.nombre) like '%" . mb_strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
                             . "%' OR LOWER(B.estatus) like '%" . mb_strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
@@ -370,9 +370,8 @@
                             . "%')";
             }
             
-            if($condicion != ""){
-                $condicion = "WHERE " . $condicion;
-            }
+            
+            $condicion = "WHERE  (L.secuencia like '%" . $this->session->userdata("secuencia") ."%') " . $condicion;
             //Query para buscar usuario
             $query ="   SELECT  Bie_Id,
                                 nombre,

@@ -2,6 +2,204 @@
 
     class Mantenimientorep_model extends CI_Model{
         
+        private function ObtenerObrero($id){
+            
+            //Abrir conexion
+            $conexion = $this->bd_model->ObtenerConexion();
+
+            $query ="
+            SELECT 	nombre
+            FROM Obreros 
+            WHERE obr_id = " . $id;
+
+            //Ejecutar Query
+            $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
+
+            $retorno = array();
+            if($line = pg_fetch_array($result, null, PGSQL_ASSOC)){
+               $retorno = $line;
+            }
+
+            //Liberar memoria
+            pg_free_result($result);
+    
+            //liberar conexion
+            $this->bd_model->CerrarConexion($conexion);
+
+            return $retorno;
+        }
+        
+        private function ObtenerLocalizacion($id){
+            
+            //Abrir conexion
+            $conexion = $this->bd_model->ObtenerConexion();
+
+            $query ="
+            SELECT 	nombre
+            FROM Localizaciones 
+            WHERE loc_id = " . $id;
+
+            //Ejecutar Query
+            $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
+
+            $retorno = array();
+            if($line = pg_fetch_array($result, null, PGSQL_ASSOC)){
+               $retorno = $line;
+            }
+
+            //Liberar memoria
+            pg_free_result($result);
+    
+            //liberar conexion
+            $this->bd_model->CerrarConexion($conexion);
+
+            return $retorno;
+        }
+        
+        private function ObtenerBien($id){
+            
+            //Abrir conexion
+            $conexion = $this->bd_model->ObtenerConexion();
+
+            $query ="
+            SELECT 	nombre
+            FROM Bienes 
+            WHERE bie_id = " . $id;
+
+            //Ejecutar Query
+            $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
+
+            $retorno = array();
+            if($line = pg_fetch_array($result, null, PGSQL_ASSOC)){
+               $retorno = $line;
+            }
+
+            //Liberar memoria
+            pg_free_result($result);
+    
+            //liberar conexion
+            $this->bd_model->CerrarConexion($conexion);
+
+            return $retorno;
+        }
+        
+        private function ObtenerProveedor($id){
+            
+            //Abrir conexion
+            $conexion = $this->bd_model->ObtenerConexion();
+
+            $query ="
+            SELECT 	raz_soc
+            FROM proveedores 
+            WHERE pro_id = " . $id;
+
+            //Ejecutar Query
+            $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
+
+            $retorno = array();
+            if($line = pg_fetch_array($result, null, PGSQL_ASSOC)){
+               $retorno = $line;
+            }
+
+            //Liberar memoria
+            pg_free_result($result);
+    
+            //liberar conexion
+            $this->bd_model->CerrarConexion($conexion);
+
+            return $retorno;
+        }
+
+        public function ObtenerParametros($data){
+            
+            $parametros = array();
+            $i = 0;
+            if($data['Inicio'] != ""){
+                $parametros[$i] = array("Inicio",$data['Inicio']);
+                $i++;
+            }
+            
+            if($data['Fin'] != ""){
+                $parametros[$i] = array("Fin",$data['Fin']);
+                $i++;
+            }
+            
+            if($data['Obrero'] != ""){
+                $campo = $this->ObtenerObrero($data['Obrero']);
+
+                if(count($campo) > 0){
+                    $campo = $campo['nombre'];
+                }else{
+                    $campo = "";
+                }
+                $parametros[$i] = array("Obrero",$campo);
+                $i++;
+            }
+            
+            if($data['Proveedor'] != ""){
+                $campo = $this->ObtenerProveedor($data['Proveedor']);
+
+                if(count($campo) > 0){
+                    $campo = $campo['raz_soc'];
+                }else{
+                    $campo = "";
+                }
+                $parametros[$i] = array("Proveedor",$campo);
+                $i++;
+            }
+            
+            if($data['Bien'] != ""){
+                $campo = $this->ObtenerBien($data['Bien']);
+
+                if(count($campo) > 0){
+                    $campo = $campo['nombre'];
+                }else{
+                    $campo = "";
+                }
+                $parametros[$i] = array("Bien",$campo);
+                $i++;
+            }
+            
+            if($data['Localizacion'] != ""){
+                
+                $campo = $this->ObtenerLocalizacion($data['Localizacion']);
+
+                if(count($campo) > 0){
+                    $campo = $campo['nombre'];
+                }else{
+                    $campo = "";
+                }
+
+                $parametros[$i] = array("Localizacion",$campo);
+                $i++;
+            }
+            
+            return $parametros;
+            // //Abrir conexion
+            // $conexion = $this->bd_model->ObtenerConexion();
+
+            // $query ="
+            // SELECT 	nombre
+            // FROM Localizaciones 
+            // WHERE loc_id = " . $data['Localizacion'];
+
+            // //Ejecutar Query
+            // $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
+
+            // $retorno = array();
+            // while($line = pg_fetch_array($result, null, PGSQL_ASSOC)){
+            //     array_push($retorno,$line);
+            // }
+
+            // //Liberar memoria
+            // pg_free_result($result);
+    
+            // //liberar conexion
+            // $this->bd_model->CerrarConexion($conexion);
+
+            // return $retorno;
+        }
+
         public function RepManPro($data){
             
             //Abrir conexion
@@ -31,8 +229,10 @@
             }
 
             if($filtros != ""){
-                $filtros = "WHERE " . $filtros;
+                $filtros = " AND " . $filtros;
             }
+
+            $filtros = "WHERE  (LOC.secuencia like '%" . $this->session->userdata("secuencia") ."%') " . $filtros;
 
             $query ="
             SELECT 	'Cambios Correctivos' Opcion,
@@ -48,6 +248,7 @@
             FROM cambiocorrectivo Renglon
                 JOIN mantenimientocorrectivo MCO ON MCO.mco_id = Renglon.mco_id
                 JOIN Bienes BIE ON BIE.bie_id = MCO.bie_id
+                JOIN Localizaciones LOC ON LOC.loc_id = BIE.loc_id
                 JOIN piezas PIE ON PIE.pie_id = Renglon.pda_id
                 JOIN piezas PIE2 ON PIE2.pie_id = Renglon.pca_id
                 JOIN proveedores Pro ON Pro.pro_id = Renglon.pro_id
@@ -68,6 +269,7 @@
             FROM reparacioncorrectiva Renglon
                 JOIN mantenimientocorrectivo MCO ON MCO.mco_id = Renglon.mco_id
                 JOIN Bienes BIE ON BIE.bie_id = MCO.bie_id
+                JOIN Localizaciones LOC ON LOC.loc_id = BIE.loc_id
                 JOIN piezas PIE ON PIE.pie_id = Renglon.pie_id
                 JOIN proveedores Pro ON Pro.pro_id = Renglon.pro_id
             " . $filtros . "
@@ -87,6 +289,7 @@
             FROM mantenimientotarea Renglon
                 JOIN mantenimiento MAN ON MAN.man_id = Renglon.man_id
                 JOIN Bienes BIE ON BIE.bie_id = MAN.bie_id
+                JOIN Localizaciones LOC ON LOC.loc_id = BIE.loc_id
                 JOIN piezas PIE ON PIE.pie_id = Renglon.pie_id
                 JOIN proveedores Pro ON Pro.pro_id = Renglon.pro_id
             " . $filtros . "
@@ -110,7 +313,7 @@
             return $retorno;
         }
 
-        public function RepManUsu($data){
+        public function RepManObr($data){
             
             //Abrir conexion
             $conexion = $this->bd_model->ObtenerConexion();
@@ -125,8 +328,8 @@
                 $filtros .= ($filtros == "" ? "": " AND ") . " Renglon.fec_fin <= '" . $data['Fin'] . "'";
             }
 
-            if($data['Usuario'] != ""){
-                $filtros .= ($filtros == "" ? "": " AND ") . " Usu.usu_id = '" . $data['Usuario'] . "'";
+            if($data['Obrero'] != ""){
+                $filtros .= ($filtros == "" ? "": " AND ") . " Obr.obr_id = '" . $data['Obrero'] . "'";
             }
 
             if($data['Bien'] != ""){
@@ -139,8 +342,10 @@
             }
 
             if($filtros != ""){
-                $filtros = "WHERE " . $filtros;
+                $filtros = " AND " . $filtros;
             }
+
+            $filtros = "WHERE  (LOC.secuencia like '%" . $this->session->userdata("secuencia") ."%') " . $filtros;
 
             $query ="
             SELECT 	'Cambios Correctivos' Opcion,
@@ -151,14 +356,15 @@
                             BIE.nombre Bien,
                             PIE.nombre Pieza,
                             PIE2.nombre pca,
-                            Usu.usu_id,
-                            Usu.nombre Usuario
+                            Obr.obr_id,
+                            Obr.nombre Obrero
             FROM cambiocorrectivo Renglon
                 JOIN mantenimientocorrectivo MCO ON MCO.mco_id = Renglon.mco_id
                 JOIN Bienes BIE ON BIE.bie_id = MCO.bie_id
+                JOIN Localizaciones LOC ON LOC.loc_id = BIE.loc_id
                 JOIN piezas PIE ON PIE.pie_id = Renglon.pda_id
                 JOIN piezas PIE2 ON PIE2.pie_id = Renglon.pca_id
-                JOIN usuarios Usu ON Usu.usu_id = Renglon.usu_id
+                JOIN obreros Obr ON Obr.obr_id = Renglon.obr_id
             " . $filtros . "
             
             UNION
@@ -171,13 +377,14 @@
                             BIE.nombre Bien,
                             PIE.nombre Pieza,
                             '' pca,
-                            Usu.usu_id,
-                            Usu.nombre Usuario
+                            Obr.obr_id,
+                            Obr.nombre Obrero
             FROM reparacioncorrectiva Renglon
                 JOIN mantenimientocorrectivo MCO ON MCO.mco_id = Renglon.mco_id
                 JOIN Bienes BIE ON BIE.bie_id = MCO.bie_id
+                JOIN Localizaciones LOC ON LOC.loc_id = BIE.loc_id
                 JOIN piezas PIE ON PIE.pie_id = Renglon.pie_id
-                JOIN usuarios Usu ON Usu.usu_id = Renglon.usu_id
+                JOIN obreros Obr ON Obr.obr_id = Renglon.obr_id
             " . $filtros . "
             
             UNION
@@ -190,16 +397,17 @@
                     BIE.nombre Bien,
                     PIE.nombre Pieza,
                     '' pca,
-                    Usu.usu_id,
-                    Usu.nombre Usuario
+                    Obr.obr_id,
+                    Obr.nombre Obrero
             FROM mantenimientotarea Renglon
                 JOIN mantenimiento MAN ON MAN.man_id = Renglon.man_id
-                JOIN Bienes BIE ON BIE.bie_id = MAN.bie_id
+                JOIN Bienes BIE ON BIE.bie_id = MAN.
+                JOIN Localizaciones LOC ON LOC.loc_id = BIE.loc_id
                 JOIN piezas PIE ON PIE.pie_id = Renglon.pie_id
-                JOIN usuarios Usu ON Usu.usu_id = Renglon.usu_id
+                JOIN obreros Obr ON Obr.obr_id = Renglon.obr_id
             " . $filtros . "
             
-            ORDER BY Usuario ASC,usu_id ASC, opcion ASC, documento ASC";
+            ORDER BY Obrero ASC,obr_id ASC, opcion ASC, documento ASC";
 
             //Ejecutar Query
             $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
@@ -233,11 +441,11 @@
                 $filtros .= ($filtros == "" ? "": " AND ") . " Documento.fec_fin <= '" . $data['Fin'] . "'";
             }
 
-            if($data['Usuario'] != "" || $data['Proveedor'] != ""){
+            if($data['Obrero'] != "" || $data['Proveedor'] != ""){
                 $ejecutor = "";
 
-                if($data['Usuario'] != ""){
-                    $ejecutor = "Renglon.usu_id = '" . $data['Usuario'] . "'";
+                if($data['Obrero'] != ""){
+                    $ejecutor = "Renglon.obr_id = '" . $data['Obrero'] . "'";
                 }
 
                 if($data['Proveedor'] != ""){
@@ -256,8 +464,10 @@
             }
 
             if($filtros != ""){
-                $filtros = "WHERE " . $filtros;
+                $filtros = " AND " . $filtros;
             }
+
+            $filtros = "WHERE  (LOC.secuencia like '%" . $this->session->userdata("secuencia") ."%') " . $filtros;
 
             $query ="
             SELECT 	DISTINCT 'Mantenimiento Correctivo' Opcion,
@@ -270,6 +480,7 @@
             FROM cambiocorrectivo Renglon
                 JOIN mantenimientocorrectivo Documento ON Documento.mco_id = Renglon.mco_id
                 JOIN Bienes BIE ON BIE.bie_id = Documento.bie_id
+                JOIN Localizaciones LOC ON LOC.loc_id = BIE.loc_id
                 " . $filtros . "
             
             UNION
@@ -284,6 +495,7 @@
             FROM reparacioncorrectiva Renglon
                 JOIN mantenimientocorrectivo Documento ON Documento.mco_id = Renglon.mco_id
                 JOIN Bienes BIE ON BIE.bie_id = Documento.bie_id
+                JOIN Localizaciones LOC ON LOC.loc_id = BIE.loc_id
                 " . $filtros . "
             
             UNION
@@ -298,6 +510,7 @@
             FROM mantenimientotarea Renglon
                 JOIN mantenimiento Documento ON Documento.man_id = Renglon.man_id
                 JOIN Bienes BIE ON BIE.bie_id = Documento.bie_id
+                JOIN Localizaciones LOC ON LOC.loc_id = BIE.loc_id
                 " . $filtros . "
             
             ORDER BY Bien ASC,bie_id ASC, opcion ASC, documento ASC";
@@ -334,11 +547,11 @@
                 $filtros .= ($filtros == "" ? "": " AND ") . " Documento.fec_fin <= '" . $data['Fin'] . "'";
             }
 
-            if($data['Usuario'] != "" || $data['Proveedor'] != ""){
+            if($data['Obrero'] != "" || $data['Proveedor'] != ""){
                 $ejecutor = "";
 
-                if($data['Usuario'] != ""){
-                    $ejecutor = "Renglon.usu_id = '" . $data['Usuario'] . "'";
+                if($data['Obrero'] != ""){
+                    $ejecutor = "Renglon.obr_id = '" . $data['Obrero'] . "'";
                 }
 
                 if($data['Proveedor'] != ""){
@@ -357,8 +570,10 @@
             }
 
             if($filtros != ""){
-                $filtros = "WHERE " . $filtros;
+                $filtros = " AND " . $filtros;
             }
+
+            $filtros = "WHERE  (LOC.secuencia like '%" . $this->session->userdata("secuencia") ."%') " . $filtros;
 
             $query ="
             SELECT 	DISTINCT 'Mantenimiento Correctivo' Opcion,

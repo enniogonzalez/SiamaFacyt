@@ -265,6 +265,24 @@
                     </a>
                 </li>
                 <li class="submenu submenu<?=$posMenu?>">
+                    <a href='<?=base_url()?>reportes/obreros'>
+                    <span class="fa fa-address-card" style="width:20px;"></span> 
+                    <label>Obreros</label>
+                    </a>
+                </li>
+                <li class="submenu submenu<?=$posMenu?>">
+                    <a href='<?=base_url()?>reportes/partidas'>
+                    <span class="fa fa-bookmark" style="width:20px;"></span> 
+                    <label>Partidas</label>
+                    </a>
+                </li>
+                <li class="submenu submenu<?=$posMenu?>">
+                    <a href='<?=base_url()?>reportes/patrimonio'>
+                    <span class="fa fa-product-hunt" style="width:20px;" ></span>
+                    <label>Patrimonio</label>
+                    </a>
+                </li>
+                <li class="submenu submenu<?=$posMenu?>">
                     <a href='<?=base_url()?>reportes/proveedores'>
                         <span class="fa fa-user" style="width:20px;" ></span>
                         <label>Proveedores</label>

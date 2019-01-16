@@ -180,12 +180,14 @@
 
             
             if($busqueda != ""){
-                $condicion = " WHERE (LOWER(Hijo.Nombre) like '%" . mb_strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
+                $condicion = " AND (LOWER(Hijo.Nombre) like '%" . mb_strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
                             . "%' OR LOWER(Hijo.Ubicacion) like '%" . mb_strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
                             . "%' OR LOWER(Hijo.Tipo) like '%" . mb_strtolower(str_replace(" ","%",str_replace("'", "''",$busqueda)))
                             . "%')";
             }
-            
+
+            $condicion = "WHERE  (Hijo.secuencia like '%" . $this->session->userdata("secuencia") ."%') " . $condicion;
+
             if($id != ""){
                 
                 $valorSec = $this->ObtenerSecuencia($id);
