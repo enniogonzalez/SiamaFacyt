@@ -249,21 +249,10 @@ $(function(){
     })
 
     $('.botoneraFormulario').on('click','#GuardarRegistro',function(){
-        var Valido = true;
         var Cambios = [];
         var Reparaciones = [];
 
-        $('.formulario-sigma form .form-control').each(function(){
-            $(this).removeClass('is-invalid');
-            if($(this).hasClass('obligatorio') && $(this).val().trim() == ""){
-
-                if(Valido)
-                    $(this).focus();
-                
-                Valido = false;
-                $(this).addClass('is-invalid');
-            }
-        })
+        var Valido = ValidarFormulario();
 
         if($('#OrigenCorrectivo').val().trim() == "Bien" && $('#nomBieCorrectivo').val().trim() == ""){
             Valido = false;

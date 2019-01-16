@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="author" content="Ennio Gonzalez">
-        <meta name="description" content="Sistema automatizado de mantenimiento">
+        <meta name="description" content="Sistema de gestion de mantenimiento">
         <title>SiGMa FACYT</title>
 
 		<link rel="icon" type="image/x-icon" href="<?=base_url()?>assets/images/logoPagina.png" />

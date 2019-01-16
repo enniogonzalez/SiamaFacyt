@@ -326,7 +326,7 @@
             $condicion ="";
 
             if($data['Disponible']){
-                $condicion = " (B.BIE_ID NOT IN( SELECT BIE_ID
+                $condicion = " AND (B.BIE_ID NOT IN( SELECT BIE_ID
                                                 FROM Ajustes
                                                 WHERE Estatus = 'Solicitado'
 

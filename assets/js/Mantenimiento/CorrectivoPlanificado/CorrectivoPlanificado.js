@@ -194,21 +194,10 @@ $(function(){
     })
 
     $('.botoneraFormulario').on('click','#GuardarRegistro',function(){
-        var Valido = true;
         var Agregados = [];
         var PiezaDAs = [];
 
-        $('.formulario-sigma form .form-control').removeClass('is-invalid');
-        $('.formulario-sigma form .form-control').each(function(){
-            if($(this).hasClass('obligatorio') && $(this).val().trim() == ""){
-
-                if(Valido)
-                    $(this).focus();
-                
-                Valido = false;
-                $(this).addClass('is-invalid');
-            }
-        })
+        var Valido = ValidarFormulario();
 
         valor = $('#OrigenPlanificado').val().trim();
         if(Valido && valor == "Mantenimiento Preventivo" && $('#idPreventivo').text().trim() == ""){

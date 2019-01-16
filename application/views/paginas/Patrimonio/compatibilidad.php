@@ -71,7 +71,7 @@
                 <table id="TablaAgregarTipos" class="table table-hover tabla-sigma tabla-sigma-desactivada">
                     <thead class="head-table-sigma" style="font-size:11px;">
                         <tr>
-                            <th style="width:90%;">Pieza</th>
+                            <th style="width:90%;">Tipo de Pieza</th>
                             <th style="width:5%;">
                                 <span id ="agregarAP" style="color:#28a745;cursor: pointer;" class="fa fa-plus-circle fa-lg"></span>
                             </th>
@@ -93,7 +93,7 @@
                 <table id="TablaQuitarTipos" class="table table-hover tabla-sigma tabla-sigma-desactivada">
                     <thead class="head-table-sigma" style="font-size:11px;">
                         <tr>
-                            <th style="width:90%;">Pieza</th>
+                            <th style="width:90%;">Tipo de Pieza</th>
                             <th style="width:5%;">
                                 <span id ="agregarQP" style="color:#28a745;cursor: pointer;" class="fa fa-plus-circle fa-lg"></span>
                             </th>

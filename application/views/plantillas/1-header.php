@@ -5,7 +5,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta name="author" content="Ennio Gonzalez">
-        <meta name="description" content="Sistema automatizado de mantenimiento">
+        <meta name="description" content="Sistema de gestion de mantenimiento">
         
 		<link rel="icon" type="image/x-icon" href="<?=base_url()?>assets/images/logoPagina.png" />
         <title>SiGMa FACYT</title>

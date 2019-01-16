@@ -2,6 +2,13 @@ function validateEmail(email) {
     var re = /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/;
     return re.test(email);
   }
+  function isValidDate(dateString) {
+    var regEx = /^\d{4}-\d{2}-\d{2}$/;
+    if(!dateString.match(regEx)) return false;  // Invalid format
+    var d = new Date(dateString);
+    if(Number.isNaN(d.getTime())) return false; // Invalid date
+    return d.toISOString().slice(0,10) === dateString;
+  }
 
 $(function(){
     $(window).scrollTop(0);
@@ -274,9 +281,37 @@ $(function(){
     }
 
 
+    window.ValidarFormulario = function(){
 
+        var Valido = true;
 
+        $('.formulario-sigma form .form-control').removeClass('is-invalid');
+        $('.formulario-sigma form .form-control').each(function(){
+            $(this).removeClass('is-invalid');
+            if($(this).hasClass('obligatorio') && $(this).val().trim() == ""){
 
+                if(Valido)
+                    $(this).focus();
+                
+                if($(this).hasClass('fecha') ){
+                    $(this).parent('div').find('.invalid-feedback').text('Campo Obligatorio');
+                }
+                Valido = false;
+                $(this).addClass('is-invalid');
+            }
 
+            if($(this).hasClass('fecha') && $(this).val().trim() != "" && !isValidDate($(this).val().trim())){
+                $(this).parent('div').find('.invalid-feedback').text('Formato de fecha requerido: AAAA-MM-DD');
+
+                if(Valido)
+                    $(this).focus();
+                
+                Valido = false;
+                $(this).addClass('is-invalid');
+            }
+        })
+
+        return Valido;
+    }
     
 });
