@@ -475,17 +475,23 @@
             $query ="   SELECT  CPL.Documento,
                                 CPL.CPL_ID,
                                 B.nombre Bie_Nom,		
-                                B.Inv_UC,		
+                                B.Inv_UC,	
+                                CASE
+                                    WHEN CPL.man_id is not null THEN 'Mantenimiento Preventivo'
+                                    WHEN CPL.mco_id is not null THEN 'Mantenimiento Correctivo'
+                                END Origen,	
+                                COALESCE(MAN.documento,MCO.documento) doc_ori,
                                 CPL.Estatus,
                                 CRE.Nombre Solicitante,
                                 COALESCE(APR.Nombre,'') Aprobador,
-                                to_char(CPL.Fec_Ini,'DD/MM/YYYY') Fec_ini,
-                                to_char(CPL.Fec_Fin,'DD/MM/YYYY') Fec_Fin,
+                                to_char(CPL.fec_eje,'DD/MM/YYYY') fec_eje,
                                 to_char(CPL.Fec_Cre,'DD/MM/YYYY') Fec_Cre,
                                 COALESCE(to_char(CPL.Fec_Apr,'DD/MM/YYYY'),'') Fec_Apr,
                                 COALESCE(CPL.Observaciones,'') Observaciones
                         FROM CorrectivoPlanificado CPL
-                            JOIN Bienes B ON B.bie_id = CPL.bie_id
+                            LEFT JOIN Mantenimiento MAN ON MAN.man_id = CPL.man_id
+                            LEFT JOIN MantenimientoCorrectivo MCO ON MCO.mco_id = CPL.mco_id
+                            JOIN Bienes B ON B.bie_id = COALESCE(MAN.bie_id,MCO.bie_id)
                             JOIN Usuarios CRE ON CRE.usu_id = CPL.usu_cre
                             LEFT JOIN Usuarios APR ON APR.usu_id = CPL.usu_apr
                         WHERE CPL.CPL_ID = '" . $id . "'";
@@ -506,8 +512,8 @@
             $this->bd_model->CerrarConexion($conexion);
 
             if($retorno){
-                $retorno['Cambios'] = $this->ObtenerCambioPDF($retorno['mco_id']);
-                $retorno['Reparaciones'] = $this->ObtenerReparacionesPDF($retorno['mco_id']);
+                $array = $this->ObtenerPiezas($retorno['cpl_id']);
+                $retorno['Piezas'] = $array['Array'];
             }
 
 
@@ -652,48 +658,6 @@
 
             return $result;
         }
-        
-        private function ObtenerCambioPDF($correctivo){
-
-            //Abrir conexion
-            $conexion = $this->bd_model->ObtenerConexion();
-            		
-            //Query para buscar usuario
-            $query ="   SELECT  PDA.Nombre PDA_NOM,			
-                                COALESCE(USU.Nombre,'') USU_NOM,		
-                                COALESCE(PRO.Raz_Soc,'') PRO_NOM,
-                                PCA.Nombre PCA_NOM,			
-                                CCO.ESTATUS,
-                                CCO.fal_id,
-                                FAL.nombre falla,
-                                COALESCE(to_char(CCO.Fec_Ini,'DD/MM/YYYY'),'') Fec_Ini,			
-                                COALESCE(to_char(CCO.Fec_Fin,'DD/MM/YYYY'),'') Fec_Fin,				
-                                COALESCE(CCO.Observaciones,'') Observaciones
-                        FROM CambioCorrectivo CCO
-                            JOIN Piezas PDA ON PDA.PIE_ID = CCO.PDA_ID
-                            JOIN Piezas PCA ON PCA.PIE_ID = CCO.PCA_ID
-                            JOIN Fallas FAL ON FAL.fal_id = CCO.fal_id
-                            LEFT JOIN Usuarios USU ON USU.USU_ID = CCO.USU_ID
-                            LEFT JOIN Proveedores PRO ON PRO.PRO_ID = CCO.PRO_ID
-                        WHERE CCO.CPL_ID = " . $correctivo;
-
-
-            //Ejecutar Query
-            $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
-
-            $retorno = array();
-            while($line = pg_fetch_array($result, null, PGSQL_ASSOC))
-                array_push($retorno,$line);
-
-            //Liberar memoria
-            pg_free_result($result);
-
-            //liberar conexion
-            $this->bd_model->CerrarConexion($conexion);
-
-
-            return $retorno;
-        }
 
         private function ObtenerPiezas($correctivo){
 
@@ -703,6 +667,7 @@
             //Query para buscar usuario
             $query ="   SELECT  CPP.pie_id,
                                 P.nombre pie_nom,
+                                P.inv_uc,
                                 F.fal_id,
                                 F.nombre fal_nom,
                                 CPP.observaciones 

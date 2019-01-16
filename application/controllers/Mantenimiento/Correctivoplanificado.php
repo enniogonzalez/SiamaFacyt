@@ -237,8 +237,9 @@
         public function imprimir($id){
             $this->ValidarPermiso();
             $data['datos'] = $this->FormatearImpresion($this->correctivoplanificado_model->ObtenerInfoPDF($id));
+            // echo json_encode($data);
             $this->load->library('tcpdf/Pdf');
-            $this->load->view('Reportes/repCambiosEstatus',$data);
+            $this->load->view('Formatos/formatoManCorPla',$data);
         }
 
         public function obtener(){
