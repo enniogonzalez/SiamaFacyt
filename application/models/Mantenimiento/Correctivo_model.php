@@ -55,6 +55,18 @@
 
             }
 
+            if($data['cpl_id'] != "" && $result){
+                
+                $query = "
+                    DELETE FROM Alertas 
+                    WHERE tabla = 'CorrectivoPlanificado' 
+                        AND tab_id = '" . str_replace("'", "''",$data['cpl_id']) . "'
+                        AND titulo like '%Ejecutar%'
+                ";
+                
+                $result = pg_query($query);
+            }
+
             /************************************/
             /*         Inicio Auditorias        */
             /************************************/
@@ -122,9 +134,11 @@
                     $query = "  SELECT  MCO.Documento,
                                         to_char(MCO.Fec_Cre,'DD/MM/YYYY') Fecha,
                                         BIE.nombre BIE_NOM,
+                                        BIE.bie_id,
                                         USU.Nombre USU_NOM,
                                         COALESCE(APR.Nombre) apr_nom,
-                                        LOC.nombre LOC_NOM
+                                        LOC.nombre LOC_NOM,
+                                        Loc.secuencia
                                 FROM MantenimientoCorrectivo MCO
                                     LEFT JOIN CorrectivoPlanificado CPL ON CPL.cpl_id = MCO.cpl_id
                                     LEFT JOIN Mantenimiento MAN ON MAN.man_id = CPL.man_id
@@ -160,13 +174,15 @@
                             "Opcion"    => "Mantenimiento Correctivo",
                             "Tabla"     => "MantenimientoCorrectivo",
                             "Estatus"   => "Aprobado",
+                            "Secuencia" => $line['secuencia'],
                             "Titulo"    => $titulo,
                             "Menu"      => "Mantenimiento", 
                             "Cuerpo"    =>$MensajeCorreo
                         );
 
-                        $query = "INSERT INTO Alertas(Titulo, Menu, Tabla, TAB_ID,Usu_Cre,Descripcion)
-                            VALUES('" . $titulo . "','Mantenimiento','MantenimientoCorrectivo',"
+                        $query = "INSERT INTO Alertas(Titulo,bie_id, Menu, Tabla, TAB_ID,Usu_Cre,Descripcion)
+                            VALUES('" . $titulo . "',"
+                            . $line['bie_id'] .",'Mantenimiento','MantenimientoCorrectivo',"
                             . $id . ","
                             .$this->session->userdata("usu_id") . ",'"
                             . str_replace("'", "''",$descripcion)  . "')";
@@ -208,7 +224,7 @@
             //liberar conexion
             $this->bd_model->CerrarConexion($conexion);
 
-            //$this->alertas_model->EnviarCorreo($correoMasivo);
+            $this->alertas_model->EnviarCorreo($correoMasivo);
 
             return true;
         }
@@ -454,6 +470,18 @@
                 $new_id = $row['0']; 
             }
 
+            if($data['cpl_id'] != "" && $result){
+                
+                $query = "
+                    DELETE FROM Alertas 
+                    WHERE tabla = 'CorrectivoPlanificado' 
+                        AND tab_id = '" . str_replace("'", "''",$data['cpl_id']) . "'
+                        AND titulo like '%Ejecutar%'
+                ";
+                
+                $result = pg_query($query);
+            }
+
             if ($result){
 
                 $TransCambio = $this->ObtenerTransaccionesCambios($data['Cambios'],$new_id);
@@ -475,8 +503,10 @@
             $query = "  SELECT  MCO.Documento,
                                 to_char(MCO.Fec_Cre,'DD/MM/YYYY') Fecha,
                                 COALESCE(BIE.nombre,'') BIE_NOM,
+                                BIE.bie_id,
                                 USU.Nombre USU_NOM,
-                                LOC.nombre LOC_NOM
+                                LOC.nombre LOC_NOM,
+                                Loc.secuencia
                         FROM MantenimientoCorrectivo MCO
                             LEFT JOIN CorrectivoPlanificado CPL ON CPL.cpl_id = MCO.cpl_id
                             LEFT JOIN Mantenimiento MAN ON MAN.man_id = CPL.man_id
@@ -513,13 +543,15 @@
                         "Opcion"    => "Mantenimiento Correctivo",
                         "Tabla"     => "MantenimientoCorrectivo",
                         "Estatus"   => "Solicitado",
+                        "Secuencia" => $line['secuencia'],
                         "Titulo"    => $titulo,
                         "Menu"      => "Mantenimiento", 
                         "Cuerpo"    =>$MensajeCorreo
                     );
 
-                    $query = "INSERT INTO Alertas(Titulo, Menu, Tabla, TAB_ID,Usu_Cre,Descripcion)
-                        VALUES('" . $titulo . "','Mantenimiento','MantenimientoCorrectivo',"
+                    $query = "INSERT INTO Alertas(Titulo,bie_id, Menu, Tabla, TAB_ID,Usu_Cre,Descripcion)
+                        VALUES('" . $titulo . "',"
+                        . $line['bie_id'] .",'Mantenimiento','MantenimientoCorrectivo',"
                         . $new_id . ","
                         .$this->session->userdata("usu_id") . ",'"
                         . str_replace("'", "''",$descripcion) . "')";
@@ -562,7 +594,7 @@
             //liberar conexion
             $this->bd_model->CerrarConexion($conexion);
 
-            //$this->alertas_model->EnviarCorreo($correoMasivo);
+            $this->alertas_model->EnviarCorreo($correoMasivo);
             ;
             return $new_id;
         }
@@ -849,8 +881,10 @@
                 $query = "  SELECT  MCO.Documento,
                                     to_char(MCO.Fec_Cre,'DD/MM/YYYY') Fecha,
                                     COALESCE(BIE.nombre,'') BIE_NOM,
+                                    BIE.bie_id,
                                     USU.Nombre USU_NOM,
-                                    LOC.nombre LOC_NOM
+                                    LOC.nombre LOC_NOM,
+                                    Loc.secuencia
                             FROM MantenimientoCorrectivo MCO
                                 LEFT JOIN CorrectivoPlanificado CPL ON CPL.cpl_id = MCO.cpl_id
                                 LEFT JOIN Mantenimiento MAN ON MAN.man_id = CPL.man_id
@@ -888,8 +922,9 @@
                             "Cuerpo"    =>$MensajeCorreo
                         );
 
-                        $query = "INSERT INTO Alertas(Titulo, Menu, Tabla, TAB_ID,Usu_Cre,Descripcion)
-                            VALUES('" . $titulo . "','Mantenimiento','MantenimientoCorrectivo',"
+                        $query = "INSERT INTO Alertas(Titulo,bie_id, Menu, Tabla, TAB_ID,Usu_Cre,Descripcion)
+                            VALUES('" . $titulo . "',"
+                        . $line['bie_id'] .",'Mantenimiento','MantenimientoCorrectivo',"
                             . $id . ","
                             .$this->session->userdata("usu_id") . ",'"
                             . str_replace("'", "''",$descripcion)  . "')";
@@ -930,7 +965,7 @@
             //liberar conexion
             $this->bd_model->CerrarConexion($conexion);
 
-            //$this->alertas_model->EnviarCorreo($correoMasivo);
+            $this->alertas_model->EnviarCorreo($correoMasivo);
 
             return true;
         }
@@ -1016,9 +1051,11 @@
             $query = "  SELECT  MCO.Documento,
                                 to_char(MCO.Fec_Cre,'DD/MM/YYYY') Fecha,
                                 BIE.nombre BIE_NOM,
+                                BIE.bie_id,
                                 USU.Nombre USU_NOM,
                                 COALESCE(APR.Nombre) apr_nom,
-                                LOC.nombre LOC_NOM
+                                LOC.nombre LOC_NOM,
+                                Loc.secuencia
                         FROM MantenimientoCorrectivo MCO
                             LEFT JOIN CorrectivoPlanificado CPL ON CPL.cpl_id = MCO.cpl_id
                             LEFT JOIN Mantenimiento MAN ON MAN.man_id = CPL.man_id
@@ -1054,13 +1091,15 @@
                         "Opcion"    => "Mantenimiento Correctivo",
                         "Tabla"     => "MantenimientoCorrectivo",
                         "Estatus"   => "Afectado",
+                        "Secuencia" => $line['secuencia'],
                         "Titulo"    => $titulo,
                         "Menu"      => "Mantenimiento", 
                         "Cuerpo"    =>$MensajeCorreo
                     );
 
-                    $query = "INSERT INTO Alertas(Titulo, Menu, Tabla, TAB_ID,Usu_Cre,Descripcion)
-                        VALUES('" . $titulo . "','Mantenimiento','MantenimientoCorrectivo',"
+                    $query = "INSERT INTO Alertas(Titulo,bie_id, Menu, Tabla, TAB_ID,Usu_Cre,Descripcion)
+                        VALUES('" . $titulo . "',"
+                        . $line['bie_id'] .",'Mantenimiento','MantenimientoCorrectivo',"
                         . $data['idActual'] . ","
                         .$this->session->userdata("usu_id") . ",'"
                         . str_replace("'", "''",$descripcion) . "')";
@@ -1097,7 +1136,7 @@
             $this->bd_model->CerrarConexion($conexion);
 
 
-            //$this->alertas_model->EnviarCorreo($correoMasivo);
+            $this->alertas_model->EnviarCorreo($correoMasivo);
             
             /************************************/
             /*         Inicio Auditorias        */

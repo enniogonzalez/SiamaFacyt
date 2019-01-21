@@ -1,16 +1,16 @@
 <?php
 
-    class Marcasrep extends CI_Controller{
+    class Partidasrep extends CI_Controller{
 
         public function __construct(){
             parent::__construct();
             $this->load->library('liblistasdesplegables','liblistasdesplegables');
-            $this->load->model('Reportes/marcasrep_model' , 'marcasrep_model');
+            $this->load->model('Reportes/partidasrep_model' , 'partidasrep_model');
         }
 
         private function ValidarPermiso(){
 
-            if(!$this->session->userdata("Permisos")['Reportes'] || !$this->session->userdata("Permisos")['RepMarcas']){
+            if(!$this->session->userdata("Permisos")['Reportes'] || !$this->session->userdata("Permisos")['RepPartidas']){
                 show_404();
             }
             
@@ -19,7 +19,7 @@
         public function view(){
             $this->ValidarPermiso();
             
-            $JsFile = "<script src=\"". base_url() . "assets/js/Reportes/Marcasrep.js\"></script>";
+            $JsFile = "<script src=\"". base_url() . "assets/js/Reportes/Partidasrep.js\"></script>";
             
             $datafile['JsFile'] = $JsFile ;
 
@@ -28,9 +28,9 @@
             $this->load->model('Sistema/listasdesplegables_model' , 'listasdesplegables_model');
 
             
-            $listaBusquedaMarcas  = $this->listasdesplegables_model->Obtener('','COB-MARCAS');
+            $listaBusquedaPartidas  = $this->listasdesplegables_model->Obtener('','COB-PARTID');
 
-            $data['listaBusquedaMarcas']  = $this->liblistasdesplegables->FormatearListaDesplegable($listaBusquedaMarcas);
+            $data['listaBusquedaPartidas']  = $this->liblistasdesplegables->FormatearListaDesplegable($listaBusquedaPartidas);
 
             $dataLD['OrdenarBusqueda'] = "";
 
@@ -42,30 +42,31 @@
             $this->load->view('plantillas/3-iniciomain');
             $this->load->view('plantillas/4-barramenu');
             $this->load->view('plantillas/5-iniciopagina');
-            $this->load->view('paginas/Reportes/marcasrep',$data);
+            $this->load->view('paginas/Reportes/partidasrep',$data);
             $this->load->view('plantillas/7-footer');
         }
 
-        public function listadomarcas(){
+        public function listadopartidas(){
             $this->ValidarPermiso();
 
             $parametros = array(
-                "Marca"  => $this->input->post("Marca"),
+                "Partida"  => $this->input->post("Partida"),
             );
 
-            $data['datos'] = $this->marcasrep_model->listadomarcas($parametros);
+            $data['datos'] = $this->partidasrep_model->listadopartidas($parametros);
             
-            if($this->input->post("Marca") != ""){
-                $param = $this->marcasrep_model->ObtenerParametros($parametros);
+            if($this->input->post("Partida") != ""){
+                $param = $this->partidasrep_model->ObtenerParametros($parametros);
                 if(count($param) > 0){
                     $parametros = array(
-                        "Marca"  => $param[0]['nombre'],
+                        "Partida"  => $param[0]['nombre'],
                     );
                 }
             }
             $data['parametros'] = $parametros;
+
             $this->load->library('tcpdf/Pdf');
-            $this->load->view('Reportes/Listadomarcas',$data);
+            $this->load->view('Reportes/Listadopartidas',$data);
         }
 
     }

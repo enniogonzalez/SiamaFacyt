@@ -106,9 +106,11 @@
             $query = "  SELECT  MAN.Documento,
                                 to_char(MAN.Fec_Cre,'DD/MM/YYYY') Fecha,
                                 BIE.nombre BIE_NOM,
+                                BIE.bie_id,
                                 USU.Nombre USU_NOM,
                                 COALESCE(APR.Nombre,'') apr_nom,   
-                                LOC.nombre LOC_NOM
+                                LOC.nombre LOC_NOM,
+                                Loc.secuencia
                         FROM Mantenimiento MAN
                             JOIN Bienes BIE ON BIE.BIE_ID = MAN.BIE_ID
                             JOIN Usuarios USU ON USU.USU_ID = MAN.usu_cre
@@ -141,13 +143,15 @@
                         "Opcion"    => "Mantenimiento Preventivo",
                         "Tabla"     => "Mantenimiento",
                         "Estatus"   => "Aprobado",
+                        "Secuencia" => $line['secuencia'],
                         "Titulo"    => $titulo,
                         "Menu"      => "Mantenimiento", 
                         "Cuerpo"    =>$MensajeCorreo
                     );
 
-                    $query = "INSERT INTO Alertas(Titulo, Menu, Tabla, TAB_ID,Usu_Cre,Descripcion)
-                        VALUES('" . $titulo . "','Mantenimiento','Mantenimiento',"
+                    $query = "INSERT INTO Alertas(Titulo,bie_id, Menu, Tabla, TAB_ID,Usu_Cre,Descripcion)
+                        VALUES('" . $titulo . "',"
+                        . $line['bie_id'] .",'Mantenimiento','Mantenimiento',"
                         . $id . ","
                         .$this->session->userdata("usu_id") . ",'"
                         . $descripcion . "')";
@@ -181,7 +185,7 @@
             //liberar conexion
             $this->bd_model->CerrarConexion($conexion);
 
-            //$this->alertas_model->EnviarCorreo($correoMasivo);
+            $this->alertas_model->EnviarCorreo($correoMasivo);
 
             return true;
         }
@@ -467,8 +471,10 @@
             $query = "  SELECT  MAN.Documento,
                                 to_char(MAN.Fec_Cre,'DD/MM/YYYY') Fecha,
                                 BIE.nombre BIE_NOM,
+                                BIE.bie_id,
                                 USU.Nombre USU_NOM,
-                                LOC.nombre LOC_NOM
+                                LOC.nombre LOC_NOM,
+                                Loc.secuencia
                         FROM Mantenimiento MAN
                             JOIN Bienes BIE ON BIE.BIE_ID = MAN.BIE_ID
                             JOIN Usuarios USU ON USU.USU_ID = MAN.USU_CRE
@@ -500,13 +506,15 @@
                         "Opcion"    => "Mantenimiento Preventivo",
                         "Tabla"     => "Mantenimiento",
                         "Estatus"   => "Solicitado",
+                        "Secuencia" => $line['secuencia'],
                         "Titulo"    => $titulo,
                         "Menu"      => "Mantenimiento", 
                         "Cuerpo"    =>$MensajeCorreo
                     );
 
-                    $query = "INSERT INTO Alertas(Titulo, Menu, Tabla, TAB_ID,Usu_Cre,Descripcion)
-                        VALUES('" . $titulo . "','Mantenimiento','Mantenimiento',"
+                    $query = "INSERT INTO Alertas(Titulo,bie_id,Menu, Tabla, TAB_ID,Usu_Cre,Descripcion)
+                        VALUES('" . $titulo . "',"
+                        . $line['bie_id'] .",'Mantenimiento','Mantenimiento',"
                         . $new_id . ","
                         .$this->session->userdata("usu_id") . ",'"
                         . str_replace("'", "''",$descripcion) . "')";
@@ -540,7 +548,7 @@
             //liberar conexion
             $this->bd_model->CerrarConexion($conexion);
 
-            //$this->alertas_model->EnviarCorreo($correoMasivo);
+            $this->alertas_model->EnviarCorreo($correoMasivo);
 
             return $new_id;
         }
@@ -818,8 +826,10 @@
                                 to_char(MAN.Fec_Cre,'DD/MM/YYYY') Fecha,
                                 BIE.nombre BIE_NOM,
                                 USU.Nombre USU_NOM,
+                                BIE.bie_id,
                                 COALESCE(APR.Nombre,'') apr_nom,
-                                LOC.nombre LOC_NOM
+                                LOC.nombre LOC_NOM,
+                                Loc.secuencia
                         FROM Mantenimiento MAN
                             JOIN Bienes BIE ON BIE.BIE_ID = MAN.BIE_ID
                             JOIN Usuarios USU ON USU.USU_ID = MAN.USU_CRE
@@ -854,13 +864,15 @@
                         "Opcion"    => "Mantenimiento Preventivo",
                         "Tabla"     => "Mantenimiento",
                         "Estatus"   => "Afectado",
+                        "Secuencia" => $line['secuencia'],
                         "Titulo"    => $titulo,
                         "Menu"      => "Mantenimiento", 
                         "Cuerpo"    =>$MensajeCorreo
                     );
 
-                    $query = "INSERT INTO Alertas(Titulo, Menu, Tabla, TAB_ID,Usu_Cre,Descripcion)
-                        VALUES('" . $titulo . "','Mantenimiento','Mantenimiento',"
+                    $query = "INSERT INTO Alertas(Titulo,bie_id, Menu, Tabla, TAB_ID,Usu_Cre,Descripcion)
+                        VALUES('" . $titulo . "',"
+                        . $line['bie_id'] .",'Mantenimiento','Mantenimiento',"
                         . $data['idActual'] . ","
                         .$this->session->userdata("usu_id") . ",'"
                         . str_replace("'", "''",$descripcion) . "')";
@@ -892,15 +904,12 @@
                     $result = pg_query($query);
                 }
             }
-
-
-                
+      
             if(!$result){
                 pg_query("ROLLBACK") or die("Transaction rollback failed");
                 die(pg_last_error());
             }else
                 pg_query("COMMIT") or die("Transaction commit failed");
-                
                 
             //Liberar memoria
             pg_free_result($result);
@@ -942,7 +951,7 @@
             /*         Fin Auditorias           */
             /************************************/
 
-            //$this->alertas_model->EnviarCorreo($correoMasivo);
+            $this->alertas_model->EnviarCorreo($correoMasivo);
 
             return true;
         }
@@ -982,8 +991,10 @@
             $query = "  SELECT  MAN.Documento,
                                 to_char(MAN.Fec_Cre,'DD/MM/YYYY') Fecha,
                                 BIE.nombre BIE_NOM,
+                                BIE.bie_id,
                                 USU.Nombre USU_NOM,
-                                LOC.nombre LOC_NOM
+                                LOC.nombre LOC_NOM,
+                                Loc.secuencia
                         FROM Mantenimiento MAN
                             JOIN Bienes BIE ON BIE.BIE_ID = MAN.BIE_ID
                             JOIN Usuarios USU ON USU.USU_ID = MAN.USU_CRE
@@ -1015,13 +1026,15 @@
                         "Opcion"    => "Mantenimiento Preventivo",
                         "Tabla"     => "Mantenimiento",
                         "Estatus"   => "Solicitado",
+                        "Secuencia" => $line['secuencia'],
                         "Titulo"    => $titulo,
                         "Menu"      => "Mantenimiento", 
                         "Cuerpo"    =>$MensajeCorreo
                     );
 
-                    $query = "INSERT INTO Alertas(Titulo, Menu, Tabla, TAB_ID,Usu_Cre,Descripcion)
-                        VALUES('" . $titulo . "','Mantenimiento','Mantenimiento',"
+                    $query = "INSERT INTO Alertas(Titulo,bie_id, Menu, Tabla, TAB_ID,Usu_Cre,Descripcion)
+                        VALUES('" . $titulo . "',"
+                        . $line['bie_id'] .",'Mantenimiento','Mantenimiento',"
                         . $id . ","
                         .$this->session->userdata("usu_id") . ",'"
                         . str_replace("'", "''",$descripcion) . "')";
@@ -1055,7 +1068,7 @@
             //liberar conexion
             $this->bd_model->CerrarConexion($conexion);
 
-            //$this->alertas_model->EnviarCorreo($correoMasivo);
+            $this->alertas_model->EnviarCorreo($correoMasivo);
 
             return true;
         }
@@ -1095,27 +1108,6 @@
                     if(!$result){
                         break;
                     }
-
-                    // $query = "INSERT INTO MantenimientoTarea(MAN_ID, PIE_ID, Titulo, ESTATUS, USU_ID, 
-                    //                                         PRO_ID, Hor_Asi, Hor_Eje, Fec_Ini, Fec_Fin, 
-                    //                                         Descripcion, Herramientas, Usu_Cre, Usu_Mod, Observaciones) "
-                    //         . "VALUES('"
-                    //         . str_replace("'", "''",$mantenimiento)    . "','"
-                    //         . str_replace("'", "''",$data['IdPieza']) . "','"
-                    //         . str_replace("'", "''",$data['Titulo']) . "','Solicitado',"
-                    //         . (($data['idObrero'] == "") ? "null" : ("'" .str_replace("'", "''", $data['idObrero']) . "'")) . ","
-                    //         . (($data['idProveedor'] == "") ? "null" : ("'" .str_replace("'", "''", $data['idProveedor']) . "'")). ","
-                    //         . str_replace("'", "''",$data['Hor_Asi']) . ","
-                    //         . str_replace("'", "''",$data['Hor_Eje']) . ",'"
-                    //         . str_replace("'", "''",$data['Inicio']) . "','"
-                    //         . str_replace("'", "''",$data['Fin']) . "','"
-                    //         . str_replace("'", "''",$data['Descripcion'])    . "','"
-                    //         . str_replace("'", "''",$data['Herramientas'])    . "',"
-                    //         . $this->session->userdata("usu_id")    . ","
-                    //         . $this->session->userdata("usu_id")    . ","
-                    //         . (($data['Observacion'] == "") ? "null" : ("'" .str_replace("'", "''", $data['Observacion']) . "'"))
-                    //         . ");";
-
                 }
             }
 

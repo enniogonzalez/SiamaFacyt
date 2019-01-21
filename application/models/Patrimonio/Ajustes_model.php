@@ -348,8 +348,10 @@
                 $query = "  SELECT  AJU.Documento,
                                     to_char(AJU.Fec_Cre,'DD/MM/YYYY') Fecha,
                                     BIE.nombre BIE_NOM,
+                                    BIE.bie_id,
                                     USU.Nombre USU_NOM,
-                                    LOC.nombre LOC_NOM
+                                    LOC.nombre LOC_NOM,
+                                    Loc.secuencia
                             FROM Ajustes AJU
                                 JOIN Bienes BIE ON BIE.BIE_ID = AJU.BIE_ID
                                 JOIN Usuarios USU ON USU.USU_ID = AJU.USU_CRE
@@ -380,13 +382,15 @@
                             "Opcion"    => "Ajuste",
                             "Tabla"     => "Ajuste",
                             "Estatus"   => "Solicitado",
+                            "Secuencia" => $line['secuencia'],
                             "Titulo"    => $titulo,
                             "Menu"      => "Patrimonio", 
                             "Cuerpo"    =>$MensajeCorreo
                         );
 
-                        $query = "INSERT INTO Alertas(Titulo, Menu, Tabla, TAB_ID,Usu_Cre,Descripcion)
-                            VALUES('" . $titulo . "','Patrimonio','Ajustes',"
+                        $query = "INSERT INTO Alertas(Titulo,bie_id, Menu, Tabla, TAB_ID,Usu_Cre,Descripcion)
+                            VALUES('" . $titulo . "',"
+                            . $line['bie_id'] .",'Patrimonio','Ajustes',"
                             . $UltimoId['aju_id'] . ","
                             .$this->session->userdata("usu_id") . ",'"
                             .str_replace("'", "''",$descripcion) . "')";
@@ -423,7 +427,7 @@
             //liberar conexion
             $this->bd_model->CerrarConexion($conexion);
 
-            //$this->alertas_model->EnviarCorreo($correoMasivo);
+            $this->alertas_model->EnviarCorreo($correoMasivo);
 
             return $UltimoId['aju_id'];
         }

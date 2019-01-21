@@ -1,16 +1,16 @@
 <?php
 
-    class Marcasrep_model extends CI_Model{
+    class Partidasrep_model extends CI_Model{
         
-        public function listadomarcas($data){
+        public function listadopartidas($data){
             
             //Abrir conexion
             $conexion = $this->bd_model->ObtenerConexion();
 
             $filtros = "";
 
-            if($data['Marca'] != ""){
-                $filtros .= "mar_id =  ". $data['Marca'] ;
+            if($data['Partida'] != ""){
+                $filtros .= "par_id =  ". $data['Partida'] ;
             }
 
             if($filtros != ""){
@@ -18,8 +18,8 @@
             }
 
             $query ="
-            SELECT 	nombre, COALESCE(observaciones,'') observaciones
-            FROM Marcas 
+            SELECT 	codigo, nombre, COALESCE(observaciones,'') observaciones
+            FROM Partidas 
             " . $filtros . "
             ORDER BY nombre ASC";
 
@@ -47,8 +47,8 @@
 
             $query ="
             SELECT 	nombre
-            FROM marcas 
-            WHERE mar_id = " . $data['Marca'];
+            FROM partidas 
+            WHERE par_id = " . $data['Partida'];
 
             //Ejecutar Query
             $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());

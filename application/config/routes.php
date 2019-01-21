@@ -146,6 +146,19 @@ $route['obreros'] = 'obreros/view';
 $route['reportes/marcas/listadomarcas'] = 'Reportes/marcasrep/listadomarcas';
 $route['reportes/marcas'] = 'Reportes/marcasrep/view';
 
+$route['reportes/obreros/listadoobreros'] = 'Reportes/obrerosrep/listadoobreros';
+$route['reportes/obreros'] = 'Reportes/obrerosrep/view';
+
+$route['reportes/partidas/listadopartidas'] = 'Reportes/partidasrep/listadopartidas';
+$route['reportes/partidas'] = 'Reportes/partidasrep/view';
+
+$route['reportes/patrimonio/listadoajustes'] = 'Reportes/patrimoniorep/listadoajustes';
+$route['reportes/patrimonio/listadobienes'] = 'Reportes/patrimoniorep/listadobienes';
+$route['reportes/patrimonio/listadocambiosestatus'] = 'Reportes/patrimoniorep/listadocambiosestatus';
+$route['reportes/patrimonio/listadocompatibilidad'] = 'Reportes/patrimoniorep/listadocompatibilidad';
+$route['reportes/patrimonio/listadopiezas'] = 'Reportes/patrimoniorep/listadopiezas';
+$route['reportes/patrimonio'] = 'Reportes/patrimoniorep/view';
+
 $route['reportes/proveedores/listadoproveedores'] = 'Reportes/proveedoresrep/listadoproveedores';
 $route['reportes/proveedores'] = 'Reportes/proveedoresrep/view';
 

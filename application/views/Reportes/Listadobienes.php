@@ -16,13 +16,13 @@ class MYPDF extends TCPDF {
         
         $this->SetFont('helvetica', 'B', 15);
 		$this->SetY(23);
-        $this->Cell(200, 10, "Mantenimientos por Localización", 0, false, 'C', 0, '', 0, false, 'M', 'M');
+        $this->Cell(200, 10, "Listado de Bienes", 0, false, 'C', 0, '', 0, false, 'M', 'M');
 		$this->SetY(28);
         $this->SetFont('helvetica', 'B', 8);
         $this->Cell(320, 10, "Fecha Impresión: " . date("d/m/Y"), 0, false, 'C', 0, '', 0, false, 'M', 'M');
                 
 		$this->SetY(30);
-        $this->writeHTML("<hr>", true, false, false, false, '');
+        $this->writeHTML("<hr/>", true, false, false, false, '');
 	}
 
 	// Page footer
@@ -41,8 +41,8 @@ $pdf = new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8',
 // set document information
 $pdf->SetCreator(PDF_CREATOR);
 $pdf->SetAuthor('Ennio Gonzalez');
-$pdf->SetTitle('Mantenimientos por Localización');
-$pdf->SetSubject('Mantenimientos por Localización');
+$pdf->SetTitle('Listado de Bienes');
+$pdf->SetSubject('Listado de Bienes');
 $pdf->SetKeywords('TCPDF, PDF, example, test, guide');
 
 // set default header data
@@ -80,9 +80,6 @@ $pdf->AddPage();
 
 $pdf->SetFont('helvetica', '', 10);
 
-$localizacionAnterior = "";
-$opcionAnterior = "";
-$tbl = "";
 
 $cantidad = count($parametros);
 
@@ -116,63 +113,38 @@ if($cantidad > 0){
 $pdf->writeHTML($tbl, true, false, false, false, '');
 } 
 
-$tbl = "";
+
+$pdf->SetFont('helvetica', '', 10);
+$tbl =" 
+        <table>
+            <thead>
+                <tr style=\"font-weight: bold; \">
+					<th style=\"width:40%;\">Nombre</th>
+					<th style=\"width:15%;\">Estatus</th>
+					<th style=\"width:15%;\">Inventario UC</th>
+					<th style=\"width:15%;\">Localizaci&oacute;n</th>
+					<th style=\"width:15%;\">Marca</th>
+                </tr>
+            </thead>
+        </table><hr>";
+
+
 foreach ($datos as $elemento) {
-
-    if($localizacionAnterior != $elemento['loc_id']){
-
-        if($localizacionAnterior != ""){
-            $tbl .= "<br/><br/>";
-        }
-
-        $tbl .= "
-        <table cellspacing=\"0\" cellpadding=\"1\" style=\"border: 1px solid black;font-size: 18pt;text-align: center;\">
-            <tr >
-                <td> " . $elemento['localizacion'] ."</td>
-            </tr>
-        </table>
-            
-        ";
-        $opcionAnterior = "";
-    }
-
-    if($opcionAnterior != $elemento['opcion']){
-        
-        $tbl .= "
-            <h3>" . $elemento['opcion'] ."</h3>
-            <table>
-                <thead>
-                    <tr style=\"font-weight: bold; \">
-                        <th style=\"width:25%\">Documento </th>
-                        <th style=\"width:25%\">Inicio</th>
-                        <th style=\"width:25%\">Fin</th>
-                        <th style=\"width:25%\">Estatus</th>
-                    </tr>
-                </thead>
-            </table>
-        ";
-
-    }
-
-    $tbl .= "<hr><table><tr>
-                    <td style=\"width:25%\">" . $elemento['documento'] . "</td>
-                    <td style=\"width:25%\">" . $elemento['fec_ini'] . "</td>
-                    <td style=\"width:25%\">" . $elemento['fec_fin'] . "</td>
-                    <td style=\"width:25%\">" . $elemento['estatus'] . "</td>
-                </tr></table>";
-
-    
-
-
-    $localizacionAnterior = $elemento['loc_id'];
-    $opcionAnterior = $elemento['opcion'];
+        $tbl .= "<table><tr>
+                        <td style=\"width:40%\">" . $elemento['nombre'] . "</td>
+                        <td style=\"width:15%\">" . $elemento['estatus'] . "</td>
+                        <td style=\"width:15%\">" . $elemento['inv_uc'] . "</td>
+                        <td style=\"width:15%\">" . $elemento['nomloc'] . "</td>
+                        <td style=\"width:15%\">" . $elemento['nommar'] . "</td>
+                    </tr></table><hr>";
 }
+
+$tbl .= "<table><tr><td><strong>" . count($datos) . " Bienes</strong></td></tr></table>";
 
 
 $pdf->writeHTML($tbl, true, false, false, false, '');
 
-
 // -----------------------------------------------------------------------------
 
 //Close and output PDF document
-$pdf->Output('MantenimientosPorLocalizacion.pdf', 'I');
+$pdf->Output('ListadoBienes.pdf', 'I');

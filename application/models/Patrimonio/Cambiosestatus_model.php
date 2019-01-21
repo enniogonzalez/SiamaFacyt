@@ -47,8 +47,10 @@
             $query = "  SELECT  CAM.Documento,
                                 to_char(CAM.Fec_Cre,'DD/MM/YYYY') Fecha,
                                 BIE.nombre BIE_NOM,
+                                BIE.bie_id,
                                 USU.Nombre USU_NOM,
-                                LOC.nombre LOC_NOM
+                                LOC.nombre LOC_NOM,
+                                Loc.secuencia
                         FROM CambiosEstatus CAM
                             JOIN Bienes BIE ON BIE.BIE_ID = CAM.BIE_ID
                             JOIN Usuarios USU ON USU.USU_ID = CAM.USU_CRE
@@ -76,8 +78,9 @@
                     $MensajeCorreo .= "<strong>Solicitante:</strong> " . $line['usu_nom'] . "<br/>";
                     $MensajeCorreo .= "<strong>Fecha:</strong> " . $line['fecha'];
 
-                    $query = "INSERT INTO Alertas(Titulo, Menu, Tabla, TAB_ID,Usu_Cre,Descripcion)
-                        VALUES('" . $titulo . "','Patrimonio','CambiosEstatus',"
+                    $query = "INSERT INTO Alertas(Titulo,bie_id, Menu, Tabla, TAB_ID,Usu_Cre,Descripcion)
+                        VALUES('" . $titulo . "',"
+                        . $line['bie_id'] .",'Patrimonio','CambiosEstatus',"
                         . $new_id . ","
                         .$this->session->userdata("usu_id") . ",'"
                         . str_replace("'", "''",$descripcion)  . "')";
@@ -87,6 +90,7 @@
                         "Opcion"    => "Cambio de Estatus",
                         "Tabla"     => "CambiosEstatus",
                         "Estatus"   => "Solicitado",
+                        "Secuencia" => $line['secuencia'],
                         "Titulo"    => $titulo,
                         "Menu"      => "Patrimonio", 
                         "Cuerpo"    =>$MensajeCorreo
@@ -121,7 +125,7 @@
             //liberar conexion
             $this->bd_model->CerrarConexion($conexion);
 
-            // $this->alertas_model->EnviarCorreo($correoMasivo);
+            $this->alertas_model->EnviarCorreo($correoMasivo);
 
             return $new_id;
         }

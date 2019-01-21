@@ -143,7 +143,9 @@
                             . "%' OR LOWER(CPL.estatus) like '%" . mb_strtolower(str_replace(" ","%",str_replace("'", "''",$data['busqueda'])))
                             . "%')";
             }
-            
+            if($data['SoloAprobados']){
+                $condicion = ($condicion == "" ? "": $condicion . " AND ") . " CPL.estatus = 'Aprobado'";
+            }
             if($condicion != ""){
                 $condicion =  " WHERE " . $condicion;
             }
@@ -315,59 +317,65 @@
                 $result = $this->InsertarPiezasDA($data['PiezaDAs'],$new_id);
             }
 
-            // $query = "  SELECT  CPL.Documento,
-            //                     to_char(CPL.Fec_Cre,'DD/MM/YYYY') Fecha,
-            //                     BIE.nombre BIE_NOM,
-            //                     USU.Nombre USU_NOM,
-            //                     LOC.nombre LOC_NOM
-            //             FROM CorrectivoPlanificado CPL
-            //                 JOIN Bienes BIE ON BIE.BIE_ID = CPL.BIE_ID
-            //                 JOIN Usuarios USU ON USU.USU_ID = CPL.USU_CRE
-            //                 JOIN Localizaciones LOC ON LOC.LOC_ID = BIE.LOC_ID
-            //             WHERE CPL.mco_id = " . $new_id;
+            $query = "  SELECT  CPL.Documento,
+                                to_char(CPL.Fec_Cre,'DD/MM/YYYY') Fecha,
+                                BIE.nombre BIE_NOM,
+                                BIE.bie_id,
+                                USU.Nombre USU_NOM,
+                                LOC.nombre LOC_NOM,
+                                Loc.secuencia
+                        FROM CorrectivoPlanificado CPL
+                            LEFT JOIN Mantenimiento MAN ON MAN.man_id = CPL.man_id
+                            LEFT JOIN MantenimientoCorrectivo MCO ON MCO.mco_id = CPL.mco_id
+                            JOIN Bienes BIE ON BIE.BIE_ID = COALESCE(MAN.BIE_ID,MCO.BIE_ID)
+                            JOIN Usuarios USU ON USU.USU_ID = CPL.USU_CRE
+                            JOIN Localizaciones LOC ON LOC.LOC_ID = BIE.LOC_ID
+                        WHERE CPL.cpl_id = " . $new_id;
 
-            // $documento = "";
-            // if($result){
-            //     $result = pg_query($query);
+            $documento = "";
+            if($result){
+                $result = pg_query($query);
 
-            //     if($line = pg_fetch_array($result, null, PGSQL_ASSOC)){
-            //         $documento = $line['documento'];
-            //         $titulo = "Mantenimiento Correctivo Solicitado " . $line['documento'];
+                if($line = pg_fetch_array($result, null, PGSQL_ASSOC)){
+                    $documento = $line['documento'];
+                    $titulo = "Mantenimiento Correctivo Planificado Solicitado " . $line['documento'];
 
-            //         $descripcion = "<table style=\"width:100%\"><tr><td style=\"width:30%\"><strong>Documento:</strong></td><td style=\"width:70%\">" . $line['documento'] . "</td></tr>";
-            //         $descripcion .= "<td><strong>Bien:</strong> </td><td>" . $line['bie_nom'] . "</td></tr>";
-            //         $descripcion .= "<td><strong>Localizaci&oacute;n:</strong> </td><td>" . $line['loc_nom'] . "</td></tr>";
-            //         $descripcion .= "<td><strong>Solicitante:</strong> </td><td>" . $line['usu_nom'] . "</td></tr>";
-            //         $descripcion .= "<td><strong>Fecha:</strong> </td><td>" . $line['fecha'] . "</td></tr></table>";
+                    $descripcion = "<table style=\"width:100%\"><tr><td style=\"width:30%\"><strong>Documento:</strong></td><td style=\"width:70%\">" . $line['documento'] . "</td></tr>";
+                    $descripcion .= "<td><strong>Bien:</strong> </td><td>" . $line['bie_nom'] . "</td></tr>";
+                    $descripcion .= "<td><strong>Localizaci&oacute;n:</strong> </td><td>" . $line['loc_nom'] . "</td></tr>";
+                    $descripcion .= "<td><strong>Solicitante:</strong> </td><td>" . $line['usu_nom'] . "</td></tr>";
+                    $descripcion .= "<td><strong>Fecha:</strong> </td><td>" . $line['fecha'] . "</td></tr></table>";
 
-            //         $MensajeCorreo = "<strong>Documento:</strong> " . $line['documento'] . "<br/>";
-            //         $MensajeCorreo .= "<strong>Bien:</strong> " . $line['bie_nom'] . "<br/>";
-            //         $MensajeCorreo .= "<strong>Localizaci&oacute;n:</strong> " . $line['loc_nom'] . "<br/>";
-            //         $MensajeCorreo .= "<strong>Solicitante:</strong> " . $line['usu_nom'] . "<br/>";
-            //         $MensajeCorreo .= "<strong>Fecha:</strong> " . $line['fecha'];
+                    $MensajeCorreo = "<strong>Documento:</strong> " . $line['documento'] . "<br/>";
+                    $MensajeCorreo .= "<strong>Bien:</strong> " . $line['bie_nom'] . "<br/>";
+                    $MensajeCorreo .= "<strong>Localizaci&oacute;n:</strong> " . $line['loc_nom'] . "<br/>";
+                    $MensajeCorreo .= "<strong>Solicitante:</strong> " . $line['usu_nom'] . "<br/>";
+                    $MensajeCorreo .= "<strong>Fecha:</strong> " . $line['fecha'];
                     
-            //         $correoMasivo = array(
-            //             "id"        => $new_id,
-            //             "Opcion"    => "Mantenimiento Correctivo",
-            //             "Tabla"     => "CorrectivoPlanificado",
-            //             "Estatus"   => "Solicitado",
-            //             "Titulo"    => $titulo,
-            //             "Menu"      => "Mantenimiento", 
-            //             "Cuerpo"    =>$MensajeCorreo
-            //         );
+                    $correoMasivo = array(
+                        "id"        => $new_id,
+                        "Opcion"    => "Mantenimiento Correctivo Planificado",
+                        "Tabla"     => "CorrectivoPlanificado",
+                        "Estatus"   => "Solicitado",
+                        "Secuencia" => $line['secuencia'],
+                        "Titulo"    => $titulo,
+                        "Menu"      => "Mantenimiento", 
+                        "Cuerpo"    =>$MensajeCorreo
+                    );
 
-            //         $query = "INSERT INTO Alertas(Titulo, Menu, Tabla, TAB_ID,Usu_Cre,Descripcion)
-            //             VALUES('" . $titulo . "','Mantenimiento','CorrectivoPlanificado',"
-            //             . $new_id . ","
-            //             .$this->session->userdata("usu_id") . ",'"
-            //             . str_replace("'", "''",$descripcion) . "')";
-                        
-            //         $result = pg_query($query);
-            //     }else{
-            //         $result = false;
-            //     }
-            // }
-            $documento = "hola";
+                    $query = "INSERT INTO Alertas(Titulo,bie_id, Menu, Tabla, TAB_ID,Usu_Cre,Descripcion)
+                        VALUES('" . $titulo . "',"
+                        . $line['bie_id'] .",'Mantenimiento','CorrectivoPlanificado',"
+                        . $new_id . ","
+                        .$this->session->userdata("usu_id") . ",'"
+                        . str_replace("'", "''",$descripcion) . "')";
+
+                    $result = pg_query($query);
+                }else{
+                    $result = false;
+                }
+            }
+            
             /************************************/
             /*         Inicio Auditorias        */
             /************************************/
@@ -398,7 +406,7 @@
             //liberar conexion
             $this->bd_model->CerrarConexion($conexion);
 
-            //$this->alertas_model->EnviarCorreo($correoMasivo);
+            $this->alertas_model->EnviarCorreo($correoMasivo);
             
             return $new_id;
         }

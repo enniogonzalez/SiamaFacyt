@@ -140,15 +140,23 @@
             
             $inicio = 1+$regXpag*($pagina-1);
             $fin = $regXpag*$pagina;
+            $Condiciones = $this->input->post("Condiciones");
+            $SoloAprobados = false;
 
+            if(isset($Condiciones)){
+                $SoloAprobados = $Condiciones['SoloAprobados'] == "true" ? true:false;
+            }
+            
             $datos = array(
-                "busqueda"  => $busqueda,
-                "orden"     => $ordenamiento,
-                "inicio"    => $inicio,
-                "fin"       => $fin,
-                "fec_ini"   => $fec_ini,
-                "fec_fin"   => $fec_fin,
+                "busqueda"          => $busqueda,
+                "orden"             => $ordenamiento,
+                "inicio"            => $inicio,
+                "fin"               => $fin,
+                "fec_ini"           => $fec_ini,
+                "SoloAprobados"     => $SoloAprobados,
+                "fec_fin"           => $fec_fin,
             );
+            
             $respuesta = $this->FormatearBusqueda($this->correctivoplanificado_model->Busqueda($datos));
 
             echo json_encode(array("isValid"=>true,"Datos"=>$respuesta));

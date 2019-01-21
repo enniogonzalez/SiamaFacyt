@@ -528,11 +528,13 @@ CREATE TABLE Alertas(
 	Titulo			VARCHAR(100)	NOT NULL UNIQUE,
 	Menu			VARCHAR(30)		NOT NULL,
 	Tabla			VARCHAR(30)		NOT NULL,
+	bie_id			INT				NOT NULL,	
 	TAB_ID			INT				NOT NULL,
-	Usu_Cre			INT				NOT NULL, --Usuario Creador
+	Usu_Cre			INT				NULL, --Usuario Creador
 	Fec_Cre			TIMESTAMP		NOT NULL DEFAULT(NOW()), --fecha Creacion
 	Descripcion		TEXT			NOT NULL,
-	FOREIGN KEY (Usu_Cre) References Usuarios
+	FOREIGN KEY (Usu_Cre) References Usuarios,
+	FOREIGN KEY (bie_id) References Bienes
 );
 
 CREATE TABLE LogContra(

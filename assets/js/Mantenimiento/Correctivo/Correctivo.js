@@ -495,10 +495,14 @@ $(function(){
             "Tipo": CorrectivoPlanificado
         }
 
+        condiciones = {
+            "SoloAprobados":true
+        }
+        
         idBuscadorActual = $('#idManCorPla').text().trim();
         nombreBuscadorActual = $('#manCorPla').val().trim();
 
-        SetSearchModal(parametros,true)
+        SetSearchModal(parametros,true,condiciones)
 
     }
 

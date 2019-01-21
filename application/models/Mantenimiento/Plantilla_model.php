@@ -309,8 +309,10 @@
                 $query = "  SELECT  PLM.Documento,
                                     to_char(PLM.Fec_Cre,'DD/MM/YYYY') Fecha,
                                     BIE.nombre BIE_NOM,
+                                    BIE.bie_id,
                                     USU.Nombre USU_NOM,
-                                    LOC.nombre LOC_NOM
+                                    LOC.nombre LOC_NOM,
+                                    Loc.secuencia   
                             FROM PlantillaMantenimiento PLM
                                 JOIN Bienes BIE ON BIE.BIE_ID = PLM.BIE_ID
                                 JOIN Usuarios USU ON USU.USU_ID = PLM.USU_CRE
@@ -325,7 +327,7 @@
                         $documento = $line['documento'];
                         $titulo = "Plantilla de Mantenimiento Solicitada " . $line['documento'];
                         
-                        $descripcion = "<table style=\"width:100%\"><tr><td style=\"width:30%\"><strong>Documento:</strong></td><td style=\"width:70%\">" . $line['documento'] . "</td></tr>";
+                        $descripcion = "<table style=\"width:100%\"><tr><td style=\"width:35%\"><strong>Documento:</strong></td><td style=\"width:65%\">" . $line['documento'] . "</td></tr>";
                         $descripcion .= "<td><strong>Bien:</strong> </td><td>" . $line['bie_nom'] . "</td></tr>";
                         $descripcion .= "<td><strong>Localizaci&oacute;n:</strong> </td><td>" . $line['loc_nom'] . "</td></tr>";
                         $descripcion .= "<td><strong>Solicitante:</strong> </td><td>" . $line['usu_nom'] . "</td></tr>";
@@ -343,13 +345,15 @@
                             "Opcion"    => "Plantilla de Mantenimiento",
                             "Tabla"     => "PlantillaMantenimiento",
                             "Estatus"   => "Solicitado",
+                            "Secuencia" => $line['secuencia'],
                             "Titulo"    => $titulo,
                             "Menu"      => "Mantenimiento", 
                             "Cuerpo"    =>$MensajeCorreo
                         );
 
-                        $query = "INSERT INTO Alertas(Titulo, Menu, Tabla, TAB_ID,Usu_Cre,Descripcion)
-                            VALUES('" . $titulo . "','Mantenimiento','PlantillaMantenimiento',"
+                        $query = "INSERT INTO Alertas(Titulo,bie_id, Menu, Tabla, TAB_ID,Usu_Cre,Descripcion)
+                            VALUES('" . $titulo . "',"
+                            . $line['bie_id'] .",'Mantenimiento','PlantillaMantenimiento',"
                             . $new_id . ","
                             .$this->session->userdata("usu_id") . ",'"
                             .  str_replace("'", "''",$descripcion) . "')";
@@ -384,7 +388,7 @@
             //liberar conexion
             $this->bd_model->CerrarConexion($conexion);
 
-            //$this->alertas_model->EnviarCorreo($correoMasivo);
+            $this->alertas_model->EnviarCorreo($correoMasivo);
 
             return $new_id;
         }
@@ -683,8 +687,10 @@
                 $query = "  SELECT  PLM.Documento,
                                     to_char(PLM.Fec_Cre,'DD/MM/YYYY') Fecha,
                                     BIE.nombre BIE_NOM,
+                                    BIE.bie_id,
                                     USU.Nombre USU_NOM,
-                                    LOC.nombre LOC_NOM
+                                    LOC.nombre LOC_NOM,
+                                    Loc.secuencia   
                             FROM PlantillaMantenimiento PLM
                                 JOIN Bienes BIE ON BIE.BIE_ID = PLM.BIE_ID
                                 JOIN Usuarios USU ON USU.USU_ID = PLM.USU_CRE
@@ -714,13 +720,15 @@
                             "Opcion"    => "Plantilla de Mantenimiento",
                             "Tabla"     => "PlantillaMantenimiento",
                             "Estatus"   => "Solicitado",
+                            "Secuencia" => $line['secuencia'],
                             "Titulo"    => $titulo,
                             "Menu"      => "Mantenimiento", 
                             "Cuerpo"    =>$MensajeCorreo
                         );
 
-                        $query = "INSERT INTO Alertas(Titulo, Menu, Tabla, TAB_ID,Usu_Cre,Descripcion)
-                            VALUES('" . $titulo . "','Mantenimiento','PlantillaMantenimiento',"
+                        $query = "INSERT INTO Alertas(Titulo,bie_id, Menu, Tabla, TAB_ID,Usu_Cre,Descripcion)
+                            VALUES('" . $titulo . "',"
+                            . $line['bie_id'] .",'Mantenimiento','PlantillaMantenimiento',"
                             . $id . ","
                             .$this->session->userdata("usu_id") . ",'"
                             .  str_replace("'", "''",$descripcion) . "')";
@@ -755,7 +763,7 @@
             //liberar conexion
             $this->bd_model->CerrarConexion($conexion);
 
-            //$this->alertas_model->EnviarCorreo($correoMasivo);
+            $this->alertas_model->EnviarCorreo($correoMasivo);
 
             return true;
         }

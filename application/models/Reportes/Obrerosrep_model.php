@@ -1,16 +1,16 @@
 <?php
 
-    class Marcasrep_model extends CI_Model{
+    class Obrerosrep_model extends CI_Model{
         
-        public function listadomarcas($data){
+        public function listadoobreros($data){
             
             //Abrir conexion
             $conexion = $this->bd_model->ObtenerConexion();
 
             $filtros = "";
 
-            if($data['Marca'] != ""){
-                $filtros .= "mar_id =  ". $data['Marca'] ;
+            if($data['Obrero'] != ""){
+                $filtros .= "obr_id =  ". $data['Obrero'] ;
             }
 
             if($filtros != ""){
@@ -18,8 +18,8 @@
             }
 
             $query ="
-            SELECT 	nombre, COALESCE(observaciones,'') observaciones
-            FROM Marcas 
+            SELECT 	cedula, nombre, COALESCE(telefonos,'') telefonos, COALESCE(correo,'') correo
+            FROM Obreros 
             " . $filtros . "
             ORDER BY nombre ASC";
 
@@ -47,8 +47,8 @@
 
             $query ="
             SELECT 	nombre
-            FROM marcas 
-            WHERE mar_id = " . $data['Marca'];
+            FROM obreros 
+            WHERE obr_id = " . $data['Obrero'];
 
             //Ejecutar Query
             $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());

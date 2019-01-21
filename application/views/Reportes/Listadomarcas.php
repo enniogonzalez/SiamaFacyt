@@ -12,7 +12,7 @@ class MYPDF extends TCPDF {
         
 		// Title
 		$this->SetY(13);
-        $this->Cell(210, 10, "Sistema Automático de Mantenimiento FACYT", 0, false, 'C', 0, '', 0, false, 'M', 'M');
+        $this->Cell(210, 10, "Sistema de Gestión de Mantenimiento FACYT", 0, false, 'C', 0, '', 0, false, 'M', 'M');
         
         $this->SetFont('helvetica', 'B', 15);
 		$this->SetY(23);
@@ -80,6 +80,21 @@ $pdf->AddPage();
 
 $pdf->SetFont('helvetica', '', 10);
 
+
+if($parametros['Marca'] != ""){
+
+	$tbl = " <h2>Parámetros</h2>
+    <table cellspacing=\"0\" cellpadding=\"1\" style=\"border: 1px solid black;\">
+			<tr >
+				<td> <strong>Marca:</strong></td>
+				<td>" . $parametros['Marca'] . "</td>
+			</tr>
+	</table>
+	<br/>
+	<br/>
+";
+$pdf->writeHTML($tbl, true, false, false, false, '');
+}
 
 $pdf->SetFont('helvetica', '', 10);
 $tbl =" 

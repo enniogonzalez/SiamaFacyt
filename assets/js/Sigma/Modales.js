@@ -551,6 +551,8 @@ $(function(){
             Cuerpo = "Envio incorrecto de parametros, por favor comunicarse con departamento de sistema.";
         else if(Cuerpo.search('fkey') != -1)
             Cuerpo = "No se puede eliminar registro debido a que este est&aacute; asociado a otra tabla.";
+        else if(Cuerpo.search('Email') != -1)
+            location.reload();
 
         var parametros = {
             "Titulo":"Ha ocurrido un error",
